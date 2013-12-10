@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">GeoKrety Logger</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="secure_id">Secure ID:</string>
+    <string name="login">Login:</string>
+    <string name="password">Password:</string>
+    <string name="description"></string>
+    <string name="login_error_title">Loggin error</string>
+    <string name="login_error_password_message">Invalid login or password. Error code: </string>
+    <string name="login_error_message">Connection error: </string>
+    <string name="store_password">Store login and password</string>
+    <string name="title_activity_accounts">GeoKrety accounts manager</string>
+    <string name="accounts_button">Accounts</string>
+    <string name="account_new">New</string>
+    <string name="account_edit">Edit</string>
+    <string name="account_remove">Remove</string>
+    <string name="title_activity_account">GeoKrety accounts manager</string>
+    <string name="error_login_null">Login can not be empty</string>
+    <string name="error_password_null">Password can not be empty</string>
+    <string name="accounts_add_title">Add new account</string>
+    <string name="accounts_edit_title">Edit account</string>
+    <string name="accounts_remove_title">Remove account</string>
+    <string name="accounts_remove_question">Are you sure to remove account </string>
+    <string name="error_current_null">Pleas select account.</string>
+</resources>
