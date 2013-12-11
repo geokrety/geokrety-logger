@@ -3,7 +3,6 @@
 
     <string name="app_name">GeoKrety Logger</string>
     <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
     <string name="secure_id">Secure ID:</string>
     <string name="login">Login:</string>
     <string name="password">Password:</string>
@@ -11,7 +10,6 @@
     <string name="login_error_title">Loggin error</string>
     <string name="login_error_password_message">Invalid login or password. Error code: </string>
     <string name="login_error_message">Connection error: </string>
-    <string name="store_password">Store login and password</string>
     <string name="title_activity_accounts">GeoKrety accounts manager</string>
     <string name="accounts_button">Accounts</string>
     <string name="account_new">New</string>
