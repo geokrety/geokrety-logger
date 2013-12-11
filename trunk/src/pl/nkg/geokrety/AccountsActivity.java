@@ -3,16 +3,15 @@ package pl.nkg.geokrety;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -64,11 +63,11 @@ public class AccountsActivity extends Activity {
 
 		switch (item.getItemId()) {
 		case R.id.account_new:
-			onAddNewAccount();
+			prepareAccountDialog(false);
 			return true;
 
 		case R.id.account_edit:
-			onEditAccount();
+			prepareAccountDialog(true);
 			return true;
 
 		case R.id.account_remove:
@@ -79,85 +78,55 @@ public class AccountsActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	private final DialogInterface.OnClickListener emptyListener = new DialogInterface.OnClickListener() {
 
-	private void onAddNewAccount() {
-		final Dialog dialog = new Dialog(this);
-		dialog.setContentView(R.layout.activity_account);
-		dialog.setTitle(R.string.accounts_add_title);
-
-		Button okButton = (Button) dialog.findViewById(R.id.okButton);
-		Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
-		// if button is clicked, close the custom dialog
-
-		okButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String login = ((EditText) dialog
-						.findViewById(R.id.loginEditText)).getText().toString();
-				String password = ((EditText) dialog
-						.findViewById(R.id.passwordEditText)).getText()
-						.toString();
-
-				if (login.length() == 0) {
-					Toast t = Toast.makeText(AccountsActivity.this,
-							R.string.error_login_null, Toast.LENGTH_SHORT);
-					t.show();
-					return;
-				}
-
-				if (password.length() == 0) {
-					Toast t = Toast.makeText(AccountsActivity.this,
-							R.string.error_password_null, Toast.LENGTH_SHORT);
-					t.show();
-					return;
-				}
-
-				preferences.addAccount(login, password);
-				// listAdapter.add(login);
-				listAdapter.notifyDataSetChanged();
-				dialog.dismiss();
-			}
-		});
-
-		cancelButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
-
-		dialog.show();
-	}
-
-	private void onEditAccount() {
-		final Dialog dialog = new Dialog(this);
-		dialog.setContentView(R.layout.activity_account);
-		dialog.setTitle(R.string.accounts_edit_title);
-
-		Button okButton = (Button) dialog.findViewById(R.id.okButton);
-		Button cancelButton = (Button) dialog.findViewById(R.id.cancelButton);
-
-		final EditText loginEditText = (EditText) dialog
-				.findViewById(R.id.loginEditText);
-		final EditText passwordEditText = (EditText) dialog
-				.findViewById(R.id.passwordEditText);
-
-		final int current = preferences.getCurrentAccount();// getCurrentAccount();
-		if (current == ListView.INVALID_POSITION) {
-			Toast t = Toast.makeText(AccountsActivity.this,
-					R.string.error_current_null, Toast.LENGTH_SHORT);
-			t.show();
-			return;
+		@Override
+		public void onClick(DialogInterface dialog, int which) {
+		}};
+	
+	private void prepareAccountDialog(final boolean isEdit) {
+		final int current = preferences.getCurrentAccount();
+		if (isEdit && current == ListView.INVALID_POSITION) {
+				Toast t = Toast.makeText(AccountsActivity.this,
+						R.string.error_current_null, Toast.LENGTH_SHORT);
+				t.show();
+				return;
 		}
+		
+		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
-		loginEditText.setText(preferences.getAccountLogin(current));
-		passwordEditText.setText(preferences.getAccountPassword(current));
+		View layout = inflater.inflate(R.layout.activity_account,
+		        (ViewGroup) findViewById(R.id.accuntMainLayout));
 
-		okButton.setOnClickListener(new OnClickListener() {
-			@Override
+		final EditText loginEditText = (EditText) layout
+				.findViewById(R.id.loginEditText);
+		final EditText passwordEditText = (EditText) layout
+				.findViewById(R.id.passwordEditText);
+		final EditText ocEditText = (EditText) layout
+				.findViewById(R.id.ocEditText);
+
+		if (isEdit) {
+			loginEditText.setText(preferences.getAccountLogin(current));
+			passwordEditText.setText(preferences.getAccountPassword(current));
+			ocEditText.setText(preferences.getAccountOcs(current));
+		}
+		
+		// Budowanie i pokazywanie
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setView(layout);
+		builder.setTitle(isEdit ? R.string.accounts_edit_title : R.string.accounts_add_title);
+		builder.setNegativeButton(android.R.string.cancel, emptyListener);
+		builder.setPositiveButton(android.R.string.ok, emptyListener);
+		final AlertDialog alertDialog = builder.create();
+		alertDialog.show();
+		
+
+		alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
-				String login = loginEditText.getText().toString();
+            	String login = loginEditText.getText().toString();
 				String password = passwordEditText.getText().toString();
+				String oc = ocEditText.getText().toString();
 
 				if (login.length() == 0) {
 					Toast t = Toast.makeText(AccountsActivity.this,
@@ -172,22 +141,25 @@ public class AccountsActivity extends Activity {
 					t.show();
 					return;
 				}
-
-				preferences.setAccountLogin(current, login);
-				preferences.setAccountPassword(current, password);
+				
+				if (oc.length() == 0) {
+					Toast t = Toast.makeText(AccountsActivity.this,
+							R.string.error_oc_null, Toast.LENGTH_SHORT);
+					t.show();
+					return;
+				}
+				
+				if (isEdit) {
+					preferences.setAccountLogin(current, login);
+					preferences.setAccountPassword(current, password);
+					preferences.setAccountOcs(current, oc);
+				} else {
+					preferences.addAccount(login, password, oc);
+				}
 				listAdapter.notifyDataSetChanged();
-				dialog.dismiss();
-			}
-		});
-
-		cancelButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				dialog.dismiss();
-			}
-		});
-
-		dialog.show();
+				alertDialog.dismiss();
+            }
+        });
 	}
 
 	@Override

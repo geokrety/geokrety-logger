@@ -4,8 +4,12 @@
     <string name="app_name">GeoKrety Logger</string>
     <string name="action_settings">Settings</string>
     <string name="secure_id">Secure ID:</string>
-    <string name="login">Login:</string>
-    <string name="password">Password:</string>
+    <string name="login">GK login:</string>
+    <string name="password">GK password:</string>
+    <string name="oc">OC login:</string>
+    <string name="login_hint">GeoKrety login</string>
+    <string name="password_hint">GeoKrety password</string>
+    <string name="oc_hint">OpenCaching login</string>
     <string name="description"></string>
     <string name="login_error_title">Loggin error</string>
     <string name="login_error_password_message">Invalid login or password. Error code: </string>
@@ -16,8 +20,9 @@
     <string name="account_edit">Edit</string>
     <string name="account_remove">Remove</string>
     <string name="title_activity_account">GeoKrety accounts manager</string>
-    <string name="error_login_null">Login can not be empty</string>
-    <string name="error_password_null">Password can not be empty</string>
+    <string name="error_login_null">GeoKrety.org login can not be empty</string>
+    <string name="error_password_null">GeoKrety.org password can not be empty</string>
+    <string name="error_oc_null">OpenCaching.pl login can not be empty</string>
     <string name="accounts_add_title">Add new account</string>
     <string name="accounts_edit_title">Edit account</string>
     <string name="accounts_remove_title">Remove account</string>

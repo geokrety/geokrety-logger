@@ -14,6 +14,7 @@ import android.widget.ListView;
 public class PreferencesDecorator {
 	private final SharedPreferences preferences;
 	private List<String> logins;
+	private List<String> ocs;
 	private List<String> passwords;
 
 	public PreferencesDecorator(ContextWrapper content) {
@@ -50,6 +51,12 @@ public class PreferencesDecorator {
 		}
 	}
 	
+	private void updateOcs() {
+		if (ocs == null) {
+			ocs = getSplited("accounts_ocs");
+		}
+	}
+	
 	private List<String> getSplited(String name) {
 		String str = preferences.getString(name, "");
 		if (str.length() == 0) {
@@ -67,6 +74,11 @@ public class PreferencesDecorator {
 		updatePasswords();
 		return Utils.decode(passwords.get(nr));
 	}
+	
+	public String getAccountOcs(int nr) {
+		updateOcs();
+		return Utils.decode(ocs.get(nr));
+	}
 
 	public void setAccountLogin(int nr, String value) {
 		updateLogins();
@@ -77,20 +89,29 @@ public class PreferencesDecorator {
 		updatePasswords();
 		passwords.set(nr, Utils.encode(value));
 	}
+	
+	public void setAccountOcs(int nr, String value) {
+		updateOcs();
+		ocs.set(nr, Utils.encode(value));
+	}
 
-	public void addAccount(String login, String password) {
+	public void addAccount(String login, String password, String oc) {
 		updateLogins();
 		updatePasswords();
+		updateOcs();
 		logins.add(login);
 		passwords.add(password);
+		ocs.add(oc);
 	}
 
 	public void flushAccount() {
 		updateLogins();
 		updatePasswords();
+		updateOcs();
 		preferences.edit()
 				.putString("accounts_logins", TextUtils.join("/", logins))
 				.putString("accounts_passwords", TextUtils.join("/", passwords))
+				.putString("accounts_ocs", TextUtils.join("/", ocs))
 				.commit();
 	}
 
@@ -106,7 +127,9 @@ public class PreferencesDecorator {
 	public void removeAccount(int nr) {
 		updateLogins();
 		updatePasswords();
+		updateOcs();
 		logins.remove(nr);
 		passwords.remove(nr);
+		ocs.remove(nr);
 	}
 }
