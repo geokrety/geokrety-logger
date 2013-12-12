@@ -28,6 +28,12 @@
             android:onClick="showInventoryActivity"
             android:text="@string/button_inventory" />
 
+        <Button
+            android:id="@+id/ocsButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="showLastOCsActivity"
+            android:text="@string/button_ocs" />
         
     </LinearLayout>
 

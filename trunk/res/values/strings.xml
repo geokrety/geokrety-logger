@@ -12,9 +12,8 @@
     <string name="oc_hint">OpenCaching login</string>
     <string name="description"></string>
     <string name="login_error_title">Loggin error</string>
-    <string name="login_error_password_message">Invalid login or password. Error code: </string>
+    <string name="login_error_password_message">Invalid GeoKrety login or password.</string>
     <string name="login_error_message">Connection error: </string>
-    <string name="inventory_error_message">Inventory retriving error</string>
     <string name="title_activity_accounts">GeoKrety accounts manager</string>
     <string name="accounts_button">Accounts</string>
     <string name="account_new">New</string>
@@ -30,10 +29,16 @@
     <string name="accounts_remove_question">Are you sure to remove account </string>
     <string name="error_current_null">Pleas select account.</string>
     <string name="title_activity_inventory">GeoKrety inventory</string>
-    <string name="hello_world">Hello world!</string>
-    
     <string name="button_inventory">Inventory</string>
+    <string name="button_ocs">OpenCaching last logs</string>
     <string name="menu_inventory_refresh">Refresh</string>
-    <string name="inventory_refresh_finish">Inventory refreshed</string>
+    <string name="menu_ocs_refresh">Refresh</string>
     
+    <string name="inventory_refresh_finish">Inventory refreshed</string>
+    <string name="ocs_refresh_finish">OpenCaching activity refreshed</string>
+    <string name="title_activity_last_ocs">Last log from OpenCaching.pl</string>
+    <string name="invalid_oclogin_error_message">Invalid OpenCaching.pl login</string>
+
+    <string name="inventory_error_message">Inventory retriving error. Pleas check your Interent connection.</string>
+    <string name="oclogs_error_message">OpenCaching logs retriving error. Pleas check your Interent connection.</string>
 </resources>

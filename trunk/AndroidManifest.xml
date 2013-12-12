@@ -32,6 +32,10 @@
             android:name="pl.nkg.geokrety.InventoryActivity"
             android:label="@string/title_activity_inventory" >
         </activity>
+        <activity
+            android:name="pl.nkg.geokrety.LastOCsActivity"
+            android:label="@string/title_activity_last_ocs" >
+        </activity>
     </application>
 
 </manifest>

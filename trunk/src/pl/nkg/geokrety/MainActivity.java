@@ -29,4 +29,8 @@ public class MainActivity extends Activity {
 	public void showInventoryActivity(View view) {
 		startActivity(new Intent(this, InventoryActivity.class));
 	}
+	
+	public void showLastOCsActivity(View view) {
+		startActivity(new Intent(this, LastOCsActivity.class));
+	}
 }

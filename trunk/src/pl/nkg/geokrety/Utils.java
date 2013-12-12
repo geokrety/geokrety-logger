@@ -117,7 +117,7 @@ public class Utils {
 			first = false;
 			sb.append(varible[0]);
 			sb.append("=");
-			sb.append(varible[1]);
+			sb.append(Utils.encode(varible[1]));
 		}
 
 		String url2 = sb.toString();
