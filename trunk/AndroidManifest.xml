@@ -28,6 +28,10 @@
             android:name="pl.nkg.geokrety.AccountsActivity"
             android:label="@string/title_activity_accounts" >
         </activity>
+        <activity
+            android:name="pl.nkg.geokrety.InventoryActivity"
+            android:label="@string/title_activity_inventory" >
+        </activity>
     </application>
 
 </manifest>

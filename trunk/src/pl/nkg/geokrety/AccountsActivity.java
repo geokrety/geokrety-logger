@@ -1,5 +1,7 @@
 package pl.nkg.geokrety;
 
+import pl.nkg.geokrety.data.Account;
+import pl.nkg.geokrety.data.StateHolder;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -19,34 +21,32 @@ import android.widget.Toast;
 public class AccountsActivity extends Activity {
 
 	private ListView mainListView;
-	private ArrayAdapter<String> listAdapter;
-	private PreferencesDecorator preferences;
+	private ArrayAdapter<Account> listAdapter;
 
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		preferences = new PreferencesDecorator(this);
+		final StateHolder holder = StateHolder.getInstance(this);
 
 		setContentView(R.layout.activity_accounts);
 
 		mainListView = (ListView) findViewById(R.id.accountListView);
 
 		// Create ArrayAdapter using the planet list.
-		listAdapter = new ArrayAdapter<String>(this,
+		listAdapter = new ArrayAdapter<Account>(this,
 				android.R.layout.simple_list_item_single_choice,
-				preferences.getAccountList());
+				holder.getAccountList());
 
 		// Set the ArrayAdapter as the ListView's adapter.
 		mainListView.setAdapter(listAdapter);
-		mainListView.setItemChecked(preferences.getCurrentAccount(), true);
+		mainListView.setItemChecked(holder.getDefaultAccount(), true);
 
 		mainListView.setOnItemClickListener(new OnItemClickListener() {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				preferences.setCurrentAccount(arg2);
-
+				holder.setDefaultAccount(arg2);
 			}
 		});
 	}
@@ -78,26 +78,30 @@ public class AccountsActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	private final DialogInterface.OnClickListener emptyListener = new DialogInterface.OnClickListener() {
 
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-		}};
-	
-	private void prepareAccountDialog(final boolean isEdit) {
-		final int current = preferences.getCurrentAccount();
-		if (isEdit && current == ListView.INVALID_POSITION) {
-				Toast t = Toast.makeText(AccountsActivity.this,
-						R.string.error_current_null, Toast.LENGTH_SHORT);
-				t.show();
-				return;
 		}
-		
+	};
+
+	private void prepareAccountDialog(final boolean isEdit) {
+		final StateHolder holder = StateHolder.getInstance(this);
+		final Account account = holder.getDefaultAccount() == ListView.INVALID_POSITION ? null
+				: holder.getAccountList().get(holder.getDefaultAccount());
+
+		if (isEdit && holder.getDefaultAccount() == ListView.INVALID_POSITION) {
+			Toast t = Toast.makeText(AccountsActivity.this,
+					R.string.error_current_null, Toast.LENGTH_SHORT);
+			t.show();
+			return;
+		}
+
 		LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
 
 		View layout = inflater.inflate(R.layout.activity_account,
-		        (ViewGroup) findViewById(R.id.accuntMainLayout));
+				(ViewGroup) findViewById(R.id.accuntMainLayout));
 
 		final EditText loginEditText = (EditText) layout
 				.findViewById(R.id.loginEditText);
@@ -107,70 +111,77 @@ public class AccountsActivity extends Activity {
 				.findViewById(R.id.ocEditText);
 
 		if (isEdit) {
-			loginEditText.setText(preferences.getAccountLogin(current));
-			passwordEditText.setText(preferences.getAccountPassword(current));
-			ocEditText.setText(preferences.getAccountOcs(current));
+			loginEditText.setText(account.getGeoKretyLogin());
+			passwordEditText.setText(account.getGeoKretyPassword());
+			ocEditText.setText(account.getOpenCachingLogin());
 		}
-		
+
 		// Budowanie i pokazywanie
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setView(layout);
-		builder.setTitle(isEdit ? R.string.accounts_edit_title : R.string.accounts_add_title);
+		builder.setTitle(isEdit ? R.string.accounts_edit_title
+				: R.string.accounts_add_title);
 		builder.setNegativeButton(android.R.string.cancel, emptyListener);
 		builder.setPositiveButton(android.R.string.ok, emptyListener);
 		final AlertDialog alertDialog = builder.create();
 		alertDialog.show();
-		
 
-		alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-            	String login = loginEditText.getText().toString();
-				String password = passwordEditText.getText().toString();
-				String oc = ocEditText.getText().toString();
+		alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+				.setOnClickListener(new View.OnClickListener() {
+					public void onClick(View v) {
+						String login = loginEditText.getText().toString();
+						String password = passwordEditText.getText().toString();
+						String oc = ocEditText.getText().toString();
 
-				if (login.length() == 0) {
-					Toast t = Toast.makeText(AccountsActivity.this,
-							R.string.error_login_null, Toast.LENGTH_SHORT);
-					t.show();
-					return;
-				}
+						if (login.length() == 0) {
+							Toast t = Toast.makeText(AccountsActivity.this,
+									R.string.error_login_null,
+									Toast.LENGTH_SHORT);
+							t.show();
+							return;
+						}
 
-				if (password.length() == 0) {
-					Toast t = Toast.makeText(AccountsActivity.this,
-							R.string.error_password_null, Toast.LENGTH_SHORT);
-					t.show();
-					return;
-				}
-				
-				if (oc.length() == 0) {
-					Toast t = Toast.makeText(AccountsActivity.this,
-							R.string.error_oc_null, Toast.LENGTH_SHORT);
-					t.show();
-					return;
-				}
-				
-				if (isEdit) {
-					preferences.setAccountLogin(current, login);
-					preferences.setAccountPassword(current, password);
-					preferences.setAccountOcs(current, oc);
-				} else {
-					preferences.addAccount(login, password, oc);
-				}
-				listAdapter.notifyDataSetChanged();
-				alertDialog.dismiss();
-            }
-        });
+						if (password.length() == 0) {
+							Toast t = Toast.makeText(AccountsActivity.this,
+									R.string.error_password_null,
+									Toast.LENGTH_SHORT);
+							t.show();
+							return;
+						}
+
+						if (oc.length() == 0) {
+							Toast t = Toast.makeText(AccountsActivity.this,
+									R.string.error_oc_null, Toast.LENGTH_SHORT);
+							t.show();
+							return;
+						}
+
+						if (isEdit) {
+							account.setGeoKretyLogin(login);
+							account.setGeoKretyPassword(password);
+							account.setOpenCachingLogin(oc);
+						} else {
+							holder.getAccountList().add(
+									new Account(login, password, oc));
+						}
+						listAdapter.notifyDataSetChanged();
+						alertDialog.dismiss();
+					}
+				});
 	}
 
 	@Override
 	protected void onPause() {
-		preferences.flushAccount();
+		StateHolder.getInstance(this).storeAccountList(this);
 		super.onPause();
 	}
 
 	private void onRemoveAccount() {
-		final int current = preferences.getCurrentAccount();// getCurrentAccount();
-		if (current == ListView.INVALID_POSITION) {
+		final StateHolder holder = StateHolder.getInstance(this);
+		final Account account = holder.getDefaultAccount() == ListView.INVALID_POSITION ? null
+				: holder.getAccountList().get(holder.getDefaultAccount());
+
+		if (account == null) {
 			Toast t = Toast.makeText(AccountsActivity.this,
 					R.string.error_current_null, Toast.LENGTH_SHORT);
 			t.show();
@@ -182,20 +193,17 @@ public class AccountsActivity extends Activity {
 		builder.setTitle(R.string.account_remove);
 		builder.setMessage(getResources().getText(
 				R.string.accounts_remove_question)
-				+ " " + preferences.getAccountLogin() + "?");
+				+ " " + account.getGeoKretyLogin() + "?");
 
 		builder.setPositiveButton(android.R.string.yes,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int which) {
 						mainListView.setItemChecked(
-								preferences.getCurrentAccount(), false);
-						preferences.removeAccount(preferences
-								.getCurrentAccount());
+								holder.getDefaultAccount(), false);
+						holder.getAccountList().remove(holder.getDefaultAccount());
 						listAdapter.notifyDataSetChanged();
-						preferences
-								.setCurrentAccount(ListView.INVALID_POSITION);
-						dialog.dismiss();
+						holder.setDefaultAccount(ListView.INVALID_POSITION);
 					}
 
 				});
@@ -205,7 +213,6 @@ public class AccountsActivity extends Activity {
 
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
 					}
 				});
 

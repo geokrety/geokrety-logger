@@ -29,4 +29,9 @@
     <string name="accounts_remove_title">Remove account</string>
     <string name="accounts_remove_question">Are you sure to remove account </string>
     <string name="error_current_null">Pleas select account.</string>
+    <string name="title_activity_inventory">GeoKrety inventory</string>
+    <string name="hello_world">Hello world!</string>
+    
+    <string name="menu_inventory_refresh">Refresh</string>
+
 </resources>

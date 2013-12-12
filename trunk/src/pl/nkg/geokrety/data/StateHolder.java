@@ -1,6 +1,7 @@
 package pl.nkg.geokrety.data;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import pl.nkg.geokrety.Utils;
 
@@ -80,5 +81,17 @@ public class StateHolder {
 	
 	private static SharedPreferences getPreferences(ContextWrapper context) {
 		return context.getSharedPreferences("pl.nkg.geokrety", Context.MODE_PRIVATE);
+	}
+
+	public List<Account> getAccountList() {
+		return accountList;
+	}
+
+	public int getDefaultAccount() {
+		return defaultAccount;
+	}
+
+	public void setDefaultAccount(int defaultAccount) {
+		this.defaultAccount = defaultAccount;
 	}
 }

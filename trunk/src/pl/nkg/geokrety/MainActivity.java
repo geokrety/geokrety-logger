@@ -48,12 +48,10 @@ public class MainActivity extends Activity {
     //DEFINING A STRING ADAPTER WHICH WILL HANDLE THE DATA OF THE LISTVIEW
 	private ArrayAdapter<String> adapter;
 	
-	private PreferencesDecorator preferences;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		preferences = new PreferencesDecorator(this);
 		setContentView(R.layout.activity_main);
 		
 		adapter = new ArrayAdapter<String>(this,
@@ -75,7 +73,7 @@ public class MainActivity extends Activity {
 		startActivity(new Intent(this, AccountsActivity.class));
 	}
 
-
+/*
 	private String getLogin() {
 		preferences = new PreferencesDecorator(this);
 		return preferences.getAccountLogin();
@@ -94,7 +92,7 @@ public class MainActivity extends Activity {
 	private void setSecureID(String value) {
 		((EditText) findViewById(R.id.secureIDEditText)).setText(value);
 	}
-
+*//*
 	private void showMessageBox(String title, String message) {
 		AlertDialog.Builder dlgAlert = new AlertDialog.Builder(this);
 
@@ -112,5 +110,5 @@ public class MainActivity extends Activity {
 
 					}
 				});
-	}
+	}*/
 }
