@@ -21,39 +21,14 @@
             android:onClick="showAccountsActivity"
             android:text="@string/accounts_button" />
 
-        <TextView
-            android:id="@+id/descriptionTextView"
+        <Button
+            android:id="@+id/inventoryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/description" />
+            android:onClick="showInventoryActivity"
+            android:text="@string/button_inventory" />
 
-        <LinearLayout
-            android:id="@+id/loginButtonLinearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" >
-
-            <Button
-                android:id="@+id/loginButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:onClick="retriveSecureID"
-                android:text="@string/login" />
-        </LinearLayout>
-
-        <EditText
-            android:id="@+id/secureIDEditText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:hint="@string/secure_id" />
-
-            <ListView
-                android:id="@+id/inventoryListView"
-                android:layout_width="match_parent"
-                android:layout_height="257dp"
-                android:drawSelectorOnTop="true" >
-
-            </ListView>
+        
     </LinearLayout>
 
 </ScrollView>

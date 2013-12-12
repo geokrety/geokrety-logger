@@ -32,6 +32,8 @@
     <string name="title_activity_inventory">GeoKrety inventory</string>
     <string name="hello_world">Hello world!</string>
     
+    <string name="button_inventory">Inventory</string>
     <string name="menu_inventory_refresh">Refresh</string>
-
+    <string name="inventory_refresh_finish">Inventory refreshed</string>
+    
 </resources>

@@ -1,5 +1,7 @@
 package pl.nkg.geokrety.exceptions;
 
+import android.content.ContextWrapper;
+
 public class MessagedException extends Exception {
 	private static final long serialVersionUID = 6866743560825681444L;
 	private final int messageID;
@@ -21,5 +23,10 @@ public class MessagedException extends Exception {
 	
 	public Object[] getArgs() {
 		return args;
+	}
+
+	public String getFormatedMessage(ContextWrapper context) {
+		String message = context.getResources().getString(messageID);
+		return String.format(message, args);
 	}
 }

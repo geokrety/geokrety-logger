@@ -54,4 +54,9 @@ public class Geokret {
 	public String getTackingCode() {
 		return nr;
 	}
+	
+	@Override
+	public String toString() {
+		return name + " (" + nr + ")";
+	}
 }

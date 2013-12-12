@@ -71,6 +71,10 @@ public class Account {
 		return openCachingLogs;
 	}
 	
+	public ArrayList<Geokret> getInventory() {
+		return inventory;
+	}
+	
 	public boolean expired() {
 		if (lastDataLoaded == null) {
 			return true;
@@ -139,5 +143,11 @@ public class Account {
 	@Override
 	public String toString() {
 		return geoKretyLogin;
+	}
+
+	public void loadIfExpired() throws MessagedException {
+		if (expired()) {
+			loadData();
+		}
 	}
 }
