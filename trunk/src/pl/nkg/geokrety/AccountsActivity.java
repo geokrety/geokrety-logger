@@ -57,6 +57,13 @@ public class AccountsActivity extends Activity {
 		getMenuInflater().inflate(R.menu.accounts, menu);
 		return true;
 	}
+	
+	@Override
+	public void onBackPressed() {
+		setResult(StateHolder.getInstance(this).getDefaultAccount());
+		finish();
+		super.onBackPressed();
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

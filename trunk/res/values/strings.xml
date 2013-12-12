@@ -33,12 +33,47 @@
     <string name="button_ocs">OpenCaching last logs</string>
     <string name="menu_inventory_refresh">Refresh</string>
     <string name="menu_ocs_refresh">Refresh</string>
-    
     <string name="inventory_refresh_finish">Inventory refreshed</string>
     <string name="ocs_refresh_finish">OpenCaching activity refreshed</string>
     <string name="title_activity_last_ocs">Last log from OpenCaching.pl</string>
     <string name="invalid_oclogin_error_message">Invalid OpenCaching.pl login</string>
-
     <string name="inventory_error_message">Inventory retriving error. Pleas check your Interent connection.</string>
     <string name="oclogs_error_message">OpenCaching logs retriving error. Pleas check your Interent connection.</string>
+    <string name="title_activity_log">LogActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="log_drop">I\'ve dropped GeoKret</string>
+    <string name="log_grab">I\'ve grabbed GeoKret</string>
+    <string name="log_met">I\'ve met GeoKret</string>
+    <string name="log_dipped">I\'ve dipped GeoKret</string>
+    <string name="log_comment">I\'ve Comment GeoKret</string>
+    <string name="submit_error_message">Submit error</string>
+
+    <string-array name="log_array">
+        <item>@string/log_drop</item>
+        <item>@string/log_grab</item>
+        <item>@string/log_met</item>
+        <item>@string/log_dipped</item>
+        <item>@string/log_comment</item>
+    </string-array>
+
+    <string name="form_log_type">1. Chose log type</string>
+    <string name="form_identify">2. Identify GeoKret</string>
+    <string name="form_code">Tracking code</string>
+    <string name="form_inventory">Inventory</string>
+    <string name="form_accounts">Config</string>
+    <string name="form_location">3. New location</string>
+    <string name="form_waypoint">Waypoint</string>
+    <string name="form_oclogs">OC Log</string>
+    <string name="form_cords">Coordinates</string>
+    <string name="form_gps">GPS</string>
+    <string name="form_additional">4. Additional data</string>
+    <string name="form_date">Date</string>
+    <string name="form_time">Time</string>
+    <string name="form_comment">Comment</string>
+    <string name="form_submit">Go!</string>
+    <string name="form_clear">Clear</string>
+    <string name="title_dialog_inventory">Your inventory</string>
+    <string name="title_dialog_waypoint">Latest OpenCaching.pl logs</string>
+    <string name="not_implemented_yet">Not implemented yet</string>
+
 </resources>

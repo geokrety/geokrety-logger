@@ -33,4 +33,8 @@ public class MainActivity extends Activity {
 	public void showLastOCsActivity(View view) {
 		startActivity(new Intent(this, LastOCsActivity.class));
 	}
+	
+	public void showLogGeoKretActivity(View view) {
+		startActivity(new Intent(this, LogActivity.class));
+	}
 }

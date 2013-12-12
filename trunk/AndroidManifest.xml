@@ -36,6 +36,10 @@
             android:name="pl.nkg.geokrety.LastOCsActivity"
             android:label="@string/title_activity_last_ocs" >
         </activity>
+        <activity
+            android:name="pl.nkg.geokrety.LogActivity"
+            android:label="@string/title_activity_log" >
+        </activity>
     </application>
 
 </manifest>

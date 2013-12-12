@@ -34,6 +34,13 @@
             android:layout_height="wrap_content"
             android:onClick="showLastOCsActivity"
             android:text="@string/button_ocs" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="showLogGeoKretActivity"
+            android:text="Log GeoKret" />
         
     </LinearLayout>
 
