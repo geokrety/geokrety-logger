@@ -37,7 +37,7 @@ public class Utils {
 			throw new RuntimeException(e);
 		}
 	}
-	
+
 	public static String decode(String encoded) {
 		try {
 			return URLDecoder.decode(encoded, "utf-8");
@@ -45,7 +45,6 @@ public class Utils {
 			throw new RuntimeException(e);
 		}
 	}
-	
 
 	public static Document getDomElement(String xml) {
 		Document doc = null;
@@ -98,10 +97,11 @@ public class Utils {
 		for (String[] varible : data) {
 			nameValuePairs.add(new BasicNameValuePair(varible[0], varible[1]));
 		}
-		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 
 		// Execute HTTP Post Request
-		return EntityUtils.toString(httpclient.execute(httppost).getEntity(), HTTP.UTF_8);
+		return EntityUtils.toString(httpclient.execute(httppost).getEntity(),
+				HTTP.UTF_8);
 	}
 
 	public static String httpGet(String url, String[][] data)
@@ -124,7 +124,8 @@ public class Utils {
 		HttpGet httppost = new HttpGet(url2);
 
 		// Execute HTTP Post Request
-		return EntityUtils.toString(httpclient.execute(httppost).getEntity(), HTTP.UTF_8);
+		return EntityUtils.toString(httpclient.execute(httppost).getEntity(),
+				HTTP.UTF_8);
 	}
 
 }

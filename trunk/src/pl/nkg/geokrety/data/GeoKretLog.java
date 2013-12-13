@@ -164,7 +164,7 @@ public class GeoKretLog {
 	public void setDateAndTime(Date date) {
 		data = DateFormat.format("yyyy-MM-dd", date).toString();
 		Time today = new Time(Time.getCurrentTimezone());
-		today.setToNow();
+		today.set(date.getTime());
 		godzina = today.hour;
 		minuta = today.minute;
 	}
@@ -172,7 +172,7 @@ public class GeoKretLog {
 	public void setDate(int year, int monthOfYear, int dayOfMonth) {
 		NumberFormat nf = NumberFormat.getInstance();
 		nf.setMinimumIntegerDigits(2);
-		data = Integer.toString(year) + ":" + nf.format(monthOfYear) + ":" + nf.format(dayOfMonth);
+		data = Integer.toString(year) + "-" + nf.format(monthOfYear) + "-" + nf.format(dayOfMonth);
 	}
 
 	public String submit(Account currentAccount) throws MessagedException {

@@ -104,6 +104,7 @@ public class LogActivity extends Activity {
 		log.setWpt(waypointEditText.getText().toString());
 		log.setLatlon(coordinatesEditText.getText().toString());
 		log.setComment(commentEditText.getText().toString());
+		log.setLogTypeMapped(logTypeSpinner.getSelectedItemPosition());
 	}
 
 	public void showInventory(View view) {
@@ -186,16 +187,22 @@ public class LogActivity extends Activity {
 
 	public void checkDate(View view) {
 		String[] date = currentLog.getData().split("-");
+		int y = Integer.parseInt(date[0]);
+		int m = Integer.parseInt(date[1]) - 1;
+		int d = Integer.parseInt(date[2]);
+		try {
 		new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
 			@Override
 			public void onDateSet(DatePicker view, int year, int monthOfYear,
 					int dayOfMonth) {
-				currentLog.setDate(year, monthOfYear, dayOfMonth);
+				currentLog.setDate(year, monthOfYear + 1, dayOfMonth);
 				loadFromGeoKretLog(currentLog);
 			}
-		}, Integer.parseInt(date[0]), Integer.parseInt(date[1]),
-				Integer.parseInt(date[2])).show();
+		}, y, m, d).show();
+		} catch (Exception e) {
+			System.out.print(e);
+		}
 	}
 
 	public void checkTime(View view) {
@@ -215,8 +222,7 @@ public class LogActivity extends Activity {
 			storeToGeoKretLog(currentLog);
 			String ret = currentLog.submit(currentAccount);
 			reset(view);
-			Toast.makeText(this, ret, Toast.LENGTH_SHORT)
-			.show();
+			Toast.makeText(this, ret, Toast.LENGTH_SHORT).show();
 		} catch (MessagedException e) {
 			Toast.makeText(this, e.getFormatedMessage(this), Toast.LENGTH_SHORT)
 					.show();
