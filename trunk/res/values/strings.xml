@@ -44,8 +44,8 @@
     <string name="log_drop">I\'ve dropped GeoKret</string>
     <string name="log_grab">I\'ve grabbed GeoKret</string>
     <string name="log_met">I\'ve met GeoKret</string>
-    <string name="log_dipped">I\'ve dipped GeoKret</string>
-    <string name="log_comment">I\'ve Comment GeoKret</string>
+    <string name="log_dipped">I\'ve dipped a GeoKret</string>
+    <string name="log_comment">Comment</string>
     <string name="submit_error_message">Submit error</string>
 
     <string-array name="log_array">
@@ -75,5 +75,25 @@
     <string name="title_dialog_inventory">Your inventory</string>
     <string name="title_dialog_waypoint">Latest OpenCaching.pl logs</string>
     <string name="not_implemented_yet">Not implemented yet</string>
-
+    
+    <string name="download_title">Refreshing user account</string>
+    <string name="download_login_gk">Login to GeoKrety.org&#8230;</string>
+    <string name="download_getting_gk">Getting inventory from GeoKrety.org&#8230;</string>
+    <string name="download_getting_ocs">Getting last logs from OpenCaching.pl&#8230;</string>
+    <string name="download_getting_names">Getting geocache names&#8230;</string>
+    <string name="download_finish">Refresh finish</string>
+    <string name="download_fail">Refresh fail: </string>
+    
+    <string name="submit_title">Submitting log</string>
+    <string name="submit_message">Log of geokret are submitting&#8230;</string>
+    <string name="submit_finish">GeoKret logged finish</string>
+    <string name="submit_fail">Submit fail: </string>
+    
+    <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013</string>
+    <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
+    
+    <string name="version">GeoKrety Logger v0.0.1 alpha</string>
+    <string name="button_log">Log GeoKret</string>
+    
+        
 </resources>

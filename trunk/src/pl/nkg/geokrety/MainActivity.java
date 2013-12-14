@@ -12,7 +12,6 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
 	}
 
 	@Override
@@ -21,7 +20,7 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-	
+
 	public void showAccountsActivity(View view) {
 		startActivity(new Intent(this, AccountsActivity.class));
 	}
@@ -29,11 +28,11 @@ public class MainActivity extends Activity {
 	public void showInventoryActivity(View view) {
 		startActivity(new Intent(this, InventoryActivity.class));
 	}
-	
+
 	public void showLastOCsActivity(View view) {
 		startActivity(new Intent(this, LastOCsActivity.class));
 	}
-	
+
 	public void showLogGeoKretActivity(View view) {
 		startActivity(new Intent(this, LogActivity.class));
 	}

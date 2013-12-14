@@ -6,6 +6,7 @@ import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.exceptions.MessagedException;
+import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -24,7 +25,7 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class LogActivity extends Activity {
+public class LogActivity extends Activity implements RefreshSuccessfulListener {
 
 	private GeoKretLog currentLog;
 	private Account currentAccount;
@@ -64,6 +65,7 @@ public class LogActivity extends Activity {
 		if (currentAccountNr != ListView.INVALID_POSITION) {
 			currentAccount = holder.getAccountList().get(currentAccountNr);
 			currentLog.setGeoKretyLogin(currentAccount.getGeoKretyLogin());
+			currentAccount.loadIfExpired(this, this);
 		}
 	}
 
@@ -136,18 +138,7 @@ public class LogActivity extends Activity {
 					Toast.LENGTH_SHORT).show();
 			return false;
 		}
-		try {
-			currentAccount.loadIfExpired();
-			return true;
-		} catch (MessagedException e) {
-			Toast.makeText(this, e.getFormatedMessage(this), Toast.LENGTH_SHORT)
-					.show();
-		} catch (Exception e) {
-			Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT)
-					.show();
-		}
-
-		return false;
+		return !currentAccount.expired();
 	}
 
 	public void showOcs(View view) {
@@ -191,15 +182,17 @@ public class LogActivity extends Activity {
 		int m = Integer.parseInt(date[1]) - 1;
 		int d = Integer.parseInt(date[2]);
 		try {
-		new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+			new DatePickerDialog(this,
+					new DatePickerDialog.OnDateSetListener() {
 
-			@Override
-			public void onDateSet(DatePicker view, int year, int monthOfYear,
-					int dayOfMonth) {
-				currentLog.setDate(year, monthOfYear + 1, dayOfMonth);
-				loadFromGeoKretLog(currentLog);
-			}
-		}, y, m, d).show();
+						@Override
+						public void onDateSet(DatePicker view, int year,
+								int monthOfYear, int dayOfMonth) {
+							currentLog.setDate(year, monthOfYear + 1,
+									dayOfMonth);
+							loadFromGeoKretLog(currentLog);
+						}
+					}, y, m, d).show();
 		} catch (Exception e) {
 			System.out.print(e);
 		}
@@ -217,25 +210,28 @@ public class LogActivity extends Activity {
 		}, currentLog.getGodzina(), currentLog.getMinuta(), true).show();
 	}
 
-	public void submit(View view) {
-		try {
-			storeToGeoKretLog(currentLog);
-			String ret = currentLog.submit(currentAccount);
-			reset(view);
-			Toast.makeText(this, ret, Toast.LENGTH_SHORT).show();
-		} catch (MessagedException e) {
-			Toast.makeText(this, e.getFormatedMessage(this), Toast.LENGTH_SHORT)
-					.show();
-		} catch (Exception e) {
-			Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_SHORT)
-					.show();
-		}
+	public void submit(final View view) {
+		storeToGeoKretLog(currentLog);
+		currentLog.submit(this, currentAccount,
+				new RefreshSuccessfulListener() {
+
+					@Override
+					public void onRefreshSuccessful() {
+						reset(view);
+					}
+				});
 	}
 
 	public void reset(View view) {
 		currentLog = new GeoKretLog();
 		updateCurrentAccount();
 		loadFromGeoKretLog(currentLog);
+	}
+
+	@Override
+	public void onRefreshSuccessful() {
+		// TODO Auto-generated method stub
+
 	}
 
 }

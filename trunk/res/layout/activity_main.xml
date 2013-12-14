@@ -40,7 +40,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="showLogGeoKretActivity"
-            android:text="Log GeoKret" />
+            android:text="@string/button_log" />
+
+        <TextView
+            android:id="@+id/versionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/version" />
+
+        <TextView
+            android:id="@+id/copyrightTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/copyright" />
+
+        <TextView
+            android:id="@+id/aboutTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@string/about" >
+        </TextView>
         
     </LinearLayout>
 

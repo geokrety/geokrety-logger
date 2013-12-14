@@ -14,11 +14,16 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.text.TextUtils;
+import android.widget.Toast;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.exceptions.MessagedException;
+import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
 
 public class Account {
 	private static final String URL_LOGIN = "http://geokrety.org/api-login2secid.php";
@@ -95,15 +100,14 @@ public class Account {
 		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
 	}
 
-	public void loadData() throws MessagedException {
-		loadSecureID();
-		loadInventory();
-		loadOpenCachingUUID();
-		loadOpenCachingLogs();
-		lastDataLoaded = new Date();
-	}
+	/*
+	 * public void loadData() throws MessagedException { loadSecureID();
+	 * loadInventory(); loadOpenCachingUUID(); loadOpenCachingLogs();
+	 * lastDataLoaded = new Date(); }
+	 */
 
-	private void loadSecureID() throws MessagedException {
+	private void loadSecureID(AsyncTask<String, Integer, Boolean> asyncTask)
+			throws MessagedException {
 		String[][] postData = new String[][] {
 				new String[] { "login", geoKretyLogin },
 				new String[] { "password", geoKretyPassword } };
@@ -112,18 +116,20 @@ public class Account {
 		try {
 			value = Utils.httpPost(URL_LOGIN, postData);
 		} catch (Exception e) {
-			throw new MessagedException(R.string.login_error_message);
+			throw new MessagedException(R.string.login_error_message,
+					e.getLocalizedMessage());
 		}
 
 		if (value != null && !value.startsWith("error")) {
 			geoKretySecredID = value.trim();
 		} else {
 			throw new MessagedException(R.string.login_error_password_message,
-					new Object[] { geoKretyLogin, String.valueOf(value) });
+					String.valueOf(value));
 		}
 	}
 
-	private void loadInventory() throws MessagedException {
+	private void loadInventory(AsyncTask<String, Integer, Boolean> asyncTask)
+			throws MessagedException {
 		inventory = new ArrayList<Geokret>();
 
 		String[][] getData = new String[][] {
@@ -144,7 +150,9 @@ public class Account {
 		}
 	}
 
-	private void loadOpenCachingUUID() throws MessagedException {
+	private void loadOpenCachingUUID(
+			AsyncTask<String, Integer, Boolean> asyncTask)
+			throws MessagedException {
 		String[][] getData = new String[][] {
 				new String[] { "username", openCachingLogin },
 				new String[] { "fields", "uuid" },
@@ -160,13 +168,16 @@ public class Account {
 		}
 	}
 
-	private void loadOpenCachingLogs() throws MessagedException {
+	private void loadOpenCachingLogs(
+			AsyncTask<String, Integer, Boolean> asyncTask)
+			throws MessagedException {
 		openCachingLogs = new ArrayList<GeocacheLog>();
 		String[][] getData = new String[][] {
 				new String[] { "user_uuid", openCachingUUID },
 				new String[] { "consumer_key", CONSUMER_KEY } };
 		try {
 			String jsonString = Utils.httpGet(URL_USERLOGS, getData);
+
 			JSONArray json = new JSONArray(jsonString);
 
 			for (int i = 0; i < json.length(); i++) {
@@ -222,9 +233,115 @@ public class Account {
 		return geoKretyLogin;
 	}
 
-	public void loadIfExpired() throws MessagedException {
+	public void loadIfExpired(Activity context,
+			RefreshSuccessfulListener listener) {
 		if (expired()) {
-			loadData();
+			loadData(context, listener);
+		} else {
+			listener.onRefreshSuccessful();
 		}
+	}
+
+	private AsyncTask<String, Integer, Boolean> refreshTask;
+
+	public void loadData(final Activity context,
+			final RefreshSuccessfulListener listener) {
+
+		if (refreshTask != null) {
+			return;
+		}
+
+		refreshTask = new AsyncTask<String, Integer, Boolean>() {
+			private ProgressDialog dialog;
+			private MessagedException excaption;
+
+			@Override
+			protected void onPreExecute() {
+				try {
+					dialog = ProgressDialog.show(context, context
+							.getResources().getString(R.string.download_title),
+							"", true);
+				} catch (Throwable t) {
+					t.printStackTrace();
+					refreshTask.cancel(true);
+					refreshTask = null;
+				}
+			}
+
+			@Override
+			protected Boolean doInBackground(String... params) {
+				try {
+					publishProgress(0);
+					loadSecureID(this);
+					publishProgress(1);
+					loadInventory(this);
+					publishProgress(2);
+					loadOpenCachingUUID(this);
+					publishProgress(3);
+					loadOpenCachingLogs(this);
+					lastDataLoaded = new Date();
+					return true;
+				} catch (MessagedException e) {
+					excaption = e;
+					return false;
+				}
+
+			}
+
+			@Override
+			protected void onPostExecute(Boolean result) {
+				super.onPostExecute(result);
+				if (result != null) {
+					if (result) {
+						Toast.makeText(context, R.string.download_finish,
+								Toast.LENGTH_LONG).show();
+						listener.onRefreshSuccessful();
+					} else {
+						Toast.makeText(context,
+								excaption.getFormatedMessage(context),
+								Toast.LENGTH_LONG).show();
+					}
+					try {
+						dialog.dismiss();
+					} catch (Throwable t) {
+						t.printStackTrace();
+					}
+				}
+				refreshTask = null;
+			}
+
+			@Override
+			protected void onProgressUpdate(Integer... values) {
+				try {
+					switch (values[0]) {
+					case 0:
+						dialog.setMessage(context.getResources().getString(
+								R.string.download_login_gk));
+						break;
+
+					case 1:
+						dialog.setMessage(context.getResources().getString(
+								R.string.download_getting_gk));
+						break;
+
+					case 2:
+						dialog.setMessage(context.getResources().getString(
+								R.string.download_getting_ocs));
+						break;
+
+					case 3:
+						dialog.setMessage(context.getResources().getString(
+								R.string.download_getting_names));
+						break;
+					}
+				} catch (Throwable t) {
+					t.printStackTrace();
+					refreshTask.cancel(true);
+					refreshTask = null;
+				}
+
+			}
+
+		}.execute();
 	}
 }
