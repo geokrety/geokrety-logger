@@ -95,5 +95,7 @@
         first public version, \n
         works only with Android 2.1-2.3.x.</string>
     <string name="title_activity_about">About</string>
+    <string name="no_account_configured">You must configure account!</string>
+    <string name="button_add_account">Add account</string>
 
 </resources>

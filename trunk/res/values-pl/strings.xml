@@ -87,5 +87,7 @@
         0.0.0 alpha - 2013-12-13\n
         - pierwsza wersja działająca jedynie pod Android 2.1-2.3.x.</string>
     <string name="title_activity_about">Informacje o GeoKrety Logger</string>
+    <string name="no_account_configured">Najpierw dodaj co najmniej jedno konto!</string>
+    <string name="button_add_account">Dodaj nowe konto</string>
 
 </resources>

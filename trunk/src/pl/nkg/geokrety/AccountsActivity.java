@@ -85,6 +85,10 @@ public class AccountsActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	public void onAddAccountButtonClicks(View view) {
+		prepareAccountDialog(false);
+	}
 
 	private final DialogInterface.OnClickListener emptyListener = new DialogInterface.OnClickListener() {
 
