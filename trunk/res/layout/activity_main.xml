@@ -14,55 +14,70 @@
         android:layout_height="wrap_content"
         android:orientation="vertical" >
 
-        <Button
-            android:id="@+id/accountsButton"
+        <TextView
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@string/welcome" />
+
+        <Button
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showAccountsActivity"
             android:text="@string/accounts_button" />
 
         <Button
-            android:id="@+id/inventoryButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showInventoryActivity"
             android:text="@string/button_inventory" />
 
         <Button
-            android:id="@+id/ocsButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showLastOCsActivity"
             android:text="@string/button_ocs" />
 
         <Button
-            android:id="@+id/button1"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:onClick="showLogGeoKretActivity"
             android:text="@string/button_log" />
 
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="showAboutActivity"
+            android:text="@string/button_about" />
+
         <TextView
-            android:id="@+id/versionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dip"
             android:text="@string/version" />
 
         <TextView
-            android:id="@+id/copyrightTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/copyright" />
 
         <TextView
-            android:id="@+id/aboutTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
             android:autoLink="web"
             android:linksClickable="true"
-            android:text="@string/about" >
-        </TextView>
-        
+            android:text="@string/about" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@string/emergency" />
     </LinearLayout>
 
 </ScrollView>

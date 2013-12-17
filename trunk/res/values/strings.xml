@@ -3,15 +3,12 @@
 
     <string name="app_name">GeoKrety Logger</string>
     <string name="action_settings">Settings</string>
-    <string name="secure_id">Secure ID:</string>
     <string name="login">GK login:</string>
     <string name="password">GK password:</string>
     <string name="oc">OC login:</string>
     <string name="login_hint">GeoKrety login</string>
     <string name="password_hint">GeoKrety password</string>
     <string name="oc_hint">OpenCaching login</string>
-    <string name="description"></string>
-    <string name="login_error_title">Loggin error</string>
     <string name="login_error_password_message">Invalid GeoKrety login or password.</string>
     <string name="login_error_message">Connection error: </string>
     <string name="title_activity_accounts">GeoKrety accounts manager</string>
@@ -19,34 +16,29 @@
     <string name="account_new">New</string>
     <string name="account_edit">Edit</string>
     <string name="account_remove">Remove</string>
-    <string name="title_activity_account">GeoKrety accounts manager</string>
     <string name="error_login_null">GeoKrety.org login can not be empty</string>
     <string name="error_password_null">GeoKrety.org password can not be empty</string>
     <string name="error_oc_null">OpenCaching.pl login can not be empty</string>
     <string name="accounts_add_title">Add new account</string>
     <string name="accounts_edit_title">Edit account</string>
-    <string name="accounts_remove_title">Remove account</string>
     <string name="accounts_remove_question">Are you sure to remove account </string>
     <string name="error_current_null">Pleas select account.</string>
     <string name="title_activity_inventory">GeoKrety inventory</string>
     <string name="button_inventory">Inventory</string>
+    <string name="button_about">About</string>
     <string name="button_ocs">OpenCaching last logs</string>
     <string name="menu_inventory_refresh">Refresh</string>
     <string name="menu_ocs_refresh">Refresh</string>
-    <string name="inventory_refresh_finish">Inventory refreshed</string>
-    <string name="ocs_refresh_finish">OpenCaching activity refreshed</string>
     <string name="title_activity_last_ocs">Last log from OpenCaching.pl</string>
     <string name="invalid_oclogin_error_message">Invalid OpenCaching.pl login</string>
     <string name="inventory_error_message">Inventory retriving error. Pleas check your Interent connection.</string>
     <string name="oclogs_error_message">OpenCaching logs retriving error. Pleas check your Interent connection.</string>
     <string name="title_activity_log">LogActivity</string>
-    <string name="hello_world">Hello world!</string>
     <string name="log_drop">I\'ve dropped GeoKret</string>
     <string name="log_grab">I\'ve grabbed GeoKret</string>
     <string name="log_met">I\'ve met GeoKret</string>
     <string name="log_dipped">I\'ve dipped a GeoKret</string>
     <string name="log_comment">Comment</string>
-    <string name="submit_error_message">Submit error</string>
 
     <string-array name="log_array">
         <item>@string/log_drop</item>
@@ -60,40 +52,47 @@
     <string name="form_identify">2. Identify GeoKret</string>
     <string name="form_code">Tracking code</string>
     <string name="form_inventory">Inventory</string>
-    <string name="form_accounts">Config</string>
     <string name="form_location">3. New location</string>
     <string name="form_waypoint">Waypoint</string>
     <string name="form_oclogs">OC Log</string>
     <string name="form_cords">Coordinates</string>
     <string name="form_gps">GPS</string>
     <string name="form_additional">4. Additional data</string>
-    <string name="form_date">Date</string>
-    <string name="form_time">Time</string>
     <string name="form_comment">Comment</string>
     <string name="form_submit">Go!</string>
     <string name="form_clear">Clear</string>
     <string name="title_dialog_inventory">Your inventory</string>
-    <string name="title_dialog_waypoint">Latest OpenCaching.pl logs</string>
+    <string name="title_dialog_ocs">Your last logs in OpenCaching.pl</string>
     <string name="not_implemented_yet">Not implemented yet</string>
-    
     <string name="download_title">Refreshing user account</string>
     <string name="download_login_gk">Login to GeoKrety.org&#8230;</string>
     <string name="download_getting_gk">Getting inventory from GeoKrety.org&#8230;</string>
     <string name="download_getting_ocs">Getting last logs from OpenCaching.pl&#8230;</string>
     <string name="download_getting_names">Getting geocache names&#8230;</string>
     <string name="download_finish">Refresh finish</string>
-    <string name="download_fail">Refresh fail: </string>
-    
     <string name="submit_title">Submitting log</string>
     <string name="submit_message">Log of geokret are submitting&#8230;</string>
     <string name="submit_finish">GeoKret logged finish</string>
     <string name="submit_fail">Submit fail: </string>
-    
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
-    
-    <string name="version">GeoKrety Logger v0.0.1 alpha</string>
+    <string name="version">GeoKrety Logger v0.0.2 alpha</string>
     <string name="button_log">Log GeoKret</string>
-    
-        
+    <string name="welcome">GeoKrety Logger is a program to logging of moving of GeoKrets. GeoKrety (<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>) is a similar game to TravelBug(TM) or GeoLutins, aiming at tracking objects you leave in geocache containers (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).</string>
+    <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
+    <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
+    <string name="changelog">Change log:\n\n
+        0.0.2 alpha - 2013-12-17\n 
+        polish translation,\n 
+        about,\n
+        \n
+        0.0.1 alpha - 2013-12-14\n
+        first version with public .apk file,\n 
+        fix problem with Android 4.x,\n
+        \n
+        0.0.0 alpha - 2013-12-13\n
+        first public version, \n
+        works only with Android 2.1-2.3.x.</string>
+    <string name="title_activity_about">About</string>
+
 </resources>

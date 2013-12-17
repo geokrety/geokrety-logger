@@ -5,7 +5,6 @@ import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
-import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
 import android.os.Bundle;
 import android.app.Activity;
@@ -150,7 +149,7 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener {
 				this, android.R.layout.simple_spinner_dropdown_item,
 				currentAccount.getOpenCachingLogs());
 
-		new AlertDialog.Builder(this).setTitle(R.string.title_dialog_inventory)
+		new AlertDialog.Builder(this).setTitle(R.string.title_dialog_ocs)
 				.setAdapter(adapter, new DialogInterface.OnClickListener() {
 
 					@Override

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.nkg.geokrety"
-    android:versionCode="1"
-    android:versionName="0.0.1 alpha" >
+    android:versionCode="2"
+    android:versionName="0.0.2 alpha" >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -39,6 +39,10 @@
         <activity
             android:name="pl.nkg.geokrety.LogActivity"
             android:label="@string/title_activity_log" >
+        </activity>
+        <activity
+            android:name="pl.nkg.geokrety.AboutActivity"
+            android:label="@string/title_activity_about" >
         </activity>
     </application>
 
