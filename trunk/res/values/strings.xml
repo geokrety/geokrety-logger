@@ -84,7 +84,8 @@
     <string name="changelog">Change log:\n\n
         0.0.2 alpha - 2013-12-17\n 
         polish translation,\n 
-        about,\n
+        about activity,\n
+        interface improvements,\n
         \n
         0.0.1 alpha - 2013-12-14\n
         first version with public .apk file,\n 

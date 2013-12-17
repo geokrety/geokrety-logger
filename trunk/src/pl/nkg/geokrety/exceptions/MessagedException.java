@@ -22,7 +22,7 @@ public class MessagedException extends Exception {
 	}
 	
 	public String getFormatedMessage(ContextWrapper context) {
-		String message = context.getResources().getString(messageID) + arg;
+		String message = context.getResources().getString(messageID) + " " + arg;
 		return message;
 	}
 }

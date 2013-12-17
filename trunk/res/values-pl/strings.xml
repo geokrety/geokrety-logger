@@ -10,7 +10,7 @@
     <string name="password_hint">GeoKrety hasło</string>
     <string name="oc_hint">OpenCaching login</string>
     <string name="login_error_password_message">Zły login lub hasło do GeoKrety.org</string>
-    <string name="login_error_message">Problem z połączeniem:\ </string>
+    <string name="login_error_message">Problem z połączeniem:</string>
     <string name="title_activity_accounts">Konta</string>
     <string name="accounts_button">Konta</string>
     <string name="account_new">Nowe</string>
@@ -21,7 +21,7 @@
     <string name="error_oc_null">Nie podałeś loginu do OpenCaching.pl</string>
     <string name="accounts_add_title">Dodaj nowe konto</string>
     <string name="accounts_edit_title">Edytuj konto</string>
-    <string name="accounts_remove_question">Czy jesteś pewien że chcesz usunąć konto\ </string>
+    <string name="accounts_remove_question">Czy jesteś pewien że chcesz usunąć konto</string>
     <string name="error_current_null">Proszę wybrać konto</string>
     <string name="title_activity_inventory">Krety, które masz u siebie</string>
     <string name="button_inventory">Krety, które masz u siebie</string>
@@ -35,7 +35,7 @@
     <string name="oclogs_error_message">Problem z pobraniem listy Twoich ostatnich logów z OpenCaching.pl. Czy Internet działa?</string>
     <string name="title_activity_log">Zaloguj kreta</string>
     <string name="log_drop">Wrzuciłem GeoKreta</string>
-    <string name="log_grab">>Zabrałem GeoKreta</string>
+    <string name="log_grab">Zabrałem GeoKreta</string>
     <string name="log_met">Spotkałem GeoKreta</string>
     <string name="log_dipped">Kret odwiedził</string>
     <string name="log_comment">Komentarz</string>
@@ -64,7 +64,7 @@
     <string name="submit_title">Logowanie GeoKreta</string>
     <string name="submit_message">Trwa logowanie GeoKreta. Czekaj cierpliwie i niczego nie dotykaj :)&#8230;</string>
     <string name="submit_finish">GeoKret został zalogowany pomyślnie</string>
-    <string name="submit_fail">Problem z logowaniem GeoKreta:\ </string>
+    <string name="submit_fail">Problem z logowaniem GeoKreta:</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
     <string name="version">GeoKrety Logger v0.0.2 alpha</string>
@@ -77,6 +77,7 @@
         0.0.2 alpha - 2013-12-17\n
         - polskie tłumaczenie,\n
         - informacje o programie,\n
+        - poprawki interfejsu,\n
         \n
         0.0.1 alpha - 2013-12-14\n
         - pierwsza wersja z publicznym, gotowym do instalacji pakietem apk,\n

@@ -100,12 +100,6 @@ public class Account {
 		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
 	}
 
-	/*
-	 * public void loadData() throws MessagedException { loadSecureID();
-	 * loadInventory(); loadOpenCachingUUID(); loadOpenCachingLogs();
-	 * lastDataLoaded = new Date(); }
-	 */
-
 	private void loadSecureID(AsyncTask<String, Integer, Boolean> asyncTask)
 			throws MessagedException {
 		String[][] postData = new String[][] {

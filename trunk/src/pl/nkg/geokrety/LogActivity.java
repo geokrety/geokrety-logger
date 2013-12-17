@@ -15,6 +15,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,7 +26,8 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class LogActivity extends Activity implements RefreshSuccessfulListener {
+public class LogActivity extends Activity implements RefreshSuccessfulListener,
+		OnItemSelectedListener {
 
 	private GeoKretLog currentLog;
 	private Account currentAccount;
@@ -32,6 +35,8 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener {
 	private Spinner logTypeSpinner;
 	private Button accountsButton;
 	private EditText trackingCodeEditText;
+	private Button ocsButton;
+	private Button gpsButton;
 	private Button datePicker;
 	private Button timePicker;
 	private EditText waypointEditText;
@@ -41,7 +46,8 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		currentLog = new GeoKretLog();
+
+		currentLog = new GeoKretLog(savedInstanceState);
 
 		updateCurrentAccount();
 
@@ -50,11 +56,15 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener {
 		logTypeSpinner = (Spinner) findViewById(R.id.logTypeSpinner);
 		accountsButton = (Button) findViewById(R.id.accountsButton);
 		trackingCodeEditText = (EditText) findViewById(R.id.trackingCodeEditText);
+		ocsButton = (Button) findViewById(R.id.ocsButton);
+		gpsButton = (Button) findViewById(R.id.gpsButton);
 		datePicker = (Button) findViewById(R.id.datePicker);
 		timePicker = (Button) findViewById(R.id.timePicker);
 		waypointEditText = (EditText) findViewById(R.id.waypointEditText);
 		coordinatesEditText = (EditText) findViewById(R.id.coordinatesEditText);
 		commentEditText = (EditText) findViewById(R.id.commentEditText);
+		logTypeSpinner.setOnItemSelectedListener(this);
+
 		loadFromGeoKretLog(currentLog);
 	}
 
@@ -89,6 +99,20 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		storeToGeoKretLog(currentLog);
+		currentLog.storeToBundle(outState);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		currentLog = new GeoKretLog(savedInstanceState);
+		loadFromGeoKretLog(currentLog);
+	}
+
 	private void loadFromGeoKretLog(GeoKretLog log) {
 		logTypeSpinner.setSelection(log.getLogTypeMapped());
 		accountsButton.setText(log.getGeoKretyLogin());
@@ -98,6 +122,7 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener {
 		waypointEditText.setText(log.getWpt());
 		coordinatesEditText.setText(log.getLatlon());
 		commentEditText.setText(log.getComment());
+		updateVisibles();
 	}
 
 	private void storeToGeoKretLog(GeoKretLog log) {
@@ -233,4 +258,24 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener {
 
 	}
 
+	@Override
+	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
+			long arg3) {
+		updateVisibles();
+	}
+
+	@Override
+	public void onNothingSelected(AdapterView<?> arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	private void updateVisibles() {
+		int s = logTypeSpinner.getSelectedItemPosition();
+		boolean locationVisible = !GeoKretLog.checkIgnoreLocation(s);
+		waypointEditText.setEnabled(locationVisible);
+		coordinatesEditText.setEnabled(locationVisible);
+		gpsButton.setEnabled(locationVisible);
+		ocsButton.setEnabled(locationVisible);
+	}
 }

@@ -1,12 +1,17 @@
 package pl.nkg.geokrety.data;
 
+import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.w3c.dom.Document;
+
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.text.format.DateFormat;
 
 import pl.nkg.geokrety.R;
@@ -16,7 +21,9 @@ import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
 import android.text.format.Time;
 import android.widget.Toast;
 
-public class GeoKretLog {
+public class GeoKretLog implements Serializable {
+	private static final long serialVersionUID = 907039083028176080L;
+
 	private static final String URL = "http://geokrety.org/ruchy.php";
 	private static final String[] LOG_TYPE_MAPPIG = { "0", "1", "3", "5", "2" };
 
@@ -46,6 +53,25 @@ public class GeoKretLog {
 		comment = "";
 		latlon = "";
 		wpt = "";
+	}
+
+	public GeoKretLog(Bundle savedInstanceState) {
+		this();
+		if (savedInstanceState != null) {
+
+			secid = savedInstanceState.getString("secid");
+			nr = savedInstanceState.getString("nr");
+			logtype_mapped = savedInstanceState.getInt("logtype_mapped");
+			data = savedInstanceState.getString("data");
+			godzina = savedInstanceState.getInt("godzina");
+			minuta = savedInstanceState.getInt("minuta");
+			comment = savedInstanceState.getString("comment");
+
+			latlon = savedInstanceState.getString("latlon");
+			wpt = savedInstanceState.getString("wpt");
+
+			geoKretyLogin = savedInstanceState.getString("geoKretyLogin");
+		}
 	}
 
 	public String getSecid() {
@@ -186,6 +212,12 @@ public class GeoKretLog {
 	public void submit(final Activity context, final Account currentAccount,
 			final RefreshSuccessfulListener listener) {
 
+		try {
+			app_ver = context.getPackageManager().getPackageInfo(
+					context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e1) {
+		}
+
 		if (refreshTask != null) {
 			return;
 		}
@@ -212,6 +244,8 @@ public class GeoKretLog {
 
 			@Override
 			protected Boolean doInBackground(String... params) {
+				boolean ignoreLocation = checkIgnoreLocation(logtype_mapped);
+
 				String[][] postData = new String[][] {
 						new String[] { "secid",
 								currentAccount.getGeoKreySecredID() },
@@ -226,12 +260,20 @@ public class GeoKretLog {
 						new String[] { "app", app },
 						new String[] { "app_ver", app_ver },
 						new String[] { "mobile_lang", mobile_lang },
-						new String[] { "latlon", latlon },
-						new String[] { "wpt", wpt }, };
+						new String[] { "latlon", ignoreLocation ? "" : latlon },
+						new String[] { "wpt", ignoreLocation ? "" : wpt }, };
 
 				try {
 					String value = Utils.httpPost(URL, postData);
-					return true;
+					Document doc = Utils.getDomElement(value);
+					String error = doc.getElementsByTagName("error").item(0)
+							.getTextContent();
+					if (error.length() == 0) {
+						return true;
+					} else {
+						excaption = new MessagedException(R.string.submit_fail,
+								error);
+					}
 				} catch (Exception e) {
 					excaption = new MessagedException(R.string.submit_fail,
 							e.getLocalizedMessage());
@@ -294,5 +336,24 @@ public class GeoKretLog {
 			}
 
 		}.execute();
+	}
+
+	public static boolean checkIgnoreLocation(int logtype_mapped) {
+		return logtype_mapped == 1 || logtype_mapped == 4;
+	}
+
+	public void storeToBundle(Bundle outState) {
+		outState.putString("secid", secid);
+		outState.putString("nr", nr);
+		outState.putInt("logtype_mapped", logtype_mapped);
+		outState.putString("data", data);
+		outState.putInt("godzina", godzina);
+		outState.putInt("minuta", minuta);
+		outState.putString("comment", comment);
+
+		outState.putString("latlon", latlon);
+		outState.putString("wpt", wpt);
+
+		outState.putString("geoKretyLogin", geoKretyLogin);
 	}
 }
