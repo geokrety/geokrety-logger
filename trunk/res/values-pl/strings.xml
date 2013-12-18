@@ -67,7 +67,7 @@
     <string name="submit_fail">Problem z logowaniem GeoKreta:</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
-    <string name="version">GeoKrety Logger v0.0.2 alpha</string>
+    <string name="version">GeoKrety Logger v</string>
     <string name="button_log">Zaloguj GeoKreta</string>
     <string name="welcome">GeoKrety Logger to program, który służy do rejestracji przeniesienia przedmiotów (<a href="http://pl.m.wikipedia.org/wiki/Geokrety">GeoKretów</a>) pozostawionych w <a href="http://pl.m.wikipedia.org/wiki/Geocaching">pojemnikach geocache</a>.</string>
     <string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne. Program jest darmowy, a jego kod źródłowy jest dostępny publicznie na licencji GPL 3.0 (<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>). Jeżeli coś działa nieprawidłowo, poinformuj mnie o tym pisząc najlepiej w formularzu pod adresem: <a href="http://geokrety.org/majluj.php?to=12444">geokrety.org/majluj.php?to=12444</a>. Nie ponoszę odpowiedzialności za szkody wynikające błędnego działania programu lub używania go niezgodnie z przeznaczeniem.</string>

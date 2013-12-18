@@ -27,6 +27,8 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 public class Utils {
@@ -128,4 +130,12 @@ public class Utils {
 				HTTP.UTF_8);
 	}
 
+	public static String getAppVer(Context context) {
+		try {
+			return context.getPackageManager().getPackageInfo(
+					context.getPackageName(), 0).versionName;
+		} catch (NameNotFoundException e) {
+			return "";
+		}
+	}
 }

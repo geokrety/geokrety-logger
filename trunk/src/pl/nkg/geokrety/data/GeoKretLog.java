@@ -212,11 +212,7 @@ public class GeoKretLog implements Serializable {
 	public void submit(final Activity context, final Account currentAccount,
 			final RefreshSuccessfulListener listener) {
 
-		try {
-			app_ver = context.getPackageManager().getPackageInfo(
-					context.getPackageName(), 0).versionName;
-		} catch (NameNotFoundException e1) {
-		}
+		app_ver = Utils.getAppVer(context);
 
 		if (refreshTask != null) {
 			return;
