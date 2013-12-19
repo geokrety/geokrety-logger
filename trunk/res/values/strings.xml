@@ -47,6 +47,11 @@
         <item>@string/log_dipped</item>
         <item>@string/log_comment</item>
     </string-array>
+    
+    <string-array name="context_menu_account">
+        <item>@string/account_edit</item>
+        <item>@string/account_remove</item>
+    </string-array>
 
     <string name="form_log_type">1. Chose log type</string>
     <string name="form_identify">2. Identify GeoKret</string>
@@ -98,4 +103,6 @@
     <string name="no_account_configured">You must configure account!</string>
     <string name="button_add_account">Add account</string>
 
+    <string name="account_add_prompt_message">Enter values of the new account</string>
+    <string name="account_edit_prompt_message">Change values of the existing account</string>
 </resources>

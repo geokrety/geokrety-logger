@@ -90,4 +90,6 @@
     <string name="no_account_configured">Najpierw dodaj co najmniej jedno konto!</string>
     <string name="button_add_account">Dodaj nowe konto</string>
 
+    <string name="account_add_prompt_message">Wprowadź dane pozwalające na zalogowanie się na Twoje konto w GeoKrety.pl i pobranie Twoich ostatnich logów z OpenCaching.pl.</string>
+    <string name="account_edit_prompt_message">Popraw dane pozwalające na zalogowanie się na Twoje konto w GeoKrety.pl i pobranie Twoich ostatnich logów z OpenCaching.pl.</string>
 </resources>
