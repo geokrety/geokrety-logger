@@ -47,7 +47,6 @@
         <item>@string/log_dipped</item>
         <item>@string/log_comment</item>
     </string-array>
-    
     <string-array name="context_menu_account">
         <item>@string/account_edit</item>
         <item>@string/account_remove</item>
@@ -87,22 +86,25 @@
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <string name="changelog">Change log:\n\n
+        0.1.0 beta - 2013-12-19\n
+        - rotation safe,\n
+        \n 
         0.0.2 alpha - 2013-12-17\n 
-        polish translation,\n 
-        about activity,\n
-        interface improvements,\n
+        - polish translation,\n 
+        - about activity,\n
+        - interface improvements,\n
         \n
         0.0.1 alpha - 2013-12-14\n
-        first version with public .apk file,\n 
-        fix problem with Android 4.x,\n
+        - first version with public .apk file,\n 
+        - fix problem with Android 4.x,\n
         \n
         0.0.0 alpha - 2013-12-13\n
-        first public version, \n
-        works only with Android 2.1-2.3.x.</string>
+        - first public version, \n
+        - works only with Android 2.1-2.3.x.</string>
     <string name="title_activity_about">About</string>
     <string name="no_account_configured">You must configure account!</string>
     <string name="button_add_account">Add account</string>
-
     <string name="account_add_prompt_message">Enter values of the new account</string>
     <string name="account_edit_prompt_message">Change values of the existing account</string>
+
 </resources>
