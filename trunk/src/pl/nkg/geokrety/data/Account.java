@@ -16,7 +16,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.app.Activity;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 
@@ -236,12 +235,14 @@ public class Account {
 		return geoKretyLogin;
 	}
 
-	public void loadIfExpired(RefreshProgressDialog refreshProgressDialog,
+	public boolean loadIfExpired(RefreshProgressDialog refreshProgressDialog,
 			RefreshSuccessfulListener listener) {
 		if (expired()) {
 			loadData(refreshProgressDialog, listener);
+			return true;
 		} else {
-			listener.onRefreshSuccessful();
+			listener.onRefreshSuccessful(false);
+			return false;
 		}
 	}
 

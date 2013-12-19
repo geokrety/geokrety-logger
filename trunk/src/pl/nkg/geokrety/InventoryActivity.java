@@ -82,7 +82,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 	}
 
 	@Override
-	public void onRefreshSuccessful() {
+	public void onRefreshSuccessful(boolean changed) {
 		ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(
 				InventoryActivity.this, android.R.layout.simple_list_item_1,
 				account.getInventory());

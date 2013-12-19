@@ -71,7 +71,7 @@ public class RefreshAccount extends AsyncTask<String, Integer, Boolean> {
 					Toast.makeText(
 							refreshProgressDialog.getManagedDialogsActivity(),
 							R.string.download_finish, Toast.LENGTH_LONG).show();
-					refreshSuccessfulListener.onRefreshSuccessful();
+					refreshSuccessfulListener.onRefreshSuccessful(true);
 				} else {
 					Toast.makeText(
 							refreshProgressDialog.getManagedDialogsActivity(),

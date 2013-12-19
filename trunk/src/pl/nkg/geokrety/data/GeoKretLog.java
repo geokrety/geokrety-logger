@@ -7,19 +7,17 @@ import java.util.Locale;
 
 import org.w3c.dom.Document;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.dialogs.LogProgressDialog;
 import pl.nkg.geokrety.exceptions.MessagedException;
-import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
+import pl.nkg.geokrety.threads.LogGeoKret;
+import pl.nkg.geokrety.widgets.LogSuccessfulListener;
+import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.text.format.Time;
-import android.widget.Toast;
 
 public class GeoKretLog implements Serializable {
 	private static final long serialVersionUID = 907039083028176080L;
@@ -207,131 +205,13 @@ public class GeoKretLog implements Serializable {
 				+ nf.format(dayOfMonth);
 	}
 
-	private AsyncTask<String, Integer, Boolean> refreshTask;
-
-	public void submit(final Activity context, final Account currentAccount,
-			final RefreshSuccessfulListener listener) {
+	public void submit(final ManagedDialogsActivity context,
+			LogProgressDialog logProgressDialog, final Account currentAccount,
+			final LogSuccessfulListener listener) {
 
 		app_ver = Utils.getAppVer(context);
-
-		if (refreshTask != null) {
-			return;
-		}
-
-		refreshTask = new AsyncTask<String, Integer, Boolean>() {
-			private ProgressDialog dialog;
-			private MessagedException excaption;
-
-			@Override
-			protected void onPreExecute() {
-				try {
-					dialog = ProgressDialog.show(
-							context,
-							context.getResources().getString(
-									R.string.submit_title),
-							context.getResources().getString(
-									R.string.submit_message), true);
-				} catch (Throwable t) {
-					t.printStackTrace();
-					refreshTask.cancel(true);
-					refreshTask = null;
-				}
-			}
-
-			@Override
-			protected Boolean doInBackground(String... params) {
-				boolean ignoreLocation = checkIgnoreLocation(logtype_mapped);
-
-				String[][] postData = new String[][] {
-						new String[] { "secid",
-								currentAccount.getGeoKreySecredID() },
-						new String[] { "nr", nr },
-						new String[] { "formname", formname },
-						new String[] { "logtype",
-								LOG_TYPE_MAPPIG[logtype_mapped] },
-						new String[] { "data", data },
-						new String[] { "godzina", Integer.toString(godzina) },
-						new String[] { "minuta", Integer.toString(minuta) },
-						new String[] { "comment", comment },
-						new String[] { "app", app },
-						new String[] { "app_ver", app_ver },
-						new String[] { "mobile_lang", mobile_lang },
-						new String[] { "latlon", ignoreLocation ? "" : latlon },
-						new String[] { "wpt", ignoreLocation ? "" : wpt }, };
-
-				try {
-					String value = Utils.httpPost(URL, postData);
-					Document doc = Utils.getDomElement(value);
-					String error = doc.getElementsByTagName("error").item(0)
-							.getTextContent();
-					if (error.length() == 0) {
-						return true;
-					} else {
-						excaption = new MessagedException(R.string.submit_fail,
-								error);
-					}
-				} catch (Exception e) {
-					excaption = new MessagedException(R.string.submit_fail,
-							e.getLocalizedMessage());
-				}
-				return false;
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result) {
-				super.onPostExecute(result);
-				if (result != null) {
-					if (result) {
-						Toast.makeText(context, R.string.submit_finish,
-								Toast.LENGTH_LONG).show();
-						listener.onRefreshSuccessful();
-					} else {
-						Toast.makeText(context,
-								excaption.getFormatedMessage(context),
-								Toast.LENGTH_LONG).show();
-					}
-					try {
-						dialog.dismiss();
-					} catch (Throwable t) {
-						t.printStackTrace();
-					}
-				}
-				refreshTask = null;
-			}
-
-			@Override
-			protected void onProgressUpdate(Integer... values) {
-				try {
-					switch (values[0]) {
-					case 0:
-						dialog.setMessage(context.getResources().getString(
-								R.string.download_login_gk));
-						break;
-
-					case 1:
-						dialog.setMessage(context.getResources().getString(
-								R.string.download_getting_gk));
-						break;
-
-					case 2:
-						dialog.setMessage(context.getResources().getString(
-								R.string.download_getting_ocs));
-						break;
-
-					case 3:
-						dialog.setMessage(context.getResources().getString(
-								R.string.download_getting_names));
-						break;
-					}
-				} catch (Throwable t) {
-					t.printStackTrace();
-					refreshTask.cancel(true);
-					refreshTask = null;
-				}
-
-			}
-
-		}.execute();
+		LogGeoKret.logGeoKret(this, currentAccount, logProgressDialog,
+				listener, false);
 	}
 
 	public static boolean checkIgnoreLocation(int logtype_mapped) {
@@ -351,5 +231,46 @@ public class GeoKretLog implements Serializable {
 		outState.putString("wpt", wpt);
 
 		outState.putString("geoKretyLogin", geoKretyLogin);
+	}
+
+	public boolean submitBackground(Account account) throws MessagedException {
+		boolean ignoreLocation = checkIgnoreLocation(logtype_mapped);
+
+		String[][] postData = new String[][] {
+				new String[] { "secid", account.getGeoKreySecredID() },
+				new String[] { "nr", nr },
+				new String[] { "formname", formname },
+				new String[] { "logtype", LOG_TYPE_MAPPIG[logtype_mapped] },
+				new String[] { "data", data },
+				new String[] { "godzina", Integer.toString(godzina) },
+				new String[] { "minuta", Integer.toString(minuta) },
+				new String[] { "comment", comment },
+				new String[] { "app", app },
+				new String[] { "app_ver", app_ver },
+				new String[] { "mobile_lang", mobile_lang },
+				new String[] { "latlon", ignoreLocation ? "" : latlon },
+				new String[] { "wpt", ignoreLocation ? "" : wpt }, };
+
+		while (true) {
+			try {
+				String value = Utils.httpPost(URL, postData);
+				Document doc = Utils.getDomElement(value);
+				String error = doc.getElementsByTagName("error").item(0)
+						.getTextContent();
+				if (error.length() == 0) {
+					return true;
+				} else {
+					if (error.equals("Wrong secid identifier")) {
+						account.loadSecureID(null);
+						continue;
+					} else {
+						throw new MessagedException(R.string.submit_fail, error);
+					}
+				}
+			} catch (Exception e) {
+				throw new MessagedException(R.string.submit_fail,
+						e.getLocalizedMessage());
+			}
+		}
 	}
 }

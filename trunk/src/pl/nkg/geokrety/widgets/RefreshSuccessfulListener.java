@@ -1,5 +1,5 @@
 package pl.nkg.geokrety.widgets;
 
 public interface RefreshSuccessfulListener {
-	void onRefreshSuccessful();
+	void onRefreshSuccessful(boolean changed);
 }

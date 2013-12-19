@@ -86,7 +86,7 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 	}
 
 	@Override
-	public void onRefreshSuccessful() {
+	public void onRefreshSuccessful(boolean changed) {
 		ArrayAdapter<GeocacheLog> adapter = new ArrayAdapter<GeocacheLog>(this,
 				android.R.layout.simple_list_item_1,
 				account.getOpenCachingLogs());
