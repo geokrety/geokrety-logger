@@ -3,8 +3,10 @@ package pl.nkg.geokrety.data;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONArray;
@@ -15,14 +17,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.text.TextUtils;
-import android.widget.Toast;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
 import pl.nkg.geokrety.exceptions.MessagedException;
+import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
 
 public class Account {
@@ -40,9 +42,9 @@ public class Account {
 
 	private String geoKretySecredID;
 	private String openCachingUUID;
-	private ArrayList<GeocacheLog> openCachingLogs;
+	private List<GeocacheLog> openCachingLogs;
 
-	private ArrayList<Geokret> inventory;
+	private List<Geokret> inventory;
 
 	private Date lastDataLoaded;
 
@@ -85,11 +87,11 @@ public class Account {
 		return openCachingUUID;
 	}
 
-	public ArrayList<GeocacheLog> getOpenCachingLogs() {
+	public List<GeocacheLog> getOpenCachingLogs() {
 		return openCachingLogs;
 	}
 
-	public ArrayList<Geokret> getInventory() {
+	public List<Geokret> getInventory() {
 		return inventory;
 	}
 
@@ -100,7 +102,7 @@ public class Account {
 		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
 	}
 
-	private void loadSecureID(AsyncTask<String, Integer, Boolean> asyncTask)
+	public void loadSecureID(AsyncTask<String, Integer, Boolean> asyncTask)
 			throws MessagedException {
 		String[][] postData = new String[][] {
 				new String[] { "login", geoKretyLogin },
@@ -122,9 +124,9 @@ public class Account {
 		}
 	}
 
-	private void loadInventory(AsyncTask<String, Integer, Boolean> asyncTask)
+	public void loadInventory(AsyncTask<String, Integer, Boolean> asyncTask)
 			throws MessagedException {
-		inventory = new ArrayList<Geokret>();
+		ArrayList<Geokret> inventory = new ArrayList<Geokret>();
 
 		String[][] getData = new String[][] {
 				new String[] { "secid", geoKretySecredID },
@@ -139,12 +141,13 @@ public class Account {
 				Node node = nl.item(i);
 				inventory.add(new Geokret(node));
 			}
+			this.inventory = Collections.synchronizedList(inventory);
 		} catch (Exception e) {
 			throw new MessagedException(R.string.inventory_error_message);
 		}
 	}
 
-	private void loadOpenCachingUUID(
+	public void loadOpenCachingUUID(
 			AsyncTask<String, Integer, Boolean> asyncTask)
 			throws MessagedException {
 		String[][] getData = new String[][] {
@@ -162,10 +165,10 @@ public class Account {
 		}
 	}
 
-	private void loadOpenCachingLogs(
+	public void loadOpenCachingLogs(
 			AsyncTask<String, Integer, Boolean> asyncTask)
 			throws MessagedException {
-		openCachingLogs = new ArrayList<GeocacheLog>();
+		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
 		String[][] getData = new String[][] {
 				new String[] { "user_uuid", openCachingUUID },
 				new String[] { "consumer_key", CONSUMER_KEY } };
@@ -178,6 +181,8 @@ public class Account {
 				openCachingLogs.add(new GeocacheLog(json.getJSONObject(i)));
 			}
 
+			this.openCachingLogs = Collections
+					.synchronizedList(openCachingLogs);
 			if (openCachingLogs.size() > 0) {
 				loadOCnames();
 			}
@@ -188,6 +193,10 @@ public class Account {
 		} catch (ParseException e) {
 			throw new MessagedException(R.string.oclogs_error_message);
 		}
+	}
+
+	public void touchLastLoadedDate() {
+		lastDataLoaded = new Date();
 	}
 
 	private void loadOCnames() throws ClientProtocolException, IOException,
@@ -214,7 +223,7 @@ public class Account {
 
 	private HashSet<String> getCacheCodes() {
 		HashSet<String> caches = new HashSet<String>();
-		for (GeocacheLog log : openCachingLogs) {
+		for (GeocacheLog log : new ArrayList<GeocacheLog>(openCachingLogs)) {
 			if (!StateHolder.getGeoacheMap().containsKey(log.getCacheCode())) {
 				caches.add(log.getCacheCode());
 			}
@@ -227,115 +236,18 @@ public class Account {
 		return geoKretyLogin;
 	}
 
-	public void loadIfExpired(Activity context,
+	public void loadIfExpired(RefreshProgressDialog refreshProgressDialog,
 			RefreshSuccessfulListener listener) {
 		if (expired()) {
-			loadData(context, listener);
+			loadData(refreshProgressDialog, listener);
 		} else {
 			listener.onRefreshSuccessful();
 		}
 	}
 
-	private AsyncTask<String, Integer, Boolean> refreshTask;
-
-	public void loadData(final Activity context,
+	public void loadData(final RefreshProgressDialog refreshProgressDialog,
 			final RefreshSuccessfulListener listener) {
-
-		if (refreshTask != null) {
-			return;
-		}
-
-		refreshTask = new AsyncTask<String, Integer, Boolean>() {
-			private ProgressDialog dialog;
-			private MessagedException excaption;
-
-			@Override
-			protected void onPreExecute() {
-				try {
-					dialog = ProgressDialog.show(context, context
-							.getResources().getString(R.string.download_title),
-							"", true);
-				} catch (Throwable t) {
-					t.printStackTrace();
-					refreshTask.cancel(true);
-					refreshTask = null;
-				}
-			}
-
-			@Override
-			protected Boolean doInBackground(String... params) {
-				try {
-					publishProgress(0);
-					loadSecureID(this);
-					publishProgress(1);
-					loadInventory(this);
-					publishProgress(2);
-					loadOpenCachingUUID(this);
-					publishProgress(3);
-					loadOpenCachingLogs(this);
-					lastDataLoaded = new Date();
-					return true;
-				} catch (MessagedException e) {
-					excaption = e;
-					return false;
-				}
-
-			}
-
-			@Override
-			protected void onPostExecute(Boolean result) {
-				super.onPostExecute(result);
-				if (result != null) {
-					if (result) {
-						Toast.makeText(context, R.string.download_finish,
-								Toast.LENGTH_LONG).show();
-						listener.onRefreshSuccessful();
-					} else {
-						Toast.makeText(context,
-								excaption.getFormatedMessage(context),
-								Toast.LENGTH_LONG).show();
-					}
-					try {
-						dialog.dismiss();
-					} catch (Throwable t) {
-						t.printStackTrace();
-					}
-				}
-				refreshTask = null;
-			}
-
-			@Override
-			protected void onProgressUpdate(Integer... values) {
-				try {
-					switch (values[0]) {
-					case 0:
-						dialog.setMessage(context.getResources().getString(
-								R.string.download_login_gk));
-						break;
-
-					case 1:
-						dialog.setMessage(context.getResources().getString(
-								R.string.download_getting_gk));
-						break;
-
-					case 2:
-						dialog.setMessage(context.getResources().getString(
-								R.string.download_getting_ocs));
-						break;
-
-					case 3:
-						dialog.setMessage(context.getResources().getString(
-								R.string.download_getting_names));
-						break;
-					}
-				} catch (Throwable t) {
-					t.printStackTrace();
-					refreshTask.cancel(true);
-					refreshTask = null;
-				}
-
-			}
-
-		}.execute();
+		RefreshAccount.refreshAccount(this, refreshProgressDialog, listener,
+				false);
 	}
 }

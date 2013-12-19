@@ -1,8 +1,10 @@
 package pl.nkg.geokrety.data;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import pl.nkg.geokrety.Utils;
 
@@ -22,7 +24,7 @@ public class StateHolder {
 	private static final String DEFAULT_LOGINS_VALUE = "";
 	private static final String ACCOUNTS_SEPARATOR = "/";
 
-	private static HashMap<String, Geocache> geoCachesMap;
+	private static Map<String, Geocache> geoCachesMap;
 
 	private ArrayList<Account> accountList;
 	private int defaultAccount;
@@ -114,9 +116,10 @@ public class StateHolder {
 		this.defaultAccount = defaultAccount;
 	}
 
-	public static HashMap<String, Geocache> getGeoacheMap() {
+	public static Map<String, Geocache> getGeoacheMap() {
 		if (geoCachesMap == null) {
-			geoCachesMap = new HashMap<String, Geocache>();
+			geoCachesMap = Collections
+					.synchronizedMap(new HashMap<String, Geocache>());
 		}
 		return geoCachesMap;
 	}

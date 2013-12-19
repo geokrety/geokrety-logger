@@ -5,9 +5,11 @@ import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
+import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
 import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
+import pl.nkg.lib.dialogs.ManagedActivityDialog;
+import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -26,8 +28,10 @@ import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class LogActivity extends Activity implements RefreshSuccessfulListener,
-		OnItemSelectedListener {
+public class LogActivity extends ManagedDialogsActivity implements
+		RefreshSuccessfulListener, OnItemSelectedListener {
+
+	private RefreshProgressDialog refreshProgressDialog;
 
 	private GeoKretLog currentLog;
 	private Account currentAccount;
@@ -45,6 +49,7 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener,
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		refreshProgressDialog = new RefreshProgressDialog(this, this);
 		super.onCreate(savedInstanceState);
 
 		currentLog = new GeoKretLog(savedInstanceState);
@@ -74,7 +79,7 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener,
 		if (currentAccountNr != ListView.INVALID_POSITION) {
 			currentAccount = holder.getAccountList().get(currentAccountNr);
 			currentLog.setGeoKretyLogin(currentAccount.getGeoKretyLogin());
-			currentAccount.loadIfExpired(this, this);
+			currentAccount.loadIfExpired(refreshProgressDialog, this);
 		}
 	}
 
@@ -277,5 +282,14 @@ public class LogActivity extends Activity implements RefreshSuccessfulListener,
 		coordinatesEditText.setEnabled(locationVisible);
 		gpsButton.setEnabled(locationVisible);
 		ocsButton.setEnabled(locationVisible);
+	}
+
+	@Override
+	protected void registerDialogs() {
+		registerDialog(refreshProgressDialog);
+	}
+
+	@Override
+	public void dialogFinished(ManagedActivityDialog dialog, int buttonId) {
 	}
 }

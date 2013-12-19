@@ -3,9 +3,11 @@ package pl.nkg.geokrety;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
+import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
 import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
+import pl.nkg.lib.dialogs.ManagedActivityDialog;
+import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.os.Bundle;
-import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,13 +16,15 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 
-public class InventoryActivity extends Activity implements
+public class InventoryActivity extends ManagedDialogsActivity implements
 		AdapterView.OnItemSelectedListener, RefreshSuccessfulListener {
 
 	private Account account;
+	private RefreshProgressDialog refreshProgressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		refreshProgressDialog = new RefreshProgressDialog(this, this);
 		super.onCreate(savedInstanceState);
 		StateHolder holder = StateHolder.getInstance(this);
 		setContentView(R.layout.activity_inventory);
@@ -60,7 +64,7 @@ public class InventoryActivity extends Activity implements
 	}
 
 	private void refreshAccout() {
-		account.loadData(this, this);
+		account.loadData(refreshProgressDialog, this);
 	}
 
 	@Override
@@ -74,7 +78,7 @@ public class InventoryActivity extends Activity implements
 	}
 
 	private void updateListView() {
-		account.loadIfExpired(this, this);
+		account.loadIfExpired(refreshProgressDialog, this);
 	}
 
 	@Override
@@ -88,5 +92,14 @@ public class InventoryActivity extends Activity implements
 
 	@Override
 	public void onNothingSelected(AdapterView<?> arg0) {
+	}
+
+	@Override
+	protected void registerDialogs() {
+		registerDialog(refreshProgressDialog);
+	}
+
+	@Override
+	public void dialogFinished(ManagedActivityDialog dialog, int buttonId) {
 	}
 }
