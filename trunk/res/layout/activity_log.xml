@@ -47,7 +47,7 @@
                 android:text="@string/form_log_type"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
-            <Spinner
+            <!-- <Spinner
                 android:id="@+id/logTypeSpinner"
                 style="@android:style/Widget.Spinner"
                 android:layout_width="match_parent"
@@ -55,7 +55,15 @@
                 android:entries="@array/log_array" >
 
                 <requestFocus />
-            </Spinner>
+            </Spinner> -->
+            
+            <Button
+                    android:id="@+id/logTypeButton"
+                    style="@android:style/Widget.Spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                    android:onClick="showLogType"
+                    android:text="@string/log_drop" />
 
             <TextView
                 android:layout_width="wrap_content"

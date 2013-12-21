@@ -25,17 +25,15 @@ import android.content.Intent;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Spinner;
 import android.widget.Toast;
 
-public class LogActivity extends ManagedDialogsActivity implements
-		OnItemSelectedListener {
+public class LogActivity extends ManagedDialogsActivity {
+
+	//private static final String LOGTYPE = "logtype";
 
 	private GenericProgressDialogWrapper refreshProgressDialog;
 	private GenericProgressDialogWrapper logProgressDialog;
@@ -43,6 +41,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 	private DatePickerDialogWrapper datePickerDialog;
 	private AlertDialogWrapper inventorySpinnerDialog;
 	private AlertDialogWrapper ocsSpinnerDialog;
+	private AlertDialogWrapper logTypeSpinnerDialog;
 
 	private GeoKretyApplication application;
 	private RefreshAccount refreshAccount;
@@ -50,8 +49,10 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	private GeoKretLog currentLog;
 	private Account currentAccount;
+	private int currentLogType = 0;
 
-	private Spinner logTypeSpinner;
+	// private Spinner logTypeSpinner;
+	private Button logTypeButton;
 	private Button accountsButton;
 	private EditText trackingCodeEditText;
 	private Button ocsButton;
@@ -83,6 +84,9 @@ public class LogActivity extends ManagedDialogsActivity implements
 				Dialogs.OCS_SPINNERDIALOG);
 		ocsSpinnerDialog.setTitle(R.string.title_dialog_ocs);
 
+		logTypeSpinnerDialog = new AlertDialogWrapper(this,
+				Dialogs.TYPE_SPINNERDIALOG);
+
 		logProgressDialog.setTitle(R.string.submit_title);
 
 		application = (GeoKretyApplication) getApplication();
@@ -95,7 +99,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 		setContentView(R.layout.activity_log);
 
-		logTypeSpinner = (Spinner) findViewById(R.id.logTypeSpinner);
+		// logTypeSpinner = (Spinner) findViewById(R.id.logTypeSpinner);
+		logTypeButton = (Button) findViewById(R.id.logTypeButton);
 		accountsButton = (Button) findViewById(R.id.accountsButton);
 		trackingCodeEditText = (EditText) findViewById(R.id.trackingCodeEditText);
 		ocsButton = (Button) findViewById(R.id.ocsButton);
@@ -106,8 +111,9 @@ public class LogActivity extends ManagedDialogsActivity implements
 		// coordinatesEditText = (EditText)
 		// findViewById(R.id.coordinatesEditText);
 		commentEditText = (EditText) findViewById(R.id.commentEditText);
-		logTypeSpinner.setOnItemSelectedListener(this);
+		// logTypeSpinner.setOnItemSelectedListener(this);
 
+		// currentLogType = savedInstanceState.getInt(LOGTYPE, 0);
 	}
 
 	@Override
@@ -128,8 +134,14 @@ public class LogActivity extends ManagedDialogsActivity implements
 						}.setFinishMessage(R.string.submit_finish)
 								.setBreakMessage(R.string.submit_broken));
 		updateCurrentAccount();
+
+		logTypeSpinnerDialog.setAdapter(new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_dropdown_item, getResources()
+						.getStringArray(R.array.log_array)));
+
 		configAdapters();
 		loadFromGeoKretLog(currentLog);
+		logTypeSpinnerDialog.setCheckedItem(currentLogType);
 	}
 
 	@Override
@@ -184,7 +196,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 	}
 
 	private void loadFromGeoKretLog(GeoKretLog log) {
-		logTypeSpinner.setSelection(log.getLogTypeMapped());
+		currentLogType = (log.getLogTypeMapped());
 		accountsButton.setText(log.getGeoKretyLogin());
 		trackingCodeEditText.setText(log.getNr());
 		datePicker.setText(log.getData());
@@ -200,7 +212,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 		log.setWpt(waypointEditText.getText().toString());
 		// log.setLatlon(coordinatesEditText.getText().toString());
 		log.setComment(commentEditText.getText().toString());
-		log.setLogTypeMapped(logTypeSpinner.getSelectedItemPosition());
+		log.setLogTypeMapped(currentLogType);
 	}
 
 	private boolean configAdapters() {
@@ -222,6 +234,10 @@ public class LogActivity extends ManagedDialogsActivity implements
 		return true;
 	}
 
+	public void showLogType(View view) {
+		logTypeSpinnerDialog.show(null);
+	}
+
 	public void showInventory(View view) {
 		if (configAdapters()) {
 			inventorySpinnerDialog.show(null);
@@ -239,7 +255,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	public void showOcs(View view) {
 		if (configAdapters()) {
-			ocsSpinnerDialog.show(null);
+			ocsSpinnerDialog.show(null, currentLogType);
 		}
 	}
 
@@ -280,21 +296,11 @@ public class LogActivity extends ManagedDialogsActivity implements
 		loadFromGeoKretLog(currentLog);
 	}
 
-	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-		updateVisibles();
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-		// TODO Auto-generated method stub
-
-	}
-
 	private void updateVisibles() {
-		int s = logTypeSpinner.getSelectedItemPosition();
-		boolean locationVisible = !GeoKretLog.checkIgnoreLocation(s);
+		logTypeButton
+				.setText(getResources().getStringArray(R.array.log_array)[currentLogType]);
+		boolean locationVisible = !GeoKretLog
+				.checkIgnoreLocation(currentLogType);
 		waypointEditText.setEnabled(locationVisible);
 		// coordinatesEditText.setEnabled(locationVisible);
 		// gpsButton.setEnabled(locationVisible);
@@ -333,6 +339,10 @@ public class LogActivity extends ManagedDialogsActivity implements
 			loadFromGeoKretLog(currentLog);
 			break;
 
+		case Dialogs.TYPE_SPINNERDIALOG:
+			currentLogType = buttonId;
+			updateVisibles();
+			break;
 		}
 	}
 }

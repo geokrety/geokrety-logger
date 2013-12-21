@@ -1,9 +1,13 @@
 package pl.nkg.lib.dialogs;
 
+import java.io.Serializable;
+
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 
 /**
  * Na podstawie książki: Android 2 Tworzenie aplikacji<br/>
@@ -15,6 +19,8 @@ import android.widget.ListAdapter;
 public class AlertDialogWrapper extends
 		AbstractAlertDialogWrapper<AlertDialog> {
 
+	private static final String CHECKED = "checked";
+	
 	private Integer layoutId = null;
 	private ListAdapter adapter = null;
 
@@ -53,7 +59,7 @@ public class AlertDialogWrapper extends
 		}
 
 		if (adapter != null) {
-			builder.setAdapter(adapter, this);
+			builder.setSingleChoiceItems(adapter, getCheckedItem(), this);
 		}
 
 		buildLayout(builder);
@@ -75,5 +81,27 @@ public class AlertDialogWrapper extends
 
 	public void setAdapter(ListAdapter adapter) {
 		this.adapter = adapter;
+	}
+
+	public int getCheckedItem() {
+		return getBundle().getInt(CHECKED, ListView.INVALID_POSITION);
+	}
+
+	public void setCheckedItem(int checkedItem) {
+		getBundle().putInt(CHECKED, checkedItem);
+	}
+	
+	@Override
+	public void onClick(DialogInterface dialog, int which) {
+		setCheckedItem(which);
+		super.onClick(dialog, which);
+		if (adapter != null) {
+			getInstance().dismiss();
+		}
+	}
+	
+	public void show(Serializable arg, int checkedItem) {
+		setCheckedItem(checkedItem);
+		super.show(arg);
 	}
 }
