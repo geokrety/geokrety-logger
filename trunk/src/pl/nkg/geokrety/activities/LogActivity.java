@@ -14,6 +14,7 @@ import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.threads.LogGeoKret;
 import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
+import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
@@ -42,6 +43,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 	private GenericProgressDialogWrapper logProgressDialog;
 	private TimePickerDialogWrapper timePickerDialog;
 	private DatePickerDialogWrapper datePickerDialog;
+	private AlertDialogWrapper inventorySpinnerDialog;
 
 	private GeoKretyApplication application;
 	private RefreshAccount refreshAccount;
@@ -73,6 +75,9 @@ public class LogActivity extends ManagedDialogsActivity implements
 				Dialogs.TIME_PICKERDIALOG);
 		datePickerDialog = new DatePickerDialogWrapper(this,
 				Dialogs.DATE_PICKERDIALOG);
+		inventorySpinnerDialog = new AlertDialogWrapper(this,
+				Dialogs.INVENTORY_SPINNERDIALOG);
+		inventorySpinnerDialog.setTitle(R.string.title_dialog_inventory);
 
 		logProgressDialog.setTitle(R.string.submit_title);
 
@@ -119,6 +124,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 						}.setFinishMessage(R.string.submit_finish)
 								.setBreakMessage(R.string.submit_broken));
 		updateCurrentAccount();
+		configInventoryAdapter();
 		loadFromGeoKretLog(currentLog);
 	}
 
@@ -193,31 +199,45 @@ public class LogActivity extends ManagedDialogsActivity implements
 		log.setLogTypeMapped(logTypeSpinner.getSelectedItemPosition());
 	}
 
-	public void showInventory(View view) {
+	private boolean configInventoryAdapter() {
 		if (!canShowUserData()) {
-			return;
+			return false;
 		}
 
 		if (currentAccount.loadIfExpired(application)) {
-			return;
+			return false;
 		}
 
-		final ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(this,
+		ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(this,
 				android.R.layout.simple_spinner_dropdown_item,
 				currentAccount.getInventory());
+		inventorySpinnerDialog.setAdapter(adapter);
+		return true;
+	}
 
-		new AlertDialog.Builder(this).setTitle(R.string.title_dialog_inventory)
-				.setAdapter(adapter, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-
-						trackingCodeEditText.setText(adapter.getItem(which)
-								.getTackingCode());
-
-						dialog.dismiss();
-					}
-				}).create().show();
+	public void showInventory(View view) {
+		if (configInventoryAdapter()) {
+			inventorySpinnerDialog.show(null);
+		}/*
+		 * if (!canShowUserData()) { return; }
+		 * 
+		 * if (currentAccount.loadIfExpired(application)) { return; }
+		 * 
+		 * final ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(this,
+		 * android.R.layout.simple_spinner_dropdown_item,
+		 * currentAccount.getInventory());
+		 * 
+		 * new
+		 * AlertDialog.Builder(this).setTitle(R.string.title_dialog_inventory)
+		 * .setAdapter(adapter, new DialogInterface.OnClickListener() {
+		 * 
+		 * @Override public void onClick(DialogInterface dialog, int which) {
+		 * 
+		 * trackingCodeEditText.setText(adapter.getItem(which)
+		 * .getTackingCode());
+		 * 
+		 * dialog.dismiss(); } }).create().show();
+		 */
 	}
 
 	private boolean canShowUserData() {
@@ -326,12 +346,19 @@ public class LogActivity extends ManagedDialogsActivity implements
 			currentLog.setMinuta(timePickerDialog.getMinute());
 			loadFromGeoKretLog(currentLog);
 			break;
+			
 		case Dialogs.DATE_PICKERDIALOG:
 			currentLog.setDate(datePickerDialog.getYear(),
 					datePickerDialog.getMonthOfYear() + 1,
 					datePickerDialog.getDayOfMonth());
 			loadFromGeoKretLog(currentLog);
-
+			break;
+			
+		case Dialogs.INVENTORY_SPINNERDIALOG:
+			Geokret kret = (Geokret) inventorySpinnerDialog.getAdapter()
+					.getItem(buttonId);
+			trackingCodeEditText.setText(kret.getTackingCode());
+			break;
 		}
 	}
 }

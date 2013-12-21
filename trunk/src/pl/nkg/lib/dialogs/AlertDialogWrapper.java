@@ -12,7 +12,7 @@ import android.widget.ListAdapter;
  * ISBN: 978-83-246-2754-7
  * 
  */
-public abstract class AlertDialogWrapper extends
+public class AlertDialogWrapper extends
 		AbstractAlertDialogWrapper<AlertDialog> {
 
 	private Integer layoutId = null;
