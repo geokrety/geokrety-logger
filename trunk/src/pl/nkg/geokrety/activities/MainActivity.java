@@ -1,5 +1,7 @@
-package pl.nkg.geokrety;
+package pl.nkg.geokrety.activities;
 
+import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.StateHolder;
 import android.os.Bundle;
 import android.app.Activity;

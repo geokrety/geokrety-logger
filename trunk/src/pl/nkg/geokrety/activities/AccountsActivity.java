@@ -1,7 +1,8 @@
-package pl.nkg.geokrety;
+package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
 
+import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.EditAccountDialog;

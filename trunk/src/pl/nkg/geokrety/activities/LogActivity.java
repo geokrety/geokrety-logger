@@ -1,7 +1,9 @@
-package pl.nkg.geokrety;
+package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
 
+import pl.nkg.geokrety.GeoKretyApplication;
+import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeoKretLog;
@@ -40,6 +42,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	private GenericProgressDialogWrapper refreshProgressDialog;
 	private GenericProgressDialogWrapper logProgressDialog;
+	
 	private GeoKretyApplication application;
 	private RefreshAccount refreshAccount;
 	private LogGeoKret logGeoKret;
