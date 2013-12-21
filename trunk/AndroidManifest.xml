@@ -38,11 +38,11 @@
             android:label="@string/title_activity_last_ocs" >
         </activity>
         <activity
-            android:name="pl.nkg.geokrety.activities.LogActivityLogActivity"
+            android:name="pl.nkg.geokrety.activities.LogActivity"
             android:label="@string/title_activity_log" >
         </activity>
         <activity
-            android:name="pl.nkg.geokrety.activities.AboutActivityoutActivity"
+            android:name="pl.nkg.geokrety.activities.AboutActivity"
             android:label="@string/title_activity_about" >
         </activity>
     </application>

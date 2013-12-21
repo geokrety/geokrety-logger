@@ -6,4 +6,9 @@ public class Dialogs {
 	public static final int REMOVE_ACCOUNT_ALERTDIALOG = 1003;
 	public static final int REFRESH_ACCOUNT_PROGRESSDIALOG = 1004;
 	public static final int LOG_PROGRESSDIALOG = 1005;
+	public static final int TIME_PICKERDIALOG = 1006;
+	public static final int DATE_PICKERDIALOG = 1007;
+	public static final int INVENTORY_SPINNERDIALOG = 1008;
+	public static final int OCS_SPINNERDIALOG = 1009;
+	public static final int TYPE_SPINNERDIALOG = 1010;
 }

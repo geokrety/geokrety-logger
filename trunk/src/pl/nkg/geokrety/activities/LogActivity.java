@@ -16,6 +16,7 @@ import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
+import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
 import android.os.Bundle;
 import android.app.AlertDialog;
@@ -42,7 +43,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	private GenericProgressDialogWrapper refreshProgressDialog;
 	private GenericProgressDialogWrapper logProgressDialog;
-	
+	private TimePickerDialogWrapper timePickerDialog;
+
 	private GeoKretyApplication application;
 	private RefreshAccount refreshAccount;
 	private LogGeoKret logGeoKret;
@@ -69,6 +71,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 				Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
 		logProgressDialog = new GenericProgressDialogWrapper(this,
 				Dialogs.LOG_PROGRESSDIALOG);
+		timePickerDialog = new TimePickerDialogWrapper(this,
+				Dialogs.TIME_PICKERDIALOG);
 
 		logProgressDialog.setTitle(R.string.submit_title);
 
@@ -79,7 +83,6 @@ public class LogActivity extends ManagedDialogsActivity implements
 				.getForegroundTaskHandler());
 
 		currentLog = new GeoKretLog(savedInstanceState);
-
 
 		setContentView(R.layout.activity_log);
 
@@ -113,7 +116,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 								super.onFinish(sender, param, result);
 								reset(null);
 							};
-						}.setFinishMessage(R.string.submit_finish).setBreakMessage(R.string.submit_broken));
+						}.setFinishMessage(R.string.submit_finish)
+								.setBreakMessage(R.string.submit_broken));
 		updateCurrentAccount();
 		loadFromGeoKretLog(currentLog);
 	}
@@ -287,7 +291,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 	}
 
 	public void checkTime(View view) {
-		new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+		/*new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
 
 			@Override
 			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -295,7 +299,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 				currentLog.setMinuta(minute);
 				loadFromGeoKretLog(currentLog);
 			}
-		}, currentLog.getGodzina(), currentLog.getMinuta(), true).show();
+		}, currentLog.getGodzina(), currentLog.getMinuta(), true).show();*/
+		timePickerDialog.show(null, currentLog.getGodzina(), currentLog.getMinuta(), true);
 	}
 
 	public void submit(final View view) {
@@ -333,7 +338,13 @@ public class LogActivity extends ManagedDialogsActivity implements
 	@Override
 	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
 			Serializable arg) {
-		// TODO Auto-generated method stub
+		switch (dialog.getDialogId()) {
+		case Dialogs.TIME_PICKERDIALOG:
+			currentLog.setGodzina(timePickerDialog.getHourOfDay());
+			currentLog.setMinuta(timePickerDialog.getMinute());
+			loadFromGeoKretLog(currentLog);
+			break;
 
+		}
 	}
 }

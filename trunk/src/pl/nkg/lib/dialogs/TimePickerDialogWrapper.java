@@ -1,5 +1,8 @@
 package pl.nkg.lib.dialogs;
 
+import java.io.Serializable;
+
+import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.widget.TimePicker;
 
@@ -24,11 +27,19 @@ public class TimePickerDialogWrapper extends
 		dialog.setMessage(getMessage());
 		return dialog;
 	}
+	
+	@Override
+	public void prepare(TimePickerDialog dialog) {
+		super.prepare(dialog);
+		dialog.updateTime(hourOfDay, minute);
+	}
 
 	@Override
 	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 		setHourOfDay(hourOfDay);
 		setMinute(minute);
+		getManagedDialogsActivity().dialogFinished(this,
+				Dialog.BUTTON_POSITIVE, getArg());
 	}
 
 	public int getHourOfDay() {
@@ -55,4 +66,11 @@ public class TimePickerDialogWrapper extends
 		this.is24HourView = is24HourView;
 	}
 
+	public void show(Serializable arg, int hourOfDay, int minute,
+			boolean is24HourView) {
+		setHourOfDay(hourOfDay);
+		setMinute(minute);
+		setIs24HourView(is24HourView);
+		show(arg);
+	}
 }
