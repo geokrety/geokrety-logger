@@ -14,14 +14,13 @@ import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.threads.LogGeoKret;
 import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
+import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
 import android.os.Bundle;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Pair;
@@ -31,11 +30,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class LogActivity extends ManagedDialogsActivity implements
@@ -44,6 +41,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 	private GenericProgressDialogWrapper refreshProgressDialog;
 	private GenericProgressDialogWrapper logProgressDialog;
 	private TimePickerDialogWrapper timePickerDialog;
+	private DatePickerDialogWrapper datePickerDialog;
 
 	private GeoKretyApplication application;
 	private RefreshAccount refreshAccount;
@@ -73,6 +71,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 				Dialogs.LOG_PROGRESSDIALOG);
 		timePickerDialog = new TimePickerDialogWrapper(this,
 				Dialogs.TIME_PICKERDIALOG);
+		datePickerDialog = new DatePickerDialogWrapper(this,
+				Dialogs.DATE_PICKERDIALOG);
 
 		logProgressDialog.setTitle(R.string.submit_title);
 
@@ -274,33 +274,15 @@ public class LogActivity extends ManagedDialogsActivity implements
 		int m = Integer.parseInt(date[1]) - 1;
 		int d = Integer.parseInt(date[2]);
 		try {
-			new DatePickerDialog(this,
-					new DatePickerDialog.OnDateSetListener() {
-
-						@Override
-						public void onDateSet(DatePicker view, int year,
-								int monthOfYear, int dayOfMonth) {
-							currentLog.setDate(year, monthOfYear + 1,
-									dayOfMonth);
-							loadFromGeoKretLog(currentLog);
-						}
-					}, y, m, d).show();
+			datePickerDialog.show(null, y, m, d);
 		} catch (Exception e) {
 			System.out.print(e);
 		}
 	}
 
 	public void checkTime(View view) {
-		/*new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
-
-			@Override
-			public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-				currentLog.setGodzina(hourOfDay);
-				currentLog.setMinuta(minute);
-				loadFromGeoKretLog(currentLog);
-			}
-		}, currentLog.getGodzina(), currentLog.getMinuta(), true).show();*/
-		timePickerDialog.show(null, currentLog.getGodzina(), currentLog.getMinuta(), true);
+		timePickerDialog.show(null, currentLog.getGodzina(),
+				currentLog.getMinuta(), true);
 	}
 
 	public void submit(final View view) {
@@ -344,6 +326,11 @@ public class LogActivity extends ManagedDialogsActivity implements
 			currentLog.setMinuta(timePickerDialog.getMinute());
 			loadFromGeoKretLog(currentLog);
 			break;
+		case Dialogs.DATE_PICKERDIALOG:
+			currentLog.setDate(datePickerDialog.getYear(),
+					datePickerDialog.getMonthOfYear() + 1,
+					datePickerDialog.getDayOfMonth());
+			loadFromGeoKretLog(currentLog);
 
 		}
 	}
