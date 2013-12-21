@@ -1,22 +1,27 @@
 package pl.nkg.geokrety;
 
+import java.io.Serializable;
+
+import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
-import pl.nkg.geokrety.dialogs.LogProgressDialog;
-import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
-import pl.nkg.geokrety.widgets.LogSuccessfulListener;
-import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
-import pl.nkg.lib.dialogs.ManagedActivityDialog;
+import pl.nkg.geokrety.dialogs.Dialogs;
+import pl.nkg.geokrety.threads.LogGeoKret;
+import pl.nkg.geokrety.threads.RefreshAccount;
+import pl.nkg.lib.dialogs.AbstractDialogWrapper;
+import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
+import pl.nkg.lib.threads.GenericTaskListener;
 import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.util.Pair;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,10 +36,13 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 public class LogActivity extends ManagedDialogsActivity implements
-		RefreshSuccessfulListener, OnItemSelectedListener, LogSuccessfulListener {
+		OnItemSelectedListener {
 
-	private RefreshProgressDialog refreshProgressDialog;
-	private LogProgressDialog logProgressDialog;
+	private GenericProgressDialogWrapper refreshProgressDialog;
+	private GenericProgressDialogWrapper logProgressDialog;
+	private GeoKretyApplication application;
+	private RefreshAccount refreshAccount;
+	private LogGeoKret logGeoKret;
 
 	private GeoKretLog currentLog;
 	private Account currentAccount;
@@ -43,22 +51,32 @@ public class LogActivity extends ManagedDialogsActivity implements
 	private Button accountsButton;
 	private EditText trackingCodeEditText;
 	private Button ocsButton;
-	//private Button gpsButton;
+	// private Button gpsButton;
 	private Button datePicker;
 	private Button timePicker;
 	private EditText waypointEditText;
-	//private EditText coordinatesEditText;
+	// private EditText coordinatesEditText;
 	private EditText commentEditText;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		refreshProgressDialog = new RefreshProgressDialog(this, this);
-		logProgressDialog = new LogProgressDialog(this, this);
 		super.onCreate(savedInstanceState);
+
+		refreshProgressDialog = new GenericProgressDialogWrapper(this,
+				Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
+		logProgressDialog = new GenericProgressDialogWrapper(this,
+				Dialogs.LOG_PROGRESSDIALOG);
+
+		logProgressDialog.setTitle(R.string.submit_title);
+
+		application = (GeoKretyApplication) getApplication();
+		refreshAccount = RefreshAccount.getFromHandler(application
+				.getForegroundTaskHandler());
+		logGeoKret = LogGeoKret.getFromHandler(application
+				.getForegroundTaskHandler());
 
 		currentLog = new GeoKretLog(savedInstanceState);
 
-		updateCurrentAccount();
 
 		setContentView(R.layout.activity_log);
 
@@ -66,15 +84,41 @@ public class LogActivity extends ManagedDialogsActivity implements
 		accountsButton = (Button) findViewById(R.id.accountsButton);
 		trackingCodeEditText = (EditText) findViewById(R.id.trackingCodeEditText);
 		ocsButton = (Button) findViewById(R.id.ocsButton);
-		//gpsButton = (Button) findViewById(R.id.gpsButton);
+		// gpsButton = (Button) findViewById(R.id.gpsButton);
 		datePicker = (Button) findViewById(R.id.datePicker);
 		timePicker = (Button) findViewById(R.id.timePicker);
 		waypointEditText = (EditText) findViewById(R.id.waypointEditText);
-		//coordinatesEditText = (EditText) findViewById(R.id.coordinatesEditText);
+		// coordinatesEditText = (EditText)
+		// findViewById(R.id.coordinatesEditText);
 		commentEditText = (EditText) findViewById(R.id.commentEditText);
 		logTypeSpinner.setOnItemSelectedListener(this);
 
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this));
+		logGeoKret
+				.attach(logProgressDialog,
+						new GenericTaskListener<Pair<GeoKretLog, Account>, String, Boolean>(
+								this) {
+							public void onFinish(
+									pl.nkg.lib.threads.AbstractForegroundTaskWrapper<android.util.Pair<GeoKretLog, Account>, String, Boolean> sender,
+									android.util.Pair<GeoKretLog, Account> param,
+									Boolean result) {
+								super.onFinish(sender, param, result);
+								reset(null);
+							};
+						}.setFinishMessage(R.string.submit_finish).setBreakMessage(R.string.submit_broken));
+		updateCurrentAccount();
 		loadFromGeoKretLog(currentLog);
+	}
+
+	@Override
+	protected void onStop() {
+		refreshAccount.detach();
+		super.onStop();
 	}
 
 	private void updateCurrentAccount() {
@@ -83,7 +127,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 		if (currentAccountNr != ListView.INVALID_POSITION) {
 			currentAccount = holder.getAccountList().get(currentAccountNr);
 			currentLog.setGeoKretyLogin(currentAccount.getGeoKretyLogin());
-			currentAccount.loadIfExpired(refreshProgressDialog, this);
+			currentAccount.loadIfExpired(application);
 		}
 	}
 
@@ -129,7 +173,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 		datePicker.setText(log.getData());
 		timePicker.setText(log.getFormatedTime());
 		waypointEditText.setText(log.getWpt());
-		//coordinatesEditText.setText(log.getLatlon());
+		// coordinatesEditText.setText(log.getLatlon());
 		commentEditText.setText(log.getComment());
 		updateVisibles();
 	}
@@ -137,7 +181,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 	private void storeToGeoKretLog(GeoKretLog log) {
 		log.setNr(trackingCodeEditText.getText().toString());
 		log.setWpt(waypointEditText.getText().toString());
-		//log.setLatlon(coordinatesEditText.getText().toString());
+		// log.setLatlon(coordinatesEditText.getText().toString());
 		log.setComment(commentEditText.getText().toString());
 		log.setLogTypeMapped(logTypeSpinner.getSelectedItemPosition());
 	}
@@ -146,8 +190,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 		if (!canShowUserData()) {
 			return;
 		}
-		
-		if (currentAccount.loadIfExpired(refreshProgressDialog, this)) {
+
+		if (currentAccount.loadIfExpired(application)) {
 			return;
 		}
 
@@ -182,8 +226,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 		if (!canShowUserData()) {
 			return;
 		}
-		
-		if (currentAccount.loadIfExpired(refreshProgressDialog, this)) {
+
+		if (currentAccount.loadIfExpired(application)) {
 			return;
 		}
 
@@ -253,19 +297,13 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	public void submit(final View view) {
 		storeToGeoKretLog(currentLog);
-		currentLog.submit(this, logProgressDialog, currentAccount, this);
+		currentLog.submit(application, currentAccount);
 	}
 
 	public void reset(View view) {
 		currentLog = new GeoKretLog();
 		updateCurrentAccount();
 		loadFromGeoKretLog(currentLog);
-	}
-
-	@Override
-	public void onRefreshSuccessful(boolean changed) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -284,23 +322,15 @@ public class LogActivity extends ManagedDialogsActivity implements
 		int s = logTypeSpinner.getSelectedItemPosition();
 		boolean locationVisible = !GeoKretLog.checkIgnoreLocation(s);
 		waypointEditText.setEnabled(locationVisible);
-		//coordinatesEditText.setEnabled(locationVisible);
-		//gpsButton.setEnabled(locationVisible);
+		// coordinatesEditText.setEnabled(locationVisible);
+		// gpsButton.setEnabled(locationVisible);
 		ocsButton.setEnabled(locationVisible);
 	}
 
 	@Override
-	protected void registerDialogs() {
-		registerDialog(refreshProgressDialog);
-		registerDialog(logProgressDialog);
-	}
+	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
+			Serializable arg) {
+		// TODO Auto-generated method stub
 
-	@Override
-	public void dialogFinished(ManagedActivityDialog dialog, int buttonId) {
-	}
-
-	@Override
-	public void onLogSuccessful() {
-		reset(null);
 	}
 }

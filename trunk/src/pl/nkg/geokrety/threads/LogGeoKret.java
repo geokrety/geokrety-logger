@@ -3,104 +3,44 @@ package pl.nkg.geokrety.threads;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeoKretLog;
-import pl.nkg.geokrety.dialogs.LogProgressDialog;
-import pl.nkg.geokrety.exceptions.MessagedException;
-import pl.nkg.geokrety.widgets.LogSuccessfulListener;
-import android.os.AsyncTask;
-import android.widget.Toast;
+import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
+import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
+import pl.nkg.lib.threads.ForegroundTaskHandler;
+import pl.nkg.lib.threads.TaskListener;
+import android.content.Context;
+import android.util.Pair;
 
-public class LogGeoKret extends AsyncTask<String, Integer, Boolean> {
+public class LogGeoKret extends
+		AbstractForegroundTaskWrapper<Pair<GeoKretLog, Account>, String, Boolean> {
 
-	private static LogGeoKret instance;
+	public static final int ID = 2;
+	private String message = "";
 
-	public static LogGeoKret getInstance() {
-		return instance;
-	}
-
-	private MessagedException excaption;
-	private GeoKretLog log;
-	private Account account;
-	private LogProgressDialog logProgressDialog;
-	private LogSuccessfulListener logSuccessfulListener;
-
-	public LogGeoKret(GeoKretLog log, Account account,
-			LogProgressDialog logProgressDialog,
-			LogSuccessfulListener logSuccessfulListener) {
-		this.log = log;
-		this.account = account;
-		this.logProgressDialog = logProgressDialog;
-		this.logSuccessfulListener = logSuccessfulListener;
+	public LogGeoKret() {
+		super(ID);
 	}
 
 	@Override
-	protected void onPreExecute() {
-		synchronized (instance) {
-			try {
-				logProgressDialog.show();
-			} catch (Throwable t) {
-				t.printStackTrace();
-				cancel(true);
-				instance = null;
-			}
-		}
+	protected Boolean runInBackground(Pair<GeoKretLog, Account> param)
+			throws Throwable {
+		GeoKretLog log = param.first;
+		Account account = param.second;
+		return log.submitBackground(account);
 	}
 
+	public static LogGeoKret getFromHandler(ForegroundTaskHandler handler) {
+		AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
+		LogGeoKret b = (LogGeoKret) a;
+		return b;
+	}
+	
 	@Override
-	protected Boolean doInBackground(String... params) {
-		try {
-			return log.submitBackground(account);
-		} catch (MessagedException e) {
-			excaption = e;
-			return false;
-		}
-
-	}
-
-	@Override
-	protected void onPostExecute(Boolean result) {
-		super.onPostExecute(result);
-		synchronized (instance) {
-			if (result != null) {
-				if (result) {
-					Toast.makeText(
-							logProgressDialog.getManagedDialogsActivity(),
-							R.string.submit_finish, Toast.LENGTH_LONG).show();
-					logSuccessfulListener.onLogSuccessful();
-				} else {
-					Toast.makeText(
-							logProgressDialog.getManagedDialogsActivity(),
-							excaption.getFormatedMessage(logProgressDialog
-									.getManagedDialogsActivity()),
-							Toast.LENGTH_LONG).show();
-				}
-				logProgressDialog.dismiss();
-			}
-			instance = null;
-		}
-	}
-
-	public void updateActivities(LogProgressDialog logProgressDialog,
-			LogSuccessfulListener logSuccessfulListener) {
-		synchronized (instance) {
-			this.logProgressDialog = logProgressDialog;
-			this.logSuccessfulListener = logSuccessfulListener;
-		}
-	}
-
-	public static void logGeoKret(GeoKretLog log, Account account,
-			LogProgressDialog logProgressDialog,
-			LogSuccessfulListener listener, boolean force) {
-
-		if (instance != null && !force) {
-			return;
-		}
-
-		if (instance != null) {
-			instance.cancel(true);
-			instance = null;
-		}
-
-		instance = new LogGeoKret(log, account, logProgressDialog, listener);
-		instance.execute();
+	public void attach(
+			AbstractProgressDialogWrapper<String> progressDialogWrapper,
+			TaskListener<Pair<GeoKretLog, Account>, String, Boolean> listener) {
+		super.attach(progressDialogWrapper, listener);
+		Context ctx = progressDialogWrapper.getManagedDialogsActivity();
+		message = ctx.getText(R.string.submit_message).toString();
+		progressDialogWrapper.setProgress(message);
 	}
 }

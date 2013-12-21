@@ -65,6 +65,7 @@
     <string name="submit_message">Trwa logowanie GeoKreta. Czekaj cierpliwie i niczego nie dotykaj :)&#8230;</string>
     <string name="submit_finish">GeoKret został zalogowany pomyślnie</string>
     <string name="submit_fail">Problem z logowaniem GeoKreta:</string>
+    <string name="submit_broken">Przerwano logowanie GeoKreta, ale serwer mógł już zapisać log. Wejdź potem na stronę geokrety.org i w razie konieczności usuń log.</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
     <string name="version">GeoKrety Logger v</string>
@@ -95,4 +96,8 @@
 
     <string name="account_add_prompt_message">Wprowadź dane pozwalające na zalogowanie się na Twoje konto w GeoKrety.pl i pobranie Twoich ostatnich logów z OpenCaching.pl.</string>
     <string name="account_edit_prompt_message">Popraw dane pozwalające na zalogowanie się na Twoje konto w GeoKrety.pl i pobranie Twoich ostatnich logów z OpenCaching.pl.</string>
+    
+    <string name="generic_error">Napotkano problem z:</string>
+    <string name="generic_broken">Przerwano</string>
+    <string name="generic_finish">Zakończono pomyślnie</string>
 </resources>

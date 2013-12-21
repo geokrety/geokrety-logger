@@ -1,12 +1,16 @@
 package pl.nkg.geokrety;
 
+import java.io.Serializable;
+
+import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
-import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
-import pl.nkg.lib.dialogs.ManagedActivityDialog;
+import pl.nkg.geokrety.threads.RefreshAccount;
+import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
+import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,16 +21,23 @@ import android.widget.Spinner;
 import android.widget.AdapterView;
 
 public class InventoryActivity extends ManagedDialogsActivity implements
-		AdapterView.OnItemSelectedListener, RefreshSuccessfulListener {
+		AdapterView.OnItemSelectedListener {
 
 	private Account account;
 	private RefreshProgressDialog refreshProgressDialog;
+	private GeoKretyApplication application;
+	private RefreshAccount refreshAccount;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		refreshProgressDialog = new RefreshProgressDialog(this, this);
-		super.onCreate(savedInstanceState);
 		StateHolder holder = StateHolder.getInstance(this);
+		super.onCreate(savedInstanceState);
+		refreshProgressDialog = new RefreshProgressDialog(this);
+
+		application = (GeoKretyApplication) getApplication();
+		refreshAccount = RefreshAccount.getFromHandler(application
+				.getForegroundTaskHandler());
+
 		setContentView(R.layout.activity_inventory);
 		Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
 		spin.setOnItemSelectedListener(this);
@@ -36,11 +47,39 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spin.setAdapter(aa);
 		spin.setSelection(holder.getDefaultAccount());
+	}
 
+	@Override
+	protected void onStart() {
+		super.onStart();
+		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
+			@Override
+			public void onFinish(
+					AbstractForegroundTaskWrapper<Account, String, Boolean> sender,
+					Account param, Boolean result) {
+				super.onFinish(sender, param, result);
+				refreshListView();
+			}
+		});
+		StateHolder holder = StateHolder.getInstance(this);
 		if (holder.getDefaultAccount() != ListView.INVALID_POSITION) {
 			account = holder.getAccountList().get(holder.getDefaultAccount());
 			updateListView();
 		}
+	}
+	
+	private void refreshListView() {
+		ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(
+				InventoryActivity.this, android.R.layout.simple_list_item_1,
+				account.getInventory());
+		ListView listView = (ListView) findViewById(R.id.inventoryListView);
+		listView.setAdapter(adapter);		
+	}
+
+	@Override
+	protected void onStop() {
+		refreshAccount.detach();
+		super.onStop();
 	}
 
 	@Override
@@ -64,7 +103,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 	}
 
 	private void refreshAccout() {
-		account.loadData(refreshProgressDialog, this);
+		account.loadData((GeoKretyApplication) getApplication());
 	}
 
 	@Override
@@ -78,16 +117,9 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 	}
 
 	private void updateListView() {
-		account.loadIfExpired(refreshProgressDialog, this);
-	}
-
-	@Override
-	public void onRefreshSuccessful(boolean changed) {
-		ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(
-				InventoryActivity.this, android.R.layout.simple_list_item_1,
-				account.getInventory());
-		ListView listView = (ListView) findViewById(R.id.inventoryListView);
-		listView.setAdapter(adapter);
+		if (!account.loadIfExpired((GeoKretyApplication) getApplication())) {
+			refreshListView();
+		}
 	}
 
 	@Override
@@ -95,11 +127,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 	}
 
 	@Override
-	protected void registerDialogs() {
-		registerDialog(refreshProgressDialog);
-	}
-
-	@Override
-	public void dialogFinished(ManagedActivityDialog dialog, int buttonId) {
+	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
+			Serializable arg) {
 	}
 }

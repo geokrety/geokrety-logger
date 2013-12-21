@@ -77,6 +77,7 @@
     <string name="submit_title">Submitting log</string>
     <string name="submit_message">Log of geokret are submitting&#8230;</string>
     <string name="submit_finish">GeoKret logged finish</string>
+    <string name="submit_broken">GeoKret logged broken but GeoKret still be logged</string>
     <string name="submit_fail">Submit fail: </string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
@@ -107,4 +108,8 @@
     <string name="account_add_prompt_message">Enter values of the new account</string>
     <string name="account_edit_prompt_message">Change values of the existing account</string>
 
+    
+    <string name="generic_error">Error:</string>
+    <string name="generic_broken">Broken</string>
+    <string name="generic_finish">End successful</string>
 </resources>

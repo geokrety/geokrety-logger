@@ -10,14 +10,13 @@ import org.w3c.dom.Document;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 
+import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
-import pl.nkg.geokrety.dialogs.LogProgressDialog;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.threads.LogGeoKret;
-import pl.nkg.geokrety.widgets.LogSuccessfulListener;
-import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.text.format.Time;
+import android.util.Pair;
 
 public class GeoKretLog implements Serializable {
 	private static final long serialVersionUID = 907039083028176080L;
@@ -205,13 +204,14 @@ public class GeoKretLog implements Serializable {
 				+ nf.format(dayOfMonth);
 	}
 
-	public void submit(final ManagedDialogsActivity context,
-			LogProgressDialog logProgressDialog, final Account currentAccount,
-			final LogSuccessfulListener listener) {
+	public void submit(GeoKretyApplication application, Account currentAccount) {
 
-		app_ver = Utils.getAppVer(context);
-		LogGeoKret.logGeoKret(this, currentAccount, logProgressDialog,
-				listener, false);
+		app_ver = Utils.getAppVer(application.getApplicationContext());
+
+		application.getForegroundTaskHandler().runTask(LogGeoKret.ID,
+				new Pair<GeoKretLog, Account>(this, currentAccount));
+		// LogGeoKret.logGeoKret(this, currentAccount, logProgressDialog,
+		// listener, false);
 	}
 
 	public static boolean checkIgnoreLocation(int logtype_mapped) {

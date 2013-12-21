@@ -2,116 +2,67 @@ package pl.nkg.geokrety.threads;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
-import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
-import pl.nkg.geokrety.exceptions.MessagedException;
-import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
-import android.os.AsyncTask;
-import android.widget.Toast;
+import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
+import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
+import pl.nkg.lib.threads.ForegroundTaskHandler;
+import pl.nkg.lib.threads.TaskListener;
+import android.content.Context;
 
-public class RefreshAccount extends AsyncTask<String, Integer, Boolean> {
+public class RefreshAccount extends
+		AbstractForegroundTaskWrapper<Account, String, Boolean> {
 
-	private static RefreshAccount instance;
+	public static final int ID = 1;
+	private String[] messages;
 
-	public static RefreshAccount getInstance() {
-		return instance;
-	}
-
-	private MessagedException excaption;
-	private Account account;
-	private RefreshProgressDialog refreshProgressDialog;
-	private RefreshSuccessfulListener refreshSuccessfulListener;
-
-	public RefreshAccount(Account account,
-			RefreshProgressDialog refreshProgressDialog,
-			RefreshSuccessfulListener refreshSuccessfulListener) {
-		this.account = account;
-		this.refreshProgressDialog = refreshProgressDialog;
-		this.refreshSuccessfulListener = refreshSuccessfulListener;
+	public RefreshAccount() {
+		super(ID);
 	}
 
 	@Override
-	protected void onPreExecute() {
-		synchronized (instance) {
-			try {
-				refreshProgressDialog.show();
-			} catch (Throwable t) {
-				t.printStackTrace();
-				cancel(true);
-				instance = null;
+	protected Boolean runInBackground(Account param) throws Throwable {
+		Account account = param;
+
+		publishProgress(getProgressMessage(0));
+		account.loadSecureID(this);
+		publishProgress(getProgressMessage(1));
+		account.loadInventory(this);
+		publishProgress(getProgressMessage(2));
+		account.loadOpenCachingUUID(this);
+		publishProgress(getProgressMessage(3));
+		account.loadOpenCachingLogs(this);
+		account.touchLastLoadedDate();
+		return true;
+	}
+
+	private String getProgressMessage(int step) {
+		synchronized (this) {
+			if (messages == null) {
+				return "";
 			}
+			return messages[step];
 		}
 	}
 
 	@Override
-	protected Boolean doInBackground(String... params) {
-		try {
-			publishProgress(0);
-			account.loadSecureID(this);
-			publishProgress(1);
-			account.loadInventory(this);
-			publishProgress(2);
-			account.loadOpenCachingUUID(this);
-			publishProgress(3);
-			account.loadOpenCachingLogs(this);
-			account.touchLastLoadedDate();
-			return true;
-		} catch (MessagedException e) {
-			excaption = e;
-			return false;
-		}
+	public void attach(
+			AbstractProgressDialogWrapper<String> progressDialogWrapper,
+			TaskListener<Account, String, Boolean> listener) {
+		super.attach(progressDialogWrapper, listener);
 
-	}
-
-	@Override
-	protected void onPostExecute(Boolean result) {
-		super.onPostExecute(result);
-		synchronized (instance) {
-			if (result != null) {
-				if (result) {
-					Toast.makeText(
-							refreshProgressDialog.getManagedDialogsActivity(),
-							R.string.download_finish, Toast.LENGTH_LONG).show();
-					refreshSuccessfulListener.onRefreshSuccessful(true);
-				} else {
-					Toast.makeText(
-							refreshProgressDialog.getManagedDialogsActivity(),
-							excaption.getFormatedMessage(refreshProgressDialog
-									.getManagedDialogsActivity()),
-							Toast.LENGTH_LONG).show();
-				}
-				refreshProgressDialog.dismiss();
-			}
-			instance = null;
+		synchronized (this) {
+			Context ctx = progressDialogWrapper.getManagedDialogsActivity();
+			messages = new String[4];
+			messages[0] = ctx.getText(R.string.download_login_gk).toString();
+			messages[1] = ctx.getText(R.string.download_getting_gk).toString();
+			messages[2] = ctx.getText(R.string.download_getting_ocs).toString();
+			messages[3] = ctx.getText(R.string.download_getting_names)
+					.toString();
 		}
 	}
-
-	@Override
-	protected void onProgressUpdate(Integer... values) {
-		refreshProgressDialog.setProgress(values[0]);
-	}
-
-	public void updateActivities(RefreshProgressDialog refreshProgressDialog,
-			RefreshSuccessfulListener refreshSuccessfulListener) {
-		synchronized (instance) {
-			this.refreshProgressDialog = refreshProgressDialog;
-			this.refreshSuccessfulListener = refreshSuccessfulListener;
-		}
-	}
-
-	public static void refreshAccount(Account account,
-			RefreshProgressDialog refreshProgressDialog,
-			RefreshSuccessfulListener listener, boolean force) {
-
-		if (instance != null && !force) {
-			return;
-		}
-
-		if (instance != null) {
-			instance.cancel(true);
-			instance = null;
-		}
-
-		instance = new RefreshAccount(account, refreshProgressDialog, listener);
-		instance.execute();
+	
+	public static RefreshAccount getFromHandler(ForegroundTaskHandler handler) {
+		AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
+		RefreshAccount b = (RefreshAccount) a;
+		return b;
 	}
 }

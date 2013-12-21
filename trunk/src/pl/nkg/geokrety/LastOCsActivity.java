@@ -1,12 +1,17 @@
 package pl.nkg.geokrety;
 
+import java.io.Serializable;
+
+import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.StateHolder;
-import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
-import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
-import pl.nkg.lib.dialogs.ManagedActivityDialog;
+import pl.nkg.geokrety.dialogs.Dialogs;
+import pl.nkg.geokrety.threads.RefreshAccount;
+import pl.nkg.lib.dialogs.AbstractDialogWrapper;
+import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
+import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,15 +22,23 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 public class LastOCsActivity extends ManagedDialogsActivity implements
-		AdapterView.OnItemSelectedListener, RefreshSuccessfulListener {
+		AdapterView.OnItemSelectedListener {
 
 	private Account account;
-	private RefreshProgressDialog refreshProgressDialog;
+	private GenericProgressDialogWrapper refreshProgressDialog;
+	private GeoKretyApplication application;
+	private RefreshAccount refreshAccount;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		refreshProgressDialog = new RefreshProgressDialog(this, this);
 		super.onCreate(savedInstanceState);
+		refreshProgressDialog = new GenericProgressDialogWrapper(this,
+				Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
+
+		application = (GeoKretyApplication) getApplication();
+		refreshAccount = RefreshAccount.getFromHandler(application
+				.getForegroundTaskHandler());
+
 		StateHolder holder = StateHolder.getInstance(this);
 		setContentView(R.layout.activity_last_ocs);
 		Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
@@ -37,10 +50,39 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 		spin.setAdapter(aa);
 		spin.setSelection(holder.getDefaultAccount());
 
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		StateHolder holder = StateHolder.getInstance(this);
+		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
+			@Override
+			public void onFinish(
+					AbstractForegroundTaskWrapper<Account, String, Boolean> sender,
+					Account param, Boolean result) {
+				super.onFinish(sender, param, result);
+				refreshListView();
+			}
+		});
 		if (holder.getDefaultAccount() != ListView.INVALID_POSITION) {
 			account = holder.getAccountList().get(holder.getDefaultAccount());
 			updateListView();
 		}
+	}
+
+	private void refreshListView() {
+		ArrayAdapter<GeocacheLog> adapter = new ArrayAdapter<GeocacheLog>(this,
+				android.R.layout.simple_list_item_1,
+				account.getOpenCachingLogs());
+		ListView listView = (ListView) findViewById(R.id.ocsListView);
+		listView.setAdapter(adapter);
+	}
+
+	@Override
+	protected void onStop() {
+		refreshAccount.detach();
+		super.onStop();
 	}
 
 	@Override
@@ -64,7 +106,7 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 	}
 
 	private void refreshAccout() {
-		account.loadData(refreshProgressDialog, this);
+		account.loadData(application);
 	}
 
 	@Override
@@ -78,7 +120,9 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 	}
 
 	private void updateListView() {
-		account.loadIfExpired(refreshProgressDialog, this);
+		if (!account.loadIfExpired(application)) {
+			refreshListView();
+		}
 	}
 
 	@Override
@@ -86,21 +130,9 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 	}
 
 	@Override
-	public void onRefreshSuccessful(boolean changed) {
-		ArrayAdapter<GeocacheLog> adapter = new ArrayAdapter<GeocacheLog>(this,
-				android.R.layout.simple_list_item_1,
-				account.getOpenCachingLogs());
-		ListView listView = (ListView) findViewById(R.id.ocsListView);
-		listView.setAdapter(adapter);
-	}
-
-	@Override
-	protected void registerDialogs() {
-		registerDialog(refreshProgressDialog);
-	}
-
-	@Override
-	public void dialogFinished(ManagedActivityDialog dialog, int buttonId) {
+	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
+			Serializable arg) {
+		// TODO Auto-generated method stub
 
 	}
 

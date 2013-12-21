@@ -16,15 +16,13 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import android.os.AsyncTask;
 import android.text.TextUtils;
 
+import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
-import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.threads.RefreshAccount;
-import pl.nkg.geokrety.widgets.RefreshSuccessfulListener;
 
 public class Account {
 	private static final String URL_LOGIN = "http://geokrety.org/api-login2secid.php";
@@ -101,8 +99,7 @@ public class Account {
 		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
 	}
 
-	public void loadSecureID(AsyncTask<String, Integer, Boolean> asyncTask)
-			throws MessagedException {
+	public void loadSecureID(RefreshAccount asyncTask) throws MessagedException {
 		String[][] postData = new String[][] {
 				new String[] { "login", geoKretyLogin },
 				new String[] { "password", geoKretyPassword } };
@@ -123,7 +120,7 @@ public class Account {
 		}
 	}
 
-	public void loadInventory(AsyncTask<String, Integer, Boolean> asyncTask)
+	public void loadInventory(RefreshAccount asyncTask)
 			throws MessagedException {
 		ArrayList<Geokret> inventory = new ArrayList<Geokret>();
 
@@ -146,8 +143,7 @@ public class Account {
 		}
 	}
 
-	public void loadOpenCachingUUID(
-			AsyncTask<String, Integer, Boolean> asyncTask)
+	public void loadOpenCachingUUID(RefreshAccount asyncTask)
 			throws MessagedException {
 		String[][] getData = new String[][] {
 				new String[] { "username", openCachingLogin },
@@ -164,8 +160,7 @@ public class Account {
 		}
 	}
 
-	public void loadOpenCachingLogs(
-			AsyncTask<String, Integer, Boolean> asyncTask)
+	public void loadOpenCachingLogs(RefreshAccount asyncTask)
 			throws MessagedException {
 		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
 		String[][] getData = new String[][] {
@@ -235,20 +230,19 @@ public class Account {
 		return geoKretyLogin;
 	}
 
-	public boolean loadIfExpired(RefreshProgressDialog refreshProgressDialog,
-			RefreshSuccessfulListener listener) {
+	public boolean loadIfExpired(GeoKretyApplication application) {
 		if (expired()) {
-			loadData(refreshProgressDialog, listener);
+			loadData(application);
 			return true;
 		} else {
-			listener.onRefreshSuccessful(false);
+			// listener.onRefreshSuccessful(false);
 			return false;
 		}
 	}
 
-	public void loadData(final RefreshProgressDialog refreshProgressDialog,
-			final RefreshSuccessfulListener listener) {
-		RefreshAccount.refreshAccount(this, refreshProgressDialog, listener,
-				false);
+	public void loadData(GeoKretyApplication application) {
+		application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this);
+		// RefreshAccount.refreshAccount(this, refreshProgressDialog, listener,
+		// false);
 	}
 }

@@ -1,11 +1,13 @@
 package pl.nkg.geokrety;
 
+import java.io.Serializable;
+
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.EditAccountDialog;
 import pl.nkg.geokrety.dialogs.NewAccountDialog;
 import pl.nkg.geokrety.dialogs.RemoveAccountDialog;
-import pl.nkg.lib.dialogs.ManagedActivityDialog;
+import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.os.Bundle;
 import android.app.Dialog;
@@ -31,13 +33,13 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		newAccountDialog = new NewAccountDialog(this);
-		editAccountDialog = new EditAccountDialog(this);
-		removeAccountDialog = new RemoveAccountDialog(this);
-
 		super.onCreate(savedInstanceState);
 		final StateHolder holder = StateHolder.getInstance(this);
 
+		newAccountDialog = new NewAccountDialog(this);
+		editAccountDialog = new EditAccountDialog(this);
+		removeAccountDialog = new RemoveAccountDialog(this);
+		
 		setContentView(R.layout.activity_accounts);
 
 		mainListView = (ListView) findViewById(R.id.accountListView);
@@ -108,7 +110,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 
 	private void showNewAccountDialog() {
 		newAccountDialog.clearValues();
-		newAccountDialog.show();
+		newAccountDialog.show(null);
 	}
 
 	private void showEditAccountDialog(int position) {
@@ -116,18 +118,18 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		Account account = StateHolder.getInstance(this).getAccountList()
 				.get(position);
 
-		editAccountDialog.setGKLogin(account.getGeoKretyLogin());
-		editAccountDialog.setGKPassword(account.getGeoKretyPassword());
-		editAccountDialog.setOCLogin(account.getOpenCachingLogin());
-		editAccountDialog.setArg(position);
-		editAccountDialog.show();
+		//editAccountDialog.setGKLogin(account.getGeoKretyLogin());
+		//editAccountDialog.setGKPassword(account.getGeoKretyPassword());
+		//editAccountDialog.setOCLogin(account.getOpenCachingLogin());
+		//editAccountDialog.setPosition(position);
+		editAccountDialog.show(null, account.getGeoKretyLogin(), account.getGeoKretyPassword(), account.getOpenCachingLogin(), position);
 	}
 
 	private void showRemoveAccountDialog(int position) {
 		Account account = StateHolder.getInstance(this).getAccountList()
 				.get(position);
-		removeAccountDialog.setArg(position);
-		removeAccountDialog.show(account.getGeoKretyLogin());
+		//removeAccountDialog.setPosition(position);
+		removeAccountDialog.show(account.getGeoKretyLogin(), account.getGeoKretyLogin(), position);
 	}
 
 	@Override
@@ -137,7 +139,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	}
 
 	@Override
-	public void dialogFinished(ManagedActivityDialog dialog, int buttonId) {
+	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId, Serializable arg) {
 		StateHolder holder = StateHolder.getInstance(this);
 		if (dialog.getDialogId() == newAccountDialog.getDialogId()
 				&& buttonId == Dialog.BUTTON_POSITIVE) {
@@ -147,25 +149,17 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		} else if (dialog.getDialogId() == editAccountDialog.getDialogId()
 				&& buttonId == Dialog.BUTTON_POSITIVE) {
 			Account account = holder.getAccountList().get(
-					(Integer) editAccountDialog.getArg());
+					(Integer) editAccountDialog.getPosition());
 			account.setGeoKretyLogin(editAccountDialog.getGKLogin());
 			account.setGeoKretyPassword(editAccountDialog.getGKPassword());
 			account.setOpenCachingLogin(editAccountDialog.getOCLogin());
 		} else if (dialog.getDialogId() == removeAccountDialog.getDialogId()
 				&& buttonId == Dialog.BUTTON_POSITIVE) {
 			mainListView.setItemChecked(holder.getDefaultAccount(), false);
-			int pos = (Integer) removeAccountDialog.getArg();
+			int pos = (Integer) removeAccountDialog.getPosition();
 			holder.getAccountList().remove(pos);
 			holder.setDefaultAccount(ListView.INVALID_POSITION);
 		}
 		listAdapter.notifyDataSetChanged();
 	}
-
-	@Override
-	protected void registerDialogs() {
-		registerDialog(newAccountDialog);
-		registerDialog(editAccountDialog);
-		registerDialog(removeAccountDialog);
-	}
-
 }

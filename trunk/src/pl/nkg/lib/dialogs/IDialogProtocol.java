@@ -1,25 +1,25 @@
 package pl.nkg.lib.dialogs;
 
+import java.io.Serializable;
+
 import android.app.Dialog;
 import android.os.Bundle;
 
 /**
- * Na podstawie ksi¹¿ki: Android 2 Tworzenie aplikacji<br/>
+ * Na podstawie ksiÄ…Å¼ki: Android 2 Tworzenie aplikacji<br/>
  * English title: Pro Android 2<br/>
  * Authors: Sayed Hashimi, Satya Komatineni, Dave MacLean<br/>
  * ISBN: 978-83-246-2754-7
  * 
  */
-public interface IDialogProtocol {
-	public Dialog create();
+public interface IDialogProtocol<D extends Dialog> {
+	public D create();
 
-	public void prepare(Dialog dialog);
+	public void prepare(D dialog);
 
 	public int getDialogId();
 
-	public void show();
-
-	public void onClickHook(int buttonId);
+	public void show(Serializable arg);
 
 	public void saveInstanceState(Bundle outState);
 

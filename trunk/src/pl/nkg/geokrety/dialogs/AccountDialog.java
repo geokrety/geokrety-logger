@@ -1,20 +1,24 @@
 package pl.nkg.geokrety.dialogs;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.widget.EditText;
 import android.widget.Toast;
 import pl.nkg.geokrety.R;
-import pl.nkg.lib.dialogs.GenericLayoutDialog;
+import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 
-public abstract class AccountDialog extends GenericLayoutDialog {
+public abstract class AccountDialog extends AlertDialogWrapper {
 
 	private String mGKLogin = "";
 	private String mGKPassword = "";
 	private String mOCLogin = "";
 
 	public AccountDialog(ManagedDialogsActivity a, int dialogId, int title) {
-		super(a, dialogId, R.layout.activity_account, title, NO_USE_MESSAGE);
+		super(a, dialogId);
+		setTitle(title);
+		setLayout(R.layout.activity_account);
+		setOkCancelButtons();
 	}
 
 	@Override
@@ -45,7 +49,7 @@ public abstract class AccountDialog extends GenericLayoutDialog {
 	}
 
 	@Override
-	public void prepare(Dialog dialog) {
+	public void prepare(AlertDialog dialog) {
 		((EditText) dialog.findViewById(R.id.loginEditText)).setText(mGKLogin);
 		((EditText) dialog.findViewById(R.id.passwordEditText))
 				.setText(mGKPassword);
@@ -54,7 +58,7 @@ public abstract class AccountDialog extends GenericLayoutDialog {
 	}
 
 	private void showToast(int stringID) {
-		Toast.makeText(ctx, stringID, Toast.LENGTH_SHORT).show();
+		Toast.makeText(getManagedDialogsActivity(), stringID, Toast.LENGTH_SHORT).show();
 	}
 
 	public String getGKLogin() {
