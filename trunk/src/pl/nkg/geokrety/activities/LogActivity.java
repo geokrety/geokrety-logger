@@ -21,8 +21,6 @@ import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
 import android.os.Bundle;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.util.Pair;
 import android.view.Menu;
@@ -44,6 +42,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 	private TimePickerDialogWrapper timePickerDialog;
 	private DatePickerDialogWrapper datePickerDialog;
 	private AlertDialogWrapper inventorySpinnerDialog;
+	private AlertDialogWrapper ocsSpinnerDialog;
 
 	private GeoKretyApplication application;
 	private RefreshAccount refreshAccount;
@@ -75,9 +74,14 @@ public class LogActivity extends ManagedDialogsActivity implements
 				Dialogs.TIME_PICKERDIALOG);
 		datePickerDialog = new DatePickerDialogWrapper(this,
 				Dialogs.DATE_PICKERDIALOG);
+
 		inventorySpinnerDialog = new AlertDialogWrapper(this,
 				Dialogs.INVENTORY_SPINNERDIALOG);
 		inventorySpinnerDialog.setTitle(R.string.title_dialog_inventory);
+
+		ocsSpinnerDialog = new AlertDialogWrapper(this,
+				Dialogs.OCS_SPINNERDIALOG);
+		ocsSpinnerDialog.setTitle(R.string.title_dialog_ocs);
 
 		logProgressDialog.setTitle(R.string.submit_title);
 
@@ -124,7 +128,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 						}.setFinishMessage(R.string.submit_finish)
 								.setBreakMessage(R.string.submit_broken));
 		updateCurrentAccount();
-		configInventoryAdapter();
+		configAdapters();
 		loadFromGeoKretLog(currentLog);
 	}
 
@@ -199,7 +203,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 		log.setLogTypeMapped(logTypeSpinner.getSelectedItemPosition());
 	}
 
-	private boolean configInventoryAdapter() {
+	private boolean configAdapters() {
 		if (!canShowUserData()) {
 			return false;
 		}
@@ -208,36 +212,20 @@ public class LogActivity extends ManagedDialogsActivity implements
 			return false;
 		}
 
-		ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(this,
-				android.R.layout.simple_spinner_dropdown_item,
-				currentAccount.getInventory());
-		inventorySpinnerDialog.setAdapter(adapter);
+		inventorySpinnerDialog.setAdapter(new ArrayAdapter<Geokret>(this,
+				android.R.layout.simple_spinner_dropdown_item, currentAccount
+						.getInventory()));
+
+		ocsSpinnerDialog.setAdapter(new ArrayAdapter<GeocacheLog>(this,
+				android.R.layout.simple_spinner_dropdown_item, currentAccount
+						.getOpenCachingLogs()));
 		return true;
 	}
 
 	public void showInventory(View view) {
-		if (configInventoryAdapter()) {
+		if (configAdapters()) {
 			inventorySpinnerDialog.show(null);
-		}/*
-		 * if (!canShowUserData()) { return; }
-		 * 
-		 * if (currentAccount.loadIfExpired(application)) { return; }
-		 * 
-		 * final ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(this,
-		 * android.R.layout.simple_spinner_dropdown_item,
-		 * currentAccount.getInventory());
-		 * 
-		 * new
-		 * AlertDialog.Builder(this).setTitle(R.string.title_dialog_inventory)
-		 * .setAdapter(adapter, new DialogInterface.OnClickListener() {
-		 * 
-		 * @Override public void onClick(DialogInterface dialog, int which) {
-		 * 
-		 * trackingCodeEditText.setText(adapter.getItem(which)
-		 * .getTackingCode());
-		 * 
-		 * dialog.dismiss(); } }).create().show();
-		 */
+		}
 	}
 
 	private boolean canShowUserData() {
@@ -250,33 +238,9 @@ public class LogActivity extends ManagedDialogsActivity implements
 	}
 
 	public void showOcs(View view) {
-		if (!canShowUserData()) {
-			return;
+		if (configAdapters()) {
+			ocsSpinnerDialog.show(null);
 		}
-
-		if (currentAccount.loadIfExpired(application)) {
-			return;
-		}
-
-		final ArrayAdapter<GeocacheLog> adapter = new ArrayAdapter<GeocacheLog>(
-				this, android.R.layout.simple_spinner_dropdown_item,
-				currentAccount.getOpenCachingLogs());
-
-		new AlertDialog.Builder(this).setTitle(R.string.title_dialog_ocs)
-				.setAdapter(adapter, new DialogInterface.OnClickListener() {
-
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-
-						GeocacheLog log = adapter.getItem(which);
-						waypointEditText.setText(log.getCacheCode());
-						storeToGeoKretLog(currentLog);
-						currentLog.setDateAndTime(log.getDate());
-						loadFromGeoKretLog(currentLog);
-
-						dialog.dismiss();
-					}
-				}).create().show();
 	}
 
 	public void showAccountsActivity(View view) {
@@ -346,19 +310,29 @@ public class LogActivity extends ManagedDialogsActivity implements
 			currentLog.setMinuta(timePickerDialog.getMinute());
 			loadFromGeoKretLog(currentLog);
 			break;
-			
+
 		case Dialogs.DATE_PICKERDIALOG:
 			currentLog.setDate(datePickerDialog.getYear(),
 					datePickerDialog.getMonthOfYear() + 1,
 					datePickerDialog.getDayOfMonth());
 			loadFromGeoKretLog(currentLog);
 			break;
-			
+
 		case Dialogs.INVENTORY_SPINNERDIALOG:
 			Geokret kret = (Geokret) inventorySpinnerDialog.getAdapter()
 					.getItem(buttonId);
 			trackingCodeEditText.setText(kret.getTackingCode());
 			break;
+
+		case Dialogs.OCS_SPINNERDIALOG:
+			GeocacheLog log = (GeocacheLog) ocsSpinnerDialog.getAdapter()
+					.getItem(buttonId);
+			waypointEditText.setText(log.getCacheCode());
+			storeToGeoKretLog(currentLog);
+			currentLog.setDateAndTime(log.getDate());
+			loadFromGeoKretLog(currentLog);
+			break;
+
 		}
 	}
 }
