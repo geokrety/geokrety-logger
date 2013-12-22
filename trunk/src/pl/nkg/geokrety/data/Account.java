@@ -17,6 +17,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import android.text.TextUtils;
+import android.widget.ListView;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
@@ -235,14 +236,33 @@ public class Account {
 			loadData(application);
 			return true;
 		} else {
-			// listener.onRefreshSuccessful(false);
 			return false;
 		}
 	}
 
 	public void loadData(GeoKretyApplication application) {
 		application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this);
-		// RefreshAccount.refreshAccount(this, refreshProgressDialog, listener,
-		// false);
+	}
+
+	public int getTrackingCodeIndex(String trackingCode) {
+		int pos = 0;
+		for (Geokret g : inventory) {
+			if (g.getTackingCode().equalsIgnoreCase(trackingCode)) {
+				return pos;
+			}
+			pos++;
+		}
+		return ListView.INVALID_POSITION;
+	}
+	
+	public int getWaypointIndex(String waypoint) {
+		int pos = 0;
+		for (GeocacheLog l : openCachingLogs) {
+			if (l.getCacheCode().equalsIgnoreCase(waypoint)) {
+				return pos;
+			}
+			pos++;
+		}
+		return ListView.INVALID_POSITION;
 	}
 }

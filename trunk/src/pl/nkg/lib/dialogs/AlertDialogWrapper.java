@@ -89,6 +89,15 @@ public class AlertDialogWrapper extends
 
 	public void setCheckedItem(int checkedItem) {
 		getBundle().putInt(CHECKED, checkedItem);
+		if (getInstance() != null) {
+			getInstance().getListView().setItemChecked(getCheckedItem(), true);
+		}
+	}
+	
+	@Override
+	public void prepare(AlertDialog dialog) {
+		super.prepare(dialog);
+		getInstance().getListView().setItemChecked(getCheckedItem(), true);
 	}
 	
 	@Override

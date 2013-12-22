@@ -33,7 +33,7 @@ import android.widget.Toast;
 
 public class LogActivity extends ManagedDialogsActivity {
 
-	//private static final String LOGTYPE = "logtype";
+	// private static final String LOGTYPE = "logtype";
 
 	private GenericProgressDialogWrapper refreshProgressDialog;
 	private GenericProgressDialogWrapper logProgressDialog;
@@ -235,12 +235,14 @@ public class LogActivity extends ManagedDialogsActivity {
 	}
 
 	public void showLogType(View view) {
-		logTypeSpinnerDialog.show(null);
+		logTypeSpinnerDialog.show(null, currentLogType);
 	}
 
 	public void showInventory(View view) {
 		if (configAdapters()) {
-			inventorySpinnerDialog.show(null);
+			inventorySpinnerDialog.show(null, currentAccount
+					.getTrackingCodeIndex(trackingCodeEditText.getText()
+							.toString()));
 		}
 	}
 
@@ -255,7 +257,8 @@ public class LogActivity extends ManagedDialogsActivity {
 
 	public void showOcs(View view) {
 		if (configAdapters()) {
-			ocsSpinnerDialog.show(null, currentLogType);
+			ocsSpinnerDialog.show(null, currentAccount
+					.getWaypointIndex(waypointEditText.getText().toString()));
 		}
 	}
 
