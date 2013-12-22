@@ -32,7 +32,8 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 		super.onCreate(savedInstanceState);
 		refreshProgressDialog = new RefreshProgressDialog(this);
 
@@ -63,19 +64,20 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 				refreshListView();
 			}
 		});
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 		if (holder.getDefaultAccount() != ListView.INVALID_POSITION) {
 			account = holder.getAccountList().get(holder.getDefaultAccount());
 			updateListView();
 		}
 	}
-	
+
 	private void refreshListView() {
 		ArrayAdapter<Geokret> adapter = new ArrayAdapter<Geokret>(
 				InventoryActivity.this, android.R.layout.simple_list_item_1,
 				account.getInventory());
 		ListView listView = (ListView) findViewById(R.id.inventoryListView);
-		listView.setAdapter(adapter);		
+		listView.setAdapter(adapter);
 	}
 
 	@Override
@@ -113,7 +115,8 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 			long arg3) {
 		ListView listView = (ListView) findViewById(R.id.inventoryListView);
 		listView.setAdapter(null);
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 		account = holder.getAccountList().get(arg2);
 		updateListView();
 	}

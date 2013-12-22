@@ -16,11 +16,10 @@ import android.widget.ListView;
  * ISBN: 978-83-246-2754-7
  * 
  */
-public class AlertDialogWrapper extends
-		AbstractAlertDialogWrapper<AlertDialog> {
+public class AlertDialogWrapper extends AbstractAlertDialogWrapper<AlertDialog> {
 
 	private static final String CHECKED = "checked";
-	
+
 	private Integer layoutId = null;
 	private ListAdapter adapter = null;
 
@@ -89,17 +88,19 @@ public class AlertDialogWrapper extends
 
 	public void setCheckedItem(int checkedItem) {
 		getBundle().putInt(CHECKED, checkedItem);
-		if (getInstance() != null) {
+		if (getInstance() != null && adapter != null) {
 			getInstance().getListView().setItemChecked(getCheckedItem(), true);
 		}
 	}
-	
+
 	@Override
 	public void prepare(AlertDialog dialog) {
 		super.prepare(dialog);
-		getInstance().getListView().setItemChecked(getCheckedItem(), true);
+		if (adapter != null) {
+			getInstance().getListView().setItemChecked(getCheckedItem(), true);
+		}
 	}
-	
+
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		setCheckedItem(which);
@@ -108,7 +109,7 @@ public class AlertDialogWrapper extends
 			getInstance().dismiss();
 		}
 	}
-	
+
 	public void show(Serializable arg, int checkedItem) {
 		setCheckedItem(checkedItem);
 		super.show(arg);

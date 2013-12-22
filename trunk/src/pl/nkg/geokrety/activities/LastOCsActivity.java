@@ -41,7 +41,8 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 		refreshAccount = RefreshAccount.getFromHandler(application
 				.getForegroundTaskHandler());
 
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 		setContentView(R.layout.activity_last_ocs);
 		Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
 		spin.setOnItemSelectedListener(this);
@@ -57,7 +58,8 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 	@Override
 	protected void onStart() {
 		super.onStart();
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
 			@Override
 			public void onFinish(
@@ -116,7 +118,8 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 			long arg3) {
 		ListView listView = (ListView) findViewById(R.id.ocsListView);
 		listView.setAdapter(null);
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 		account = holder.getAccountList().get(arg2);
 		updateListView();
 	}

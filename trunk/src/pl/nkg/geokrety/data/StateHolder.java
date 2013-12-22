@@ -9,13 +9,11 @@ import java.util.Map;
 import pl.nkg.geokrety.Utils;
 
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.widget.ListView;
 
 public class StateHolder {
-	private static StateHolder mInstance = null;
 	private static final String ACCOUNTS_GKLOGINS = "accounts_logins";
 	private static final String ACCOUNTS_GKPASSWORDS = "accounts_passwords";
 	private static final String ACCOUNTS_OCLOGINS = "accounts_ocs";
@@ -29,18 +27,11 @@ public class StateHolder {
 	private ArrayList<Account> accountList;
 	private int defaultAccount;
 
-	private StateHolder(ContextWrapper context) {
+	public StateHolder(Context context) {
 		loadAccountList(context);
 	}
 
-	public static StateHolder getInstance(ContextWrapper context) {
-		if (mInstance == null) {
-			mInstance = new StateHolder(context);
-		}
-		return mInstance;
-	}
-
-	private void loadAccountList(ContextWrapper context) {
+	private void loadAccountList(Context context) {
 		SharedPreferences preferences = getPreferences(context);
 		String[] gkLogins = splited(preferences.getString(ACCOUNTS_GKLOGINS,
 				DEFAULT_LOGINS_VALUE));
@@ -59,7 +50,7 @@ public class StateHolder {
 		}
 	}
 
-	public void storeAccountList(ContextWrapper context) {
+	public void storeAccountList(Context context) {
 		String[] gkLogins = new String[accountList.size()];
 		String[] gkPasswords = new String[accountList.size()];
 		String[] ocLogins = new String[accountList.size()];
@@ -85,7 +76,7 @@ public class StateHolder {
 
 	}
 
-	public void storeDefaultAccount(ContextWrapper context) {
+	public void storeDefaultAccount(Context context) {
 		getPreferences(context).edit().putInt(DEFAULT_ACCOUNT, defaultAccount)
 				.commit();
 	}
@@ -97,7 +88,7 @@ public class StateHolder {
 		return values.split(ACCOUNTS_SEPARATOR);
 	}
 
-	private static SharedPreferences getPreferences(ContextWrapper context) {
+	private static SharedPreferences getPreferences(Context context) {
 		return context.getSharedPreferences("pl.nkg.geokrety",
 				Context.MODE_PRIVATE);
 	}

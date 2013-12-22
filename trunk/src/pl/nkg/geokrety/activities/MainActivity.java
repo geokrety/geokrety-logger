@@ -1,8 +1,8 @@
 package pl.nkg.geokrety.activities;
 
+import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
-import pl.nkg.geokrety.data.StateHolder;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
@@ -17,8 +17,9 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		TextView appName = (TextView)findViewById(R.id.appNameTextView);
-		appName.setText(getResources().getString(R.string.version) + Utils.getAppVer(this));
+		TextView appName = (TextView) findViewById(R.id.appNameTextView);
+		appName.setText(getResources().getString(R.string.version)
+				+ Utils.getAppVer(this));
 	}
 
 	@Override
@@ -38,8 +39,10 @@ public class MainActivity extends Activity {
 	}
 
 	private boolean accountExist() {
-		if (StateHolder.getInstance(this).getAccountList().size() == 0) {
-			Toast.makeText(this, R.string.no_account_configured, Toast.LENGTH_LONG).show();
+		if (((GeoKretyApplication) getApplication()).getStateHolder()
+				.getAccountList().size() == 0) {
+			Toast.makeText(this, R.string.no_account_configured,
+					Toast.LENGTH_LONG).show();
 			return false;
 		}
 		return true;

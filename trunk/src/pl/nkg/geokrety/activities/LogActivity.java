@@ -151,7 +151,8 @@ public class LogActivity extends ManagedDialogsActivity {
 	}
 
 	private void updateCurrentAccount() {
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 		int currentAccountNr = holder.getDefaultAccount();
 		if (currentAccountNr != ListView.INVALID_POSITION) {
 			currentAccount = holder.getAccountList().get(currentAccountNr);

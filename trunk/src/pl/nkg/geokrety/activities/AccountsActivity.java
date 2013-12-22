@@ -2,6 +2,7 @@ package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
 
+import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.StateHolder;
@@ -35,7 +36,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final StateHolder holder = StateHolder.getInstance(this);
+		final StateHolder holder = ((GeoKretyApplication)getApplication()).getStateHolder();
 
 		newAccountDialog = new NewAccountDialog(this);
 		editAccountDialog = new EditAccountDialog(this);
@@ -66,7 +67,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication)getApplication()).getStateHolder();
 
 		if (v.getId() == R.id.accountListView) {
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -100,7 +101,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 
 	@Override
 	public void onBackPressed() {
-		setResult(StateHolder.getInstance(this).getDefaultAccount());
+		setResult(((GeoKretyApplication)getApplication()).getStateHolder().getDefaultAccount());
 		finish();
 		super.onBackPressed();
 	}
@@ -116,7 +117,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 
 	private void showEditAccountDialog(int position) {
 
-		Account account = StateHolder.getInstance(this).getAccountList()
+		Account account = ((GeoKretyApplication)getApplication()).getStateHolder().getAccountList()
 				.get(position);
 
 		//editAccountDialog.setGKLogin(account.getGeoKretyLogin());
@@ -127,7 +128,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	}
 
 	private void showRemoveAccountDialog(int position) {
-		Account account = StateHolder.getInstance(this).getAccountList()
+		Account account = ((GeoKretyApplication)getApplication()).getStateHolder().getAccountList()
 				.get(position);
 		//removeAccountDialog.setPosition(position);
 		removeAccountDialog.show(account.getGeoKretyLogin(), account.getGeoKretyLogin(), position);
@@ -135,13 +136,13 @@ public class AccountsActivity extends ManagedDialogsActivity {
 
 	@Override
 	protected void onPause() {
-		StateHolder.getInstance(this).storeAccountList(this);
+		((GeoKretyApplication)getApplication()).getStateHolder().storeAccountList(this);
 		super.onPause();
 	}
 
 	@Override
 	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId, Serializable arg) {
-		StateHolder holder = StateHolder.getInstance(this);
+		StateHolder holder = ((GeoKretyApplication)getApplication()).getStateHolder();
 		if (dialog.getDialogId() == newAccountDialog.getDialogId()
 				&& buttonId == Dialog.BUTTON_POSITIVE) {
 			holder.getAccountList().add(
