@@ -18,7 +18,6 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
@@ -32,6 +31,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
 public class Utils {
+	public static GeoKretyApplication application;
+	
 	public static String encode(String decoded) {
 		try {
 			return URLEncoder.encode(decoded, "utf-8");
@@ -90,7 +91,7 @@ public class Utils {
 
 	public static String httpPost(String url, String[][] data)
 			throws ClientProtocolException, IOException {
-		HttpClient httpclient = new DefaultHttpClient();
+		HttpClient httpclient = application.getHttpClient();//new DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 
 		// Add your data
@@ -108,7 +109,7 @@ public class Utils {
 
 	public static String httpGet(String url, String[][] data)
 			throws ClientProtocolException, IOException {
-		HttpClient httpclient = new DefaultHttpClient();
+		HttpClient httpclient = application.getHttpClient();//new DefaultHttpClient();
 
 		StringBuilder sb = new StringBuilder();
 		sb.append(url);

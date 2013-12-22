@@ -29,6 +29,7 @@ public class GeoKretyApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		Utils.application = this;
 		stateHolder = new StateHolder(getApplicationContext());
 		httpClient = createHttpClient();
 		foregroundTaskHandler = new ForegroundTaskHandler();
@@ -39,6 +40,7 @@ public class GeoKretyApplication extends Application {
 	@Override
 	public void onLowMemory() {
 		super.onLowMemory();
+		Utils.application = null;
 		shutdownHttpClient();
 		shutdownHandler();
 	}
@@ -46,6 +48,7 @@ public class GeoKretyApplication extends Application {
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
+		Utils.application = null;
 		shutdownHttpClient();
 		shutdownHandler();
 	}
