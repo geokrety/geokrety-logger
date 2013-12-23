@@ -17,7 +17,7 @@ public abstract class AccountDialog extends AlertDialogWrapper {
 	public AccountDialog(ManagedDialogsActivity a, int dialogId, int title) {
 		super(a, dialogId);
 		setTitle(title);
-		setLayout(R.layout.activity_account);
+		setLayout(R.layout.dialog_account);
 		setOkCancelButtons();
 	}
 
