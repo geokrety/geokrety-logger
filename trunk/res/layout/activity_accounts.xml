@@ -21,7 +21,14 @@
             android:layout_height="wrap_content"
             android:onClick="onAddAccountButtonClicks"
             android:text="@string/button_add_account" />
-    </LinearLayout>
+
+        <Button
+            android:id="@+id/addV2Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onAddAccountButtonClicksV2"
+            android:text="Add (TODO)" />
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"

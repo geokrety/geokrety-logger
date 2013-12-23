@@ -119,7 +119,7 @@ public abstract class AbstractAlertDialogWrapper<D extends AlertDialog> extends
 		super.show(arg);
 	}
 
-	protected void setOkCancelButtons() {
+	public void setOkCancelButtons() {
 		setPositiveButton(getManagedDialogsActivity().getText(
 				android.R.string.ok));
 		setNegativeButton(getManagedDialogsActivity().getText(

@@ -15,6 +15,8 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
 import pl.nkg.geokrety.data.StateHolder;
+import pl.nkg.geokrety.threads.GettingSecidThread;
+import pl.nkg.geokrety.threads.GettingUuidThread;
 import pl.nkg.geokrety.threads.LogGeoKret;
 import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
@@ -35,6 +37,8 @@ public class GeoKretyApplication extends Application {
 		foregroundTaskHandler = new ForegroundTaskHandler();
 		foregroundTaskHandler.registerTask(new LogGeoKret());
 		foregroundTaskHandler.registerTask(new RefreshAccount());
+		foregroundTaskHandler.registerTask(new GettingSecidThread());
+		foregroundTaskHandler.registerTask(new GettingUuidThread());
 	}
 
 	@Override

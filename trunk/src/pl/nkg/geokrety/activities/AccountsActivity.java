@@ -13,6 +13,7 @@ import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.os.Bundle;
 import android.app.Dialog;
+import android.content.Intent;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class AccountsActivity extends ManagedDialogsActivity {
 
@@ -32,16 +34,20 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	private EditAccountDialog editAccountDialog;
 	private RemoveAccountDialog removeAccountDialog;
 
+	private static final int NEW_ACCOUNT = 1;
+	private static final int EDIT_ACCOUNT = 2;
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		final StateHolder holder = ((GeoKretyApplication)getApplication()).getStateHolder();
+		final StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 
 		newAccountDialog = new NewAccountDialog(this);
 		editAccountDialog = new EditAccountDialog(this);
 		removeAccountDialog = new RemoveAccountDialog(this);
-		
+
 		setContentView(R.layout.activity_accounts);
 
 		mainListView = (ListView) findViewById(R.id.accountListView);
@@ -67,7 +73,8 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
-		StateHolder holder = ((GeoKretyApplication)getApplication()).getStateHolder();
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 
 		if (v.getId() == R.id.accountListView) {
 			AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
@@ -101,7 +108,8 @@ public class AccountsActivity extends ManagedDialogsActivity {
 
 	@Override
 	public void onBackPressed() {
-		setResult(((GeoKretyApplication)getApplication()).getStateHolder().getDefaultAccount());
+		setResult(((GeoKretyApplication) getApplication()).getStateHolder()
+				.getDefaultAccount());
 		finish();
 		super.onBackPressed();
 	}
@@ -110,39 +118,81 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		showNewAccountDialog();
 	}
 
+	public void onAddAccountButtonClicksV2(View view) {
+		showNewAccountDialogV2();
+	}
+
 	private void showNewAccountDialog() {
 		newAccountDialog.clearValues();
 		newAccountDialog.show(null);
 	}
 
+	private void showNewAccountDialogV2() {
+		Intent intent = new Intent(this, AccountActivity.class);
+		startActivityForResult(intent, NEW_ACCOUNT);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+
+		if (requestCode == NEW_ACCOUNT) {
+			if (resultCode == RESULT_OK) {
+				Toast.makeText(
+						this,
+						"requestCode: "
+								+ requestCode
+								+ "\nresultCode: "
+								+ resultCode
+								+ "\nsecid: "
+								+ data.getStringExtra(AccountActivity.SECID)
+								+ "\nocuuid: "
+								+ data.getStringArrayExtra(AccountActivity.OCUUIDS)[0]
+								+ "\nid: "
+								+ data.getLongExtra(AccountActivity.ACCOUNT_ID,
+										-1), Toast.LENGTH_LONG).show();
+				return;
+			}
+		}
+		Toast.makeText(this,
+				"requestCode: " + requestCode + "\nresultCode: " + resultCode,
+				Toast.LENGTH_LONG).show();
+	}
+
 	private void showEditAccountDialog(int position) {
 
-		Account account = ((GeoKretyApplication)getApplication()).getStateHolder().getAccountList()
-				.get(position);
+		Account account = ((GeoKretyApplication) getApplication())
+				.getStateHolder().getAccountList().get(position);
 
-		//editAccountDialog.setGKLogin(account.getGeoKretyLogin());
-		//editAccountDialog.setGKPassword(account.getGeoKretyPassword());
-		//editAccountDialog.setOCLogin(account.getOpenCachingLogin());
-		//editAccountDialog.setPosition(position);
-		editAccountDialog.show(null, account.getGeoKretyLogin(), account.getGeoKretyPassword(), account.getOpenCachingLogin(), position);
+		// editAccountDialog.setGKLogin(account.getGeoKretyLogin());
+		// editAccountDialog.setGKPassword(account.getGeoKretyPassword());
+		// editAccountDialog.setOCLogin(account.getOpenCachingLogin());
+		// editAccountDialog.setPosition(position);
+		editAccountDialog.show(null, account.getGeoKretyLogin(),
+				account.getGeoKretyPassword(), account.getOpenCachingLogin(),
+				position);
 	}
 
 	private void showRemoveAccountDialog(int position) {
-		Account account = ((GeoKretyApplication)getApplication()).getStateHolder().getAccountList()
-				.get(position);
-		//removeAccountDialog.setPosition(position);
-		removeAccountDialog.show(account.getGeoKretyLogin(), account.getGeoKretyLogin(), position);
+		Account account = ((GeoKretyApplication) getApplication())
+				.getStateHolder().getAccountList().get(position);
+		// removeAccountDialog.setPosition(position);
+		removeAccountDialog.show(account.getGeoKretyLogin(),
+				account.getGeoKretyLogin(), position);
 	}
 
 	@Override
 	protected void onPause() {
-		((GeoKretyApplication)getApplication()).getStateHolder().storeAccountList(this);
+		((GeoKretyApplication) getApplication()).getStateHolder()
+				.storeAccountList(this);
 		super.onPause();
 	}
 
 	@Override
-	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId, Serializable arg) {
-		StateHolder holder = ((GeoKretyApplication)getApplication()).getStateHolder();
+	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
+			Serializable arg) {
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
 		if (dialog.getDialogId() == newAccountDialog.getDialogId()
 				&& buttonId == Dialog.BUTTON_POSITIVE) {
 			holder.getAccountList().add(

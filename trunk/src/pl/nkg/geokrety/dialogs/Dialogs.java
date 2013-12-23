@@ -11,4 +11,10 @@ public class Dialogs {
 	public static final int INVENTORY_SPINNERDIALOG = 1008;
 	public static final int OCS_SPINNERDIALOG = 1009;
 	public static final int TYPE_SPINNERDIALOG = 1010;
+	
+	public static final int GK_PROMPTDIALOG = 1011;
+	public static final int OC_PROMPTDIALOG = 1012;
+	
+	public static final int SECID_PROGRESSDIALOG = 1013;
+	public static final int UUID_PROMPTDIALOG = 1014;
 }

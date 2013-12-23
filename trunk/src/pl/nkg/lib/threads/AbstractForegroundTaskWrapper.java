@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
+import android.util.Pair;
 
 import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
 
@@ -17,6 +18,10 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 	private Throwable exception;
 
 	private Thread thread;
+
+	private Pair<Param, Result> nofiredFinish;
+	private Pair<Param, Throwable> nofiredError;
+	private int nofired;
 
 	protected AbstractForegroundTaskWrapper(int id) {
 		this.id = id;
@@ -36,8 +41,15 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 
 	public void execute(Param param) {
 		setParam(param);
+		cleanNofired();
 		thread = new Thread();
 		thread.execute(new Object[] { param });
+	}
+
+	private void cleanNofired() {
+		nofired = 0;
+		nofiredFinish = null;
+		nofiredError = null;
 	}
 
 	public void attach(
@@ -49,6 +61,26 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 		if (thread == null) {
 			progressDialogWrapper.dismiss();
 		}
+
+		if (nofired > 0) {
+			switch (nofired) {
+			case 1:
+				listener.onFinish(this, nofiredFinish.first,
+						nofiredFinish.second);
+				break;
+
+			case 2:
+				listener.onBreak(this, nofiredFinish.first,
+						nofiredFinish.second);
+				break;
+
+			case 3:
+				listener.onError(this, nofiredError.first, nofiredError.second);
+				break;
+			}
+
+			cleanNofired();
+		}
 	}
 
 	public void detach() {
@@ -59,18 +91,27 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 	private void fireFinish(Result result) {
 		if (listener != null) {
 			listener.onFinish(this, param, result);
+		} else {
+			nofired = 1;
+			nofiredFinish = new Pair<Param, Result>(param, result);
 		}
 	}
 
 	private void fireBreak(Result result) {
 		if (listener != null) {
 			listener.onBreak(this, param, result);
+		} else {
+			nofired = 2;
+			nofiredFinish = new Pair<Param, Result>(param, result);
 		}
 	}
 
 	private void fireError() {
 		if (listener != null) {
 			listener.onError(this, param, exception);
+		} else {
+			nofired = 3;
+			nofiredError = new Pair<Param, Throwable>(param, exception);
 		}
 	}
 

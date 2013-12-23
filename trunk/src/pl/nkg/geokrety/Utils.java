@@ -139,4 +139,8 @@ public class Utils {
 			return "";
 		}
 	}
+	
+	public static boolean isEmpty(String string) {
+		return string == null || string.length() == 0;
+	}
 }

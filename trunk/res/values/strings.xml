@@ -71,6 +71,7 @@
     <string name="download_title">Refreshing user account</string>
     <string name="download_login_gk">Login to GeoKrety.org&#8230;</string>
     <string name="download_getting_gk">Getting inventory from GeoKrety.org&#8230;</string>
+    <string name="download_getting_uuid">Getting UUID from</string>
     <string name="download_getting_ocs">Getting last logs from OpenCaching.pl&#8230;</string>
     <string name="download_getting_names">Getting geocache names&#8230;</string>
     <string name="download_finish">Refresh finish</string>
@@ -89,6 +90,7 @@
     <string name="changelog">Change log:\n\n
         0.1.0 beta - 2013-12-19\n
         - rotation safe,\n
+        - use secid instead of login and password,\n
         \n 
         0.0.2 alpha - 2013-12-17\n 
         - polish translation,\n 
@@ -107,9 +109,26 @@
     <string name="button_add_account">Add account</string>
     <string name="account_add_prompt_message">Enter values of the new account</string>
     <string name="account_edit_prompt_message">Change values of the existing account</string>
-
-    
     <string name="generic_error">Error:</string>
     <string name="generic_broken">Broken</string>
     <string name="generic_finish">End successful</string>
+    
+    <string name="title_activity_account">Account</string>
+    <string name="account_account_name">Account name:</string>
+    <string name="account_account_name_hint">New user</string>
+	<string name="account_portals">Choice portals what you use</string>
+	<string name="account_portal_gk">geokrety.org (required)</string>
+	<string name="account_portal_oc0">opencaching.pl</string>
+	<string name="account_portal_oc1">opencaching.de (coming soon)</string>
+	<string name="account_portal_oc2">opencaching.us (coming soon)</string>
+	<string name="account_portal_oc3">opencaching.nl (coming soon)</string>
+	<string name="account_portal_oc4">opencaching.org.uk (coming soon)</string>
+	<string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for loggin geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
+	<string name="account_save">OK</string>
+	
+	<string name="title_dialog_gk">Login and password to GeoKrety.org</string>
+	<string name="title_dialog_oc">Login to</string>
+	<string name="dots">&#8230;</string>
+		
+	
 </resources>
