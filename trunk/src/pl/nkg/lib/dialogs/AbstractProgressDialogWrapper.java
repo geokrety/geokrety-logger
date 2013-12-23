@@ -43,6 +43,11 @@ public abstract class AbstractProgressDialogWrapper<Progress extends Serializabl
 	public void prepare(ProgressDialog dialog) {
 		super.prepare(dialog);
 		updateProgress();
+		if (task != null) {
+			if (task.isFinished()) {
+				dismiss();
+			}
+		}
 	}
 
 	public void dismiss() {

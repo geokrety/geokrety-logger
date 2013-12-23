@@ -23,11 +23,17 @@ public class TimePickerDialogWrapper extends
 		TimePickerDialog dialog = new TimePickerDialog(
 				getManagedDialogsActivity(), this, hourOfDay, minute,
 				is24HourView);
-		dialog.setTitle(getTitle());
-		dialog.setMessage(getMessage());
+		if (hasTitle()) {
+			dialog.setTitle(getTitle());
+		}
+
+		if (hasMessage()) {
+			dialog.setMessage(getMessage());
+		}
+		
 		return dialog;
 	}
-	
+
 	@Override
 	public void prepare(TimePickerDialog dialog) {
 		super.prepare(dialog);

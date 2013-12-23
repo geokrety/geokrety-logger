@@ -81,7 +81,9 @@ public abstract class AbstractDialogWrapper<D extends Dialog> implements
 			}
 		});
 		instance = dialog;
-		dialog.setTitle(getTitle());
+		if (hasTitle()) {
+			dialog.setTitle(getTitle());
+		}
 	}
 
 	protected void onDismiss(DialogInterface dialog) {
@@ -93,6 +95,10 @@ public abstract class AbstractDialogWrapper<D extends Dialog> implements
 
 	public CharSequence getTitle() {
 		return getBundle().getCharSequence(TITLE);
+	}
+	
+	public boolean hasTitle() {
+		return getTitle() != null;
 	}
 
 	public void setTitle(int titleID) {

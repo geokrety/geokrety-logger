@@ -44,6 +44,10 @@ public abstract class AbstractAlertDialogWrapper<D extends AlertDialog> extends
 	public void setMessage(int messageID) {
 		setMessage(getManagedDialogsActivity().getString(messageID));
 	}
+	
+	public boolean hasMessage() {
+		return getMessage() != null;
+	}
 
 	public CharSequence getPositiveButton() {
 		return positiveButton;
@@ -88,7 +92,9 @@ public abstract class AbstractAlertDialogWrapper<D extends AlertDialog> extends
 	@Override
 	public void prepare(final D dialog) {
 		super.prepare(dialog);
-		dialog.setMessage(getMessage());
+		if (hasMessage()) {
+			dialog.setMessage(getMessage());
+		}
 		dialog.setCancelable(isCancelable());
 		if (hasPositiveButtton()) {
 			((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE)

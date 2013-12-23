@@ -34,6 +34,7 @@ public class Account {
 	private static final String CONSUMER_KEY = "DajjA4r3QZNRHAef7XZD";
 	private static final long EXPIRED = 600000;
 
+	private long id;
 	private String geoKretyLogin;
 	private String geoKretyPassword;
 	private String openCachingLogin;
@@ -264,5 +265,13 @@ public class Account {
 			pos++;
 		}
 		return ListView.INVALID_POSITION;
+	}
+	
+	public long getID() {
+		return id;
+	}
+	
+	public void setID(long id) {
+		this.id = id;
 	}
 }

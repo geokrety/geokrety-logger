@@ -46,6 +46,9 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 		this.progressDialogWrapper = progressDialogWrapper;
 		this.listener = listener;
 		progressDialogWrapper.setTask(this);
+		if (thread == null) {
+			progressDialogWrapper.dismiss();
+		}
 	}
 
 	public void detach() {
@@ -165,5 +168,9 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 		if (thread != null) {
 			thread.cancel(b);
 		}
+	}
+
+	public boolean isFinished() {
+		return thread == null;
 	}
 }

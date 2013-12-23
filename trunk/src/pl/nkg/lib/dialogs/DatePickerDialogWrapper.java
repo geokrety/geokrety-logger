@@ -23,8 +23,14 @@ public class DatePickerDialogWrapper extends
 		DatePickerDialog dialog = new DatePickerDialog(
 				getManagedDialogsActivity(), this, year, monthOfYear,
 				dayOfMonth);
-		dialog.setTitle(getTitle());
-		dialog.setMessage(getMessage());
+		if (hasTitle()) {
+			dialog.setTitle(getTitle());
+		}
+
+		if (hasMessage()) {
+			dialog.setMessage(getMessage());
+		}
+
 		return dialog;
 	}
 

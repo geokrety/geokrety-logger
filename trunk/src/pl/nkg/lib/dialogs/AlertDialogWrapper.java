@@ -41,8 +41,14 @@ public class AlertDialogWrapper extends AbstractAlertDialogWrapper<AlertDialog> 
 		AlertDialog.Builder builder = new AlertDialog.Builder(
 				getManagedDialogsActivity());
 
-		builder.setTitle(getTitle());
-		builder.setMessage(getMessage());
+		if (hasTitle()) {
+			builder.setTitle(getTitle());
+		}
+
+		if (hasMessage()) {
+			builder.setMessage(getMessage());
+		}
+
 		builder.setCancelable(isCancelable());
 
 		if (hasPositiveButtton()) {
