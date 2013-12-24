@@ -38,7 +38,7 @@ public class Account {
 	private static final String URL_USERLOGS = "http://opencaching.pl/okapi/services/logs/userlogs";
 	private static final String URL_GEOCACHES = "http://opencaching.pl/okapi/services/caches/geocaches";
 	private static final String CONSUMER_KEY = "DajjA4r3QZNRHAef7XZD";
-	private static final long EXPIRED = 600000;
+	private static final long EXPIRED = 24 * 60 * 60 * 1000;
 
 	private long id;
 	private String name;

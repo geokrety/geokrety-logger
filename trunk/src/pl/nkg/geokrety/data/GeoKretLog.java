@@ -262,6 +262,8 @@ public class GeoKretLog implements Serializable {
 			} else {
 				throw new MessagedException(R.string.submit_fail, error);
 			}
+		} catch (MessagedException e) {
+			throw e;
 		} catch (Exception e) {
 			throw new MessagedException(R.string.submit_fail,
 					e.getLocalizedMessage());

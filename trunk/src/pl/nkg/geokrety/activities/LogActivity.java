@@ -133,7 +133,7 @@ public class LogActivity extends ManagedDialogsActivity {
 							};
 						}.setFinishMessage(R.string.submit_finish)
 								.setBreakMessage(R.string.submit_broken));
-		updateCurrentAccount();
+		updateCurrentAccount(false);
 
 		logTypeSpinnerDialog.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_dropdown_item, getResources()
@@ -150,14 +150,18 @@ public class LogActivity extends ManagedDialogsActivity {
 		super.onStop();
 	}
 
-	private void updateCurrentAccount() {
+	private void updateCurrentAccount(boolean force) {
 		StateHolder holder = ((GeoKretyApplication) getApplication())
 				.getStateHolder();
 		int currentAccountNr = holder.getDefaultAccount();
 		if (currentAccountNr != ListView.INVALID_POSITION) {
 			currentAccount = holder.getAccountList().get(currentAccountNr);
 			currentLog.setGeoKretyLogin(currentAccount.getName());
-			currentAccount.loadIfExpired(application);
+			if (force) {
+				currentAccount.loadData(application);
+			} else {
+				currentAccount.loadIfExpired(application);
+			}
 		}
 	}
 
@@ -177,7 +181,7 @@ public class LogActivity extends ManagedDialogsActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		storeToGeoKretLog(currentLog);
-		updateCurrentAccount();
+		updateCurrentAccount(false);
 		loadFromGeoKretLog(currentLog);
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -294,9 +298,13 @@ public class LogActivity extends ManagedDialogsActivity {
 		currentLog.submit(application, currentAccount);
 	}
 
+	public void refreshButtonClick(final View view) {
+		updateCurrentAccount(true);
+	}
+
 	public void reset(View view) {
 		currentLog = new GeoKretLog();
-		updateCurrentAccount();
+		updateCurrentAccount(false);
 		loadFromGeoKretLog(currentLog);
 	}
 
