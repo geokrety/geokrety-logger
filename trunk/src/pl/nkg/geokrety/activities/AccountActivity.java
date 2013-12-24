@@ -5,6 +5,7 @@ import java.io.Serializable;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.GKDialog;
 import pl.nkg.geokrety.dialogs.OCDialog;
@@ -30,12 +31,9 @@ import android.widget.Toast;
 
 public class AccountActivity extends ManagedDialogsActivity {
 
-	public static final String ACCOUNT_ID = "accountID";
-	public static final String ACCOUNT_NAME = "accountName";
-	public static final String SECID = "secid";
-	public static final String OCUUIDS = "ocUUIDs";
 
-	private long accountID;
+
+	private long accountID; // TODO: to moze byc razem z klasa Account
 	private String accountName;
 	private String secid;
 	private String[] ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -80,11 +78,11 @@ public class AccountActivity extends ManagedDialogsActivity {
 				.getForegroundTaskHandler());
 
 		setContentView(R.layout.activity_account);
-		accountID = getIntent().getLongExtra(ACCOUNT_ID,
+		accountID = getIntent().getLongExtra(Account.ACCOUNT_ID,
 				ListView.INVALID_POSITION);
-		secid = getIntent().getStringExtra(SECID);
-		ocUUIDs = getIntent().getStringArrayExtra(OCUUIDS);
-		accountName = getIntent().getStringExtra(ACCOUNT_NAME);
+		secid = getIntent().getStringExtra(Account.SECID);
+		ocUUIDs = getIntent().getStringArrayExtra(Account.OCUUIDS);
+		accountName = getIntent().getStringExtra(Account.ACCOUNT_NAME);
 
 		if (ocUUIDs == null) {
 			ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -100,7 +98,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 		findViewById(R.id.ocCheckBox3).setEnabled(false);
 		findViewById(R.id.ocCheckBox4).setEnabled(false);
 
-		accountNameEditText.setText(getIntent().getStringExtra(ACCOUNT_NAME));
+		accountNameEditText.setText(getIntent().getStringExtra(Account.ACCOUNT_NAME));
 		updateChecks();
 
 		gkCheckBox.setOnClickListener(new OnClickListener() {
@@ -231,27 +229,27 @@ public class AccountActivity extends ManagedDialogsActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putStringArray(OCUUIDS, ocUUIDs);
-		outState.putLong(ACCOUNT_ID, accountID);
-		outState.putString(SECID, secid);
-		outState.putString(ACCOUNT_NAME, accountName);
+		outState.putStringArray(Account.OCUUIDS, ocUUIDs);
+		outState.putLong(Account.ACCOUNT_ID, accountID);
+		outState.putString(Account.SECID, secid);
+		outState.putString(Account.ACCOUNT_NAME, accountName);
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		secid = savedInstanceState.getString(SECID);
-		accountID = savedInstanceState.getLong(ACCOUNT_ID);
-		ocUUIDs = savedInstanceState.getStringArray(OCUUIDS);
-		accountName = savedInstanceState.getString(ACCOUNT_NAME);
+		secid = savedInstanceState.getString(Account.SECID);
+		accountID = savedInstanceState.getLong(Account.ACCOUNT_ID);
+		ocUUIDs = savedInstanceState.getStringArray(Account.OCUUIDS);
+		accountName = savedInstanceState.getString(Account.ACCOUNT_NAME);
 	}
 
 	public void saveClick(View view) {
 		Intent returnIntent = new Intent();
-		returnIntent.putExtra(SECID, secid);
-		returnIntent.putExtra(ACCOUNT_ID, accountID);
-		returnIntent.putExtra(OCUUIDS, ocUUIDs);
-		returnIntent.putExtra(ACCOUNT_NAME, accountName);
+		returnIntent.putExtra(Account.SECID, secid);
+		returnIntent.putExtra(Account.ACCOUNT_ID, accountID);
+		returnIntent.putExtra(Account.OCUUIDS, ocUUIDs);
+		returnIntent.putExtra(Account.ACCOUNT_NAME, accountName);
 		setResult(RESULT_OK, returnIntent);
 		finish();
 	}

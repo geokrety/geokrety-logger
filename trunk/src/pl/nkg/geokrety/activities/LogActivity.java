@@ -156,7 +156,7 @@ public class LogActivity extends ManagedDialogsActivity {
 		int currentAccountNr = holder.getDefaultAccount();
 		if (currentAccountNr != ListView.INVALID_POSITION) {
 			currentAccount = holder.getAccountList().get(currentAccountNr);
-			currentLog.setGeoKretyLogin(currentAccount.getGeoKretyLogin());
+			currentLog.setGeoKretyLogin(currentAccount.getName());
 			currentAccount.loadIfExpired(application);
 		}
 	}

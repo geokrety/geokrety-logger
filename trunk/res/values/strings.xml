@@ -72,7 +72,7 @@
     <string name="download_login_gk">Login to GeoKrety.org&#8230;</string>
     <string name="download_getting_gk">Getting inventory from GeoKrety.org&#8230;</string>
     <string name="download_getting_uuid">Getting UUID from</string>
-    <string name="download_getting_ocs">Getting last logs from OpenCaching.pl&#8230;</string>
+    <string name="download_getting_ocs">Getting last logs from</string>
     <string name="download_getting_names">Getting geocache names&#8230;</string>
     <string name="download_finish">Refresh finish</string>
     <string name="submit_title">Submitting log</string>

@@ -251,26 +251,20 @@ public class GeoKretLog implements Serializable {
 				new String[] { "latlon", ignoreLocation ? "" : latlon },
 				new String[] { "wpt", ignoreLocation ? "" : wpt }, };
 
-		while (true) {
-			try {
-				String value = Utils.httpPost(URL, postData);
-				Document doc = Utils.getDomElement(value);
-				String error = doc.getElementsByTagName("error").item(0)
-						.getTextContent();
-				if (error.length() == 0) {
-					return true;
-				} else {
-					if (error.equals("Wrong secid identifier")) {
-						account.loadSecureID(null);
-						continue;
-					} else {
-						throw new MessagedException(R.string.submit_fail, error);
-					}
-				}
-			} catch (Exception e) {
-				throw new MessagedException(R.string.submit_fail,
-						e.getLocalizedMessage());
+		try {
+			String value = Utils.httpPost(URL, postData);
+			String[] adsFix = value.split("<script");
+			Document doc = Utils.getDomElement(adsFix[0]);
+			String error = doc.getElementsByTagName("error").item(0)
+					.getTextContent();
+			if (error.length() == 0) {
+				return true;
+			} else {
+				throw new MessagedException(R.string.submit_fail, error);
 			}
+		} catch (Exception e) {
+			throw new MessagedException(R.string.submit_fail,
+					e.getLocalizedMessage());
 		}
 	}
 }

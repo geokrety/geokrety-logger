@@ -16,6 +16,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ListView;
 
@@ -26,6 +27,11 @@ import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.threads.RefreshAccount;
 
 public class Account {
+	public static final String ACCOUNT_ID = "accountID";
+	public static final String ACCOUNT_NAME = "accountName";
+	public static final String SECID = "secid";
+	public static final String OCUUIDS = "ocUUIDs";
+
 	private static final String URL_LOGIN = "http://geokrety.org/api-login2secid.php";
 	private static final String URL_EXPORT2 = "http://geokrety.org/export2.php";
 	private static final String URL_BY_USERNAME = "http://opencaching.pl/okapi/services/users/by_username";
@@ -35,55 +41,54 @@ public class Account {
 	private static final long EXPIRED = 600000;
 
 	private long id;
-	private String geoKretyLogin;
-	private String geoKretyPassword;
-	private String openCachingLogin;
+	private String name;
 
 	private String geoKretySecredID;
-	private String openCachingUUID;
-	private List<GeocacheLog> openCachingLogs;
+	private String[] openCachingUUIDs;
 
+	private List<GeocacheLog> openCachingLogs;
 	private List<Geokret> inventory;
 
 	private Date lastDataLoaded;
 
-	public Account(String geoKretyLogin, String geoKretyPassword,
-			String openCachingLogin) {
-		this.geoKretyLogin = geoKretyLogin;
-		this.geoKretyPassword = geoKretyPassword;
-		this.openCachingLogin = openCachingLogin;
+	public Account(Bundle bundle) {
+		unpack(bundle);
 	}
 
-	public String getGeoKretyLogin() {
-		return geoKretyLogin;
+	public Account(long id, String name, String geoKretySecredID,
+			String[] openCachingUUIDs) {
+		this.id = id;
+		this.name = name;
+		this.geoKretySecredID = geoKretySecredID;
+		this.openCachingUUIDs = openCachingUUIDs;
 	}
 
-	public void setGeoKretyLogin(String geoKretyLogin) {
-		this.geoKretyLogin = geoKretyLogin;
+	public String getName() {
+		return name;
 	}
 
-	public String getGeoKretyPassword() {
-		return geoKretyPassword;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public void setGeoKretyPassword(String geoKretyPassword) {
-		this.geoKretyPassword = geoKretyPassword;
+	public Bundle pack(Bundle bundle) {
+		bundle.putStringArray(Account.OCUUIDS, openCachingUUIDs);
+		bundle.putLong(Account.ACCOUNT_ID, id);
+		bundle.putString(Account.SECID, geoKretySecredID);
+		bundle.putString(Account.ACCOUNT_NAME, name);
+		return bundle;
+	}
+
+	public Bundle unpack(Bundle bundle) {
+		geoKretySecredID = bundle.getString(Account.SECID);
+		id = bundle.getLong(Account.ACCOUNT_ID);
+		openCachingUUIDs = bundle.getStringArray(Account.OCUUIDS);
+		name = bundle.getString(Account.ACCOUNT_NAME);
+		return bundle;
 	}
 
 	public String getGeoKreySecredID() {
 		return geoKretySecredID;
-	}
-
-	public String getOpenCachingLogin() {
-		return openCachingLogin;
-	}
-
-	public void setOpenCachingLogin(String openCachingLogin) {
-		this.openCachingLogin = openCachingLogin;
-	}
-
-	public String getOpenCachingUUID() {
-		return openCachingUUID;
 	}
 
 	public List<GeocacheLog> getOpenCachingLogs() {
@@ -99,27 +104,6 @@ public class Account {
 			return true;
 		}
 		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
-	}
-
-	public void loadSecureID(RefreshAccount asyncTask) throws MessagedException {
-		String[][] postData = new String[][] {
-				new String[] { "login", geoKretyLogin },
-				new String[] { "password", geoKretyPassword } };
-
-		String value;
-		try {
-			value = Utils.httpPost(URL_LOGIN, postData);
-		} catch (Exception e) {
-			throw new MessagedException(R.string.login_error_message,
-					e.getLocalizedMessage());
-		}
-
-		if (value != null && !value.startsWith("error")) {
-			geoKretySecredID = value.trim();
-		} else {
-			throw new MessagedException(R.string.login_error_password_message,
-					String.valueOf(value));
-		}
 	}
 
 	public void loadInventory(RefreshAccount asyncTask)
@@ -145,28 +129,15 @@ public class Account {
 		}
 	}
 
-	public void loadOpenCachingUUID(RefreshAccount asyncTask)
-			throws MessagedException {
-		String[][] getData = new String[][] {
-				new String[] { "username", openCachingLogin },
-				new String[] { "fields", "uuid" },
-				new String[] { "consumer_key", CONSUMER_KEY } };
-		try {
-			String jsonString = Utils.httpGet(URL_BY_USERNAME, getData);
-			JSONObject json = new JSONObject(jsonString);
-			openCachingUUID = json.getString("uuid");
-		} catch (JSONException e) {
-			throw new MessagedException(R.string.invalid_oclogin_error_message);
-		} catch (Exception e) {
-			throw new MessagedException(R.string.oclogs_error_message);
-		}
+	public void setOpenCachingLogs(ArrayList<GeocacheLog> openCachingLogs) {
+		this.openCachingLogs = Collections.synchronizedList(openCachingLogs);
 	}
 
-	public void loadOpenCachingLogs(RefreshAccount asyncTask)
+	public void loadOpenCachingLogs(RefreshAccount asyncTask,
+			ArrayList<GeocacheLog> openCachingLogs, int portal)
 			throws MessagedException {
-		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
 		String[][] getData = new String[][] {
-				new String[] { "user_uuid", openCachingUUID },
+				new String[] { "user_uuid", openCachingUUIDs[portal] },
 				new String[] { "consumer_key", CONSUMER_KEY } };
 		try {
 			String jsonString = Utils.httpGet(URL_USERLOGS, getData);
@@ -177,10 +148,8 @@ public class Account {
 				openCachingLogs.add(new GeocacheLog(json.getJSONObject(i)));
 			}
 
-			this.openCachingLogs = Collections
-					.synchronizedList(openCachingLogs);
 			if (openCachingLogs.size() > 0) {
-				loadOCnames();
+				loadOCnames(openCachingLogs, portal);
 			}
 		} catch (JSONException e) {
 			throw new MessagedException(R.string.invalid_oclogin_error_message);
@@ -195,15 +164,15 @@ public class Account {
 		lastDataLoaded = new Date();
 	}
 
-	private void loadOCnames() throws ClientProtocolException, IOException,
-			JSONException {
-		HashSet<String> codes = getCacheCodes();
+	private void loadOCnames(ArrayList<GeocacheLog> openCachingLogs, int portal)
+			throws ClientProtocolException, IOException, JSONException {
+		HashSet<String> codes = getCacheCodes(openCachingLogs);
 		if (codes.size() == 0) {
 			return;
 		}
 
 		String[][] getData = new String[][] {
-				new String[] { "user_uuid", openCachingUUID },
+				new String[] { "user_uuid", openCachingUUIDs[portal] },
 				new String[] { "consumer_key", CONSUMER_KEY },
 				new String[] { "fields", "name|code" },
 				new String[] { "cache_codes", TextUtils.join("|", codes) },
@@ -217,7 +186,7 @@ public class Account {
 		}
 	}
 
-	private HashSet<String> getCacheCodes() {
+	private HashSet<String> getCacheCodes(ArrayList<GeocacheLog> openCachingLogs) {
 		HashSet<String> caches = new HashSet<String>();
 		for (GeocacheLog log : new ArrayList<GeocacheLog>(openCachingLogs)) {
 			if (!StateHolder.getGeoacheMap().containsKey(log.getCacheCode())) {
@@ -229,7 +198,7 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return geoKretyLogin;
+		return name;
 	}
 
 	public boolean loadIfExpired(GeoKretyApplication application) {
@@ -255,7 +224,7 @@ public class Account {
 		}
 		return ListView.INVALID_POSITION;
 	}
-	
+
 	public int getWaypointIndex(String waypoint) {
 		int pos = 0;
 		for (GeocacheLog l : openCachingLogs) {
@@ -266,12 +235,25 @@ public class Account {
 		}
 		return ListView.INVALID_POSITION;
 	}
-	
+
 	public long getID() {
 		return id;
 	}
-	
+
 	public void setID(long id) {
 		this.id = id;
+	}
+
+	public String[] getOpenCachingUUIDs() {
+		return openCachingUUIDs;
+	}
+
+	public boolean hasOpenCachingUUID(int portal) {
+		if (openCachingUUIDs == null || portal < 0
+				|| portal >= openCachingUUIDs.length) {
+			return false;
+		}
+
+		return !Utils.isEmpty(openCachingUUIDs[portal]);
 	}
 }

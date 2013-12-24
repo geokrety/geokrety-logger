@@ -1,8 +1,12 @@
 package pl.nkg.geokrety.threads;
 
+import java.util.ArrayList;
+
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
+import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
+import pl.nkg.lib.okapi.SupportedOKAPI;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
 import pl.nkg.lib.threads.TaskListener;
@@ -23,13 +27,16 @@ public class RefreshAccount extends
 		Account account = param;
 
 		publishProgress(getProgressMessage(0));
-		account.loadSecureID(this);
-		publishProgress(getProgressMessage(1));
 		account.loadInventory(this);
-		publishProgress(getProgressMessage(2));
-		account.loadOpenCachingUUID(this);
-		publishProgress(getProgressMessage(3));
-		account.loadOpenCachingLogs(this);
+		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
+		for (int i = 0; i < SupportedOKAPI.SUPPORTED.length; i++) {
+			if (account.hasOpenCachingUUID(i)) {
+				publishProgress(getProgressMessage(1) + " "
+						+ SupportedOKAPI.SUPPORTED[i].host + messages[2]);
+				account.loadOpenCachingLogs(this, openCachingLogs, i);
+			}
+		}
+		account.setOpenCachingLogs(openCachingLogs);
 		account.touchLastLoadedDate();
 		return true;
 	}
@@ -51,15 +58,14 @@ public class RefreshAccount extends
 
 		synchronized (this) {
 			Context ctx = progressDialogWrapper.getManagedDialogsActivity();
-			messages = new String[4];
-			messages[0] = ctx.getText(R.string.download_login_gk).toString();
-			messages[1] = ctx.getText(R.string.download_getting_gk).toString();
-			messages[2] = ctx.getText(R.string.download_getting_ocs).toString();
-			messages[3] = ctx.getText(R.string.download_getting_names)
+			messages = new String[3];
+			messages[0] = ctx.getText(R.string.download_getting_gk).toString();
+			messages[1] = ctx.getText(R.string.download_getting_ocs)
 					.toString();
+			messages[2] = ctx.getText(R.string.dots).toString();
 		}
 	}
-	
+
 	public static RefreshAccount getFromHandler(ForegroundTaskHandler handler) {
 		AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
 		RefreshAccount b = (RefreshAccount) a;
