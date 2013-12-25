@@ -1,3 +1,24 @@
+/*
+ * Copyright (C) 2013 Michał Niedźwiecki
+ * 
+ * This file is part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+ */
 package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
@@ -26,19 +47,16 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class AccountActivity extends ManagedDialogsActivity {
-
-
 
 	private long accountID; // TODO: to moze byc razem z klasa Account
 	private String accountName;
 	private String secid;
 	private String[] ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
 
-	private TextView accountNameEditText;
+	// private TextView accountNameEditText;
 	private CheckBox gkCheckBox;
 	private CheckBox[] ocCheckBox = new CheckBox[SupportedOKAPI.SUPPORTED.length];
 	private Button saveButton;
@@ -88,7 +106,8 @@ public class AccountActivity extends ManagedDialogsActivity {
 			ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
 		}
 
-		accountNameEditText = (TextView) findViewById(R.id.accountNameTextView);
+		// accountNameEditText = (TextView)
+		// findViewById(R.id.accountNameTextView);
 		gkCheckBox = (CheckBox) findViewById(R.id.gkCheckBox);
 		ocCheckBox[0] = (CheckBox) findViewById(R.id.ocCheckBox0);
 		saveButton = (Button) findViewById(R.id.saveButton);
@@ -98,7 +117,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 		findViewById(R.id.ocCheckBox3).setEnabled(false);
 		findViewById(R.id.ocCheckBox4).setEnabled(false);
 
-		accountNameEditText.setText(getIntent().getStringExtra(Account.ACCOUNT_NAME));
+		// accountNameEditText.setText(getIntent().getStringExtra(Account.ACCOUNT_NAME));
 		updateChecks();
 
 		gkCheckBox.setOnClickListener(new OnClickListener() {
@@ -138,9 +157,10 @@ public class AccountActivity extends ManagedDialogsActivity {
 	private void updateChecks() {
 		gkCheckBox.setChecked(!Utils.isEmpty(secid));
 		ocCheckBox[0].setChecked(!Utils.isEmpty(ocUUIDs[0]));
-		accountNameEditText
-				.setText(Utils.isEmpty(accountName) ? getText(R.string.account_account_name_hint)
-						: accountName);
+		setTitle(getText(R.string.title_activity_account)
+				+ ": "
+				+ (Utils.isEmpty(accountName) ? getText(R.string.account_account_name_hint)
+						: accountName));
 		saveButton.setEnabled(gkCheckBox.isChecked());
 	}
 
