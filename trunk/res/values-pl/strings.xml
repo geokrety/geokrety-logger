@@ -97,7 +97,7 @@
     <string name="emergency">Jeżeli z powodu błędu w programie nie możesz zalogować GeoKreta, zrób to przez serwis WWW przechodząc bezpośrednio na stronę <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>. Jeżeli logowanie GeoKreta na stronie WWW się powiodło, proszę poinformuj mnie o problemie.</string>
     <string name="changelog">Historia zmian:\n
         \n
-        0.1.0 beta - 2013-12-19\n
+        0.1.0 beta - 2013-12-25\n
         - nie wiesza podczas obracania ekranem,\n
         - użycie secid zamiast loginu i hasła,\n
         \n
