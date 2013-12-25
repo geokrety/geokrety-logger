@@ -337,12 +337,14 @@ public class LogActivity extends ManagedDialogsActivity {
 			Serializable arg) {
 		switch (dialog.getDialogId()) {
 		case Dialogs.TIME_PICKERDIALOG:
+			storeToGeoKretLog(currentLog);
 			currentLog.setGodzina(timePickerDialog.getHourOfDay());
 			currentLog.setMinuta(timePickerDialog.getMinute());
 			loadFromGeoKretLog(currentLog);
 			break;
 
 		case Dialogs.DATE_PICKERDIALOG:
+			storeToGeoKretLog(currentLog);
 			currentLog.setDate(datePickerDialog.getYear(),
 					datePickerDialog.getMonthOfYear() + 1,
 					datePickerDialog.getDayOfMonth());
