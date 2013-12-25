@@ -44,7 +44,6 @@ import pl.nkg.lib.threads.GenericTaskListener;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Pair;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -184,13 +183,6 @@ public class LogActivity extends ManagedDialogsActivity {
 				currentAccount.loadIfExpired(application);
 			}
 		}
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.log, menu);
-		return true;
 	}
 
 	@Override

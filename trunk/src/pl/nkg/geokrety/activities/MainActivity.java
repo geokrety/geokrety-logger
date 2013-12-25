@@ -27,7 +27,6 @@ import pl.nkg.geokrety.Utils;
 import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
-import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,12 +40,6 @@ public class MainActivity extends Activity {
 		TextView appName = (TextView) findViewById(R.id.appNameTextView);
 		appName.setText(getResources().getString(R.string.version)
 				+ Utils.getAppVer(this));
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
 	}
 
 	public void showAccountsActivity(View view) {

@@ -53,9 +53,7 @@ public class Account {
 	public static final String SECID = "secid";
 	public static final String OCUUIDS = "ocUUIDs";
 
-	private static final String URL_LOGIN = "http://geokrety.org/api-login2secid.php";
 	private static final String URL_EXPORT2 = "http://geokrety.org/export2.php";
-	private static final String URL_BY_USERNAME = "http://opencaching.pl/okapi/services/users/by_username";
 	private static final String URL_USERLOGS = "http://opencaching.pl/okapi/services/logs/userlogs";
 	private static final String URL_GEOCACHES = "http://opencaching.pl/okapi/services/caches/geocaches";
 	private static final String CONSUMER_KEY = "DajjA4r3QZNRHAef7XZD";
