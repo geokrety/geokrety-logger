@@ -59,10 +59,14 @@ public class ForegroundTaskHandler {
 	}
 
 	@SuppressWarnings("unchecked")
-	public <Params> boolean runTask(int id, Params params) {
+	public <Params> boolean runTask(int id, Params params, boolean force) {
 		synchronized (this) {
 			if (isBusy()) {
-				return false;
+				if (force) {
+					currentTask.cancel(true);
+				} else {
+					return false;
+				}
 			}
 			currentTask = taskMap.get(id);
 			AbstractForegroundTaskWrapper<Params, ?, ?> task = (AbstractForegroundTaskWrapper<Params, ?, ?>) currentTask;

@@ -225,12 +225,12 @@ public class GeoKretLog implements Serializable {
 				+ nf.format(dayOfMonth);
 	}
 
-	public void submit(GeoKretyApplication application, Account currentAccount) {
+	public void submit(GeoKretyApplication application, Account currentAccount, boolean force) {
 
 		app_ver = Utils.getAppVer(application.getApplicationContext());
 
 		application.getForegroundTaskHandler().runTask(LogGeoKret.ID,
-				new Pair<GeoKretLog, Account>(this, currentAccount));
+				new Pair<GeoKretLog, Account>(this, currentAccount), force);
 		// LogGeoKret.logGeoKret(this, currentAccount, logProgressDialog,
 		// listener, false);
 	}

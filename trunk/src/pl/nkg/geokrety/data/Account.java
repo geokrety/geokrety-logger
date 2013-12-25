@@ -220,17 +220,17 @@ public class Account {
 		return name;
 	}
 
-	public boolean loadIfExpired(GeoKretyApplication application) {
+	public boolean loadIfExpired(GeoKretyApplication application, boolean force) {
 		if (expired()) {
-			loadData(application);
+			loadData(application, force);
 			return true;
 		} else {
 			return false;
 		}
 	}
 
-	public void loadData(GeoKretyApplication application) {
-		application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this);
+	public void loadData(GeoKretyApplication application, boolean force) {
+		application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this, force);
 	}
 
 	public int getTrackingCodeIndex(String trackingCode) {

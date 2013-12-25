@@ -40,6 +40,7 @@ import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
+import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
 import android.os.Bundle;
 import android.content.Intent;
@@ -139,7 +140,17 @@ public class LogActivity extends ManagedDialogsActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
-		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this));
+
+		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
+			@Override
+			public void onFinish(
+					AbstractForegroundTaskWrapper<Account, String, Boolean> sender,
+					Account param, Boolean result) {
+				super.onFinish(sender, param, result);
+				configAdapters();
+			}
+		});
+
 		logGeoKret
 				.attach(logProgressDialog,
 						new GenericTaskListener<Pair<GeoKretLog, Account>, String, Boolean>(
@@ -149,17 +160,18 @@ public class LogActivity extends ManagedDialogsActivity {
 									android.util.Pair<GeoKretLog, Account> param,
 									Boolean result) {
 								super.onFinish(sender, param, result);
-								reset(null);
+								//reset(null);
+								finish();
 							};
 						}.setFinishMessage(R.string.submit_finish)
 								.setBreakMessage(R.string.submit_broken));
-		updateCurrentAccount(false);
+		updateCurrentAccount(false, false);
 
 		logTypeSpinnerDialog.setAdapter(new ArrayAdapter<String>(this,
 				android.R.layout.simple_spinner_dropdown_item, getResources()
 						.getStringArray(R.array.log_array)));
 
-		configAdapters();
+		updateSpinners();
 		loadFromGeoKretLog(currentLog);
 		logTypeSpinnerDialog.setCheckedItem(currentLogType);
 	}
@@ -170,17 +182,17 @@ public class LogActivity extends ManagedDialogsActivity {
 		super.onStop();
 	}
 
-	private void updateCurrentAccount(boolean force) {
+	private void updateCurrentAccount(boolean always, boolean force) {
 		StateHolder holder = ((GeoKretyApplication) getApplication())
 				.getStateHolder();
 		int currentAccountNr = holder.getDefaultAccount();
 		if (currentAccountNr != ListView.INVALID_POSITION) {
 			currentAccount = holder.getAccountList().get(currentAccountNr);
 			currentLog.setGeoKretyLogin(currentAccount.getName());
-			if (force) {
-				currentAccount.loadData(application);
+			if (always) {
+				currentAccount.loadData(application, force);
 			} else {
-				currentAccount.loadIfExpired(application);
+				currentAccount.loadIfExpired(application, force);
 			}
 		}
 	}
@@ -194,7 +206,7 @@ public class LogActivity extends ManagedDialogsActivity {
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		storeToGeoKretLog(currentLog);
-		updateCurrentAccount(false);
+		updateCurrentAccount(false, false);
 		loadFromGeoKretLog(currentLog);
 		super.onActivityResult(requestCode, resultCode, data);
 	}
@@ -233,15 +245,20 @@ public class LogActivity extends ManagedDialogsActivity {
 		log.setLogTypeMapped(currentLogType);
 	}
 
-	private boolean configAdapters() {
+	private boolean updateSpinners() {
 		if (!canShowUserData()) {
 			return false;
 		}
 
-		if (currentAccount.loadIfExpired(application)) {
+		if (currentAccount.loadIfExpired(application, false)) {
 			return false;
 		}
 
+		configAdapters();
+		return true;
+	}
+
+	private void configAdapters() {
 		inventorySpinnerDialog.setAdapter(new ArrayAdapter<Geokret>(this,
 				android.R.layout.simple_spinner_dropdown_item, currentAccount
 						.getInventory()));
@@ -249,7 +266,6 @@ public class LogActivity extends ManagedDialogsActivity {
 		ocsSpinnerDialog.setAdapter(new ArrayAdapter<GeocacheLog>(this,
 				android.R.layout.simple_spinner_dropdown_item, currentAccount
 						.getOpenCachingLogs()));
-		return true;
 	}
 
 	public void showLogType(View view) {
@@ -257,7 +273,7 @@ public class LogActivity extends ManagedDialogsActivity {
 	}
 
 	public void showInventory(View view) {
-		if (configAdapters()) {
+		if (updateSpinners()) {
 			inventorySpinnerDialog.show(null, currentAccount
 					.getTrackingCodeIndex(trackingCodeEditText.getText()
 							.toString()));
@@ -274,7 +290,7 @@ public class LogActivity extends ManagedDialogsActivity {
 	}
 
 	public void showOcs(View view) {
-		if (configAdapters()) {
+		if (updateSpinners()) {
 			ocsSpinnerDialog.show(null, currentAccount
 					.getWaypointIndex(waypointEditText.getText().toString()));
 		}
@@ -308,16 +324,16 @@ public class LogActivity extends ManagedDialogsActivity {
 
 	public void submit(final View view) {
 		storeToGeoKretLog(currentLog);
-		currentLog.submit(application, currentAccount);
+		currentLog.submit(application, currentAccount, true);
 	}
 
 	public void refreshButtonClick(final View view) {
-		updateCurrentAccount(true);
+		updateCurrentAccount(true, true);
 	}
 
 	public void reset(View view) {
 		currentLog = new GeoKretLog();
-		updateCurrentAccount(false);
+		updateCurrentAccount(false, false);
 		loadFromGeoKretLog(currentLog);
 	}
 

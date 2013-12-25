@@ -33,6 +33,7 @@ import pl.nkg.geokrety.dialogs.OCDialog;
 import pl.nkg.geokrety.threads.GettingSecidThread;
 import pl.nkg.geokrety.threads.GettingUuidThread;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
+import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.okapi.SupportedOKAPI;
@@ -55,11 +56,14 @@ public class AccountActivity extends ManagedDialogsActivity {
 	private String accountName;
 	private String secid;
 	private String[] ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
+	private boolean modified;
 
 	// private TextView accountNameEditText;
 	private CheckBox gkCheckBox;
 	private CheckBox[] ocCheckBox = new CheckBox[SupportedOKAPI.SUPPORTED.length];
 	private Button saveButton;
+
+	private AlertDialogWrapper saveModifiedsDialog;
 
 	private GKDialog gkDialog;
 	private OCDialog ocDialog;
@@ -77,6 +81,14 @@ public class AccountActivity extends ManagedDialogsActivity {
 		super.onCreate(savedInstanceState);
 
 		application = (GeoKretyApplication) getApplication();
+
+		saveModifiedsDialog = new AlertDialogWrapper(this,
+				Dialogs.SAVE_MODIFIEDSDIALOG);
+		saveModifiedsDialog.setTitle(R.string.account_save_title);
+		saveModifiedsDialog.setMessage(R.string.account_save_message);
+		saveModifiedsDialog.setPositiveButton(getText(R.string.yes));
+		saveModifiedsDialog.setNegativeButton(getText(R.string.no));
+		saveModifiedsDialog.setNeutralButton(getText(android.R.string.cancel));
 
 		gkDialog = new GKDialog(this);
 		ocDialog = new OCDialog(this);
@@ -119,6 +131,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 
 		// accountNameEditText.setText(getIntent().getStringExtra(Account.ACCOUNT_NAME));
 		updateChecks();
+		modified = false;
 
 		gkCheckBox.setOnClickListener(new OnClickListener() {
 
@@ -127,6 +140,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 				if (gkCheckBox.isChecked()) {
 					gkDialog.show(null, accountName);
 				} else {
+					modified = true;
 					secid = null;
 					saveButton.setEnabled(false);
 				}
@@ -147,6 +161,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 								SupportedOKAPI.SUPPORTED[portalNr].host,
 								accountName);
 					} else {
+						modified = true;
 						ocUUIDs[portalNr] = null;
 					}
 				}
@@ -175,6 +190,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 					public void onFinish(
 							AbstractForegroundTaskWrapper<Pair<String, String>, String, String> sender,
 							Pair<String, String> param, String result) {
+						modified = true;
 						secid = result;
 						accountName = param.first;
 						updateChecks();
@@ -199,6 +215,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 					public void onFinish(
 							AbstractForegroundTaskWrapper<Pair<String, Integer>, String, String> sender,
 							Pair<String, Integer> param, String result) {
+						modified = true;
 						ocUUIDs[param.second] = result;
 						if (Utils.isEmpty(accountName)) {
 							accountName = param.first;
@@ -226,6 +243,22 @@ public class AccountActivity extends ManagedDialogsActivity {
 	@Override
 	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
 			Serializable arg) {
+
+		if (dialog.getDialogId() == Dialogs.SAVE_MODIFIEDSDIALOG) {
+			switch (buttonId) {
+			case Dialog.BUTTON_POSITIVE:
+				saveClick(null);
+				return;
+
+			case Dialog.BUTTON_NEUTRAL:
+				return;
+
+			case Dialog.BUTTON_NEGATIVE:
+				modified = false;
+				onBackPressed();
+				return;
+			}
+		}
 
 		updateChecks();
 		if (buttonId != Dialog.BUTTON_POSITIVE) {
@@ -272,5 +305,14 @@ public class AccountActivity extends ManagedDialogsActivity {
 		returnIntent.putExtra(Account.ACCOUNT_NAME, accountName);
 		setResult(RESULT_OK, returnIntent);
 		finish();
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (modified) {
+			saveModifiedsDialog.show(null);
+		} else {
+			super.onBackPressed();
+		}
 	}
 }

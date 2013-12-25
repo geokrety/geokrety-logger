@@ -109,6 +109,11 @@
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <string name="changelog">Change log:\n\n
+        0.2.0 beta - 2013-12-26\n
+        - inventory refresh fix,\n
+        - yes/no/cancel save account changes,\n
+        - back to main activity after log successful,\n
+        \n 
         0.1.1 beta - 2013-12-25\n
         - date and time clean fields - fix,\n
         \n 
@@ -150,9 +155,13 @@
 	<string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for loggin geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
 	<string name="account_save">OK</string>
 	
+	<string name="account_save_title">Save account settings?</string>
+	<string name="account_save_message">Account settings changed. Save changes?</string>
+	
 	<string name="title_dialog_gk">Login and password to GeoKrety.org</string>
 	<string name="title_dialog_oc">Login to</string>
 	<string name="dots">&#8230;</string>
 		
-	
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
 </resources>

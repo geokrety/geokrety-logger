@@ -107,6 +107,9 @@ public class AlertDialogWrapper extends AbstractAlertDialogWrapper<AlertDialog> 
 
 	public void setAdapter(ListAdapter adapter) {
 		this.adapter = adapter;
+		if (getInstance() != null && getInstance().getListView() != null) {
+			getInstance().getListView().setAdapter(adapter);
+		}
 	}
 
 	public int getCheckedItem() {
@@ -124,6 +127,7 @@ public class AlertDialogWrapper extends AbstractAlertDialogWrapper<AlertDialog> 
 	public void prepare(AlertDialog dialog) {
 		super.prepare(dialog);
 		if (adapter != null) {
+			getInstance().getListView().setAdapter(adapter);
 			getInstance().getListView().setItemChecked(getCheckedItem(), true);
 		}
 	}

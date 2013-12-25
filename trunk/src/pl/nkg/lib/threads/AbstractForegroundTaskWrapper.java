@@ -226,9 +226,9 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 
 	}
 
-	public void cancel(boolean b) {
+	public void cancel(boolean force) {
 		if (thread != null) {
-			thread.cancel(b);
+			thread.cancel(force);
 		}
 	}
 

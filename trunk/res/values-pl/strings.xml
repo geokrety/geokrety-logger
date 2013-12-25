@@ -139,7 +139,13 @@
 	<string name="account_introduction">Instrukcja: po zaznaczeniu geokrety.org użytkownik zostanie poproszony o podanie loginu i hasła, jakich używa do logowania się na tym portalu. Następnie te dane posłużą do ściągnięcia &quot;secid&quot;. Ten &quot;secid&quot; zostanie zapisany w programie i będzie wykorzystywany do logowania kretów, które zostały przeniesione (login i hasło nie są zapisywane w pamięci).\n\nPo zaznaczeniu opencaching.pl itd. użytkownik zostanie poproszony o podanie tylko loginu, jakiego używa do logowania się na tym portalu. Ten login wykorzystywany jest tylko po to by ściągnąć listę geokeszy, do których użytkownik się logował ostatnio. Ta lista jest wykorzystywana do podpowiadania numeru waypoint podczas logowania geokreta.</string>
 	<string name="account_save">Gotowe!</string>
 
+	<string name="account_save_title">Czy zachować ustawienia konta?</string>
+	<string name="account_save_message">Dokonano zmian w ustawieniach konta. Czy zapisać zmiany?</string>
+	
 	<string name="title_dialog_gk">Login i hasło do GeoKrety.org</string>
 	<string name="title_dialog_oc">Login do</string>
 	<string name="dots">&#8230;</string>
+	
+	<string name="yes">Tak</string>
+	<string name="no">Nie</string>
 </resources>

@@ -38,4 +38,6 @@ public class Dialogs {
 	
 	public static final int SECID_PROGRESSDIALOG = 1013;
 	public static final int UUID_PROMPTDIALOG = 1014;
+	
+	public static final int SAVE_MODIFIEDSDIALOG = 1015;
 }

@@ -131,7 +131,7 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 	}
 
 	private void refreshAccout() {
-		account.loadData(application);
+		account.loadData(application, true);
 	}
 
 	@Override
@@ -146,7 +146,7 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 	}
 
 	private void updateListView() {
-		if (!account.loadIfExpired(application)) {
+		if (!account.loadIfExpired(application, false)) {
 			refreshListView();
 		}
 	}

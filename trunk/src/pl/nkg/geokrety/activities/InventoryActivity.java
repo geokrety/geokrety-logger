@@ -128,7 +128,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 	}
 
 	private void refreshAccout() {
-		account.loadData((GeoKretyApplication) getApplication());
+		account.loadData((GeoKretyApplication) getApplication(), true);
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 	}
 
 	private void updateListView() {
-		if (!account.loadIfExpired((GeoKretyApplication) getApplication())) {
+		if (!account.loadIfExpired((GeoKretyApplication) getApplication(), false)) {
 			refreshListView();
 		}
 	}
