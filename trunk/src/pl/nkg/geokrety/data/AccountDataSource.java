@@ -129,6 +129,7 @@ public class AccountDataSource {
 					extractUUIDs(cursor.getString(3)));
 			accounts.add(account);
 		}
+		cursor.close();
 		return accounts;
 	}
 }
