@@ -46,7 +46,11 @@ public class LogGeoKret extends
 			throws Throwable {
 		GeoKretLog log = param.first;
 		Account account = param.second;
-		return log.submitBackground(account);
+		if (log.submitBackground(account)) {
+			account.loadInventory();
+			return true;
+		}
+		return false;
 	}
 
 	public static LogGeoKret getFromHandler(ForegroundTaskHandler handler) {

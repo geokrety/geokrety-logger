@@ -50,7 +50,7 @@ public class RefreshAccount extends
 		Account account = param;
 
 		publishProgress(getProgressMessage(0));
-		account.loadInventory(this);
+		account.loadInventory();
 		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
 		for (int i = 0; i < SupportedOKAPI.SUPPORTED.length; i++) {
 			if (account.hasOpenCachingUUID(i)) {

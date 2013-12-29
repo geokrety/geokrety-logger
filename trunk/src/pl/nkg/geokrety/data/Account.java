@@ -126,7 +126,7 @@ public class Account {
 		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
 	}
 
-	public void loadInventory(RefreshAccount asyncTask)
+	public void loadInventory()
 			throws MessagedException {
 		ArrayList<Geokret> inventory = new ArrayList<Geokret>();
 
