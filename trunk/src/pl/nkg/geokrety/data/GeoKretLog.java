@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 
 import android.os.Bundle;
 import android.text.format.DateFormat;
@@ -276,13 +277,12 @@ public class GeoKretLog implements Serializable {
 			String value = Utils.httpPost(URL, postData);
 			String[] adsFix = value.split("<script");
 			Document doc = Utils.getDomElement(adsFix[0]);
-			String error = doc.getElementsByTagName("error").item(0)
-					.getTextContent();
-			if (error.length() == 0) {
-				return true;
-			} else {
-				throw new MessagedException(R.string.submit_fail, error);
+			NodeList nl = doc.getElementsByTagName("error").item(0)
+					.getChildNodes();
+			if (nl.getLength() > 0) {
+				throw new MessagedException(R.string.submit_fail, nl.item(0).getNodeValue());
 			}
+			return true;
 		} catch (MessagedException e) {
 			throw e;
 		} catch (Exception e) {

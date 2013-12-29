@@ -29,7 +29,7 @@
     <string name="oc">OC Login:</string>
     <string name="login_hint">GeoKrety Login</string>
     <string name="password_hint">GeoKrety Passwort</string>
-    <string name="oc_hint">OpenCaching Login</string>
+    <string name="oc_hint">Opencaching Login</string>
     <string name="login_error_password_message">Ungültiger GeoKrety Login oder Passwort.</string>
     <string name="login_error_message">Verbindungsfehler: </string>
     <string name="title_activity_accounts">GeoKrety Kontomanager</string>
@@ -39,7 +39,7 @@
     <string name="account_remove">Entfernen</string>
     <string name="error_login_null">GeoKrety.org Login darf nicht leer sein</string>
     <string name="error_password_null">GeoKrety.org Passwort darf nicht leer sein</string>
-    <string name="error_oc_null">OpenCaching Login darf nicht leer sein</string>
+    <string name="error_oc_null">Opencaching Login darf nicht leer sein</string>
     <string name="accounts_add_title">Konto hinzufügen</string>
     <string name="accounts_edit_title">Konto bearbeiten</string>
     <string name="accounts_remove_question">soll das Konto wirklich entfernt werden </string>
@@ -47,13 +47,13 @@
     <string name="title_activity_inventory">GeoKrety Inventar</string>
     <string name="button_inventory">Inventar</string>
     <string name="button_about">Über</string>
-    <string name="button_ocs">Letzte OpenCaching Logs</string>
+    <string name="button_ocs">Letzte Opencaching Logs</string>
     <string name="menu_inventory_refresh">Aktualisieren</string>
     <string name="menu_ocs_refresh">Aktualisieren</string>
-    <string name="title_activity_last_ocs">Letzte Logs aus den OpenCaching Portalen</string>
+    <string name="title_activity_last_ocs">Letzte Logs aus den Opencaching Portalen</string>
     <string name="invalid_oclogin_error_message">Ungültiger Login bei:</string>
     <string name="inventory_error_message">Fehler beim Laden des Inventars. Internetverbindung prüfen.</string>
-    <string name="oclogs_error_message">Fehler beim Laden der OpenCaching Logs. Internetverbindung prüfen.</string>
+    <string name="oclogs_error_message">Fehler beim Laden der Opencaching Logs. Internetverbindung prüfen.</string>
     <string name="title_activity_log">Log GeoKret</string>
     <string name="log_drop">GeoKret abgelegt</string>
     <string name="log_grab">GeoKret mitgenommen</string>
@@ -87,9 +87,9 @@
     <string name="form_submit">Go!</string>
     <string name="form_clear">Clear</string>
     <string name="title_dialog_inventory">Dein Inventar</string>
-    <string name="title_dialog_ocs">Deine letzten Logs bei OpenCaching</string>
+    <string name="title_dialog_ocs">Deine letzten Logs bei Opencaching</string>
     <string name="not_implemented_yet">Noch nicht verfügbar</string>
-    <string name="download_title">Benutzerkonto aktualisieren</string>
+    <string name="download_title">Aktualisieren</string>
     <string name="download_login_gk">Login bei GeoKrety.org&#8230;</string>
     <string name="download_getting_gk">Hole Inventar von GeoKrety.org&#8230;</string>
     <string name="download_getting_uuid">Hole UUID von</string>

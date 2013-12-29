@@ -33,18 +33,19 @@ public class Geokret {
 	private String nr;
 	
 	public Geokret(Node node) {
-		id = Integer.parseInt(node.getAttributes().getNamedItem("id").getTextContent());
-		dist = Integer.parseInt(node.getAttributes().getNamedItem("dist").getTextContent());
-		owner_id = Integer.parseInt(node.getAttributes().getNamedItem("owner_id").getTextContent());
-		type = Integer.parseInt(node.getAttributes().getNamedItem("type").getTextContent());
-		nr = node.getAttributes().getNamedItem("nr").getTextContent();
-	    name = node.getTextContent();
+		id = Integer.parseInt(node.getAttributes().getNamedItem("id").getNodeValue());
+		dist = Integer.parseInt(node.getAttributes().getNamedItem("dist").getNodeValue());
+		owner_id = Integer.parseInt(node.getAttributes().getNamedItem("owner_id").getNodeValue());
+		type = Integer.parseInt(node.getAttributes().getNamedItem("type").getNodeValue());
+		nr = node.getAttributes().getNamedItem("nr").getNodeValue();
+	    name = node.getChildNodes().item(0).getNodeValue();
+	    		//getTextContent() getNodeValue();
 	    
 	    Node stateNode = node.getAttributes().getNamedItem("state");
 	    if (stateNode == null) {
 	    	state = null;
 	    } else {
-	    	state = Integer.parseInt(stateNode.getTextContent());
+	    	state = Integer.parseInt(stateNode.getNodeValue());
 	    }
 	}
 
