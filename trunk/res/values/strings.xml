@@ -54,7 +54,7 @@
     <string name="invalid_oclogin_error_message">Invalid login to:</string>
     <string name="inventory_error_message">Inventory retriving error. Pleas check your Interent connection.</string>
     <string name="oclogs_error_message">OpenCaching logs retriving error. Pleas check your Interent connection.</string>
-    <string name="title_activity_log">LogActivity</string>
+    <string name="title_activity_log">Log GeoKret</string>
     <string name="log_drop">I\'ve dropped GeoKret</string>
     <string name="log_grab">I\'ve grabbed GeoKret</string>
     <string name="log_met">I\'ve met GeoKret</string>
