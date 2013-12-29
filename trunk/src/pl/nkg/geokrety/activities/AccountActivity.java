@@ -122,12 +122,11 @@ public class AccountActivity extends ManagedDialogsActivity {
 		// findViewById(R.id.accountNameTextView);
 		gkCheckBox = (CheckBox) findViewById(R.id.gkCheckBox);
 		ocCheckBox[0] = (CheckBox) findViewById(R.id.ocCheckBox0);
+		ocCheckBox[1] = (CheckBox) findViewById(R.id.ocCheckBox1);
+		ocCheckBox[2] = (CheckBox) findViewById(R.id.ocCheckBox2);
+		ocCheckBox[3] = (CheckBox) findViewById(R.id.ocCheckBox3);
+		ocCheckBox[4] = (CheckBox) findViewById(R.id.ocCheckBox4);
 		saveButton = (Button) findViewById(R.id.saveButton);
-
-		findViewById(R.id.ocCheckBox1).setEnabled(false);
-		findViewById(R.id.ocCheckBox2).setEnabled(false);
-		findViewById(R.id.ocCheckBox3).setEnabled(false);
-		findViewById(R.id.ocCheckBox4).setEnabled(false);
 
 		// accountNameEditText.setText(getIntent().getStringExtra(Account.ACCOUNT_NAME));
 		updateChecks();
@@ -171,7 +170,9 @@ public class AccountActivity extends ManagedDialogsActivity {
 
 	private void updateChecks() {
 		gkCheckBox.setChecked(!Utils.isEmpty(secid));
-		ocCheckBox[0].setChecked(!Utils.isEmpty(ocUUIDs[0]));
+		for (int i = 0; i < ocCheckBox.length; i++) {
+			ocCheckBox[i].setChecked(!Utils.isEmpty(ocUUIDs[i]));
+		}
 		setTitle(getText(R.string.title_activity_account)
 				+ ": "
 				+ (Utils.isEmpty(accountName) ? getText(R.string.account_account_name_hint)

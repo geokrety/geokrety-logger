@@ -77,10 +77,15 @@ public class AccountDataSource {
 	}
 
 	private String[] extractUUIDs(String uuids) {
+		String[] ret = new String[SupportedOKAPI.SUPPORTED.length];
 		if (Utils.isEmpty(uuids)) {
-			return new String[SupportedOKAPI.SUPPORTED.length];
+			return ret;
 		}
-		return TextUtils.split(uuids, DELIMITER);
+		String[] parsed = TextUtils.split(uuids, DELIMITER);
+		for (int i = 0; i < Math.min(parsed.length, ret.length); i++) {
+			ret[i] = parsed[i];
+		}
+		return ret;
 	}
 
 	public void persistAccount(Account account) {

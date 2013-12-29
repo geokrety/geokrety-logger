@@ -40,8 +40,9 @@ public class GeocacheLog {
 	private final String cache_code;
 	private final String type;
 	private final String comment;
-	
-	public GeocacheLog(JSONObject jsonObject) throws JSONException, ParseException {
+
+	public GeocacheLog(JSONObject jsonObject) throws JSONException,
+			ParseException {
 		uuid = jsonObject.getString("uuid");
 		date = fromISODateString(jsonObject.getString("date"));
 		cache_code = jsonObject.getString("cache_code");
@@ -68,16 +69,22 @@ public class GeocacheLog {
 	public String getComment() {
 		return comment;
 	}
-	
+
 	@Override
 	public String toString() {
-		return StateHolder.getGeoacheMap().get(cache_code).getName() + " (" + cache_code + ")";
+		if (StateHolder.getGeoacheMap().containsKey(cache_code)) {
+			return StateHolder.getGeoacheMap().get(cache_code).getName() + " ("
+					+ cache_code + ")";
+		} else {
+			return cache_code;
+		}
 	}
-	
 
-	public static Date fromISODateString(String isoDateString) throws ParseException {
-	    DateFormat f = new SimpleDateFormat(FORMAT_DATE_ISO, Locale.getDefault());
-	    f.setTimeZone(TimeZone.getDefault());
-	    return f.parse(isoDateString);
+	public static Date fromISODateString(String isoDateString)
+			throws ParseException {
+		DateFormat f = new SimpleDateFormat(FORMAT_DATE_ISO,
+				Locale.getDefault());
+		f.setTimeZone(TimeZone.getDefault());
+		return f.parse(isoDateString);
 	}
 }

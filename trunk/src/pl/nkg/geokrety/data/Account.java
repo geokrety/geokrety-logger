@@ -46,6 +46,8 @@ import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.threads.RefreshAccount;
+import pl.nkg.lib.okapi.OKAPIProvider;
+import pl.nkg.lib.okapi.SupportedOKAPI;
 
 public class Account {
 	public static final String ACCOUNT_ID = "accountID";
@@ -54,9 +56,8 @@ public class Account {
 	public static final String OCUUIDS = "ocUUIDs";
 
 	private static final String URL_EXPORT2 = "http://geokrety.org/export2.php";
-	private static final String URL_USERLOGS = "http://opencaching.pl/okapi/services/logs/userlogs";
-	private static final String URL_GEOCACHES = "http://opencaching.pl/okapi/services/caches/geocaches";
-	private static final String CONSUMER_KEY = "DajjA4r3QZNRHAef7XZD";
+	private static final String URL_USERLOGS = "/okapi/services/logs/userlogs";
+	private static final String URL_GEOCACHES = "/okapi/services/caches/geocaches";
 	private static final long EXPIRED = 24 * 60 * 60 * 1000;
 
 	private long id;
@@ -155,11 +156,15 @@ public class Account {
 	public void loadOpenCachingLogs(RefreshAccount asyncTask,
 			ArrayList<GeocacheLog> openCachingLogs, int portal)
 			throws MessagedException {
+
+		SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
+
 		String[][] getData = new String[][] {
 				new String[] { "user_uuid", openCachingUUIDs[portal] },
-				new String[] { "consumer_key", CONSUMER_KEY } };
+				new String[] { "consumer_key", okapi.consumerKey } };
 		try {
-			String jsonString = Utils.httpGet(URL_USERLOGS, getData);
+			String jsonString = Utils.httpGet(
+					OKAPIProvider.getServiceURL(okapi, URL_USERLOGS), getData);
 
 			JSONArray json = new JSONArray(jsonString);
 
@@ -168,10 +173,11 @@ public class Account {
 			}
 
 			if (openCachingLogs.size() > 0) {
-				loadOCnames(openCachingLogs, portal);
+				loadOCnames(openCachingLogs, okapi);
 			}
 		} catch (JSONException e) {
-			throw new MessagedException(R.string.invalid_oclogin_error_message);
+			throw new MessagedException(R.string.invalid_oclogin_error_message,
+					SupportedOKAPI.SUPPORTED[portal].host);
 		} catch (IOException e) {
 			throw new MessagedException(R.string.oclogs_error_message);
 		} catch (ParseException e) {
@@ -183,25 +189,29 @@ public class Account {
 		lastDataLoaded = new Date();
 	}
 
-	private void loadOCnames(ArrayList<GeocacheLog> openCachingLogs, int portal)
-			throws ClientProtocolException, IOException, JSONException {
+	private void loadOCnames(ArrayList<GeocacheLog> openCachingLogs,
+			SupportedOKAPI okapi) throws ClientProtocolException, IOException,
+			JSONException {
 		HashSet<String> codes = getCacheCodes(openCachingLogs);
 		if (codes.size() == 0) {
 			return;
 		}
 
 		String[][] getData = new String[][] {
-				new String[] { "user_uuid", openCachingUUIDs[portal] },
-				new String[] { "consumer_key", CONSUMER_KEY },
+				// new String[] { "user_uuid", openCachingUUIDs[portal] },
+				new String[] { "consumer_key", okapi.consumerKey },
 				new String[] { "fields", "name|code" },
 				new String[] { "cache_codes", TextUtils.join("|", codes) },
 				new String[] { "lpc", "0" } };
 
-		String jsonString = Utils.httpGet(URL_GEOCACHES, getData);
+		String jsonString = Utils.httpGet(
+				OKAPIProvider.getServiceURL(okapi, URL_GEOCACHES), getData);
 		JSONObject json = new JSONObject(jsonString);
 		for (String code : codes) {
-			Geocache geocache = new Geocache(json.getJSONObject(code));
-			StateHolder.getGeoacheMap().put(geocache.getCode(), geocache);
+			if (!json.isNull(code)) {
+				Geocache geocache = new Geocache(json.getJSONObject(code));
+				StateHolder.getGeoacheMap().put(geocache.getCode(), geocache);
+			}
 		}
 	}
 
@@ -230,7 +240,8 @@ public class Account {
 	}
 
 	public void loadData(GeoKretyApplication application, boolean force) {
-		application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this, force);
+		application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this,
+				force);
 	}
 
 	public int getTrackingCodeIndex(String trackingCode) {

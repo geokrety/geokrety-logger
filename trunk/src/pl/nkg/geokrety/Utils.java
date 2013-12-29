@@ -23,9 +23,6 @@ package pl.nkg.geokrety;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +36,7 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
@@ -53,22 +51,6 @@ import android.util.Log;
 
 public class Utils {
 	public static GeoKretyApplication application;
-	
-	public static String encode(String decoded) {
-		try {
-			return URLEncoder.encode(decoded, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static String decode(String encoded) {
-		try {
-			return URLDecoder.decode(encoded, "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new RuntimeException(e);
-		}
-	}
 
 	public static Document getDomElement(String xml) {
 		Document doc = null;
@@ -112,7 +94,8 @@ public class Utils {
 
 	public static String httpPost(String url, String[][] data)
 			throws ClientProtocolException, IOException {
-		HttpClient httpclient = application.getHttpClient();//new DefaultHttpClient();
+		HttpClient httpclient = application.getHttpClient();// new
+															// DefaultHttpClient();
 		HttpPost httppost = new HttpPost(url);
 
 		// Add your data
@@ -130,21 +113,16 @@ public class Utils {
 
 	public static String httpGet(String url, String[][] data)
 			throws ClientProtocolException, IOException {
-		HttpClient httpclient = application.getHttpClient();//new DefaultHttpClient();
+		HttpClient httpclient = application.getHttpClient();
 
-		StringBuilder sb = new StringBuilder();
-		sb.append(url);
-		boolean first = true;
-
+		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
+				data.length);
 		for (String[] varible : data) {
-			sb.append(first ? "?" : "&");
-			first = false;
-			sb.append(varible[0]);
-			sb.append("=");
-			sb.append(Utils.encode(varible[1]));
+			nameValuePairs.add(new BasicNameValuePair(varible[0], varible[1]));
 		}
 
-		String url2 = sb.toString();
+		String url2 = url + "?"
+				+ URLEncodedUtils.format(nameValuePairs, "UTF-8");
 		HttpGet httppost = new HttpGet(url2);
 
 		// Execute HTTP Post Request
@@ -160,7 +138,7 @@ public class Utils {
 			return "";
 		}
 	}
-	
+
 	public static boolean isEmpty(String string) {
 		return string == null || string.length() == 0;
 	}

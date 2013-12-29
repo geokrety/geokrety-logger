@@ -39,7 +39,7 @@
     <string name="account_remove">Remove</string>
     <string name="error_login_null">GeoKrety.org login can not be empty</string>
     <string name="error_password_null">GeoKrety.org password can not be empty</string>
-    <string name="error_oc_null">OpenCaching.pl login can not be empty</string>
+    <string name="error_oc_null">OpenCaching login can not be empty</string>
     <string name="accounts_add_title">Add new account</string>
     <string name="accounts_edit_title">Edit account</string>
     <string name="accounts_remove_question">Are you sure to remove account </string>
@@ -50,8 +50,8 @@
     <string name="button_ocs">OpenCaching last logs</string>
     <string name="menu_inventory_refresh">Refresh</string>
     <string name="menu_ocs_refresh">Refresh</string>
-    <string name="title_activity_last_ocs">Last log from OpenCaching.pl</string>
-    <string name="invalid_oclogin_error_message">Invalid OpenCaching.pl login</string>
+    <string name="title_activity_last_ocs">Last log from OpenCaching portals</string>
+    <string name="invalid_oclogin_error_message">Invalid login to:</string>
     <string name="inventory_error_message">Inventory retriving error. Pleas check your Interent connection.</string>
     <string name="oclogs_error_message">OpenCaching logs retriving error. Pleas check your Interent connection.</string>
     <string name="title_activity_log">LogActivity</string>
@@ -87,7 +87,7 @@
     <string name="form_submit">Go!</string>
     <string name="form_clear">Clear</string>
     <string name="title_dialog_inventory">Your inventory</string>
-    <string name="title_dialog_ocs">Your last logs in OpenCaching.pl</string>
+    <string name="title_dialog_ocs">Your last logs in OpenCaching portals</string>
     <string name="not_implemented_yet">Not implemented yet</string>
     <string name="download_title">Refreshing user account</string>
     <string name="download_login_gk">Login to GeoKrety.org&#8230;</string>
@@ -109,6 +109,9 @@
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <string name="changelog">Change log:\n\n
+        0.2.0 beta - 2013-12-29\n
+        - add support for .de, .us, .nl and .org.uk\n
+        \n
         0.1.2 beta - 2013-12-26\n
         - inventory refresh fix,\n
         - yes/no/cancel save account changes,\n
@@ -148,10 +151,10 @@
 	<string name="account_portals">Choice portals what you use</string>
 	<string name="account_portal_gk">geokrety.org (required)</string>
 	<string name="account_portal_oc0">opencaching.pl</string>
-	<string name="account_portal_oc1">opencaching.de (coming soon)</string>
-	<string name="account_portal_oc2">opencaching.us (coming soon)</string>
-	<string name="account_portal_oc3">opencaching.nl (coming soon)</string>
-	<string name="account_portal_oc4">opencaching.org.uk (coming soon)</string>
+	<string name="account_portal_oc1">opencaching.de</string>
+	<string name="account_portal_oc2">opencaching.us</string>
+	<string name="account_portal_oc3">opencaching.nl</string>
+	<string name="account_portal_oc4">opencaching.org.uk</string>
 	<string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for loggin geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
 	<string name="account_save">OK</string>
 	

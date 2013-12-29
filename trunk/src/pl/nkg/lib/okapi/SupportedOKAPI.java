@@ -28,7 +28,11 @@ public class SupportedOKAPI {
 	public final String consumerKey;
 
 	public static final SupportedOKAPI[] SUPPORTED = new SupportedOKAPI[] { //
-	new SupportedOKAPI("opencaching.pl", 912, "DajjA4r3QZNRHAef7XZD") //
+	new SupportedOKAPI("opencaching.pl", 912, "DajjA4r3QZNRHAef7XZD"), //
+	new SupportedOKAPI("opencaching.de", 893, "LtBaPTnpjUpxpeqM6ThJ"), //
+	new SupportedOKAPI("opencaching.us", 901, "5vpZTs8UehxfmdF8uKhy"), //
+	new SupportedOKAPI("opencaching.nl", 912, "rVn3VMJ82FqAa5b2fmvG"), //
+	new SupportedOKAPI("opencaching.org.uk", 515, "WM2DTuZFPrZbbLq59TBM") //
 	};
 
 	private SupportedOKAPI(String host, int version, String consumerKey) {

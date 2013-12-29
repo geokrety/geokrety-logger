@@ -39,7 +39,7 @@
     <string name="account_remove">Usuń</string>
     <string name="error_login_null">Nie podałeś loginu do GeoKrety.org</string>
     <string name="error_password_null">Nie podałeś hasła do GeoKrety.org</string>
-    <string name="error_oc_null">Nie podałeś loginu do OpenCaching.pl</string>
+    <string name="error_oc_null">Nie podałeś loginu do OpenCaching</string>
     <string name="accounts_add_title">Dodaj nowe konto</string>
     <string name="accounts_edit_title">Edytuj konto</string>
     <string name="accounts_remove_question">Czy jesteś pewien że chcesz usunąć konto</string>
@@ -47,11 +47,11 @@
     <string name="title_activity_inventory">Krety, które masz u siebie</string>
     <string name="button_inventory">Krety, które masz u siebie</string>
     <string name="button_about">Informacje</string>
-    <string name="button_ocs">Twoje ostatnie logi z OpenCaching.pl</string>
+    <string name="button_ocs">Twoje ostatnie logi z OpenCaching</string>
     <string name="menu_inventory_refresh">Odśwież</string>
     <string name="menu_ocs_refresh">Odśwież</string>
-    <string name="title_activity_last_ocs">Twoje ostatnie logi z OpenCaching.pl</string>
-    <string name="invalid_oclogin_error_message">Zły login do OpenCaching.pl</string>
+    <string name="title_activity_last_ocs">Twoje ostatnie logi z portali OpenCaching</string>
+    <string name="invalid_oclogin_error_message">Błąd pobierania danych z:</string>
     <string name="inventory_error_message">Problem z pobraniem listy kretów, które masz u siebie. Czy Internet działa?</string>
     <string name="oclogs_error_message">Problem z pobraniem listy Twoich ostatnich logów z OpenCaching.pl. Czy Internet działa?</string>
     <string name="title_activity_log">Zaloguj kreta</string>
@@ -74,7 +74,7 @@
     <string name="form_submit">Go!</string>
     <string name="form_clear">Wyczyść</string>
     <string name="title_dialog_inventory">Krety, które masz u siebie</string>
-    <string name="title_dialog_ocs">Twoje ostatnie logi z OpenCaching.pl</string>
+    <string name="title_dialog_ocs">Twoje ostatnie logi z portali OpenCaching</string>
     <string name="not_implemented_yet">Ta funkcja jeszcze nie działa, poczekaj na nowszą wersję.</string>
     <string name="download_title">Odświeżanie konta użytkownika</string>
     <string name="download_login_gk">Logowanie do GeoKrety.org&#8230;</string>
@@ -96,6 +96,9 @@
     <string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne. Program jest darmowy, a jego kod źródłowy jest dostępny publicznie na licencji GPL 3.0 (<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>). Jeżeli coś działa nieprawidłowo, poinformuj mnie o tym pisząc najlepiej w formularzu pod adresem: <a href="http://geokrety.org/majluj.php?to=12444">geokrety.org/majluj.php?to=12444</a>. Nie ponoszę odpowiedzialności za szkody wynikające błędnego działania programu lub używania go niezgodnie z przeznaczeniem.</string>
     <string name="emergency">Jeżeli z powodu błędu w programie nie możesz zalogować GeoKreta, zrób to przez serwis WWW przechodząc bezpośrednio na stronę <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>. Jeżeli logowanie GeoKreta na stronie WWW się powiodło, proszę poinformuj mnie o problemie.</string>
     <string name="changelog">Historia zmian:\n
+        0.2.0 beta - 2013-12-29\n
+        - obsługa .de, .us, .nl and .org.uk,\n
+        \n
         0.1.2 beta - 2013-12-26\n
         - naprawiony problem z odświerzaniem listy kretów i logów w oknie logowania geokreta,\n
         - pytanie tak/nie/anuluj czy zachować zmiany ustawienia konta,\n
@@ -137,10 +140,10 @@
 	<string name="account_portals">Których portali używasz?</string>
 	<string name="account_portal_gk">geokrety.org (obowiązkowe)</string>
 	<string name="account_portal_oc0">opencaching.pl</string>
-	<string name="account_portal_oc1">opencaching.de (dostępne wkrótce)</string>
-	<string name="account_portal_oc2">opencaching.us (dostępne wkrótce)</string>
-	<string name="account_portal_oc3">opencaching.nl (dostępne wkrótce)</string>
-	<string name="account_portal_oc4">opencaching.org.uk (dostępne wkrótce)</string>
+	<string name="account_portal_oc1">opencaching.de</string>
+	<string name="account_portal_oc2">opencaching.us</string>
+	<string name="account_portal_oc3">opencaching.nl</string>
+	<string name="account_portal_oc4">opencaching.org.uk</string>
 	<string name="account_introduction">Instrukcja: po zaznaczeniu geokrety.org użytkownik zostanie poproszony o podanie loginu i hasła, jakich używa do logowania się na tym portalu. Następnie te dane posłużą do ściągnięcia &quot;secid&quot;. Ten &quot;secid&quot; zostanie zapisany w programie i będzie wykorzystywany do logowania kretów, które zostały przeniesione (login i hasło nie są zapisywane w pamięci).\n\nPo zaznaczeniu opencaching.pl itd. użytkownik zostanie poproszony o podanie tylko loginu, jakiego używa do logowania się na tym portalu. Ten login wykorzystywany jest tylko po to by ściągnąć listę geokeszy, do których użytkownik się logował ostatnio. Ta lista jest wykorzystywana do podpowiadania numeru waypoint podczas logowania geokreta.</string>
 	<string name="account_save">Gotowe!</string>
 

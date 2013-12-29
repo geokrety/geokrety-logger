@@ -22,6 +22,8 @@
 package pl.nkg.geokrety.threads;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
@@ -57,6 +59,12 @@ public class RefreshAccount extends
 				account.loadOpenCachingLogs(this, openCachingLogs, i);
 			}
 		}
+		Collections.sort(openCachingLogs, new Comparator<GeocacheLog>() {
+			@Override
+			public int compare(GeocacheLog lhs, GeocacheLog rhs) {
+				return rhs.getDate().compareTo(lhs.getDate());
+			}
+		});
 		account.setOpenCachingLogs(openCachingLogs);
 		account.touchLastLoadedDate();
 		return true;
@@ -81,8 +89,7 @@ public class RefreshAccount extends
 			Context ctx = progressDialogWrapper.getManagedDialogsActivity();
 			messages = new String[3];
 			messages[0] = ctx.getText(R.string.download_getting_gk).toString();
-			messages[1] = ctx.getText(R.string.download_getting_ocs)
-					.toString();
+			messages[1] = ctx.getText(R.string.download_getting_ocs).toString();
 			messages[2] = ctx.getText(R.string.dots).toString();
 		}
 	}
