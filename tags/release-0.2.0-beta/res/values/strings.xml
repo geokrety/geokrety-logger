@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013 Michał Niedźwiecki
+ * 
+ * This file is part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+ -->
+<resources>
+
+    <string name="app_name">GeoKrety Logger</string>
+    <string name="action_settings">Settings</string>
+    <string name="login">GK login:</string>
+    <string name="password">GK password:</string>
+    <string name="oc">OC login:</string>
+    <string name="login_hint">GeoKrety login</string>
+    <string name="password_hint">GeoKrety password</string>
+    <string name="oc_hint">OpenCaching login</string>
+    <string name="login_error_password_message">Invalid GeoKrety login or password.</string>
+    <string name="login_error_message">Connection error: </string>
+    <string name="title_activity_accounts">GeoKrety accounts manager</string>
+    <string name="accounts_button">Accounts</string>
+    <string name="account_new">New</string>
+    <string name="account_edit">Edit</string>
+    <string name="account_remove">Remove</string>
+    <string name="error_login_null">GeoKrety.org login can not be empty</string>
+    <string name="error_password_null">GeoKrety.org password can not be empty</string>
+    <string name="error_oc_null">OpenCaching login can not be empty</string>
+    <string name="accounts_add_title">Add new account</string>
+    <string name="accounts_edit_title">Edit account</string>
+    <string name="accounts_remove_question">Are you sure to remove account </string>
+    <string name="error_current_null">Pleas select account.</string>
+    <string name="title_activity_inventory">GeoKrety inventory</string>
+    <string name="button_inventory">Inventory</string>
+    <string name="button_about">About</string>
+    <string name="button_ocs">OpenCaching last logs</string>
+    <string name="menu_inventory_refresh">Refresh</string>
+    <string name="menu_ocs_refresh">Refresh</string>
+    <string name="title_activity_last_ocs">Last log from OpenCaching portals</string>
+    <string name="invalid_oclogin_error_message">Invalid login to:</string>
+    <string name="inventory_error_message">Inventory retriving error. Pleas check your Interent connection.</string>
+    <string name="oclogs_error_message">OpenCaching logs retriving error. Pleas check your Interent connection.</string>
+    <string name="title_activity_log">LogActivity</string>
+    <string name="log_drop">I\'ve dropped GeoKret</string>
+    <string name="log_grab">I\'ve grabbed GeoKret</string>
+    <string name="log_met">I\'ve met GeoKret</string>
+    <string name="log_dipped">I\'ve dipped a GeoKret</string>
+    <string name="log_comment">Comment</string>
+
+    <string-array name="log_array">
+        <item>@string/log_drop</item>
+        <item>@string/log_grab</item>
+        <item>@string/log_met</item>
+        <item>@string/log_dipped</item>
+        <item>@string/log_comment</item>
+    </string-array>
+    <string-array name="context_menu_account">
+        <item>@string/account_edit</item>
+        <item>@string/account_remove</item>
+    </string-array>
+
+    <string name="form_log_type">1. Chose log type</string>
+    <string name="form_identify">2. Identify GeoKret</string>
+    <string name="form_code">Tracking code</string>
+    <string name="form_inventory">Inventory</string>
+    <string name="form_location">3. New location</string>
+    <string name="form_waypoint">Waypoint</string>
+    <string name="form_oclogs">OC Log</string>
+    <string name="form_cords">Coordinates</string>
+    <string name="form_gps">GPS</string>
+    <string name="form_additional">4. Additional data</string>
+    <string name="form_comment">Comment</string>
+    <string name="form_submit">Go!</string>
+    <string name="form_clear">Clear</string>
+    <string name="title_dialog_inventory">Your inventory</string>
+    <string name="title_dialog_ocs">Your last logs in OpenCaching portals</string>
+    <string name="not_implemented_yet">Not implemented yet</string>
+    <string name="download_title">Refreshing user account</string>
+    <string name="download_login_gk">Login to GeoKrety.org&#8230;</string>
+    <string name="download_getting_gk">Getting inventory from GeoKrety.org&#8230;</string>
+    <string name="download_getting_uuid">Getting UUID from</string>
+    <string name="download_getting_ocs">Getting last logs from</string>
+    <string name="download_getting_names">Getting geocache names&#8230;</string>
+    <string name="download_finish">Refresh finish</string>
+    <string name="submit_title">Submitting log</string>
+    <string name="submit_message">Log of geokret are submitting&#8230;</string>
+    <string name="submit_finish">GeoKret logged finish</string>
+    <string name="submit_broken">GeoKret logged broken but GeoKret still be logged</string>
+    <string name="submit_fail">Submit fail: </string>
+    <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013</string>
+    <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
+    <string name="version">GeoKrety Logger v</string>
+    <string name="button_log">Log GeoKret</string>
+    <string name="welcome">GeoKrety Logger is a program to logging of moving of GeoKrets. GeoKrety (<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>) is a similar game to TravelBug(TM) or GeoLutins, aiming at tracking objects you leave in geocache containers (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).</string>
+    <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
+    <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
+    <string name="changelog">Change log:\n\n
+        0.2.0 beta - 2013-12-29\n
+        - add support for .de, .us, .nl and .org.uk\n
+        \n
+        0.1.2 beta - 2013-12-26\n
+        - inventory refresh fix,\n
+        - yes/no/cancel save account changes,\n
+        - back to main activity after log successful,\n
+        \n 
+        0.1.1 beta - 2013-12-25\n
+        - date and time clean fields - fix,\n
+        \n 
+        0.1.0 beta - 2013-12-25\n
+        - rotation safe,\n
+        - use secid instead of login and password,\n
+        \n 
+        0.0.2 alpha - 2013-12-17\n 
+        - polish translation,\n 
+        - about activity,\n
+        - interface improvements,\n
+        \n
+        0.0.1 alpha - 2013-12-14\n
+        - first version with public .apk file,\n 
+        - fix problem with Android 4.x,\n
+        \n
+        0.0.0 alpha - 2013-12-13\n
+        - first public version, \n
+        - works only with Android 2.1-2.3.x.</string>
+    <string name="title_activity_about">About</string>
+    <string name="no_account_configured">You must configure account!</string>
+    <string name="button_add_account">Add account</string>
+    <string name="account_add_prompt_message">Enter values of the new account</string>
+    <string name="account_edit_prompt_message">Change values of the existing account</string>
+    <string name="generic_error">Error:</string>
+    <string name="generic_broken">Broken</string>
+    <string name="generic_finish">End successful</string>
+    
+    <string name="title_activity_account">Account</string>
+    <string name="account_account_name">Account name:</string>
+    <string name="account_account_name_hint">New user</string>
+	<string name="account_portals">Choice portals what you use</string>
+	<string name="account_portal_gk">geokrety.org (required)</string>
+	<string name="account_portal_oc0">opencaching.pl</string>
+	<string name="account_portal_oc1">opencaching.de</string>
+	<string name="account_portal_oc2">opencaching.us</string>
+	<string name="account_portal_oc3">opencaching.nl</string>
+	<string name="account_portal_oc4">opencaching.org.uk</string>
+	<string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for loggin geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
+	<string name="account_save">OK</string>
+	
+	<string name="account_save_title">Save account settings?</string>
+	<string name="account_save_message">Account settings changed. Save changes?</string>
+	
+	<string name="title_dialog_gk">Login and password to GeoKrety.org</string>
+	<string name="title_dialog_oc">Login to</string>
+	<string name="dots">&#8230;</string>
+		
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+</resources>

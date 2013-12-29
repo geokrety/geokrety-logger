@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013 Michał Niedźwiecki
+ * 
+ * This file is part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+ -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="pl.nkg.geokrety"
+    android:versionCode="7"
+    android:versionName="0.2.0 beta" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-sdk
+        android:minSdkVersion="8"
+        android:targetSdkVersion="19" />
+
+    <application
+        android:name="pl.nkg.geokrety.GeoKretyApplication"
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="pl.nkg.geokrety.activities.MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="pl.nkg.geokrety.activities.AccountsActivity"
+            android:label="@string/title_activity_accounts" >
+        </activity>
+        <activity
+            android:name="pl.nkg.geokrety.activities.InventoryActivity"
+            android:label="@string/title_activity_inventory" >
+        </activity>
+        <activity
+            android:name="pl.nkg.geokrety.activities.LastOCsActivity"
+            android:label="@string/title_activity_last_ocs" >
+        </activity>
+        <activity
+            android:name="pl.nkg.geokrety.activities.LogActivity"
+            android:label="@string/title_activity_log" >
+        </activity>
+        <activity
+            android:name="pl.nkg.geokrety.activities.AboutActivity"
+            android:label="@string/title_activity_about" >
+        </activity>
+        <activity
+            android:name="pl.nkg.geokrety.activities.AccountActivity"
+            android:label="@string/title_activity_account" >
+        </activity>
+    </application>
+
+</manifest>
