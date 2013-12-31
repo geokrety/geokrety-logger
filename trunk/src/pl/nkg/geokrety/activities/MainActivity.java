@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		TextView appName = (TextView) findViewById(R.id.appNameTextView);
 		appName.setText(getResources().getString(R.string.version)
-				+ Utils.getAppVer(this));
+				+ Utils.getAppVer());
 	}
 
 	public void showAccountsActivity(View view) {

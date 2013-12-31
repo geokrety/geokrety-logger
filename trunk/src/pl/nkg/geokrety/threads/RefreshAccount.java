@@ -40,6 +40,7 @@ public class RefreshAccount extends
 
 	public static final int ID = 1;
 	private String[] messages;
+	private String dots;
 
 	public RefreshAccount() {
 		super(ID);
@@ -55,8 +56,11 @@ public class RefreshAccount extends
 		for (int i = 0; i < SupportedOKAPI.SUPPORTED.length; i++) {
 			if (account.hasOpenCachingUUID(i)) {
 				publishProgress(getProgressMessage(1) + " "
-						+ SupportedOKAPI.SUPPORTED[i].host + messages[2]);
-				account.loadOpenCachingLogs(this, openCachingLogs, i);
+						+ SupportedOKAPI.SUPPORTED[i].host + dots);
+				openCachingLogs.addAll(account.loadOpenCachingLogs(i));
+				publishProgress(getProgressMessage(2) + " "
+						+ SupportedOKAPI.SUPPORTED[i].host + dots);
+				account.loadOCnamesToBuffer(openCachingLogs, i);
 			}
 		}
 		Collections.sort(openCachingLogs, new Comparator<GeocacheLog>() {
@@ -90,7 +94,8 @@ public class RefreshAccount extends
 			messages = new String[3];
 			messages[0] = ctx.getText(R.string.download_getting_gk).toString();
 			messages[1] = ctx.getText(R.string.download_getting_ocs).toString();
-			messages[2] = ctx.getText(R.string.dots).toString();
+			messages[2] = ctx.getText(R.string.download_getting_names).toString();
+			dots = ctx.getText(R.string.dots).toString();
 		}
 	}
 

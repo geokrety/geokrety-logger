@@ -34,6 +34,6 @@ public class AboutActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		TextView appName = (TextView)findViewById(R.id.appNameTextView);
-		appName.setText(getResources().getString(R.string.version) + Utils.getAppVer(this));
+		appName.setText(getResources().getString(R.string.version) + Utils.getAppVer());
 	}
 }

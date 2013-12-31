@@ -94,7 +94,7 @@
     <string name="download_getting_gk">Hole Inventar von GeoKrety.org&#8230;</string>
     <string name="download_getting_uuid">Hole UUID von</string>
     <string name="download_getting_ocs">Hole letzte Logs von</string>
-    <string name="download_getting_names">Hole Cachenamen&#8230;</string>
+    <string name="download_getting_names">Hole Cachenamen von</string>
     <string name="download_finish">Aktualisierung abgeschlossen</string>
     <string name="submit_title">Übertrage Log</string>
     <string name="submit_message">Log wird übertragen&#8230;</string>

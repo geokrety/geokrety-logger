@@ -81,7 +81,7 @@
     <string name="download_getting_gk">Pobieranie listy kretów, które masz u siebie z GeoKrety.org&#8230;</string>
     <string name="download_getting_uuid">Pobieranie Twojego UUID z</string>
     <string name="download_getting_ocs">Pobieranie Twoich ostatnich logów z</string>
-    <string name="download_getting_names">Pobieranie nazw geokeszy do których się logowałeś&#8230;</string>
+    <string name="download_getting_names">Pobieranie nazw geokeszy do których się logowałeś z</string>
     <string name="download_finish">Odświeżanie zakończone</string>
     <string name="submit_title">Logowanie GeoKreta</string>
     <string name="submit_message">Trwa logowanie GeoKreta. Czekaj cierpliwie i niczego nie dotykaj :)&#8230;</string>

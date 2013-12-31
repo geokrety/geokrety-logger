@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -45,7 +46,6 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
 
@@ -130,16 +130,24 @@ public class Utils {
 				HTTP.UTF_8);
 	}
 
-	public static String getAppVer(Context context) {
+	public static String getAppVer() {
 		try {
-			return context.getPackageManager().getPackageInfo(
-					context.getPackageName(), 0).versionName;
+			return application.getPackageManager().getPackageInfo(
+					application.getPackageName(), 0).versionName;
 		} catch (NameNotFoundException e) {
 			return "";
 		}
 	}
 
+	public static String getAppName() {
+		return application.getText(R.string.app_name).toString();
+	}
+
 	public static boolean isEmpty(String string) {
 		return string == null || string.length() == 0;
+	}
+
+	public static String getDefaultLanguage() {
+		return Locale.getDefault().getDisplayLanguage();
 	}
 }

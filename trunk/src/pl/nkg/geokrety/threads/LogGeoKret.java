@@ -46,7 +46,7 @@ public class LogGeoKret extends
 			throws Throwable {
 		GeoKretLog log = param.first;
 		Account account = param.second;
-		if (log.submitBackground(account)) {
+		if (log.submitLog(account)) {
 			account.loadInventory();
 			return true;
 		}

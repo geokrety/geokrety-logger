@@ -324,7 +324,8 @@ public class LogActivity extends ManagedDialogsActivity {
 
 	public void submit(final View view) {
 		storeToGeoKretLog(currentLog);
-		currentLog.submit(application, currentAccount, true);
+		application.getForegroundTaskHandler().runTask(LogGeoKret.ID,
+				new Pair<GeoKretLog, Account>(currentLog, currentAccount), true);
 	}
 
 	public void refreshButtonClick(final View view) {

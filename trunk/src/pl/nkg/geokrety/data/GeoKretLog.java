@@ -21,30 +21,18 @@
  */
 package pl.nkg.geokrety.data;
 
-import java.io.Serializable;
 import java.text.NumberFormat;
 import java.util.Date;
-import java.util.Locale;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
 
 import android.os.Bundle;
 import android.text.format.DateFormat;
 
-import pl.nkg.geokrety.GeoKretyApplication;
-import pl.nkg.geokrety.R;
-import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.exceptions.MessagedException;
-import pl.nkg.geokrety.threads.LogGeoKret;
+import pl.nkg.lib.gkapi.GeoKretyProvider;
 import android.text.format.Time;
-import android.util.Pair;
 
-public class GeoKretLog implements Serializable {
-	private static final long serialVersionUID = 907039083028176080L;
-
-	private static final String URL = "http://geokrety.org/ruchy.php";
-	private static final String[] LOG_TYPE_MAPPIG = { "0", "1", "3", "5", "2" };
+public class GeoKretLog {
+	private static final String[] LOG_TYPE_MAP = { "0", "1", "3", "5", "2" };
 
 	private String secid;
 	private String nr;
@@ -54,9 +42,6 @@ public class GeoKretLog implements Serializable {
 	private int godzina;
 	private int minuta;
 	private String comment;
-	private String app = "GeoKrety Logger";
-	private String app_ver = "alpha";
-	private String mobile_lang = Locale.getDefault().toString();
 
 	private String latlon;
 	private String wpt;
@@ -124,6 +109,10 @@ public class GeoKretLog implements Serializable {
 	public void setLogTypeMapped(int logtype) {
 		this.logtype_mapped = logtype;
 	}
+	
+	public String getLogType() {
+		return LOG_TYPE_MAP[logtype_mapped];
+	}
 
 	public String getData() {
 		return data;
@@ -155,30 +144,6 @@ public class GeoKretLog implements Serializable {
 
 	public void setComment(String comment) {
 		this.comment = comment;
-	}
-
-	public String getApp() {
-		return app;
-	}
-
-	public void setApp(String app) {
-		this.app = app;
-	}
-
-	public String getApp_ver() {
-		return app_ver;
-	}
-
-	public void setApp_ver(String app_ver) {
-		this.app_ver = app_ver;
-	}
-
-	public String getMobile_lang() {
-		return mobile_lang;
-	}
-
-	public void setMobile_lang(String mobile_lang) {
-		this.mobile_lang = mobile_lang;
 	}
 
 	public String getLatlon() {
@@ -226,16 +191,6 @@ public class GeoKretLog implements Serializable {
 				+ nf.format(dayOfMonth);
 	}
 
-	public void submit(GeoKretyApplication application, Account currentAccount, boolean force) {
-
-		app_ver = Utils.getAppVer(application.getApplicationContext());
-
-		application.getForegroundTaskHandler().runTask(LogGeoKret.ID,
-				new Pair<GeoKretLog, Account>(this, currentAccount), force);
-		// LogGeoKret.logGeoKret(this, currentAccount, logProgressDialog,
-		// listener, false);
-	}
-
 	public static boolean checkIgnoreLocation(int logtype_mapped) {
 		return logtype_mapped == 1 || logtype_mapped == 4;
 	}
@@ -255,39 +210,7 @@ public class GeoKretLog implements Serializable {
 		outState.putString("geoKretyLogin", geoKretyLogin);
 	}
 
-	public boolean submitBackground(Account account) throws MessagedException {
-		boolean ignoreLocation = checkIgnoreLocation(logtype_mapped);
-
-		String[][] postData = new String[][] {
-				new String[] { "secid", account.getGeoKreySecredID() },
-				new String[] { "nr", nr },
-				new String[] { "formname", formname },
-				new String[] { "logtype", LOG_TYPE_MAPPIG[logtype_mapped] },
-				new String[] { "data", data },
-				new String[] { "godzina", Integer.toString(godzina) },
-				new String[] { "minuta", Integer.toString(minuta) },
-				new String[] { "comment", comment },
-				new String[] { "app", app },
-				new String[] { "app_ver", app_ver },
-				new String[] { "mobile_lang", mobile_lang },
-				new String[] { "latlon", ignoreLocation ? "" : latlon },
-				new String[] { "wpt", ignoreLocation ? "" : wpt }, };
-
-		try {
-			String value = Utils.httpPost(URL, postData);
-			String[] adsFix = value.split("<script");
-			Document doc = Utils.getDomElement(adsFix[0]);
-			NodeList nl = doc.getElementsByTagName("error").item(0)
-					.getChildNodes();
-			if (nl.getLength() > 0) {
-				throw new MessagedException(R.string.submit_fail, nl.item(0).getNodeValue());
-			}
-			return true;
-		} catch (MessagedException e) {
-			throw e;
-		} catch (Exception e) {
-			throw new MessagedException(R.string.submit_fail,
-					e.getLocalizedMessage());
-		}
+	public boolean submitLog(Account account) throws MessagedException {
+		return GeoKretyProvider.submitLog(account.getGeoKreySecredID(), this);
 	}
 }

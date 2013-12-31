@@ -94,7 +94,7 @@
     <string name="download_getting_gk">Getting inventory from GeoKrety.org&#8230;</string>
     <string name="download_getting_uuid">Getting UUID from</string>
     <string name="download_getting_ocs">Getting last logs from</string>
-    <string name="download_getting_names">Getting geocache names&#8230;</string>
+    <string name="download_getting_names">Getting geocache names from</string>
     <string name="download_finish">Refresh finish</string>
     <string name="submit_title">Submitting log</string>
     <string name="submit_message">Log of geokret are submitting&#8230;</string>

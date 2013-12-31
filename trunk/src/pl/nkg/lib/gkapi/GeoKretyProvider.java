@@ -21,15 +21,26 @@
  */
 package pl.nkg.lib.gkapi;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.data.GeoKretLog;
+import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.exceptions.MessagedException;
 
 public class GeoKretyProvider {
 	private static final String URL_LOGIN = "http://geokrety.org/api-login2secid.php";
+	private static final String URL_EXPORT2 = "http://geokrety.org/export2.php";
+	private static final String URL_RUCHY = "http://geokrety.org/ruchy.php";
 
-	public static String loadSecureID(String geoKretyLogin, String geoKretyPassword)
-			throws MessagedException {
+	public static String loadSecureID(String geoKretyLogin,
+			String geoKretyPassword) throws MessagedException {
 		String[][] postData = new String[][] {
 				new String[] { "login", geoKretyLogin },
 				new String[] { "password", geoKretyPassword } };
@@ -48,5 +59,68 @@ public class GeoKretyProvider {
 			throw new MessagedException(R.string.login_error_password_message,
 					String.valueOf(value));
 		}
+	}
+
+	public static List<Geokret> loadInventory(String geoKretySecredID)
+			throws MessagedException {
+		ArrayList<Geokret> inventory = new ArrayList<Geokret>();
+
+		String[][] getData = new String[][] {
+				new String[] { "secid", geoKretySecredID },
+				new String[] { "inventory", "1" } };
+		try {
+			String xml = Utils.httpGet(URL_EXPORT2, getData);
+			Document doc = Utils.getDomElement(xml);
+
+			NodeList nl = doc.getElementsByTagName("geokret");
+
+			for (int i = 0; i < nl.getLength(); i++) {
+				Node node = nl.item(i);
+				inventory.add(new Geokret(node));
+			}
+			return inventory;
+		} catch (Exception e) {
+			throw new MessagedException(R.string.inventory_error_message);
+		}
+	}
+	
+	public static boolean submitLog(String secid, GeoKretLog log) throws MessagedException {
+		boolean ignoreLocation = checkIgnoreLocation(log.getLogTypeMapped());
+
+		String[][] postData = new String[][] {
+				new String[] { "secid", secid },
+				new String[] { "nr", log.getNr() },
+				new String[] { "formname", log.getFormname() },
+				new String[] { "logtype", log.getLogType() },
+				new String[] { "data", log.getData() },
+				new String[] { "godzina", Integer.toString(log.getGodzina()) },
+				new String[] { "minuta", Integer.toString(log.getMinuta()) },
+				new String[] { "comment", log.getComment() },
+				new String[] { "app", Utils.getAppName() },
+				new String[] { "app_ver", Utils.getAppVer() },
+				new String[] { "mobile_lang", Utils.getDefaultLanguage() },
+				new String[] { "latlon", ignoreLocation ? "" : log.getLatlon() },
+				new String[] { "wpt", ignoreLocation ? "" : log.getWpt() }, };
+
+		try {
+			String value = Utils.httpPost(URL_RUCHY, postData);
+			String[] adsFix = value.split("<script");
+			Document doc = Utils.getDomElement(adsFix[0]);
+			NodeList nl = doc.getElementsByTagName("error").item(0)
+					.getChildNodes();
+			if (nl.getLength() > 0) {
+				throw new MessagedException(R.string.submit_fail, nl.item(0).getNodeValue());
+			}
+			return true;
+		} catch (MessagedException e) {
+			throw e;
+		} catch (Exception e) {
+			throw new MessagedException(R.string.submit_fail,
+					e.getLocalizedMessage());
+		}
+	}
+	
+	public static boolean checkIgnoreLocation(int logtype_mapped) {
+		return logtype_mapped == 1 || logtype_mapped == 4;
 	}
 }
