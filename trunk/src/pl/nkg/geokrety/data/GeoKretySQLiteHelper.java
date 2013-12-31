@@ -79,7 +79,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 			+ COLUMN_WAYPOINT + " TEXT NOT NULL, " //
 			+ COLUMN_TYPE + " TEXT NOT NULL, " //
 			+ COLUMN_DATE + " INTEGER NOT NULL, " //
-			+ COLUMN_COMMENT + " TEXT NOT NULL" //
+			+ COLUMN_COMMENT + " TEXT NOT NULL," //
 			+ COLUMN_PORTAL + " INTEGER NOT NULL" //
 			+ ");" //
 			//

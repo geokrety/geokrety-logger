@@ -177,9 +177,10 @@ public class GeoKretLog {
 	}
 
 	public void setDateAndTime(Date date) {
-		data = DateFormat.format("yyyy-MM-dd", date).toString();
+		//data = DateFormat.format("yyyy-MM-dd", date).toString();
 		Time today = new Time(Time.getCurrentTimezone());
 		today.set(date.getTime());
+		data = today.format("%Y-%m-%d");
 		godzina = today.hour;
 		minuta = today.minute;
 	}
