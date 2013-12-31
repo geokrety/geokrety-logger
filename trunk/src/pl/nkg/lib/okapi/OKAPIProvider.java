@@ -108,7 +108,7 @@ public class OKAPIProvider {
 			JSONArray json = new JSONArray(jsonString);
 
 			for (int i = 0; i < json.length(); i++) {
-				openCachingLogs.add(new GeocacheLog(json.getJSONObject(i)));
+				openCachingLogs.add(new GeocacheLog(json.getJSONObject(i), okapi.nr));
 			}
 
 			return openCachingLogs;

@@ -28,10 +28,26 @@ public class Geocache {
 
 	private final String name;
 	private final String code;
-	
+	private final String location;
+	private final String type;
+	private final String status;
+
 	public Geocache(JSONObject jsonObject) throws JSONException {
 		name = jsonObject.getString("name");
 		code = jsonObject.getString("code");
+		location = jsonObject.getString("location");
+		type = jsonObject.getString("type");
+		status = jsonObject.getString("status");
+	}
+
+	public Geocache(String code, String name, String location, String type,
+			String status) {
+		super();
+		this.name = name;
+		this.code = code;
+		this.location = location;
+		this.type = type;
+		this.status = status;
 	}
 
 	public String getName() {
@@ -40,5 +56,17 @@ public class Geocache {
 
 	public String getCode() {
 		return code;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public String getStatus() {
+		return status;
 	}
 }

@@ -153,12 +153,12 @@ public class AccountsActivity extends ManagedDialogsActivity {
 					ListView.INVALID_POSITION);
 			if (id == ListView.INVALID_POSITION) {
 				Account account = new Account(data.getExtras());
-				holder.getAccountDataSource().persistAccount(account);
+				holder.getAccountDataSource().persist(account);
 				holder.getAccountList().add(account);
 			} else {
 				Account account = holder.getAccountByID(id);
 				account.unpack(data.getExtras());
-				holder.getAccountDataSource().mergeAccount(account);
+				holder.getAccountDataSource().merge(account);
 			}
 			listAdapter.notifyDataSetChanged();
 		}
@@ -193,7 +193,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 			int pos = (Integer) removeAccountDialog.getPosition();
 			Account account = holder.getAccountList().remove(pos);
 			holder.setDefaultAccount(ListView.INVALID_POSITION);
-			holder.getAccountDataSource().removeAccount(account.getID());
+			holder.getAccountDataSource().remove(account.getID());
 		}
 		listAdapter.notifyDataSetChanged();
 	}

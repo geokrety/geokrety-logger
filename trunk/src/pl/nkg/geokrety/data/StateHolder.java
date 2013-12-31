@@ -43,7 +43,7 @@ public class StateHolder {
 
 	public StateHolder(Context context) {
 		dataSource = new AccountDataSource(context);
-		accountList = dataSource.getAllAccounts();
+		accountList = dataSource.getAll();
 	}
 
 	public AccountDataSource getAccountDataSource() {

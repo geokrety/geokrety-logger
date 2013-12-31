@@ -40,14 +40,27 @@ public class GeocacheLog {
 	private final String cache_code;
 	private final String type;
 	private final String comment;
+	private final int portal;
 
-	public GeocacheLog(JSONObject jsonObject) throws JSONException,
+	public GeocacheLog(JSONObject jsonObject, int portal) throws JSONException,
 			ParseException {
 		uuid = jsonObject.getString("uuid");
 		date = fromISODateString(jsonObject.getString("date"));
 		cache_code = jsonObject.getString("cache_code");
 		type = jsonObject.getString("type");
 		comment = jsonObject.getString("comment");
+		this.portal = portal;
+	}
+
+	public GeocacheLog(String uuid, String cache_code, String type, Date date,
+			String comment, int portal) {
+		super();
+		this.uuid = uuid;
+		this.date = date;
+		this.cache_code = cache_code;
+		this.type = type;
+		this.comment = comment;
+		this.portal = portal;
 	}
 
 	public String getUUID() {
@@ -68,6 +81,10 @@ public class GeocacheLog {
 
 	public String getComment() {
 		return comment;
+	}
+
+	public int getPortal() {
+		return portal;
 	}
 
 	@Override

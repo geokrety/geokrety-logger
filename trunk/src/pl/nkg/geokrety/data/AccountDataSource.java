@@ -36,14 +36,16 @@ import android.text.TextUtils;
 public class AccountDataSource {
 	private GeoKretySQLiteHelper dbHelper;
 	private final static String DELIMITER = ";";
+	private final static String TABLE = GeoKretySQLiteHelper.TABLE_USERS;
+	private final static String PK_COLUMN = GeoKretySQLiteHelper.COLUMN_USER_ID;
 
 	private static final String FETCH_ALL = "SELECT " //
-			+ GeoKretySQLiteHelper.COLUMN_USER_ID + ", " //
+			+ PK_COLUMN + ", " //
 			+ GeoKretySQLiteHelper.COLUMN_USER_NAME + ", " //
 			+ GeoKretySQLiteHelper.COLUMN_SECID + ", " //
 			+ GeoKretySQLiteHelper.COLUMN_UUIDS //
 			+ " FROM " //
-			+ GeoKretySQLiteHelper.TABLE_USERS //
+			+ TABLE //
 			+ " ORDER BY " + GeoKretySQLiteHelper.COLUMN_USER_NAME;
 
 	public AccountDataSource(Context context) {
@@ -88,43 +90,19 @@ public class AccountDataSource {
 		return ret;
 	}
 
-	public void persistAccount(Account account) {
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		ContentValues values = getValues(account);
-
-		db.beginTransaction();
-		long userID = db.insert(GeoKretySQLiteHelper.TABLE_USERS, null, values);
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		db.close();
-
-		account.setID(userID);
+	public void persist(Account account) {
+		account.setID(dbHelper.persist(TABLE, getValues(account)));
 	}
 
-	public void mergeAccount(Account account) {
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		ContentValues values = getValues(account);
-		db.beginTransaction();
-		db.update(GeoKretySQLiteHelper.TABLE_USERS, values,
-				GeoKretySQLiteHelper.COLUMN_USER_ID + " = ?",
-				new String[] { String.valueOf(account.getID()) });
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		db.close();
+	public void merge(Account account) {
+		dbHelper.mergeSimple(TABLE, getValues(account), PK_COLUMN, String.valueOf(account.getID()));
 	}
 
-	public void removeAccount(long id) {
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		db.beginTransaction();
-		db.delete(GeoKretySQLiteHelper.TABLE_USERS,
-				GeoKretySQLiteHelper.COLUMN_USER_ID + " = ?",
-				new String[] { String.valueOf(id) });
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		db.close();
+	public void remove(long id) {
+		dbHelper.removeSimple(TABLE, PK_COLUMN, String.valueOf(id));
 	}
 
-	public List<Account> getAllAccounts() {
+	public List<Account> getAll() {
 		ArrayList<Account> accounts = new ArrayList<Account>();
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 		Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
