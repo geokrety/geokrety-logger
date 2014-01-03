@@ -48,6 +48,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		if (oldVersion == 1 && newVersion == 2) {
 			createV2(db);
+			db.execSQL("ALTER TABLE " + AccountDataSource.TABLE + " ADD COLUMN " + AccountDataSource.COLUMN_REFRESH + " INTEGER NOT NULL DEFAULT 0;");
 		}
 	}
 	
