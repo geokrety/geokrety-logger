@@ -108,37 +108,6 @@
     <string name="welcome">GeoKrety Logger is a program to logging of moving of GeoKrets. GeoKrety (<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>) is a similar game to TravelBug(TM) or GeoLutins, aiming at tracking objects you leave in geocache containers (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).</string>
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="emergency">If this program not working, please visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards please contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
-    <string name="changelog">Change log:\n\n
-        0.2.1 beta - 2013-12-29\n
-        - german translation, thanks for Schrottie\n
-        \n
-        0.2.0 beta - 2013-12-29\n
-        - add support for .de, .us, .nl and .org.uk\n
-        \n
-        0.1.2 beta - 2013-12-26\n
-        - inventory refresh fix,\n
-        - yes/no/cancel save account changes,\n
-        - back to main activity after log successful,\n
-        \n 
-        0.1.1 beta - 2013-12-25\n
-        - date and time clean fields - fix,\n
-        \n 
-        0.1.0 beta - 2013-12-25\n
-        - rotation safe,\n
-        - use secid instead of login and password,\n
-        \n 
-        0.0.2 alpha - 2013-12-17\n 
-        - polish translation,\n 
-        - about activity,\n
-        - interface improvements,\n
-        \n
-        0.0.1 alpha - 2013-12-14\n
-        - first version with public .apk file,\n 
-        - fix problem with Android 4.x,\n
-        \n
-        0.0.0 alpha - 2013-12-13\n
-        - first public version, \n
-        - works only with Android 2.1-2.3.x.</string>
     <string name="title_activity_about">Über</string>
     <string name="no_account_configured">Du musst ein Konto einrichten!</string>
     <string name="button_add_account">Konto hinzufügen</string>

@@ -96,6 +96,9 @@
     <string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne. Program jest darmowy, a jego kod źródłowy jest dostępny publicznie na licencji GPL 3.0 (<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>). Jeżeli coś działa nieprawidłowo, poinformuj mnie o tym pisząc najlepiej w formularzu pod adresem: <a href="http://geokrety.org/majluj.php?to=12444">geokrety.org/majluj.php?to=12444</a>. Nie ponoszę odpowiedzialności za szkody wynikające błędnego działania programu lub używania go niezgodnie z przeznaczeniem.</string>
     <string name="emergency">Jeżeli z powodu błędu w programie nie możesz zalogować GeoKreta, zrób to przez serwis WWW przechodząc bezpośrednio na stronę <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>. Jeżeli logowanie GeoKreta na stronie WWW się powiodło, proszę poinformuj mnie o problemie.</string>
     <string name="changelog">Historia zmian:\n
+        0.3.0 beta - 2014-01-03\n
+        - możliwość ręcznego umieszczenia GeoKreta w inwentarzu\n
+        \n
         0.2.1 beta - 2013-12-29\n
         - niemieckie tłumaczenie z podziękowaniem dla Schrottie\n
         \n
@@ -161,4 +164,27 @@
 	<string name="no">Nie</string>
 	
 	<string name="button_add_geokret">Dodaj ręcznie</string>
+    
+    <string name="title_activity_geo_kret">GeoKret</string>
+    <string name="geokret_id_title">Numer GK:</string>
+    <string name="geokret_id_type">Typ:</string>
+    
+    <string name="geokret_nr_title">Tracking Code:</string>
+    <string name="geokret_nr_hint">np. F65RF3</string>
+    
+    <string name="geokret_name_title">Nazwa:</string>
+    <string name="geokret_name_hint">nazwa GeoKreta</string>
+    <string-array name="geokret_id_types">
+        <item>Tradycyjny</item>
+        <item>Książka/CD/DVD&#8230;</item>
+        <item>Człowiek</item>
+        <item>Toczygrosz</item>
+        <item>Krecia Poczta</item>
+    </string-array>
+    <string name="geokret_sticki_title">Nie usuwaj z inwentarza po odświeżeniu</string>
+    
+    <string name="geokret_save">Zachowaj</string>
+    <string name="geokret_save_title">Zachować ustawienia GeoKreta?</string>
+    <string name="geokret_save_message">Dokonano zmian w ustawieniach GeoKreta. Czy zapisać zmiany?</string>
+    
 </resources>
