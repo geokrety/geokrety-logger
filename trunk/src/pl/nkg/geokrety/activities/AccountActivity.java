@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -52,7 +52,7 @@ import android.widget.Toast;
 
 public class AccountActivity extends ManagedDialogsActivity {
 
-	private long accountID; // TODO: to moze byc razem z klasa Account
+	private int accountID; // TODO: to moze byc razem z klasa Account
 	private String accountName;
 	private String secid;
 	private String[] ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -108,7 +108,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 				.getForegroundTaskHandler());
 
 		setContentView(R.layout.activity_account);
-		accountID = getIntent().getLongExtra(Account.ACCOUNT_ID,
+		accountID = getIntent().getIntExtra(Account.ACCOUNT_ID,
 				ListView.INVALID_POSITION);
 		secid = getIntent().getStringExtra(Account.SECID);
 		ocUUIDs = getIntent().getStringArrayExtra(Account.OCUUIDS);
@@ -284,7 +284,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		outState.putStringArray(Account.OCUUIDS, ocUUIDs);
-		outState.putLong(Account.ACCOUNT_ID, accountID);
+		outState.putInt(Account.ACCOUNT_ID, accountID);
 		outState.putString(Account.SECID, secid);
 		outState.putString(Account.ACCOUNT_NAME, accountName);
 	}
@@ -293,7 +293,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		secid = savedInstanceState.getString(Account.SECID);
-		accountID = savedInstanceState.getLong(Account.ACCOUNT_ID);
+		accountID = savedInstanceState.getInt(Account.ACCOUNT_ID);
 		ocUUIDs = savedInstanceState.getStringArray(Account.OCUUIDS);
 		accountName = savedInstanceState.getString(Account.ACCOUNT_NAME);
 	}

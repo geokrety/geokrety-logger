@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -101,7 +101,7 @@
     <string name="submit_finish">GeoKret erfolgreich geloggt</string>
     <string name="submit_broken">Übertragung fehlerhaft, aber Geokret wurde möglicherweise geloggt</string>
     <string name="submit_fail">Übertragungsfehler: </string>
-    <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013</string>
+    <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
     <string name="version">GeoKrety Logger v</string>
     <string name="button_log">Log GeoKret</string>

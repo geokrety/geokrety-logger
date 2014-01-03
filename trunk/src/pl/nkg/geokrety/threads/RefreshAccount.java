@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -22,13 +22,14 @@
 package pl.nkg.geokrety.threads;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+import java.util.List;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeocacheLog;
+import pl.nkg.geokrety.data.StateHolder;
+import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
 import pl.nkg.lib.okapi.SupportedOKAPI;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
@@ -45,34 +46,46 @@ public class RefreshAccount extends
 
 	public RefreshAccount(GeoKretyApplication application) {
 		super(application, ID);
+		Context ctx = application.getApplicationContext();
+		messages = new String[3];
+		messages[0] = ctx.getText(R.string.download_getting_gk).toString();
+		messages[1] = ctx.getText(R.string.download_getting_ocs).toString();
+		messages[2] = ctx.getText(R.string.download_getting_names).toString();
+		dots = ctx.getText(R.string.dots).toString();
 	}
 
 	@Override
 	protected Boolean runInBackground(Account param) throws Throwable {
 		Account account = param;
 
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
+
 		publishProgress(getProgressMessage(0));
-		account.loadInventory();
-		
+		account.loadInventoryAndStore(holder.getGeoKretDataSource());
+
 		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
 		for (int i = 0; i < SupportedOKAPI.SUPPORTED.length; i++) {
 			if (account.hasOpenCachingUUID(i)) {
 				publishProgress(getProgressMessage(1) + " "
 						+ SupportedOKAPI.SUPPORTED[i].host + dots);
-				openCachingLogs.addAll(account.loadOpenCachingLogs(i));
+				try {
+					List<GeocacheLog> logs = account.loadOpenCachingLogs(i);
+					holder.getGeocacheLogDataSource().store(logs,
+							account.getID(), i);
+					openCachingLogs.addAll(logs);
+				} catch (MessagedException e) {
+					// TODO: report problem
+				}
 				publishProgress(getProgressMessage(2) + " "
 						+ SupportedOKAPI.SUPPORTED[i].host + dots);
 				account.loadOCnamesToBuffer(openCachingLogs, i);
 			}
 		}
-		Collections.sort(openCachingLogs, new Comparator<GeocacheLog>() {
-			@Override
-			public int compare(GeocacheLog lhs, GeocacheLog rhs) {
-				return rhs.getDate().compareTo(lhs.getDate());
-			}
-		});
-		account.setOpenCachingLogs(openCachingLogs);
-		account.touchLastLoadedDate();
+		holder.storeGeoCachingNames();
+		account.setOpenCachingLogs(holder.getGeocacheLogDataSource().load(
+				account.getID()));
+		account.touchLastLoadedDate(holder.getAccountDataSource());
 		return true;
 	}
 
@@ -90,15 +103,6 @@ public class RefreshAccount extends
 			AbstractProgressDialogWrapper<String> progressDialogWrapper,
 			TaskListener<Account, String, Boolean> listener) {
 		super.attach(progressDialogWrapper, listener);
-
-		synchronized (this) {
-			Context ctx = progressDialogWrapper.getManagedDialogsActivity();
-			messages = new String[3];
-			messages[0] = ctx.getText(R.string.download_getting_gk).toString();
-			messages[1] = ctx.getText(R.string.download_getting_ocs).toString();
-			messages[2] = ctx.getText(R.string.download_getting_names).toString();
-			dots = ctx.getText(R.string.dots).toString();
-		}
 	}
 
 	public static RefreshAccount getFromHandler(ForegroundTaskHandler handler) {

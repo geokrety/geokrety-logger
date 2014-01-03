@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -47,10 +47,11 @@ public class StateHolder {
 	private final GeocacheDataSource geocacheDataSource;
 
 	public StateHolder(Context context) {
-		accountDataSource = new AccountDataSource(context);
-		geocacheLogDataSource = new GeocacheLogDataSource(context);
-		geoKretDataSource = new GeoKretDataSource(context);
-		geocacheDataSource = new GeocacheDataSource(context);
+		GeoKretySQLiteHelper dbHelper = new GeoKretySQLiteHelper(context);
+		accountDataSource = new AccountDataSource(dbHelper);
+		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
+		geoKretDataSource = new GeoKretDataSource(dbHelper);
+		geocacheDataSource = new GeocacheDataSource(dbHelper);
 		accountList = Collections.synchronizedList(accountDataSource.getAll());
 		
 		geoCachesMap = new HashMap<String, Geocache>();
@@ -58,8 +59,8 @@ public class StateHolder {
 			geoCachesMap.put(gc.getCode(), gc);
 		}
 		
-		SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
 		SparseArray<LinkedList<Geokret>> gks = geoKretDataSource.load();
+		SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
 		
 		for (Account account : accountList) {
 			account.setOpenCachingLogs(logs.get((int)account.getID()));
@@ -122,5 +123,9 @@ public class StateHolder {
 			}
 		}
 		return null;
+	}
+
+	public void storeGeoCachingNames() {
+		getGeocacheDataSource().store(geoCachesMap.values());
 	}
 }

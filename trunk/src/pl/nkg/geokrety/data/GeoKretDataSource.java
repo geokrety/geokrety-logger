@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
@@ -45,17 +44,17 @@ public class GeoKretDataSource {
 	public static final String COLUMN_USER_ID = "user_id";
 	public static final String COLUMN_STICKY = "sticky";
 
-	public static final String TABLE_CODE = "CREATE TABLE " + TABLE + "(" //
+	public static final String TABLE_CREATE = "CREATE TABLE " + TABLE + "(" //
 			+ COLUMN_GK_CODE + " INTEGER NOT NULL, " //
 			+ COLUMN_DISTANCE + " INTEGER NOT NULL, " //
 			+ COLUMN_OWNER_ID + " INTEGER NOT NULL, " //
 			+ COLUMN_STATE + " INTEGER, " //
 			+ COLUMN_TYPE + " INTEGER NOT NULL, " //
 			+ COLUMN_NAME + " TEXT NOT NULL, " //
-			+ COLUMN_TRACKING_CODE + " TEXT PRIMARY KEY, " //
+			+ COLUMN_TRACKING_CODE + " TEXT NOT NULL, " //
 			+ COLUMN_USER_ID + " INTEGER NOT NULL, " //
 			+ COLUMN_STICKY + " INTEGER NOT NULL DEFAULT 0" //
-			+ ");";
+			+ "); ";
 
 	private GeoKretySQLiteHelper dbHelper;
 
@@ -72,8 +71,8 @@ public class GeoKretDataSource {
 			+ " FROM " //
 			+ TABLE + " ORDER BY " + COLUMN_GK_CODE;
 
-	public GeoKretDataSource(Context context) {
-		dbHelper = new GeoKretySQLiteHelper(context);
+	public GeoKretDataSource(GeoKretySQLiteHelper dbHelper) {
+		this.dbHelper = dbHelper;
 	}
 
 	private static ContentValues getValues(Geokret geokret, int userID) {
@@ -90,8 +89,7 @@ public class GeoKretDataSource {
 		return values;
 	}
 
-	public void store(final Collection<Geokret> logs, final int userID,
-			final int portal) {
+	public void store(final Collection<Geokret> logs, final int userID) {
 		dbHelper.runOnWritableDatabase(new DBOperation() {
 
 			@Override

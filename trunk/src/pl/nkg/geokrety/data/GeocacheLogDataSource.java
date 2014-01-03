@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -24,11 +24,11 @@ package pl.nkg.geokrety.data;
 import java.util.Collection;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.List;
 
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
@@ -46,14 +46,14 @@ public class GeocacheLogDataSource {
 
 	public static final String TABLE_CREATE = "CREATE TABLE " //
 			+ TABLE + "(" //
-			+ COLUMN_LOG_UUID + " TEXT PRIMARY KEY, " //
+			+ COLUMN_LOG_UUID + " TEXT NOT NULL, " //
 			+ COLUMN_USER_ID + " INTEGER NOT NULL, " //
 			+ COLUMN_WAYPOINT + " TEXT NOT NULL, " //
 			+ COLUMN_TYPE + " TEXT NOT NULL, " //
 			+ COLUMN_DATE + " INTEGER NOT NULL, " //
 			+ COLUMN_COMMENT + " TEXT NOT NULL," //
 			+ COLUMN_PORTAL + " INTEGER NOT NULL" //
-			+ ");";
+			+ "); ";
 
 	private GeoKretySQLiteHelper dbHelper;
 	private final static String PK_COLUMN = COLUMN_LOG_UUID;
@@ -69,8 +69,27 @@ public class GeocacheLogDataSource {
 			+ " FROM " //
 			+ TABLE + " ORDER BY " + COLUMN_DATE + " DESC";
 
-	public GeocacheLogDataSource(Context context) {
-		dbHelper = new GeoKretySQLiteHelper(context);
+	private static final String FETCH_BY_USER = "SELECT " //
+			+ PK_COLUMN
+			+ ", " //
+			+ COLUMN_USER_ID
+			+ ", " //
+			+ COLUMN_WAYPOINT
+			+ ", " //
+			+ COLUMN_TYPE
+			+ ", " //
+			+ COLUMN_DATE
+			+ ", " //
+			+ COLUMN_COMMENT
+			+ ", " //
+			+ COLUMN_PORTAL //
+			+ " FROM " //
+			+ TABLE + " WHERE " + COLUMN_USER_ID
+			+ " = ? ORDER BY "
+			+ COLUMN_DATE + " DESC";
+
+	public GeocacheLogDataSource(GeoKretySQLiteHelper dbHelper) {
+		this.dbHelper = dbHelper;
 	}
 
 	private static ContentValues getValues(GeocacheLog log, int userID) {
@@ -135,5 +154,29 @@ public class GeocacheLogDataSource {
 			}
 		});
 		return logs;
+	}
+
+	public List<GeocacheLog> load(final int userID) {
+		final LinkedList<GeocacheLog> list = new LinkedList<GeocacheLog>();
+		dbHelper.runOnReadableDatabase(new DBOperation() {
+
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				Cursor cursor = db.rawQuery(FETCH_BY_USER,
+						new String[] { String.valueOf(userID) });
+				while (cursor.moveToNext()) {
+					GeocacheLog log = new GeocacheLog(cursor.getString(0), //
+							cursor.getString(2), //
+							cursor.getString(3), //
+							new Date(cursor.getLong(4)), //
+							cursor.getString(5), //
+							cursor.getInt(6));
+					list.add(log);
+				}
+				cursor.close();
+				return true;
+			}
+		});
+		return list;
 	}
 }

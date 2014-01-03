@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -97,11 +97,17 @@ public class GeocacheLog {
 		}
 	}
 
+	
+	private static DateFormat dateFormat;
+	
+	static {
+		dateFormat = new SimpleDateFormat(FORMAT_DATE_ISO,
+				Locale.getDefault());
+		dateFormat.setTimeZone(TimeZone.getDefault());		
+	}
+	
 	public static Date fromISODateString(String isoDateString)
 			throws ParseException {
-		DateFormat f = new SimpleDateFormat(FORMAT_DATE_ISO,
-				Locale.getDefault());
-		f.setTimeZone(TimeZone.getDefault());
-		return f.parse(isoDateString);
+		return dateFormat.parse(isoDateString);
 	}
 }

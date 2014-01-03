@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -149,7 +149,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 				.getStateHolder();
 
 		if (resultCode == RESULT_OK) {
-			long id = data.getLongExtra(Account.ACCOUNT_ID,
+			int id = data.getIntExtra(Account.ACCOUNT_ID,
 					ListView.INVALID_POSITION);
 			if (id == ListView.INVALID_POSITION) {
 				Account account = new Account(data.getExtras());

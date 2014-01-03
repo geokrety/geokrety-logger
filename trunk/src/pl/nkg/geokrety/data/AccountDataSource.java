@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -22,6 +22,7 @@
 package pl.nkg.geokrety.data;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import pl.nkg.geokrety.Utils;
@@ -29,7 +30,6 @@ import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 import pl.nkg.lib.okapi.SupportedOKAPI;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
@@ -41,14 +41,16 @@ public class AccountDataSource {
 	public static final String COLUMN_USER_NAME = "name";
 	public static final String COLUMN_SECID = "secid";
 	public static final String COLUMN_UUIDS = "uuids";
+	public static final String COLUMN_REFRESH = "refresh";
 
 	public static final String TABLE_CREATE = "CREATE TABLE " //
 			+ TABLE + "(" //
 			+ COLUMN_USER_ID + " INTEGER PRIMARY KEY autoincrement, " //
 			+ COLUMN_USER_NAME + " TEXT NOT NULL, " //
 			+ COLUMN_SECID + " TEXT NOT NULL, " //
-			+ COLUMN_UUIDS + " TEXT NOT NULL" //
-			+ ");";
+			+ COLUMN_UUIDS + " TEXT NOT NULL, " //
+			+ COLUMN_REFRESH + " INTEGER NOT NULL" //
+			+ "); ";
 
 	private GeoKretySQLiteHelper dbHelper;
 	private final static String DELIMITER = ";";
@@ -58,20 +60,25 @@ public class AccountDataSource {
 			+ PK_COLUMN + ", " //
 			+ COLUMN_USER_NAME + ", " //
 			+ COLUMN_SECID + ", " //
-			+ COLUMN_UUIDS //
+			+ COLUMN_UUIDS + ", "//
+			+ COLUMN_REFRESH //
 			+ " FROM " //
 			+ TABLE //
 			+ " ORDER BY " + COLUMN_USER_NAME;
 
-	public AccountDataSource(Context context) {
-		dbHelper = new GeoKretySQLiteHelper(context);
+	public AccountDataSource(GeoKretySQLiteHelper dbHelper) {
+		this.dbHelper = dbHelper;
 	}
 
 	private ContentValues getValues(Account account) {
+		Date lastLoadedDate = account.getLastDataLoaded();
+		long storedLastLoadedDate = lastLoadedDate == null ? 0 : lastLoadedDate.getTime();
+		
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_USER_NAME, account.getName());
 		values.put(COLUMN_SECID, account.getGeoKreySecredID());
 		values.put(COLUMN_UUIDS, joinUUIDs(account.getOpenCachingUUIDs()));
+		values.put(COLUMN_REFRESH, storedLastLoadedDate);
 		return values;
 	}
 
@@ -108,7 +115,8 @@ public class AccountDataSource {
 
 			@Override
 			public boolean inTransaction(SQLiteDatabase db) {
-				persist(db, TABLE, getValues(account));
+				int id = (int) persist(db, TABLE, getValues(account));
+				account.setID(id);
 				return true;
 			}
 		});
@@ -121,6 +129,21 @@ public class AccountDataSource {
 			public boolean inTransaction(SQLiteDatabase db) {
 				mergeSimple(db, TABLE, getValues(account), PK_COLUMN,
 						String.valueOf(account.getID()));
+				return true;
+			}
+		});
+	}
+
+	public void storeLastLoadedDate(final Account account) {
+		dbHelper.runOnWritableDatabase(new DBOperation() {
+
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				ContentValues values = new ContentValues();
+				values.put(COLUMN_REFRESH, account.getLastDataLoaded()
+						.getTime());
+				mergeSimple(db, TABLE, getValues(account), PK_COLUMN,
+						String.valueOf(values));
 				return true;
 			}
 		});
@@ -146,10 +169,16 @@ public class AccountDataSource {
 				Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
 				while (cursor.moveToNext()) {
 					Account account = new Account(//
-							cursor.getLong(0), //
+							cursor.getInt(0), //
 							cursor.getString(1), //
 							cursor.getString(2), //
 							extractUUIDs(cursor.getString(3)));
+					
+					long time = cursor.getLong(4);
+					if (time > 0) {
+						account.setLastDataLoaded(new Date(time));
+					}
+					
 					accounts.add(account);
 				}
 				cursor.close();

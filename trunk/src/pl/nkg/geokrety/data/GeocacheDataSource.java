@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -28,7 +28,6 @@ import java.util.List;
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
@@ -41,12 +40,12 @@ public class GeocacheDataSource {
 	public static final String COLUMN_STATUS = "status";
 
 	public static final String TABLE_CREATE = "CREATE TABLE " + TABLE + "(" //
-			+ COLUMN_WAYPOINT + " TEXT PRIMARY KEY, " //
+			+ COLUMN_WAYPOINT + " TEXT NOT NULL, " //
 			+ COLUMN_NAME + " TEXT NOT NULL, " //
 			+ COLUMN_LOCATION + " TEXT NOT NULL, " //
 			+ COLUMN_TYPE + " TEXT NOT NULL, " //
 			+ COLUMN_STATUS + " TEXT NOT NULL" //
-			+ ");";
+			+ "); ";
 
 	private GeoKretySQLiteHelper dbHelper;
 	private final static String PK_COLUMN = COLUMN_WAYPOINT;
@@ -60,8 +59,8 @@ public class GeocacheDataSource {
 			+ " FROM " //
 			+ TABLE;
 
-	public GeocacheDataSource(Context context) {
-		dbHelper = new GeoKretySQLiteHelper(context);
+	public GeocacheDataSource(GeoKretySQLiteHelper dbHelper) {
+		this.dbHelper = dbHelper;
 	}
 
 	private static ContentValues getValues(Geocache geocache) {

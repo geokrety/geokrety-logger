@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -21,12 +21,11 @@
  */
 package pl.nkg.lib.gkapi;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import android.util.SparseArray;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
@@ -61,9 +60,9 @@ public class GeoKretyProvider {
 		}
 	}
 
-	public static List<Geokret> loadInventory(String geoKretySecredID)
+	public static SparseArray<Geokret> loadInventory(String geoKretySecredID)
 			throws MessagedException {
-		ArrayList<Geokret> inventory = new ArrayList<Geokret>();
+		SparseArray<Geokret> inventory = new SparseArray<Geokret>();
 
 		String[][] getData = new String[][] {
 				new String[] { "secid", geoKretySecredID },
@@ -76,7 +75,8 @@ public class GeoKretyProvider {
 
 			for (int i = 0; i < nl.getLength(); i++) {
 				Node node = nl.item(i);
-				inventory.add(new Geokret(node));
+				Geokret geokret = new Geokret(node);
+				inventory.put(geokret.getID(), geokret);
 			}
 			return inventory;
 		} catch (Exception e) {

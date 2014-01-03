@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -25,9 +25,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.os.Bundle;
+import android.util.SparseArray;
 import android.widget.ListView;
 
 import pl.nkg.geokrety.GeoKretyApplication;
@@ -46,7 +48,7 @@ public class Account {
 
 	private static final long EXPIRED = 24 * 60 * 60 * 1000;
 
-	private long id;
+	private int id;
 	private String name;
 
 	private String geoKretySecredID;
@@ -61,7 +63,7 @@ public class Account {
 		unpack(bundle);
 	}
 
-	public Account(long id, String name, String geoKretySecredID,
+	public Account(int id, String name, String geoKretySecredID,
 			String[] openCachingUUIDs) {
 		this.id = id;
 		this.name = name;
@@ -69,11 +71,11 @@ public class Account {
 		this.openCachingUUIDs = openCachingUUIDs;
 	}
 
-	public long getID() {
+	public int getID() {
 		return id;
 	}
 
-	public void setID(long id) {
+	public void setID(int id) {
 		this.id = id;
 	}
 
@@ -83,6 +85,14 @@ public class Account {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Date getLastDataLoaded() {
+		return lastDataLoaded;
+	}
+
+	public void setLastDataLoaded(Date lastDataLoaded) {
+		this.lastDataLoaded = lastDataLoaded;
 	}
 
 	public String getGeoKreySecredID() {
@@ -125,6 +135,7 @@ public class Account {
 	}
 
 	public boolean expired() {
+
 		if (lastDataLoaded == null) {
 			return true;
 		}
@@ -133,7 +144,7 @@ public class Account {
 
 	public Bundle pack(Bundle bundle) {
 		bundle.putStringArray(Account.OCUUIDS, openCachingUUIDs);
-		bundle.putLong(Account.ACCOUNT_ID, id);
+		bundle.putInt(Account.ACCOUNT_ID, id);
 		bundle.putString(Account.SECID, geoKretySecredID);
 		bundle.putString(Account.ACCOUNT_NAME, name);
 		return bundle;
@@ -141,14 +152,38 @@ public class Account {
 
 	public Bundle unpack(Bundle bundle) {
 		geoKretySecredID = bundle.getString(Account.SECID);
-		id = bundle.getLong(Account.ACCOUNT_ID);
+		id = bundle.getInt(Account.ACCOUNT_ID);
 		openCachingUUIDs = bundle.getStringArray(Account.OCUUIDS);
 		name = bundle.getString(Account.ACCOUNT_NAME);
 		return bundle;
 	}
 
-	public void loadInventory() throws MessagedException {
-		setInventory(GeoKretyProvider.loadInventory(geoKretySecredID));
+	public void loadInventoryAndStore(GeoKretDataSource dataSource)
+			throws MessagedException {
+
+		SparseArray<Geokret> list = GeoKretyProvider
+				.loadInventory(geoKretySecredID);
+
+		// merge with stickys
+		for (Geokret geokret : new LinkedList<Geokret>(getInventory())) {
+			if (geokret.isSticky()) {
+				Geokret gk2 = list.get(geokret.getID());
+				if (gk2 == null) {
+					list.put(geokret.getID(), geokret);
+				} else {
+					gk2.setSticky(true);
+				}
+			}
+		}
+
+		ArrayList<Geokret> afterMerge = new ArrayList<Geokret>(list.size());
+
+		for (int i = 0; i < list.size(); i++) {
+			afterMerge.add(list.valueAt(i));
+		}
+
+		dataSource.store(afterMerge, getID());
+		setInventory(afterMerge);
 	}
 
 	public List<GeocacheLog> loadOpenCachingLogs(int portal)
@@ -159,8 +194,9 @@ public class Account {
 				openCachingUUIDs[portal]);
 	}
 
-	public void touchLastLoadedDate() {
+	public void touchLastLoadedDate(AccountDataSource accountDataSource) {
 		lastDataLoaded = new Date();
+		accountDataSource.storeLastLoadedDate(this);
 	}
 
 	public void loadOCnamesToBuffer(List<GeocacheLog> openCachingLogs,

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -24,11 +24,11 @@ package pl.nkg.lib.threads;
 import java.io.Serializable;
 
 import android.annotation.SuppressLint;
+import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Pair;
 
 import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
-import pl.nkg.geokrety.GeoKretyApplication;
 
 public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Serializable, Result> {
 	private Param param;
@@ -45,9 +45,9 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 	private Pair<Param, Throwable> nofiredError;
 	private int nofired;
 
-	private final GeoKretyApplication application;
+	private final Application application;
 
-	protected AbstractForegroundTaskWrapper(GeoKretyApplication application,
+	protected AbstractForegroundTaskWrapper(Application application,
 			int id) {
 		this.id = id;
 		this.application = application;
@@ -61,7 +61,7 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 		return id;
 	}
 
-	public GeoKretyApplication getApplication() {
+	public Application getApplication() {
 		return application;
 	}
 

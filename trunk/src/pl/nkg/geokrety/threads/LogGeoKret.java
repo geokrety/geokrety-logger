@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -32,7 +32,8 @@ import pl.nkg.lib.threads.TaskListener;
 import android.content.Context;
 import android.util.Pair;
 
-public class LogGeoKret extends
+public class LogGeoKret
+		extends
 		AbstractForegroundTaskWrapper<Pair<GeoKretLog, Account>, String, Boolean> {
 
 	public static final int ID = 2;
@@ -48,7 +49,8 @@ public class LogGeoKret extends
 		GeoKretLog log = param.first;
 		Account account = param.second;
 		if (log.submitLog(account)) {
-			account.loadInventory();
+			account.loadInventoryAndStore(((GeoKretyApplication) getApplication())
+					.getStateHolder().getGeoKretDataSource());
 			return true;
 		}
 		return false;
@@ -59,7 +61,7 @@ public class LogGeoKret extends
 		LogGeoKret b = (LogGeoKret) a;
 		return b;
 	}
-	
+
 	@Override
 	public void attach(
 			AbstractProgressDialogWrapper<String> progressDialogWrapper,

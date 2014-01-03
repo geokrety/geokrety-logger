@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -31,37 +31,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
-
-
-	public static final String TABLE_INVENTORY = "inventory";
-	public static final String COLUMN_GEOKRET_CODE = "geokret_code";
-	public static final String COLUMN_TRACKING_CODE = "tracking_code";
-	// public static final String COLUMN_USER_ID = "user_id";
-	// public static final String COLUMN_NAME = "name";
-	public static final String COLUMN_OWNER_ID = "owner_id";
-	public static final String COLUMN_DISTANCE = "dist";
-	public static final String COLUMN_STICKY = "sticky";
-
-	/*
-	 private int id;
-	private int dist;
-	private int owner_id;
-	private Integer state;
-	private int type;
-	private String name;
-	private String nr;
-	 */
-	
 	private static final String DATABASE_NAME = "geokrety.db";
 	private static final int DATABASE_VERSION = 2;
-
-	// Database creation sql statement
-	private static final String DATABASE_CREATE_V1 = AccountDataSource.TABLE_CREATE;
-
-	private static final String DATABASE_CREATE_V2 = //
-			GeocacheDataSource.TABLE_CREATE + //
-			GeocacheLogDataSource.TABLE_CREATE + //
-			GeoKretDataSource.TABLE_CODE;
 
 	public GeoKretySQLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -69,72 +40,26 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		db.execSQL(DATABASE_CREATE_V1);
-		db.execSQL(DATABASE_CREATE_V2);
+		createV1(db);
+		createV2(db);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		if (oldVersion == 1 && newVersion == 2) {
-			db.execSQL(DATABASE_CREATE_V2);
+			createV2(db);
 		}
 	}
-
-	/*public long persist(String table, ContentValues values) {
-		SQLiteDatabase db = getWritableDatabase();
-
-		db.beginTransaction();
-		long id = db.insertOrThrow(table, null, values);
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		db.close();
-
-		return id;
+	
+	private void createV1(SQLiteDatabase db) {
+		db.execSQL(AccountDataSource.TABLE_CREATE);		
 	}
 
-	public List<Long> persistAll(String table, List<ContentValues> values) {
-		LinkedList<Long> ret = new LinkedList<Long>();
-		SQLiteDatabase db = getWritableDatabase();
-
-		db.beginTransaction();
-		for (ContentValues cv : values) {
-			long id = db.insertOrThrow(table, null, cv);
-			ret.add(id);
-		}
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		db.close();
-
-		return ret;
+	private void createV2(SQLiteDatabase db) {
+		db.execSQL(GeocacheDataSource.TABLE_CREATE);
+		db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
+		db.execSQL(GeoKretDataSource.TABLE_CREATE);		
 	}
-
-	public void merge(String table, String whereClause, ContentValues values,
-			String... whereArgs) {
-		SQLiteDatabase db = getWritableDatabase();
-		db.beginTransaction();
-		db.update(table, values, whereClause, whereArgs);
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		db.close();
-	}
-
-	public void mergeSimple(String table, ContentValues values,
-			String pkColumn, String pkValue) {
-		merge(table, pkColumn + " = ?", values, pkValue);
-	}
-
-	public void removeSimple(String table, String pkColumn, String pkValue) {
-		remove(table, pkColumn + " = ?", pkValue);
-	}
-
-	public void remove(String table, String whereClause, String... whereArgs) {
-		SQLiteDatabase db = getWritableDatabase();
-		db.beginTransaction();
-		db.delete(table, whereClause, whereArgs);
-		db.setTransactionSuccessful();
-		db.endTransaction();
-		db.close();
-	}*/
 
 	public boolean runOnReadableDatabase(DBOperation operation) {
 		if (!operation.preTransaction()) {
