@@ -19,7 +19,7 @@
  * along with this source code; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
- -->
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="pl.nkg.geokrety"
     android:versionCode="9"
@@ -69,6 +69,10 @@
         <activity
             android:name="pl.nkg.geokrety.activities.AccountActivity"
             android:label="@string/title_activity_account" >
+        </activity>
+        <activity
+            android:name="pl.nkg.geokrety.activities.GeoKretActivity"
+            android:label="@string/title_activity_geo_kret" >
         </activity>
     </application>
 

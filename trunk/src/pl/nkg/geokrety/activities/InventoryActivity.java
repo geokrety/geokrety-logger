@@ -25,6 +25,7 @@ import java.io.Serializable;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.Geokret;
@@ -34,18 +35,23 @@ import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 
 public class InventoryActivity extends ManagedDialogsActivity implements
-		AdapterView.OnItemSelectedListener {
+		AdapterView.OnItemSelectedListener, OnItemClickListener {
 
+	public final static int ADD_GEOKRET = 1; 
+	public final static int EDIT_GEOKRET = 2; 
+	
 	private Account account;
 	private RefreshProgressDialog refreshProgressDialog;
 	private GeoKretyApplication application;
@@ -71,6 +77,8 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spin.setAdapter(aa);
 		spin.setSelection(holder.getDefaultAccount());
+		
+		((ListView)findViewById(R.id.inventoryListView)).setOnItemClickListener(this);
 	}
 
 	@Override
@@ -155,5 +163,49 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 	@Override
 	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
 			Serializable arg) {
+	}
+	
+	public void onAddButtonClicks(View view) {
+		Intent intent = new Intent(this, GeoKretActivity.class);
+		intent.putExtra(GeoKretActivity.USER_ID, account.getID());
+		startActivityForResult(intent, ADD_GEOKRET);
+	}
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position,
+			long id) {
+		Geokret gk = account.getInventory().get(position);
+		Intent intent = new Intent(this, GeoKretActivity.class);
+		intent.putExtra(GeoKretActivity.USER_ID, account.getID());
+		intent.putExtra(GeoKretActivity.TRACKING_CODE, gk.getTackingCode());
+		intent.putExtra(GeoKretActivity.NAME, gk.getName());
+		intent.putExtra(GeoKretActivity.STICKY, gk.isSticky());
+		startActivityForResult(intent, EDIT_GEOKRET);
+	}
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode != RESULT_OK) {
+			return;
+		}
+		
+		Bundle ib = data.getExtras();
+		int userId = ib.getInt(GeoKretActivity.USER_ID);
+		String trackingCode = ib.getString(GeoKretActivity.TRACKING_CODE);
+		String oldTrackingCode = ib.getString(GeoKretActivity.TRACKING_CODE_OLD);
+		String name = ib.getString(GeoKretActivity.NAME);
+		boolean sticky = ib.getBoolean(GeoKretActivity.STICKY);
+		Account a = application.getStateHolder().getAccountByID(userId);
+		Geokret geokret = a.getGeoKretByTrackingCode(oldTrackingCode);
+		if (Utils.isEmpty(oldTrackingCode) || geokret == null) {
+			geokret = new Geokret(0, 0, 0, 0, 0, name, trackingCode, sticky);
+			a.getInventory().add(geokret);
+		} else {
+			geokret.setSticky(sticky);
+			geokret.setName(name);
+			geokret.setNr(trackingCode);
+		}
+		application.getStateHolder().getGeoKretDataSource().store(a.getInventory(), userId);
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

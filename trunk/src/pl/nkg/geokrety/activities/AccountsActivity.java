@@ -48,8 +48,6 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	private ListView mainListView;
 	private ArrayAdapter<Account> listAdapter;
 
-	//private NewAccountDialog newAccountDialog;
-	//private EditAccountDialog editAccountDialog;
 	private RemoveAccountDialog removeAccountDialog;
 
 	private static final int NEW_ACCOUNT = 1;
@@ -62,8 +60,6 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		final StateHolder holder = ((GeoKretyApplication) getApplication())
 				.getStateHolder();
 
-		//newAccountDialog = new NewAccountDialog(this);
-		//editAccountDialog = new EditAccountDialog(this);
 		removeAccountDialog = new RemoveAccountDialog(this);
 
 		setContentView(R.layout.activity_accounts);

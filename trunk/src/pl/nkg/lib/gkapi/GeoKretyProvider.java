@@ -21,11 +21,12 @@
  */
 package pl.nkg.lib.gkapi;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import android.util.SparseArray;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
@@ -60,9 +61,9 @@ public class GeoKretyProvider {
 		}
 	}
 
-	public static SparseArray<Geokret> loadInventory(String geoKretySecredID)
+	public static Map<String, Geokret> loadInventory(String geoKretySecredID)
 			throws MessagedException {
-		SparseArray<Geokret> inventory = new SparseArray<Geokret>();
+		HashMap<String, Geokret> inventory = new HashMap<String, Geokret>();
 
 		String[][] getData = new String[][] {
 				new String[] { "secid", geoKretySecredID },
@@ -76,15 +77,16 @@ public class GeoKretyProvider {
 			for (int i = 0; i < nl.getLength(); i++) {
 				Node node = nl.item(i);
 				Geokret geokret = new Geokret(node);
-				inventory.put(geokret.getID(), geokret);
+				inventory.put(geokret.getTackingCode(), geokret);
 			}
 			return inventory;
 		} catch (Exception e) {
 			throw new MessagedException(R.string.inventory_error_message);
 		}
 	}
-	
-	public static boolean submitLog(String secid, GeoKretLog log) throws MessagedException {
+
+	public static boolean submitLog(String secid, GeoKretLog log)
+			throws MessagedException {
 		boolean ignoreLocation = checkIgnoreLocation(log.getLogTypeMapped());
 
 		String[][] postData = new String[][] {
@@ -109,7 +111,8 @@ public class GeoKretyProvider {
 			NodeList nl = doc.getElementsByTagName("error").item(0)
 					.getChildNodes();
 			if (nl.getLength() > 0) {
-				throw new MessagedException(R.string.submit_fail, nl.item(0).getNodeValue());
+				throw new MessagedException(R.string.submit_fail, nl.item(0)
+						.getNodeValue());
 			}
 			return true;
 		} catch (MessagedException e) {
@@ -119,7 +122,7 @@ public class GeoKretyProvider {
 					e.getLocalizedMessage());
 		}
 	}
-	
+
 	public static boolean checkIgnoreLocation(int logtype_mapped) {
 		return logtype_mapped == 1 || logtype_mapped == 4;
 	}

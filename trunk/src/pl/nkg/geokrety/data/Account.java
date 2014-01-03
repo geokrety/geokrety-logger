@@ -27,9 +27,9 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import android.os.Bundle;
-import android.util.SparseArray;
 import android.widget.ListView;
 
 import pl.nkg.geokrety.GeoKretyApplication;
@@ -161,29 +161,29 @@ public class Account {
 	public void loadInventoryAndStore(GeoKretDataSource dataSource)
 			throws MessagedException {
 
-		SparseArray<Geokret> list = GeoKretyProvider
+		Map<String, Geokret> gkMap = GeoKretyProvider
 				.loadInventory(geoKretySecredID);
 
 		// merge with stickys
 		for (Geokret geokret : new LinkedList<Geokret>(getInventory())) {
 			if (geokret.isSticky()) {
-				Geokret gk2 = list.get(geokret.getID());
+				Geokret gk2 = gkMap.get(geokret.getTackingCode());
 				if (gk2 == null) {
-					list.put(geokret.getID(), geokret);
+					gkMap.put(geokret.getTackingCode(), geokret);
 				} else {
 					gk2.setSticky(true);
 				}
 			}
 		}
 
-		ArrayList<Geokret> afterMerge = new ArrayList<Geokret>(list.size());
+		ArrayList<Geokret> afterMerge = new ArrayList<Geokret>(gkMap.size());
 
-		for (int i = 0; i < list.size(); i++) {
-			afterMerge.add(list.valueAt(i));
+		for (Geokret geokret : gkMap.values()) {
+			afterMerge.add(geokret);
 		}
 
 		dataSource.store(afterMerge, getID());
-		setInventory(afterMerge);
+		setInventory(dataSource.load(getID()));
 	}
 
 	public List<GeocacheLog> loadOpenCachingLogs(int portal)
@@ -262,6 +262,15 @@ public class Account {
 			pos++;
 		}
 		return ListView.INVALID_POSITION;
+	}
+
+	public Geokret getGeoKretByTrackingCode(String trackingCode) {
+		for (Geokret gk : getInventory()) {
+			if (gk.getTackingCode().equals(trackingCode)) {
+				return gk;
+			}
+		}
+		return null;
 	}
 
 }

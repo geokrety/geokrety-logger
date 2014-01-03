@@ -23,6 +23,7 @@ package pl.nkg.geokrety.data;
 
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 
@@ -69,7 +70,30 @@ public class GeoKretDataSource {
 			+ COLUMN_USER_ID + ", " //
 			+ COLUMN_STICKY //
 			+ " FROM " //
-			+ TABLE + " ORDER BY " + COLUMN_GK_CODE;
+			+ TABLE + " ORDER BY " + COLUMN_NAME;
+
+	private static final String FETCH_BY_USER = "SELECT " //
+			+ COLUMN_GK_CODE
+			+ ", " //
+			+ COLUMN_DISTANCE
+			+ ", " //
+			+ COLUMN_OWNER_ID
+			+ ", " //
+			+ COLUMN_STATE
+			+ ", " //
+			+ COLUMN_TYPE
+			+ ", " //
+			+ COLUMN_NAME
+			+ ", " //
+			+ COLUMN_TRACKING_CODE
+			+ ", " //
+			+ COLUMN_USER_ID
+			+ ", " //
+			+ COLUMN_STICKY //
+			+ " FROM " //
+			+ TABLE + " WHERE " + COLUMN_USER_ID
+			+ " = ? ORDER BY "
+			+ COLUMN_NAME;
 
 	public GeoKretDataSource(GeoKretySQLiteHelper dbHelper) {
 		this.dbHelper = dbHelper;
@@ -132,6 +156,32 @@ public class GeoKretDataSource {
 						gks.put(userID, list);
 					}
 					list.add(gk);
+				}
+				cursor.close();
+				return true;
+			}
+		});
+		return gks;
+	}
+
+	public List<Geokret> load(final int userID) {
+		final LinkedList<Geokret> gks = new LinkedList<Geokret>();
+		dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
+
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				Cursor cursor = db.rawQuery(FETCH_BY_USER,
+						new String[] { String.valueOf(userID) });
+				while (cursor.moveToNext()) {
+					Geokret gk = new Geokret(cursor.getInt(0), //
+							cursor.getInt(1), //
+							cursor.getInt(2), //
+							cursor.getInt(3), //
+							cursor.getInt(4), //
+							cursor.getString(5), //
+							cursor.getString(6), //
+							cursor.getInt(8) > 0);
+					gks.add(gk);
 				}
 				cursor.close();
 				return true;

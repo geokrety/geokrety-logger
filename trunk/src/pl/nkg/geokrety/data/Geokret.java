@@ -104,6 +104,34 @@ public class Geokret {
 		return sticky;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public void setDist(int dist) {
+		this.dist = dist;
+	}
+
+	public void setOwner_id(int owner_id) {
+		this.owner_id = owner_id;
+	}
+
+	public void setState(Integer state) {
+		this.state = state;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setNr(String nr) {
+		this.nr = nr;
+	}
+
 	public void setSticky(boolean sticky) {
 		this.sticky = sticky;
 	}

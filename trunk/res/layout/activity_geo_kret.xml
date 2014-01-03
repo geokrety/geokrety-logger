@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * Copyright (C) 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -18,7 +19,7 @@
  * along with this source code; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
- -->
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
@@ -38,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="saveClick"
-            android:text="@string/account_save" />
+            android:text="@string/geokret_save" />
     </LinearLayout>
 
     <ScrollView
@@ -55,59 +56,54 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin" >
 
-            <LinearLayout
-                android:id="@+id/portalsLinearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+            <TableLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:shrinkColumns="1"
+                android:stretchColumns="1" >
 
-                <TextView
+                <TableRow
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/account_portals" />
-            </LinearLayout>
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/geokret_nr_title" />
+
+                    <EditText
+                        android:id="@+id/trackingCodeEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/geokret_nr_hint" />
+                </TableRow>
+                
+                <TableRow
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/geokret_name_title" />
+
+                    <EditText
+                        android:id="@+id/nameEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:hint="@string/geokret_name_hint" />
+                </TableRow>
+
+            </TableLayout>
 
             <CheckBox
-                android:id="@+id/gkCheckBox"
+                android:id="@+id/stickyCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_portal_gk" />
-
-            <CheckBox
-                android:id="@+id/ocCheckBox0"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:text="@string/account_portal_oc0" />
-
-            <CheckBox
-                android:id="@+id/ocCheckBox1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/account_portal_oc1" />
-
-            <CheckBox
-                android:id="@+id/ocCheckBox2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/account_portal_oc2" />
-
-            <CheckBox
-                android:id="@+id/ocCheckBox3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/account_portal_oc3" />
-
-            <CheckBox
-                android:id="@+id/ocCheckBox4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/account_portal_oc4" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dip"
-                android:text="@string/account_introduction" />
+                android:text="@string/geokret_sticki_title" />
+            
         </LinearLayout>
     </ScrollView>
 

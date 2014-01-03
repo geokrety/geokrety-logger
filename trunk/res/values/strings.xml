@@ -19,7 +19,7 @@
  * along with this source code; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
- -->
+-->
 <resources>
 
     <string name="app_name">GeoKrety Logger</string>
@@ -69,6 +69,10 @@
         <item>@string/log_comment</item>
     </string-array>
     <string-array name="context_menu_account">
+        <item>@string/account_edit</item>
+        <item>@string/account_remove</item>
+    </string-array>
+    <string-array name="context_menu_inventory">
         <item>@string/account_edit</item>
         <item>@string/account_remove</item>
     </string-array>
@@ -147,27 +151,47 @@
     <string name="generic_error">Error:</string>
     <string name="generic_broken">Broken</string>
     <string name="generic_finish">End successful</string>
-    
     <string name="title_activity_account">Account</string>
     <string name="account_account_name">Account name:</string>
     <string name="account_account_name_hint">New user</string>
-	<string name="account_portals">Choice portals what you use</string>
-	<string name="account_portal_gk">geokrety.org (required)</string>
-	<string name="account_portal_oc0">opencaching.pl</string>
-	<string name="account_portal_oc1">opencaching.de</string>
-	<string name="account_portal_oc2">opencaching.us</string>
-	<string name="account_portal_oc3">opencaching.nl</string>
-	<string name="account_portal_oc4">opencaching.org.uk</string>
-	<string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for loggin geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
-	<string name="account_save">OK</string>
-	
-	<string name="account_save_title">Save account settings?</string>
-	<string name="account_save_message">Account settings changed. Save changes?</string>
-	
-	<string name="title_dialog_gk">Login and password to GeoKrety.org</string>
-	<string name="title_dialog_oc">Login to</string>
-	<string name="dots">&#8230;</string>
-		
-	<string name="yes">Yes</string>
-	<string name="no">No</string>
+    <string name="account_portals">Choice portals what you use</string>
+    <string name="account_portal_gk">geokrety.org (required)</string>
+    <string name="account_portal_oc0">opencaching.pl</string>
+    <string name="account_portal_oc1">opencaching.de</string>
+    <string name="account_portal_oc2">opencaching.us</string>
+    <string name="account_portal_oc3">opencaching.nl</string>
+    <string name="account_portal_oc4">opencaching.org.uk</string>
+    <string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for loggin geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
+    <string name="account_save">OK</string>
+    <string name="account_save_title">Save account settings?</string>
+    <string name="account_save_message">Account settings changed. Save changes?</string>
+    <string name="title_dialog_gk">Login and password to GeoKrety.org</string>
+    <string name="title_dialog_oc">Login to</string>
+    <string name="dots">&#8230;</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="button_add_geokret">Add manually</string>
+    
+    <string name="title_activity_geo_kret">GeoKret</string>
+    <string name="geokret_id_title">Reference Number:</string>
+    <string name="geokret_id_type">Type:</string>
+    
+    <string name="geokret_nr_title">Tracking Code:</string>
+    <string name="geokret_nr_hint">i.e. F65RF3</string>
+    
+    <string name="geokret_name_title">Name:</string>
+    <string name="geokret_name_hint">name of GeoKret</string>
+    <string-array name="geokret_id_types">
+        <item>Traditional</item>
+        <item>A book/CD/DVD&#8230;</item>
+        <item>A human</item>
+        <item>A coin</item>
+        <item>KretyPost</item>
+    </string-array>
+    <string name="geokret_sticki_title">No remove from inventory after refresh</string>
+    
+    <string name="geokret_save">Save</string>
+    <string name="geokret_save_title">Save GeoKret settings?</string>
+    <string name="geokret_save_message">GeoKret settings changed. Save changes?</string>
+    
 </resources>
