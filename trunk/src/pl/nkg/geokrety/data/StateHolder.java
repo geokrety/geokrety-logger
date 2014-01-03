@@ -23,11 +23,13 @@ package pl.nkg.geokrety.data;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.SparseArray;
 import android.widget.ListView;
 
 public class StateHolder {
@@ -39,15 +41,46 @@ public class StateHolder {
 	private List<Account> accountList;
 	private int defaultAccount;
 
-	private final AccountDataSource dataSource;
+	private final AccountDataSource accountDataSource;
+	private final GeocacheLogDataSource geocacheLogDataSource;
+	private final GeoKretDataSource geoKretDataSource;
+	private final GeocacheDataSource geocacheDataSource;
 
 	public StateHolder(Context context) {
-		dataSource = new AccountDataSource(context);
-		accountList = dataSource.getAll();
+		accountDataSource = new AccountDataSource(context);
+		geocacheLogDataSource = new GeocacheLogDataSource(context);
+		geoKretDataSource = new GeoKretDataSource(context);
+		geocacheDataSource = new GeocacheDataSource(context);
+		accountList = Collections.synchronizedList(accountDataSource.getAll());
+		
+		geoCachesMap = new HashMap<String, Geocache>();
+		for (Geocache gc : geocacheDataSource.load()) {
+			geoCachesMap.put(gc.getCode(), gc);
+		}
+		
+		SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
+		SparseArray<LinkedList<Geokret>> gks = geoKretDataSource.load();
+		
+		for (Account account : accountList) {
+			account.setOpenCachingLogs(logs.get((int)account.getID()));
+			account.setInventory(gks.get((int)account.getID()));
+		}
 	}
 
 	public AccountDataSource getAccountDataSource() {
-		return dataSource;
+		return accountDataSource;
+	}
+
+	public GeocacheLogDataSource getGeocacheLogDataSource() {
+		return geocacheLogDataSource;
+	}
+
+	public GeoKretDataSource getGeoKretDataSource() {
+		return geoKretDataSource;
+	}
+
+	public GeocacheDataSource getGeocacheDataSource() {
+		return geocacheDataSource;
 	}
 
 	public void storeDefaultAccount(Context context) {

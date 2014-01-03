@@ -23,7 +23,6 @@ package pl.nkg.geokrety.data;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -70,12 +69,66 @@ public class Account {
 		this.openCachingUUIDs = openCachingUUIDs;
 	}
 
+	public long getID() {
+		return id;
+	}
+
+	public void setID(long id) {
+		this.id = id;
+	}
+
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getGeoKreySecredID() {
+		return geoKretySecredID;
+	}
+
+	public List<GeocacheLog> getOpenCachingLogs() {
+		if (openCachingLogs == null) {
+			openCachingLogs = new ArrayList<GeocacheLog>();
+		}
+		return openCachingLogs;
+	}
+
+	public void setOpenCachingLogs(List<GeocacheLog> openCachingLogs) {
+		this.openCachingLogs = openCachingLogs;
+	}
+
+	public List<Geokret> getInventory() {
+		if (inventory == null) {
+			inventory = new ArrayList<Geokret>();
+		}
+		return inventory;
+	}
+
+	public void setInventory(List<Geokret> gks) {
+		this.inventory = gks;
+	}
+
+	public String[] getOpenCachingUUIDs() {
+		return openCachingUUIDs;
+	}
+
+	public boolean hasOpenCachingUUID(int portal) {
+		if (openCachingUUIDs == null || portal < 0
+				|| portal >= openCachingUUIDs.length) {
+			return false;
+		}
+
+		return !Utils.isEmpty(openCachingUUIDs[portal]);
+	}
+
+	public boolean expired() {
+		if (lastDataLoaded == null) {
+			return true;
+		}
+		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
 	}
 
 	public Bundle pack(Bundle bundle) {
@@ -94,34 +147,12 @@ public class Account {
 		return bundle;
 	}
 
-	public String getGeoKreySecredID() {
-		return geoKretySecredID;
-	}
-
-	public List<GeocacheLog> getOpenCachingLogs() {
-		return openCachingLogs;
-	}
-
-	public List<Geokret> getInventory() {
-		return inventory;
-	}
-
-	public boolean expired() {
-		if (lastDataLoaded == null) {
-			return true;
-		}
-		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
-	}
-
 	public void loadInventory() throws MessagedException {
-		this.inventory = Collections.synchronizedList(GeoKretyProvider.loadInventory(geoKretySecredID));
+		setInventory(GeoKretyProvider.loadInventory(geoKretySecredID));
 	}
 
-	public void setOpenCachingLogs(ArrayList<GeocacheLog> openCachingLogs) {
-		this.openCachingLogs = Collections.synchronizedList(openCachingLogs);
-	}
-
-	public List<GeocacheLog> loadOpenCachingLogs(int portal) throws MessagedException {
+	public List<GeocacheLog> loadOpenCachingLogs(int portal)
+			throws MessagedException {
 
 		SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
 		return OKAPIProvider.loadOpenCachingLogs(okapi,
@@ -177,7 +208,7 @@ public class Account {
 
 	public int getTrackingCodeIndex(String trackingCode) {
 		int pos = 0;
-		for (Geokret g : inventory) {
+		for (Geokret g : getInventory()) {
 			if (g.getTackingCode().equalsIgnoreCase(trackingCode)) {
 				return pos;
 			}
@@ -188,7 +219,7 @@ public class Account {
 
 	public int getWaypointIndex(String waypoint) {
 		int pos = 0;
-		for (GeocacheLog l : openCachingLogs) {
+		for (GeocacheLog l : getOpenCachingLogs()) {
 			if (l.getCacheCode().equalsIgnoreCase(waypoint)) {
 				return pos;
 			}
@@ -197,24 +228,4 @@ public class Account {
 		return ListView.INVALID_POSITION;
 	}
 
-	public long getID() {
-		return id;
-	}
-
-	public void setID(long id) {
-		this.id = id;
-	}
-
-	public String[] getOpenCachingUUIDs() {
-		return openCachingUUIDs;
-	}
-
-	public boolean hasOpenCachingUUID(int portal) {
-		if (openCachingUUIDs == null || portal < 0
-				|| portal >= openCachingUUIDs.length) {
-			return false;
-		}
-
-		return !Utils.isEmpty(openCachingUUIDs[portal]);
-	}
 }

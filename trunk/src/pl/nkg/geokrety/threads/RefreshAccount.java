@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeocacheLog;
@@ -42,8 +43,8 @@ public class RefreshAccount extends
 	private String[] messages;
 	private String dots;
 
-	public RefreshAccount() {
-		super(ID);
+	public RefreshAccount(GeoKretyApplication application) {
+		super(application, ID);
 	}
 
 	@Override
@@ -52,6 +53,7 @@ public class RefreshAccount extends
 
 		publishProgress(getProgressMessage(0));
 		account.loadInventory();
+		
 		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
 		for (int i = 0; i < SupportedOKAPI.SUPPORTED.length; i++) {
 			if (account.hasOpenCachingUUID(i)) {

@@ -31,72 +31,37 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
-	public static final String TABLE_USERS = "users";
-	public static final String COLUMN_USER_ID = "user_id";
-	public static final String COLUMN_USER_NAME = "name";
-	public static final String COLUMN_SECID = "secid";
-	public static final String COLUMN_UUIDS = "uuids";
 
-	public static final String TABLE_LOGS = "logs";
-	public static final String COLUMN_LOG_UUID = "log_uuid";
-	// public static final String COLUMN_USER_ID = "user_id";
-	public static final String COLUMN_WAYPOINT = "cache_code";
-	public static final String COLUMN_TYPE = "type";
-	public static final String COLUMN_DATE = "date";
-	public static final String COLUMN_COMMENT = "comment";
-	public static final String COLUMN_PORTAL = "portal";
-
-	public static final String TABLE_GEOCACHES = "geocaches";
-	// public static final String COLUMN_WAYPOINT = "waypoint";
-	public static final String COLUMN_NAME = "name";
-	public static final String COLUMN_LOCATION = "location";
-	// public static final String COLUMN_TYPE = "type";
-	public static final String COLUMN_STATUS = "status";
 
 	public static final String TABLE_INVENTORY = "inventory";
+	public static final String COLUMN_GEOKRET_CODE = "geokret_code";
 	public static final String COLUMN_TRACKING_CODE = "tracking_code";
 	// public static final String COLUMN_USER_ID = "user_id";
 	// public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_OWNER_ID = "owner_id";
+	public static final String COLUMN_DISTANCE = "dist";
 	public static final String COLUMN_STICKY = "sticky";
 
+	/*
+	 private int id;
+	private int dist;
+	private int owner_id;
+	private Integer state;
+	private int type;
+	private String name;
+	private String nr;
+	 */
+	
 	private static final String DATABASE_NAME = "geokrety.db";
 	private static final int DATABASE_VERSION = 2;
 
 	// Database creation sql statement
-	private static final String DATABASE_CREATE_V1 = "CREATE TABLE " //
-			+ TABLE_USERS + "(" //
-			+ COLUMN_USER_ID + " INTEGER PRIMARY KEY autoincrement, " //
-			+ COLUMN_USER_NAME + " TEXT NOT NULL, " //
-			+ COLUMN_SECID + " TEXT NOT NULL, " //
-			+ COLUMN_UUIDS + " TEXT NOT NULL" //
-			+ ");";
+	private static final String DATABASE_CREATE_V1 = AccountDataSource.TABLE_CREATE;
 
-	private static final String DATABASE_CREATE_V2 = "CREATE TABLE " //
-			+ TABLE_LOGS + "(" //
-			+ COLUMN_LOG_UUID + " TEXT PRIMARY KEY, " //
-			+ COLUMN_USER_ID + " INTEGER NOT NULL, " //
-			+ COLUMN_WAYPOINT + " TEXT NOT NULL, " //
-			+ COLUMN_TYPE + " TEXT NOT NULL, " //
-			+ COLUMN_DATE + " INTEGER NOT NULL, " //
-			+ COLUMN_COMMENT + " TEXT NOT NULL," //
-			+ COLUMN_PORTAL + " INTEGER NOT NULL" //
-			+ ");" //
-			//
-			+ "CREATE TABLE " + TABLE_GEOCACHES + "(" //
-			+ COLUMN_WAYPOINT + " TEXT PRIMARY KEY, " //
-			+ COLUMN_NAME + " TEXT NOT NULL, " //
-			+ COLUMN_LOCATION + " TEXT NOT NULL, " //
-			+ COLUMN_TYPE + " TEXT NOT NULL, " //
-			+ COLUMN_STATUS + " TEXT NOT NULL" //
-			+ ");" //
-			//
-			+ "CREATE TABLE " + TABLE_INVENTORY + "(" //
-			+ COLUMN_TRACKING_CODE + " TEXT PRIMARY KEY, " //
-			+ COLUMN_USER_ID + " INTEGER NOT NULL, " //
-			+ COLUMN_NAME + " TEXT NOT NULL, " //
-			+ COLUMN_STICKY + " BOOLEAN NOT NULL DEFAULT 0" //
-			+ ");"; //
+	private static final String DATABASE_CREATE_V2 = //
+			GeocacheDataSource.TABLE_CREATE + //
+			GeocacheLogDataSource.TABLE_CREATE + //
+			GeoKretDataSource.TABLE_CODE;
 
 	public GeoKretySQLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -115,7 +80,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	public long persist(String table, ContentValues values) {
+	/*public long persist(String table, ContentValues values) {
 		SQLiteDatabase db = getWritableDatabase();
 
 		db.beginTransaction();
@@ -169,5 +134,92 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 		db.setTransactionSuccessful();
 		db.endTransaction();
 		db.close();
+	}*/
+
+	public boolean runOnReadableDatabase(DBOperation operation) {
+		if (!operation.preTransaction()) {
+			return false;
+		}
+		SQLiteDatabase db = getReadableDatabase();
+		boolean ret = operation.inTransaction(db);
+		db.close();
+		if (ret) {
+			operation.postCommit();
+			return true;
+		} else {
+			operation.postRollback();
+			return false;
+		}
+	}
+
+	public boolean runOnWritableDatabase(DBOperation operation) {
+		if (!operation.preTransaction()) {
+			return false;
+		}
+		SQLiteDatabase db = getWritableDatabase();
+		db.beginTransaction();
+		boolean ret = operation.inTransaction(db);
+		if (ret) {
+			db.setTransactionSuccessful();
+			db.endTransaction();
+			db.close();
+			operation.postCommit();
+			return true;
+		} else {
+			db.endTransaction();
+			db.close();
+			operation.postRollback();
+			return false;
+		}
+	}
+
+	public static abstract class DBOperation {
+		public boolean preTransaction() {
+			return true;
+		}
+
+		public abstract boolean inTransaction(SQLiteDatabase db);
+
+		public void postCommit() {
+
+		}
+
+		public void postRollback() {
+
+		}
+
+		public static long persist(SQLiteDatabase db, String table,
+				ContentValues values) {
+			return db.insertOrThrow(table, null, values);
+		}
+
+		public static List<Long> persistAll(SQLiteDatabase db, String table,
+				List<ContentValues> values) {
+			LinkedList<Long> ret = new LinkedList<Long>();
+			for (ContentValues cv : values) {
+				ret.add(db.insertOrThrow(table, null, cv));
+			}
+			return ret;
+		}
+
+		public static void merge(SQLiteDatabase db, String table,
+				String whereClause, ContentValues values, String... whereArgs) {
+			db.update(table, values, whereClause, whereArgs);
+		}
+
+		public static void mergeSimple(SQLiteDatabase db, String table,
+				ContentValues values, String pkColumn, String pkValue) {
+			merge(db, table, pkColumn + " = ?", values, pkValue);
+		}
+
+		public static void removeSimple(SQLiteDatabase db, String table,
+				String pkColumn, String pkValue) {
+			remove(db, table, pkColumn + " = ?", pkValue);
+		}
+
+		public static void remove(SQLiteDatabase db, String table,
+				String whereClause, String... whereArgs) {
+			db.delete(table, whereClause, whereArgs);
+		}
 	}
 }

@@ -28,6 +28,7 @@ import android.os.AsyncTask;
 import android.util.Pair;
 
 import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
+import pl.nkg.geokrety.GeoKretyApplication;
 
 public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Serializable, Result> {
 	private Param param;
@@ -44,8 +45,12 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 	private Pair<Param, Throwable> nofiredError;
 	private int nofired;
 
-	protected AbstractForegroundTaskWrapper(int id) {
+	private final GeoKretyApplication application;
+
+	protected AbstractForegroundTaskWrapper(GeoKretyApplication application,
+			int id) {
 		this.id = id;
+		this.application = application;
 	}
 
 	void setHandler(ForegroundTaskHandler handler) {
@@ -54,6 +59,10 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 
 	public int getID() {
 		return id;
+	}
+
+	public GeoKretyApplication getApplication() {
+		return application;
 	}
 
 	public void setParam(Param param) {

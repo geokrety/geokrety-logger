@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 import pl.nkg.lib.okapi.SupportedOKAPI;
 
 import android.content.ContentValues;
@@ -34,19 +35,33 @@ import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
 public class AccountDataSource {
+
+	public static final String TABLE = "users";
+	public static final String COLUMN_USER_ID = "user_id";
+	public static final String COLUMN_USER_NAME = "name";
+	public static final String COLUMN_SECID = "secid";
+	public static final String COLUMN_UUIDS = "uuids";
+
+	public static final String TABLE_CREATE = "CREATE TABLE " //
+			+ TABLE + "(" //
+			+ COLUMN_USER_ID + " INTEGER PRIMARY KEY autoincrement, " //
+			+ COLUMN_USER_NAME + " TEXT NOT NULL, " //
+			+ COLUMN_SECID + " TEXT NOT NULL, " //
+			+ COLUMN_UUIDS + " TEXT NOT NULL" //
+			+ ");";
+
 	private GeoKretySQLiteHelper dbHelper;
 	private final static String DELIMITER = ";";
-	private final static String TABLE = GeoKretySQLiteHelper.TABLE_USERS;
-	private final static String PK_COLUMN = GeoKretySQLiteHelper.COLUMN_USER_ID;
+	private final static String PK_COLUMN = COLUMN_USER_ID;
 
 	private static final String FETCH_ALL = "SELECT " //
 			+ PK_COLUMN + ", " //
-			+ GeoKretySQLiteHelper.COLUMN_USER_NAME + ", " //
-			+ GeoKretySQLiteHelper.COLUMN_SECID + ", " //
-			+ GeoKretySQLiteHelper.COLUMN_UUIDS //
+			+ COLUMN_USER_NAME + ", " //
+			+ COLUMN_SECID + ", " //
+			+ COLUMN_UUIDS //
 			+ " FROM " //
 			+ TABLE //
-			+ " ORDER BY " + GeoKretySQLiteHelper.COLUMN_USER_NAME;
+			+ " ORDER BY " + COLUMN_USER_NAME;
 
 	public AccountDataSource(Context context) {
 		dbHelper = new GeoKretySQLiteHelper(context);
@@ -54,11 +69,9 @@ public class AccountDataSource {
 
 	private ContentValues getValues(Account account) {
 		ContentValues values = new ContentValues();
-		values.put(GeoKretySQLiteHelper.COLUMN_USER_NAME, account.getName());
-		values.put(GeoKretySQLiteHelper.COLUMN_SECID,
-				account.getGeoKreySecredID());
-		values.put(GeoKretySQLiteHelper.COLUMN_UUIDS,
-				joinUUIDs(account.getOpenCachingUUIDs()));
+		values.put(COLUMN_USER_NAME, account.getName());
+		values.put(COLUMN_SECID, account.getGeoKreySecredID());
+		values.put(COLUMN_UUIDS, joinUUIDs(account.getOpenCachingUUIDs()));
 		return values;
 	}
 
@@ -90,29 +103,59 @@ public class AccountDataSource {
 		return ret;
 	}
 
-	public void persist(Account account) {
-		account.setID(dbHelper.persist(TABLE, getValues(account)));
+	public void persist(final Account account) {
+		dbHelper.runOnWritableDatabase(new DBOperation() {
+
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				persist(db, TABLE, getValues(account));
+				return true;
+			}
+		});
 	}
 
-	public void merge(Account account) {
-		dbHelper.mergeSimple(TABLE, getValues(account), PK_COLUMN, String.valueOf(account.getID()));
+	public void merge(final Account account) {
+		dbHelper.runOnWritableDatabase(new DBOperation() {
+
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				mergeSimple(db, TABLE, getValues(account), PK_COLUMN,
+						String.valueOf(account.getID()));
+				return true;
+			}
+		});
 	}
 
-	public void remove(long id) {
-		dbHelper.removeSimple(TABLE, PK_COLUMN, String.valueOf(id));
+	public void remove(final long id) {
+		dbHelper.runOnWritableDatabase(new DBOperation() {
+
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				removeSimple(db, TABLE, PK_COLUMN, String.valueOf(id));
+				return true;
+			}
+		});
 	}
 
 	public List<Account> getAll() {
-		ArrayList<Account> accounts = new ArrayList<Account>();
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
-		while (cursor.moveToNext()) {
-			Account account = new Account(cursor.getLong(0),
-					cursor.getString(1), cursor.getString(2),
-					extractUUIDs(cursor.getString(3)));
-			accounts.add(account);
-		}
-		cursor.close();
+		final ArrayList<Account> accounts = new ArrayList<Account>();
+		dbHelper.runOnReadableDatabase(new DBOperation() {
+
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
+				while (cursor.moveToNext()) {
+					Account account = new Account(//
+							cursor.getLong(0), //
+							cursor.getString(1), //
+							cursor.getString(2), //
+							extractUUIDs(cursor.getString(3)));
+					accounts.add(account);
+				}
+				cursor.close();
+				return true;
+			}
+		});
 		return accounts;
 	}
 }

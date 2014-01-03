@@ -21,6 +21,7 @@
  */
 package pl.nkg.geokrety.threads;
 
+import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeoKretLog;
@@ -37,8 +38,8 @@ public class LogGeoKret extends
 	public static final int ID = 2;
 	private String message = "";
 
-	public LogGeoKret() {
-		super(ID);
+	public LogGeoKret(GeoKretyApplication application) {
+		super(application, ID);
 	}
 
 	@Override

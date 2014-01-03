@@ -21,6 +21,7 @@
  */
 package pl.nkg.geokrety.threads;
 
+import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.lib.okapi.OKAPIProvider;
 import pl.nkg.lib.okapi.SupportedOKAPI;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
@@ -32,8 +33,8 @@ public class GettingUuidThread extends
 
 	public static final int ID = 4;
 
-	public GettingUuidThread() {
-		super(ID);
+	public GettingUuidThread(GeoKretyApplication application) {
+		super(application, ID);
 	}
 
 	@Override

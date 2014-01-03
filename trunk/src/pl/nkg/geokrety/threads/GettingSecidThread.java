@@ -24,6 +24,7 @@ package pl.nkg.geokrety.threads;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
+import pl.nkg.geokrety.GeoKretyApplication;
 import android.util.Pair;
 
 public class GettingSecidThread extends
@@ -31,8 +32,8 @@ public class GettingSecidThread extends
 
 	public static final int ID = 3;
 
-	public GettingSecidThread() {
-		super(ID);
+	public GettingSecidThread(GeoKretyApplication application) {
+		super(application, ID);
 	}
 
 	@Override

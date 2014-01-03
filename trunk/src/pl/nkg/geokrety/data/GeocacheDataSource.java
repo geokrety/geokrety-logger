@@ -25,22 +25,38 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 public class GeocacheDataSource {
+	public static final String TABLE = "geocaches";
+	public static final String COLUMN_WAYPOINT = "waypoint";
+	public static final String COLUMN_NAME = "name";
+	public static final String COLUMN_LOCATION = "location";
+	public static final String COLUMN_TYPE = "type";
+	public static final String COLUMN_STATUS = "status";
+
+	public static final String TABLE_CREATE = "CREATE TABLE " + TABLE + "(" //
+			+ COLUMN_WAYPOINT + " TEXT PRIMARY KEY, " //
+			+ COLUMN_NAME + " TEXT NOT NULL, " //
+			+ COLUMN_LOCATION + " TEXT NOT NULL, " //
+			+ COLUMN_TYPE + " TEXT NOT NULL, " //
+			+ COLUMN_STATUS + " TEXT NOT NULL" //
+			+ ");";
+
 	private GeoKretySQLiteHelper dbHelper;
-	private final static String TABLE = GeoKretySQLiteHelper.TABLE_GEOCACHES;
-	private final static String PK_COLUMN = GeoKretySQLiteHelper.COLUMN_WAYPOINT;
+	private final static String PK_COLUMN = COLUMN_WAYPOINT;
 
 	private static final String FETCH_ALL = "SELECT " //
 			+ PK_COLUMN + ", " //
-			+ GeoKretySQLiteHelper.COLUMN_NAME + ", " //
-			+ GeoKretySQLiteHelper.COLUMN_LOCATION + ", " //
-			+ GeoKretySQLiteHelper.COLUMN_TYPE + ", " //
-			+ GeoKretySQLiteHelper.COLUMN_STATUS //
+			+ COLUMN_NAME + ", " //
+			+ COLUMN_LOCATION + ", " //
+			+ COLUMN_TYPE + ", " //
+			+ COLUMN_STATUS //
 			+ " FROM " //
 			+ TABLE;
 
@@ -51,36 +67,49 @@ public class GeocacheDataSource {
 	private static ContentValues getValues(Geocache geocache) {
 		ContentValues values = new ContentValues();
 		values.put(PK_COLUMN, geocache.getCode());
-		values.put(GeoKretySQLiteHelper.COLUMN_NAME, geocache.getName());
-		values.put(GeoKretySQLiteHelper.COLUMN_LOCATION, geocache.getLocation());
-		values.put(GeoKretySQLiteHelper.COLUMN_TYPE, geocache.getType());
-		values.put(GeoKretySQLiteHelper.COLUMN_STATUS, geocache.getStatus());
+		values.put(COLUMN_NAME, geocache.getName());
+		values.put(COLUMN_LOCATION, geocache.getLocation());
+		values.put(COLUMN_TYPE, geocache.getType());
+		values.put(COLUMN_STATUS, geocache.getStatus());
 		return values;
 	}
 
-	public void persistAll(Collection<Geocache> geocaches) {
-		LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
-		for (Geocache gc : geocaches) {
-			cv.add(getValues(gc));
-		}
-		dbHelper.persistAll(TABLE, cv);
-	}
+	public List<Geocache> load() {
+		final LinkedList<Geocache> gcs = new LinkedList<Geocache>();
+		dbHelper.runOnReadableDatabase(new DBOperation() {
 
-	public void removeAll() {
-		dbHelper.remove(TABLE, null);
-	}
-
-	public List<Geocache> getAll() {
-		LinkedList<Geocache> gcs = new LinkedList<Geocache>();
-		SQLiteDatabase db = dbHelper.getReadableDatabase();
-		Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
-		while (cursor.moveToNext()) {
-			Geocache gc = new Geocache(cursor.getString(0),
-					cursor.getString(1), cursor.getString(2),
-					cursor.getString(3), cursor.getString(4));
-			gcs.add(gc);
-		}
-		cursor.close();
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
+				while (cursor.moveToNext()) {
+					Geocache gc = new Geocache(//
+							cursor.getString(0), //
+							cursor.getString(1), //
+							cursor.getString(2), //
+							cursor.getString(3), //
+							cursor.getString(4));
+					gcs.add(gc);
+				}
+				cursor.close();
+				return true;
+			}
+		});
 		return gcs;
+	}
+
+	public void store(final Collection<Geocache> geocaches) {
+		dbHelper.runOnWritableDatabase(new DBOperation() {
+
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				remove(db, TABLE, null);
+				LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
+				for (Geocache gc : geocaches) {
+					cv.add(getValues(gc));
+				}
+				persistAll(db, TABLE, cv);
+				return true;
+			}
+		});
 	}
 }

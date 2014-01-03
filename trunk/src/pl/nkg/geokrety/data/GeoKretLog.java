@@ -25,7 +25,6 @@ import java.text.NumberFormat;
 import java.util.Date;
 
 import android.os.Bundle;
-import android.text.format.DateFormat;
 
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.lib.gkapi.GeoKretyProvider;

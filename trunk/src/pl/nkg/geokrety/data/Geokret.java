@@ -31,22 +31,40 @@ public class Geokret {
 	private int type;
 	private String name;
 	private String nr;
-	
+	private boolean sticky = false;
+
 	public Geokret(Node node) {
-		id = Integer.parseInt(node.getAttributes().getNamedItem("id").getNodeValue());
-		dist = Integer.parseInt(node.getAttributes().getNamedItem("dist").getNodeValue());
-		owner_id = Integer.parseInt(node.getAttributes().getNamedItem("owner_id").getNodeValue());
-		type = Integer.parseInt(node.getAttributes().getNamedItem("type").getNodeValue());
+		id = Integer.parseInt(node.getAttributes().getNamedItem("id")
+				.getNodeValue());
+		dist = Integer.parseInt(node.getAttributes().getNamedItem("dist")
+				.getNodeValue());
+		owner_id = Integer.parseInt(node.getAttributes()
+				.getNamedItem("owner_id").getNodeValue());
+		type = Integer.parseInt(node.getAttributes().getNamedItem("type")
+				.getNodeValue());
 		nr = node.getAttributes().getNamedItem("nr").getNodeValue();
-	    name = node.getChildNodes().item(0).getNodeValue();
-	    		//getTextContent() getNodeValue();
-	    
-	    Node stateNode = node.getAttributes().getNamedItem("state");
-	    if (stateNode == null) {
-	    	state = null;
-	    } else {
-	    	state = Integer.parseInt(stateNode.getNodeValue());
-	    }
+		name = node.getChildNodes().item(0).getNodeValue();
+		// getTextContent() getNodeValue();
+
+		Node stateNode = node.getAttributes().getNamedItem("state");
+		if (stateNode == null) {
+			state = null;
+		} else {
+			state = Integer.parseInt(stateNode.getNodeValue());
+		}
+	}
+
+	public Geokret(int id, int dist, int owner_id, Integer state, int type,
+			String name, String nr, boolean sticky) {
+		super();
+		this.id = id;
+		this.dist = dist;
+		this.owner_id = owner_id;
+		this.state = state;
+		this.type = type;
+		this.name = name;
+		this.nr = nr;
+		this.sticky = sticky;
 	}
 
 	public int getID() {
@@ -76,9 +94,17 @@ public class Geokret {
 	public String getTackingCode() {
 		return nr;
 	}
-	
+
 	@Override
 	public String toString() {
 		return name + " (" + nr + ")";
+	}
+
+	public boolean isSticky() {
+		return sticky;
+	}
+
+	public void setSticky(boolean sticky) {
+		this.sticky = sticky;
 	}
 }

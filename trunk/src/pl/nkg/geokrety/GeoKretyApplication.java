@@ -56,10 +56,10 @@ public class GeoKretyApplication extends Application {
 		stateHolder = new StateHolder(getApplicationContext());
 		httpClient = createHttpClient();
 		foregroundTaskHandler = new ForegroundTaskHandler();
-		foregroundTaskHandler.registerTask(new LogGeoKret());
-		foregroundTaskHandler.registerTask(new RefreshAccount());
-		foregroundTaskHandler.registerTask(new GettingSecidThread());
-		foregroundTaskHandler.registerTask(new GettingUuidThread());
+		foregroundTaskHandler.registerTask(new LogGeoKret(this));
+		foregroundTaskHandler.registerTask(new RefreshAccount(this));
+		foregroundTaskHandler.registerTask(new GettingSecidThread(this));
+		foregroundTaskHandler.registerTask(new GettingUuidThread(this));
 	}
 
 	@Override
