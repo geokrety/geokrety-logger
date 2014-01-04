@@ -217,7 +217,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 		updateCurrentAccount(false, false);
 
 		logTypeSpinnerDialog.setAdapter(new ArrayAdapter<String>(this,
-				android.R.layout.simple_spinner_dropdown_item, getResources()
+				android.R.layout.simple_list_item_single_choice, getResources()
 						.getStringArray(R.array.log_array)));
 
 		updateSpinners();
@@ -312,11 +312,11 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	private void configAdapters() {
 		inventorySpinnerDialog.setAdapter(new ArrayAdapter<Geokret>(this,
-				android.R.layout.simple_spinner_dropdown_item, currentAccount
+				android.R.layout.simple_list_item_single_choice, currentAccount
 						.getInventory()));
 
 		ocsSpinnerDialog.setAdapter(new ArrayAdapter<GeocacheLog>(this,
-				android.R.layout.simple_spinner_dropdown_item, currentAccount
+				android.R.layout.simple_list_item_single_choice, currentAccount
 						.getOpenCachingLogs()));
 	}
 
