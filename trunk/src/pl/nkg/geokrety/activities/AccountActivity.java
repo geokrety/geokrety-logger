@@ -36,21 +36,28 @@ import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
+import pl.nkg.lib.location.GPSAcquirer;
 import pl.nkg.lib.okapi.SupportedOKAPI;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
 import android.app.Dialog;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class AccountActivity extends ManagedDialogsActivity {
+public class AccountActivity extends ManagedDialogsActivity implements
+LocationListener, TextWatcher {
 
 	private int accountID; // TODO: to moze byc razem z klasa Account
 	private String accountName;
@@ -62,6 +69,8 @@ public class AccountActivity extends ManagedDialogsActivity {
 	private CheckBox gkCheckBox;
 	private CheckBox[] ocCheckBox = new CheckBox[SupportedOKAPI.SUPPORTED.length];
 	private Button saveButton;
+	private EditText latEditText;
+	private EditText lonEditText;
 
 	private AlertDialogWrapper saveModifiedsDialog;
 
@@ -75,6 +84,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 	private GettingUuidThread gettingUuidThread;
 
 	private GeoKretyApplication application;
+	private GPSAcquirer gpsAcquirer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -108,11 +118,16 @@ public class AccountActivity extends ManagedDialogsActivity {
 				.getForegroundTaskHandler());
 
 		setContentView(R.layout.activity_account);
+		latEditText = (EditText)findViewById(R.id.latEditText);
+		lonEditText = (EditText)findViewById(R.id.lonEditText);
+
 		accountID = getIntent().getIntExtra(Account.ACCOUNT_ID,
 				ListView.INVALID_POSITION);
 		secid = getIntent().getStringExtra(Account.SECID);
 		ocUUIDs = getIntent().getStringArrayExtra(Account.OCUUIDS);
 		accountName = getIntent().getStringExtra(Account.ACCOUNT_NAME);
+		lonEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(Account.HOME_LON), ""));
+		latEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(Account.HOME_LAT), ""));
 
 		if (ocUUIDs == null) {
 			ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -131,6 +146,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 		// accountNameEditText.setText(getIntent().getStringExtra(Account.ACCOUNT_NAME));
 		updateChecks();
 		modified = false;
+		gpsAcquirer = new GPSAcquirer(this, "gpsAcquirer", this);
 
 		gkCheckBox.setOnClickListener(new OnClickListener() {
 
@@ -166,6 +182,9 @@ public class AccountActivity extends ManagedDialogsActivity {
 				}
 			});
 		}
+		
+		lonEditText.addTextChangedListener(this);
+		latEditText.addTextChangedListener(this);
 	}
 
 	private void updateChecks() {
@@ -183,6 +202,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 	@Override
 	protected void onStart() {
 		super.onStart();
+		gpsAcquirer.start();
 		gettingSecidThread.attach(secidProgressDialog,
 				new GenericTaskListener<Pair<String, String>, String, String>(
 						this) {
@@ -283,6 +303,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		gpsAcquirer.pause(outState);
 		outState.putStringArray(Account.OCUUIDS, ocUUIDs);
 		outState.putInt(Account.ACCOUNT_ID, accountID);
 		outState.putString(Account.SECID, secid);
@@ -296,6 +317,7 @@ public class AccountActivity extends ManagedDialogsActivity {
 		accountID = savedInstanceState.getInt(Account.ACCOUNT_ID);
 		ocUUIDs = savedInstanceState.getStringArray(Account.OCUUIDS);
 		accountName = savedInstanceState.getString(Account.ACCOUNT_NAME);
+		gpsAcquirer.restore(savedInstanceState);
 	}
 
 	public void saveClick(View view) {
@@ -304,6 +326,8 @@ public class AccountActivity extends ManagedDialogsActivity {
 		returnIntent.putExtra(Account.ACCOUNT_ID, accountID);
 		returnIntent.putExtra(Account.OCUUIDS, ocUUIDs);
 		returnIntent.putExtra(Account.ACCOUNT_NAME, accountName);
+		returnIntent.putExtra(Account.HOME_LAT, latEditText.getText().toString());
+		returnIntent.putExtra(Account.HOME_LON, lonEditText.getText().toString());
 		setResult(RESULT_OK, returnIntent);
 		finish();
 	}
@@ -315,5 +339,41 @@ public class AccountActivity extends ManagedDialogsActivity {
 		} else {
 			super.onBackPressed();
 		}
+	}
+	
+	public void onClickSetCoordinatesFromGPS(View view) {
+		gpsAcquirer.runRequest(1000, 30);
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		lonEditText.setText(Utils.latlonFormat.format(location.getLongitude()));
+		latEditText.setText(Utils.latlonFormat.format(location.getLatitude()));
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		modified = true;
 	}
 }

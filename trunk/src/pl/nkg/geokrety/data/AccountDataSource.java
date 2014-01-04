@@ -42,6 +42,8 @@ public class AccountDataSource {
 	public static final String COLUMN_SECID = "secid";
 	public static final String COLUMN_UUIDS = "uuids";
 	public static final String COLUMN_REFRESH = "refresh";
+	public static final String COLUMN_HOME_LON = "home_lon";
+	public static final String COLUMN_HOME_LAT = "home_lat";
 
 	public static final String TABLE_CREATE = "CREATE TABLE " //
 			+ TABLE + "(" //
@@ -49,7 +51,9 @@ public class AccountDataSource {
 			+ COLUMN_USER_NAME + " TEXT NOT NULL, " //
 			+ COLUMN_SECID + " TEXT NOT NULL, " //
 			+ COLUMN_UUIDS + " TEXT NOT NULL, " //
-			+ COLUMN_REFRESH + " INTEGER NOT NULL" //
+			+ COLUMN_REFRESH + " INTEGER NOT NULL," //
+			+ COLUMN_HOME_LAT + " TEXT NOT NULL," //
+			+ COLUMN_HOME_LON + " TEXT NOT NULL" //
 			+ "); ";
 
 	private GeoKretySQLiteHelper dbHelper;
@@ -61,7 +65,9 @@ public class AccountDataSource {
 			+ COLUMN_USER_NAME + ", " //
 			+ COLUMN_SECID + ", " //
 			+ COLUMN_UUIDS + ", "//
-			+ COLUMN_REFRESH //
+			+ COLUMN_REFRESH + ", " //
+			+ COLUMN_HOME_LAT + ", " //
+			+ COLUMN_HOME_LON //
 			+ " FROM " //
 			+ TABLE //
 			+ " ORDER BY " + COLUMN_USER_NAME;
@@ -80,6 +86,8 @@ public class AccountDataSource {
 		values.put(COLUMN_SECID, account.getGeoKreySecredID());
 		values.put(COLUMN_UUIDS, joinUUIDs(account.getOpenCachingUUIDs()));
 		values.put(COLUMN_REFRESH, storedLastLoadedDate);
+		values.put(COLUMN_HOME_LAT, account.getHomeCordLat());
+		values.put(COLUMN_HOME_LON, account.getHomeCordLon());
 		return values;
 	}
 
@@ -174,6 +182,9 @@ public class AccountDataSource {
 							cursor.getString(1), //
 							cursor.getString(2), //
 							extractUUIDs(cursor.getString(3)));
+					
+					account.setHomeCordLat(cursor.getString(5));
+					account.setHomeCordLon(cursor.getString(6));
 
 					long time = cursor.getLong(4);
 					if (time > 0) {

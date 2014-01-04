@@ -118,6 +118,10 @@
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <string name="changelog">Change log:\n\n
+        0.3.1 beta - 2014-01-04\n
+        - support URI,\n
+        - support home location\n
+        \n
         0.3.0 beta - 2014-01-04\n
         - add GeoKret into inventory manually\n
         - log GeoKret on GPS location\n
@@ -160,6 +164,7 @@
     <string name="generic_error">Error:</string>
     <string name="generic_broken">Broken</string>
     <string name="generic_finish">End successful</string>
+    
     <string name="title_activity_account">Account</string>
     <string name="account_account_name">Account name:</string>
     <string name="account_account_name_hint">New user</string>
@@ -174,6 +179,11 @@
     <string name="account_save">OK</string>
     <string name="account_save_title">Save account settings?</string>
     <string name="account_save_message">Account settings changed. Save changes?</string>
+    <string name="account_home_location">Home coordinates (optional):</string>
+    <string name="account_latitude_hint">latitude</string>
+    <string name="account_longnitude_hint">longnitude</string>
+    <string name="account_from_gps">GPS</string>
+    
     <string name="title_dialog_gk">Login and password to GeoKrety.org</string>
     <string name="title_dialog_oc">Login to</string>
     <string name="dots">&#8230;</string>
@@ -203,4 +213,5 @@
     <string name="geokret_save_title">Save GeoKret settings?</string>
     <string name="geokret_save_message">GeoKret settings changed. Save changes?</string>
     
+    <string name="supported_formats">Supported formats: http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
 </resources>

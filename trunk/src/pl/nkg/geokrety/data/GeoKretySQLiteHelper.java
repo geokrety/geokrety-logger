@@ -32,7 +32,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "geokrety.db";
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	public GeoKretySQLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,20 +46,31 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (oldVersion == 1 && newVersion == 2) {
+		if (oldVersion == 1) {
 			createV2(db);
-			db.execSQL("ALTER TABLE " + AccountDataSource.TABLE + " ADD COLUMN " + AccountDataSource.COLUMN_REFRESH + " INTEGER NOT NULL DEFAULT 0;");
+			db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
+					+ " ADD COLUMN " + AccountDataSource.COLUMN_REFRESH
+					+ " INTEGER NOT NULL DEFAULT 0;");
+		}
+
+		if (oldVersion == 2) {
+			db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
+					+ " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LAT
+					+ " TEXT NOT NULL DEFAULT '';");
+			db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
+					+ " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LON
+					+ " TEXT NOT NULL DEFAULT '';");
 		}
 	}
-	
+
 	private void createV1(SQLiteDatabase db) {
-		db.execSQL(AccountDataSource.TABLE_CREATE);		
+		db.execSQL(AccountDataSource.TABLE_CREATE);
 	}
 
 	private void createV2(SQLiteDatabase db) {
 		db.execSQL(GeocacheDataSource.TABLE_CREATE);
 		db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
-		db.execSQL(GeoKretDataSource.TABLE_CREATE);		
+		db.execSQL(GeoKretDataSource.TABLE_CREATE);
 	}
 
 	public boolean runOnReadableDatabase(DBOperation operation) {

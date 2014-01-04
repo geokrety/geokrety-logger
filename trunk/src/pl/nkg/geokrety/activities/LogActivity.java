@@ -171,9 +171,10 @@ public class LogActivity extends ManagedDialogsActivity implements
 					if (!Utils.isEmpty(minuta)) {
 						currentLog.setMinuta(Integer.parseInt(minuta));
 					}
-				} else if(data.getHost().equals("coord.info")) {
+				} else if (data.getHost().equals("coord.info")) {
 					String path = data.getPath();
-					currentLog.setWpt(path.subSequence(1, path.length()).toString());
+					currentLog.setWpt(path.subSequence(1, path.length())
+							.toString());
 				} else {
 					currentLog.setWpt(data.getQueryParameter("wp"));
 				}
@@ -356,8 +357,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 	}
 
 	public void onClickSetHomeCoordinates(View view) {
-		Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG)
-				.show(); // TODO:
+		coordinatesEditText.setText(currentAccount.getHomeCordLat() + " "
+				+ currentAccount.getHomeCordLon());
 	}
 
 	public void checkDate(View view) {
@@ -368,13 +369,13 @@ public class LogActivity extends ManagedDialogsActivity implements
 			showDatePickerDialog();
 		}
 	}
-	
+
 	private void showDatePickerDialog() {
 		String[] date = currentLog.getData().split("-");
 		int y = Integer.parseInt(date[0]);
 		int m = Integer.parseInt(date[1]) - 1;
 		int d = Integer.parseInt(date[2]);
-		datePickerDialog.show(null, y, m, d);		
+		datePickerDialog.show(null, y, m, d);
 	}
 
 	public void checkTime(View view) {
@@ -462,8 +463,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 	@Override
 	public void onLocationChanged(Location location) {
 		coordinatesEditText.setText(//
-				Double.toString(location.getLatitude()) + ' '
-						+ Double.toString(location.getLongitude()));
+				Utils.latlonFormat.format(location.getLatitude()) + ' '
+						+ Utils.latlonFormat.format(location.getLongitude()));
 	}
 
 	@Override

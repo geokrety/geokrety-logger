@@ -46,6 +46,8 @@ public class Account {
 	public static final String ACCOUNT_NAME = "accountName";
 	public static final String SECID = "secid";
 	public static final String OCUUIDS = "ocUUIDs";
+	public static final String HOME_LON = "homeCordLon";
+	public static final String HOME_LAT = "homeCordLat";
 
 	private static final long EXPIRED = 24 * 60 * 60 * 1000;
 
@@ -59,6 +61,9 @@ public class Account {
 	private List<Geokret> inventory;
 
 	private Date lastDataLoaded;
+	
+	private String homeCordLon;
+	private String homeCordLat;
 
 	public Account(Bundle bundle) {
 		unpack(bundle);
@@ -98,6 +103,22 @@ public class Account {
 
 	public String getGeoKreySecredID() {
 		return geoKretySecredID;
+	}
+
+	public String getHomeCordLon() {
+		return homeCordLon;
+	}
+
+	public void setHomeCordLon(String homeCordLon) {
+		this.homeCordLon = homeCordLon;
+	}
+
+	public String getHomeCordLat() {
+		return homeCordLat;
+	}
+
+	public void setHomeCordLat(String homeCordLat) {
+		this.homeCordLat = homeCordLat;
 	}
 
 	public List<GeocacheLog> getOpenCachingLogs() {
@@ -148,6 +169,8 @@ public class Account {
 		bundle.putInt(Account.ACCOUNT_ID, id);
 		bundle.putString(Account.SECID, geoKretySecredID);
 		bundle.putString(Account.ACCOUNT_NAME, name);
+		bundle.putString(Account.HOME_LAT, homeCordLat);
+		bundle.putString(Account.HOME_LON, homeCordLon);
 		return bundle;
 	}
 
@@ -156,6 +179,8 @@ public class Account {
 		id = bundle.getInt(Account.ACCOUNT_ID);
 		openCachingUUIDs = bundle.getStringArray(Account.OCUUIDS);
 		name = bundle.getString(Account.ACCOUNT_NAME);
+		homeCordLat = bundle.getString(Account.HOME_LAT);
+		homeCordLon = bundle.getString(Account.HOME_LON);
 		return bundle;
 	}
 

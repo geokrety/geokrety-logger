@@ -23,6 +23,7 @@ package pl.nkg.geokrety;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -51,6 +52,7 @@ import android.util.Log;
 
 public class Utils {
 	public static GeoKretyApplication application;
+	public static DecimalFormat latlonFormat = new DecimalFormat("#.######");
 
 	public static Document getDomElement(String xml) {
 		Document doc = null;
@@ -149,5 +151,9 @@ public class Utils {
 
 	public static String getDefaultLanguage() {
 		return Locale.getDefault().getDisplayLanguage();
+	}
+
+	public static String defaultIfNull(String value, String def) {
+		return value == null ? def : value;
 	}
 }
