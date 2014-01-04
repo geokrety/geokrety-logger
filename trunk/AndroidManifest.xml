@@ -132,7 +132,16 @@
                     android:host="www.opencaching.cz"
                     android:pathPrefix="/viewcache.php" />
                 
-            </intent-filter>
+                <data 
+                    android:scheme="http"
+                    android:host="www.geocaching.com"
+                    android:pathPrefix="/seek/cache_details.aspx" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="coord.info"
+                    android:pathPrefix="/GC" />
+                </intent-filter>
         </activity>
         <activity
             android:name="pl.nkg.geokrety.activities.AboutActivity"

@@ -171,6 +171,9 @@ public class LogActivity extends ManagedDialogsActivity implements
 					if (!Utils.isEmpty(minuta)) {
 						currentLog.setMinuta(Integer.parseInt(minuta));
 					}
+				} else if(data.getHost().equals("coord.info")) {
+					String path = data.getPath();
+					currentLog.setWpt(path.subSequence(1, path.length()).toString());
 				} else {
 					currentLog.setWpt(data.getQueryParameter("wp"));
 				}
