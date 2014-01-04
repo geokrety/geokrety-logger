@@ -27,7 +27,11 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    
+	
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+	<uses-feature android:name="android.hardware.location" android:required="false" />
+	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
+	
     <uses-sdk
         android:minSdkVersion="5"
         android:targetSdkVersion="19" />
@@ -62,6 +66,27 @@
         <activity
             android:name="pl.nkg.geokrety.activities.LogActivity"
             android:label="@string/title_activity_log" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data 
+                    android:scheme="http"
+                    android:host="geokrety.org"
+                    android:path="/m/qr.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="geokrety.org"
+                    android:path="/ruchy.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="opencaching.pl"
+                    android:pathPrefix="/viewcache.php" />
+            </intent-filter>
         </activity>
         <activity
             android:name="pl.nkg.geokrety.activities.AboutActivity"

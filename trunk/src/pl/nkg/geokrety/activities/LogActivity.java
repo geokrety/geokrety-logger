@@ -22,9 +22,11 @@
 package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeoKretLog;
@@ -46,6 +48,7 @@ import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
 import android.location.Location;
 import android.location.LocationListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.content.Intent;
 import android.util.Pair;
@@ -143,6 +146,40 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 		// currentLogType = savedInstanceState.getInt(LOGTYPE, 0);
 		gpsAcquirer = new GPSAcquirer(this, "gpsAcquirer", this);
+
+		Intent intent = getIntent();
+		String action = intent.getAction();
+		if (!Utils.isEmpty(action) && action.equals(Intent.ACTION_VIEW)) {
+			Uri data = intent.getData();
+			try {
+				if (data.getHost().equals("geokrety.org")) {
+					currentLog.setNr(data.getQueryParameter("nr"));
+					currentLog.setWpt(data.getQueryParameter("wpt"));
+
+					String date = data.getQueryParameter("data");
+					String godzina = data.getQueryParameter("godzina");
+					String minuta = data.getQueryParameter("minuta");
+
+					if (!Utils.isEmpty(date)) {
+						currentLog.setData(date);
+					}
+
+					if (!Utils.isEmpty(godzina)) {
+						currentLog.setGodzina(Integer.parseInt(godzina));
+					}
+
+					if (!Utils.isEmpty(minuta)) {
+						currentLog.setMinuta(Integer.parseInt(minuta));
+					}
+				} else {
+					currentLog.setWpt(data.getQueryParameter("wp"));
+				}
+			} catch (Throwable e) {
+				Toast.makeText(this, e.getLocalizedMessage(), Toast.LENGTH_LONG)
+						.show();
+				finish();
+			}
+		}
 	}
 
 	@Override
@@ -314,21 +351,27 @@ public class LogActivity extends ManagedDialogsActivity implements
 	public void onClickSetCoordinatesFromGPS(View view) {
 		gpsAcquirer.runRequest(1000, 30);
 	}
-	
+
 	public void onClickSetHomeCoordinates(View view) {
-		Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG).show(); // TODO:
+		Toast.makeText(this, R.string.not_implemented_yet, Toast.LENGTH_LONG)
+				.show(); // TODO:
 	}
 
 	public void checkDate(View view) {
+		try {
+			showDatePickerDialog();
+		} catch (Exception e) {
+			currentLog.setDateAndTime(new Date());
+			showDatePickerDialog();
+		}
+	}
+	
+	private void showDatePickerDialog() {
 		String[] date = currentLog.getData().split("-");
 		int y = Integer.parseInt(date[0]);
 		int m = Integer.parseInt(date[1]) - 1;
 		int d = Integer.parseInt(date[2]);
-		try {
-			datePickerDialog.show(null, y, m, d);
-		} catch (Exception e) {
-			System.out.print(e);
-		}
+		datePickerDialog.show(null, y, m, d);		
 	}
 
 	public void checkTime(View view) {
@@ -395,12 +438,12 @@ public class LogActivity extends ManagedDialogsActivity implements
 			GeocacheLog log = (GeocacheLog) ocsSpinnerDialog.getAdapter()
 					.getItem(buttonId);
 			waypointEditText.setText(log.getCacheCode());
-			
+
 			Geocache gc = log.getGeoCache();
 			if (gc != null) {
-				coordinatesEditText.setText(gc.getLocation().replace("|", " "));				
+				coordinatesEditText.setText(gc.getLocation().replace("|", " "));
 			}
-			
+
 			storeToGeoKretLog(currentLog);
 			currentLog.setDateAndTime(log.getDate());
 			loadFromGeoKretLog(currentLog);
