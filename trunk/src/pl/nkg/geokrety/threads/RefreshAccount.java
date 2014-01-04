@@ -38,7 +38,7 @@ import pl.nkg.lib.threads.TaskListener;
 import android.content.Context;
 
 public class RefreshAccount extends
-		AbstractForegroundTaskWrapper<Account, String, Boolean> {
+		AbstractForegroundTaskWrapper<Account, String, String> {
 
 	public static final int ID = 1;
 	private String[] messages;
@@ -54,41 +54,6 @@ public class RefreshAccount extends
 		dots = ctx.getText(R.string.dots).toString();
 	}
 
-	@Override
-	protected Boolean runInBackground(Account param) throws Throwable {
-		Account account = param;
-
-		StateHolder holder = ((GeoKretyApplication) getApplication())
-				.getStateHolder();
-
-		publishProgress(getProgressMessage(0));
-		account.loadInventoryAndStore(holder.getGeoKretDataSource());
-
-		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
-		for (int i = 0; i < SupportedOKAPI.SUPPORTED.length; i++) {
-			if (account.hasOpenCachingUUID(i)) {
-				publishProgress(getProgressMessage(1) + " "
-						+ SupportedOKAPI.SUPPORTED[i].host + dots);
-				try {
-					List<GeocacheLog> logs = account.loadOpenCachingLogs(i);
-					holder.getGeocacheLogDataSource().store(logs,
-							account.getID(), i);
-					openCachingLogs.addAll(logs);
-				} catch (MessagedException e) {
-					// TODO: report problem
-				}
-				publishProgress(getProgressMessage(2) + " "
-						+ SupportedOKAPI.SUPPORTED[i].host + dots);
-				account.loadOCnamesToBuffer(openCachingLogs, i);
-			}
-		}
-		holder.storeGeoCachingNames();
-		account.setOpenCachingLogs(holder.getGeocacheLogDataSource().load(
-				account.getID()));
-		account.touchLastLoadedDate(holder.getAccountDataSource());
-		return true;
-	}
-
 	private String getProgressMessage(int step) {
 		synchronized (this) {
 			if (messages == null) {
@@ -101,7 +66,7 @@ public class RefreshAccount extends
 	@Override
 	public void attach(
 			AbstractProgressDialogWrapper<String> progressDialogWrapper,
-			TaskListener<Account, String, Boolean> listener) {
+			TaskListener<Account, String, String> listener) {
 		super.attach(progressDialogWrapper, listener);
 	}
 
@@ -109,5 +74,60 @@ public class RefreshAccount extends
 		AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
 		RefreshAccount b = (RefreshAccount) a;
 		return b;
+	}
+
+	@Override
+	protected String runInBackground(Thread thread, Account param)
+			throws Throwable {
+		Account account = param;
+		StringBuilder report = new StringBuilder();
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+				.getStateHolder();
+
+		try {
+			publishProgress(getProgressMessage(0));
+			account.loadInventoryAndStore(thread, holder.getGeoKretDataSource());
+
+		} catch (MessagedException e) {
+			report.append("\n");
+			report.append(e.getFormatedMessage(getApplication()
+					.getApplicationContext()));
+		}
+
+		ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
+		for (int i = 0; i < SupportedOKAPI.SUPPORTED.length; i++) {
+			if (account.hasOpenCachingUUID(i) && !thread.isCancelled()) {
+				publishProgress(getProgressMessage(1) + " "
+						+ SupportedOKAPI.SUPPORTED[i].host + dots);
+				try {
+					List<GeocacheLog> logs = account.loadOpenCachingLogs(i);
+					holder.getGeocacheLogDataSource().store(logs,
+							account.getID(), i);
+					openCachingLogs.addAll(logs);
+				} catch (MessagedException e) {
+					report.append("\n");
+					report.append(e.getFormatedMessage(getApplication()
+							.getApplicationContext()));
+				}
+
+				if (thread.isCancelled()) {
+					return "";
+				}
+
+				publishProgress(getProgressMessage(2) + " "
+						+ SupportedOKAPI.SUPPORTED[i].host + dots);
+				account.loadOCnamesToBuffer(thread, openCachingLogs, i);
+			}
+		}
+
+		if (thread.isCancelled()) {
+			return "";
+		}
+
+		holder.storeGeoCachingNames();
+		account.setOpenCachingLogs(holder.getGeocacheLogDataSource().load(
+				account.getID()));
+		account.touchLastLoadedDate(holder.getAccountDataSource());
+		return report.toString();
 	}
 }

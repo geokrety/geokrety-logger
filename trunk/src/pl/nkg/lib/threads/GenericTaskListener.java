@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 public class GenericTaskListener<Param, Progress extends Serializable, Result>
 		implements TaskListener<Param, Progress, Result> {
-	private final Context context;
+	protected final Context context;
 	private Integer finishMessage = R.string.generic_finish;
 	private Integer breakMessage = R.string.generic_broken;
 	private Integer errorMessage = R.string.generic_error;

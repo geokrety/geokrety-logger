@@ -37,9 +37,12 @@
     <string name="account_new">New</string>
     <string name="account_edit">Edit</string>
     <string name="account_remove">Remove</string>
+    
     <string name="error_login_null">GeoKrety.org login can not be empty</string>
     <string name="error_password_null">GeoKrety.org password can not be empty</string>
     <string name="error_oc_null">OpenCaching login can not be empty</string>
+    <string name="warning">Some problems:</string>
+    
     <string name="accounts_add_title">Add new account</string>
     <string name="accounts_edit_title">Edit account</string>
     <string name="accounts_remove_question">Are you sure to remove account </string>
@@ -113,7 +116,7 @@
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <string name="changelog">Change log:\n\n
-        0.3.0 beta - 2014-01-03\n
+        0.3.0 beta - 2014-01-04\n
         - add GeoKret into inventory manually\n
         \n
         0.2.1 beta - 2013-12-29\n

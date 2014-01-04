@@ -164,9 +164,9 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 		}
 	}
 
-	protected abstract Result runInBackground(Param param) throws Throwable;
+	protected abstract Result runInBackground(Thread thread, Param param) throws Throwable;
 
-	public class Thread extends AsyncTask<Object, Object, Result> {
+	public class Thread extends AsyncTask<Object, Object, Result> implements ICancelable {
 
 		@Override
 		protected void onPreExecute() {
@@ -180,7 +180,7 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
 		@Override
 		protected Result doInBackground(Object... params) {
 			try {
-				return runInBackground((Param) params[0]);
+				return runInBackground(this, (Param) params[0]);
 			} catch (Throwable t) {
 				exception = t;
 				return null;

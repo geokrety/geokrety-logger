@@ -36,16 +36,16 @@ public class GettingSecidThread extends
 		super(application, ID);
 	}
 
-	@Override
-	protected String runInBackground(Pair<String, String> param)
-			throws Throwable {
-		return GeoKretyProvider.loadSecureID(param.first, param.second);
-	}
-
 	public static GettingSecidThread getFromHandler(
 			ForegroundTaskHandler handler) {
 		AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
 		GettingSecidThread b = (GettingSecidThread) a;
 		return b;
+	}
+
+	@Override
+	protected String runInBackground(Thread thread,
+			Pair<String, String> param) throws Throwable {
+		return GeoKretyProvider.loadSecureID(param.first, param.second);
 	}
 }

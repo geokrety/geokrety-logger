@@ -22,16 +22,32 @@
 package pl.nkg.geokrety.activities.listeners;
 
 import android.content.Context;
+import android.widget.Toast;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
+import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
 
 public class RefreshListener extends
-		GenericTaskListener<Account, String, Boolean> {
+		GenericTaskListener<Account, String, String> {
 
 	public RefreshListener(Context context) {
 		super(context);
-		setFinishMessage(R.string.download_finish);
 	}
 
+	@Override
+	public void onFinish(
+			AbstractForegroundTaskWrapper<Account, String, String> sender,
+			Account param, String result) {
+		if (Utils.isEmpty(result)) {
+			Toast.makeText(context, R.string.download_finish, Toast.LENGTH_LONG)
+					.show();
+		} else {
+			Toast.makeText(
+					context,
+					context.getText(R.string.warning).toString() + ' ' + result,
+					Toast.LENGTH_LONG).show();
+		}
+	}
 }

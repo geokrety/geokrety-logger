@@ -39,6 +39,7 @@ import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 import pl.nkg.lib.okapi.OKAPIProvider;
 import pl.nkg.lib.okapi.SupportedOKAPI;
+import pl.nkg.lib.threads.ICancelable;
 
 public class Account {
 	public static final String ACCOUNT_ID = "accountID";
@@ -158,12 +159,16 @@ public class Account {
 		return bundle;
 	}
 
-	public void loadInventoryAndStore(GeoKretDataSource dataSource)
+	public void loadInventoryAndStore(ICancelable cancelable, GeoKretDataSource dataSource)
 			throws MessagedException {
 
 		Map<String, Geokret> gkMap = GeoKretyProvider
 				.loadInventory(geoKretySecredID);
 
+		if (cancelable.isCancelled()) {
+			return;
+		}
+		
 		// merge with stickys
 		for (Geokret geokret : new LinkedList<Geokret>(getInventory())) {
 			if (geokret.isSticky()) {
@@ -199,11 +204,15 @@ public class Account {
 		accountDataSource.storeLastLoadedDate(this);
 	}
 
-	public void loadOCnamesToBuffer(List<GeocacheLog> openCachingLogs,
+	public void loadOCnamesToBuffer(ICancelable cancelable, List<GeocacheLog> openCachingLogs,
 			int portal) throws MessagedException {
 		SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
 		HashSet<String> codes = getUnbufferedCacheCodes(openCachingLogs);
 		if (codes.size() == 0) {
+			return;
+		}
+		
+		if (cancelable.isCancelled()) {
 			return;
 		}
 

@@ -25,6 +25,7 @@ import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.Account;
 import pl.nkg.geokrety.data.GeoKretLog;
+import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
@@ -41,19 +42,8 @@ public class LogGeoKret
 
 	public LogGeoKret(GeoKretyApplication application) {
 		super(application, ID);
-	}
-
-	@Override
-	protected Boolean runInBackground(Pair<GeoKretLog, Account> param)
-			throws Throwable {
-		GeoKretLog log = param.first;
-		Account account = param.second;
-		if (log.submitLog(account)) {
-			account.loadInventoryAndStore(((GeoKretyApplication) getApplication())
-					.getStateHolder().getGeoKretDataSource());
-			return true;
-		}
-		return false;
+		Context ctx = application.getApplicationContext();
+		message = ctx.getText(R.string.submit_message).toString();
 	}
 
 	public static LogGeoKret getFromHandler(ForegroundTaskHandler handler) {
@@ -67,8 +57,24 @@ public class LogGeoKret
 			AbstractProgressDialogWrapper<String> progressDialogWrapper,
 			TaskListener<Pair<GeoKretLog, Account>, String, Boolean> listener) {
 		super.attach(progressDialogWrapper, listener);
-		Context ctx = progressDialogWrapper.getManagedDialogsActivity();
-		message = ctx.getText(R.string.submit_message).toString();
 		progressDialogWrapper.setProgress(message);
+	}
+
+	@Override
+	protected Boolean runInBackground(Thread thread,
+			Pair<GeoKretLog, Account> param) throws Throwable {
+		GeoKretLog log = param.first;
+		Account account = param.second;
+		if (log.submitLog(account) && !thread.isCancelled()) {
+			try {
+				account.loadInventoryAndStore(thread,
+						((GeoKretyApplication) getApplication())
+								.getStateHolder().getGeoKretDataSource());
+			} catch (MessagedException e) {
+				// only refresh
+			}
+			return true;
+		}
+		return false;
 	}
 }

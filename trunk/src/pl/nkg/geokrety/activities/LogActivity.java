@@ -144,8 +144,8 @@ public class LogActivity extends ManagedDialogsActivity {
 		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
 			@Override
 			public void onFinish(
-					AbstractForegroundTaskWrapper<Account, String, Boolean> sender,
-					Account param, Boolean result) {
+					AbstractForegroundTaskWrapper<Account, String, String> sender,
+					Account param, String result) {
 				super.onFinish(sender, param, result);
 				configAdapters();
 			}

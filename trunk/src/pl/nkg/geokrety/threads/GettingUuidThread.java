@@ -37,16 +37,16 @@ public class GettingUuidThread extends
 		super(application, ID);
 	}
 
-	@Override
-	protected String runInBackground(Pair<String, Integer> param)
-			throws Throwable {
-		return OKAPIProvider.loadOpenCachingUUID(
-				SupportedOKAPI.SUPPORTED[param.second], param.first);
-	}
-
 	public static GettingUuidThread getFromHandler(ForegroundTaskHandler handler) {
 		AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
 		GettingUuidThread b = (GettingUuidThread) a;
 		return b;
+	}
+
+	@Override
+	protected String runInBackground(Thread thread, Pair<String, Integer> param)
+			throws Throwable {
+		return OKAPIProvider.loadOpenCachingUUID(
+				SupportedOKAPI.SUPPORTED[param.second], param.first);
 	}
 }

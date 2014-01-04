@@ -22,11 +22,14 @@
 package pl.nkg.lib.gkapi;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import android.text.TextUtils;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
@@ -110,9 +113,22 @@ public class GeoKretyProvider {
 			Document doc = Utils.getDomElement(adsFix[0]);
 			NodeList nl = doc.getElementsByTagName("error").item(0)
 					.getChildNodes();
-			if (nl.getLength() > 0) {
-				throw new MessagedException(R.string.submit_fail, nl.item(0)
-						.getNodeValue());
+
+			LinkedList<String> errors = new LinkedList<String>();
+			for (int i = 0; i < nl.getLength(); i++) {
+				errors.add(nl.item(0).getNodeValue());
+			}
+
+			if (errors.size() > 0) {
+
+				if (errors
+						.get(0)
+						.equals("There is an entry with this date. Correct the date or the hour.")) {
+					return true;
+				} else {
+					throw new MessagedException(R.string.submit_fail, "\n"
+							+ TextUtils.join("\n", errors));
+				}
 			}
 			return true;
 		} catch (MessagedException e) {

@@ -37,9 +37,12 @@
     <string name="account_new">Nowe</string>
     <string name="account_edit">Edytuj</string>
     <string name="account_remove">Usuń</string>
+    
     <string name="error_login_null">Nie podałeś loginu do GeoKrety.org</string>
     <string name="error_password_null">Nie podałeś hasła do GeoKrety.org</string>
     <string name="error_oc_null">Nie podałeś loginu do OpenCaching</string>
+    <string name="warning">Napotkano kilka problemów:</string>
+    
     <string name="accounts_add_title">Dodaj nowe konto</string>
     <string name="accounts_edit_title">Edytuj konto</string>
     <string name="accounts_remove_question">Czy jesteś pewien że chcesz usunąć konto</string>
@@ -96,7 +99,7 @@
     <string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne. Program jest darmowy, a jego kod źródłowy jest dostępny publicznie na licencji GPL 3.0 (<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>). Jeżeli coś działa nieprawidłowo, poinformuj mnie o tym pisząc najlepiej w formularzu pod adresem: <a href="http://geokrety.org/majluj.php?to=12444">geokrety.org/majluj.php?to=12444</a>. Nie ponoszę odpowiedzialności za szkody wynikające błędnego działania programu lub używania go niezgodnie z przeznaczeniem.</string>
     <string name="emergency">Jeżeli z powodu błędu w programie nie możesz zalogować GeoKreta, zrób to przez serwis WWW przechodząc bezpośrednio na stronę <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>. Jeżeli logowanie GeoKreta na stronie WWW się powiodło, proszę poinformuj mnie o problemie.</string>
     <string name="changelog">Historia zmian:\n
-        0.3.0 beta - 2014-01-03\n
+        0.3.0 beta - 2014-01-04\n
         - możliwość ręcznego umieszczenia GeoKreta w inwentarzu\n
         \n
         0.2.1 beta - 2013-12-29\n
