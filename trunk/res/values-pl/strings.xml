@@ -78,6 +78,8 @@
     <string name="form_comment">Komentarz</string>
     <string name="form_submit">Go!</string>
     <string name="form_clear">Wyczyść</string>
+    <string name="form_location_description">Jeżeli podałeś waypoint to nie musisz podawać współrzędnych bo GeoKrety.org i tak użyją współrzędnych z waypoint.</string>
+    
     <string name="title_dialog_inventory">Krety, które masz u siebie</string>
     <string name="title_dialog_ocs">Twoje ostatnie logi z portali OpenCaching</string>
     <string name="not_implemented_yet">Ta funkcja jeszcze nie działa, poczekaj na nowszą wersję.</string>
@@ -197,4 +199,9 @@
     <string name="geokret_save_message">Dokonano zmian w ustawieniach GeoKreta. Czy zapisać zmiany?</string>
     
     <string name="supported_formats">Obsługiwane formaty: http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
+    <string name="gps_not_exist">Twoje urządzenie nie posiada modułu GPS</string>
+    <string name="gps_not_enabled">GPS jest wyłączony, włącz najpierw GPS i spróbuj ponownie</string>
+    <string name="gps_acquiring">oczekiwanie na GPS fix</string>
+    <string name="gps_pleas_wait">Poczekaj aż GPS złapie fix\'a</string>
+    <string name="gps_fixed">GPS fix złapany, kordy zostały wklejone</string>
 </resources>

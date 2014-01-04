@@ -21,7 +21,11 @@
  */
 package pl.nkg.lib.location;
 
+import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -117,5 +121,35 @@ public class GPSAcquirer implements LocationListener {
 		if (!paused) {
 			listener.onProviderDisabled(provider);
 		}
+	}
+	
+	@SuppressLint("InlinedApi")
+	public static boolean gpsExist(Context context) {
+		if (android.os.Build.VERSION.SDK_INT < 8) {
+			return true;
+		}
+		
+		return context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS);
+	}
+	
+	public static boolean gpsEnabled(Context context) {
+		LocationManager manager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);	
+		return manager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+	}
+	
+	public static boolean checkAndToast(Context context) {
+		if (!gpsExist(context)) {
+			Utils.makeCenterToast(context,  R.string.gps_not_exist).show();
+			return false;
+		}
+		
+		if (!gpsEnabled(context)) {
+			Utils.makeCenterToast(context,  R.string.gps_not_enabled).show();
+			return false;
+		}
+		
+		Utils.makeCenterToast(context,  R.string.gps_pleas_wait).show();
+		
+		return true;
 	}
 }

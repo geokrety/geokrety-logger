@@ -353,7 +353,9 @@ public class LogActivity extends ManagedDialogsActivity implements
 	}
 
 	public void onClickSetCoordinatesFromGPS(View view) {
-		gpsAcquirer.runRequest(1000, 30);
+		if (GPSAcquirer.checkAndToast(this)) {
+			gpsAcquirer.runRequest(1000, 30);
+		}
 	}
 
 	public void onClickSetHomeCoordinates(View view) {
@@ -465,6 +467,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 		coordinatesEditText.setText(//
 				Utils.latlonFormat.format(location.getLatitude()) + ' '
 						+ Utils.latlonFormat.format(location.getLongitude()));
+		Utils.makeCenterToast(this, R.string.gps_fixed).show();
 	}
 
 	@Override

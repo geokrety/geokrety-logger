@@ -342,13 +342,16 @@ LocationListener, TextWatcher {
 	}
 	
 	public void onClickSetCoordinatesFromGPS(View view) {
-		gpsAcquirer.runRequest(1000, 30);
+		if (GPSAcquirer.checkAndToast(this)) {
+			gpsAcquirer.runRequest(1000, 30);
+		}
 	}
 
 	@Override
 	public void onLocationChanged(Location location) {
 		lonEditText.setText(Utils.latlonFormat.format(location.getLongitude()));
 		latEditText.setText(Utils.latlonFormat.format(location.getLatitude()));
+		Utils.makeCenterToast(this, R.string.gps_fixed).show();
 	}
 
 	@Override

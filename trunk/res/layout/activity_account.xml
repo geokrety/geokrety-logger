@@ -131,7 +131,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:hint="@string/account_longnitude_hint" />
-
+<!-- 
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:visibility="invisible" />
+ -->
                 <ImageButton
                     android:id="@+id/gpsButton"
                     android:layout_width="wrap_content"

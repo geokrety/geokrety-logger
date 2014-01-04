@@ -95,6 +95,8 @@
     <string name="form_comment">Comment</string>
     <string name="form_submit">Go!</string>
     <string name="form_clear">Clear</string>
+    <string name="form_location_description">When you use waypoint then using coordinates is not necessary because GeoKrety.org uses coordinates from waypoint.</string>
+    
     <string name="title_dialog_inventory">Your inventory</string>
     <string name="title_dialog_ocs">Your last logs in OpenCaching portals</string>
     <string name="not_implemented_yet">Not implemented yet</string>
@@ -214,4 +216,9 @@
     <string name="geokret_save_message">GeoKret settings changed. Save changes?</string>
     
     <string name="supported_formats">Supported formats: http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
+    <string name="gps_not_exist">GPS module is not exist in this device</string>
+    <string name="gps_not_enabled">GPS is off, pleas turn on GPS module</string>
+    <string name="gps_acquiring">waiting for fix</string>
+    <string name="gps_pleas_wait">Pleas wait for GPS fix</string>
+    <string name="gps_fixed">GPS fixed, coords inserted</string>
 </resources>

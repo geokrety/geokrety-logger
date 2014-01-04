@@ -47,8 +47,12 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 public class Utils {
 	public static GeoKretyApplication application;
@@ -155,5 +159,12 @@ public class Utils {
 
 	public static String defaultIfNull(String value, String def) {
 		return value == null ? def : value;
+	}
+	
+	@SuppressLint("ShowToast")
+	public static Toast makeCenterToast(Context context, int resID) {
+		Toast toast = Toast.makeText(context, resID, Toast.LENGTH_LONG);
+		toast.setGravity(Gravity.CENTER, 0, 0);
+		return toast;
 	}
 }
