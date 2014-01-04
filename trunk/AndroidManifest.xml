@@ -86,6 +86,52 @@
                     android:scheme="http"
                     android:host="opencaching.pl"
                     android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencaching.us"
+                    android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencaching.org.uk"
+                    android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencaching.se"
+                    android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencaching.nl"
+                    android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencaching.no"
+                    android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencaching.it"
+                    android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencachingspain.es"
+                    android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencaching.de"
+                    android:pathPrefix="/viewcache.php" />
+                
+                <data 
+                    android:scheme="http"
+                    android:host="www.opencaching.cz"
+                    android:pathPrefix="/viewcache.php" />
+                
             </intent-filter>
         </activity>
         <activity
