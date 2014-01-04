@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * 
+ * This file is part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+ -->
+<resources>
+
+    <string name="app_name">GeoKrety Logger</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="login">GK login:</string>
+    <string name="password">GK hasło:</string>
+    <string name="oc">OC login:</string>
+    <string name="login_hint">GeoKrety login</string>
+    <string name="password_hint">GeoKrety hasło</string>
+    <string name="oc_hint">OpenCaching login</string>
+    <string name="login_error_password_message">Zły login lub hasło do GeoKrety.org</string>
+    <string name="login_error_message">Problem z połączeniem:</string>
+    <string name="title_activity_accounts">Konta</string>
+    <string name="accounts_button">Konta</string>
+    <string name="account_new">Nowe</string>
+    <string name="account_edit">Edytuj</string>
+    <string name="account_remove">Usuń</string>
+    
+    <string name="error_login_null">Nie podałeś loginu do GeoKrety.org</string>
+    <string name="error_password_null">Nie podałeś hasła do GeoKrety.org</string>
+    <string name="error_oc_null">Nie podałeś loginu do OpenCaching</string>
+    <string name="warning">Napotkano kilka problemów:</string>
+    <string name="warning_already_logged">Ten GeoKret został już zalogowany w tym miejscu i o tej porze!</string>
+    
+    <string name="accounts_add_title">Dodaj nowe konto</string>
+    <string name="accounts_edit_title">Edytuj konto</string>
+    <string name="accounts_remove_question">Czy jesteś pewien że chcesz usunąć konto</string>
+    <string name="error_current_null">Proszę wybrać konto</string>
+    <string name="title_activity_inventory">Krety, które masz u siebie</string>
+    <string name="button_inventory">Krety, które masz u siebie</string>
+    <string name="button_about">Informacje</string>
+    <string name="button_ocs">Twoje ostatnie logi z OpenCaching</string>
+    <string name="menu_inventory_refresh">Odśwież</string>
+    <string name="menu_ocs_refresh">Odśwież</string>
+    <string name="title_activity_last_ocs">Twoje ostatnie logi z portali OpenCaching</string>
+    <string name="invalid_oclogin_error_message">Błąd pobierania danych z:</string>
+    <string name="inventory_error_message">Problem z pobraniem listy kretów, które masz u siebie. Czy Internet działa?</string>
+    <string name="oclogs_error_message">Problem z pobraniem listy Twoich ostatnich logów z OpenCaching.pl. Czy Internet działa?</string>
+    <string name="title_activity_log">Zaloguj kreta</string>
+    <string name="log_drop">Wrzuciłem GeoKreta</string>
+    <string name="log_grab">Zabrałem GeoKreta</string>
+    <string name="log_met">Spotkałem GeoKreta</string>
+    <string name="log_dipped">Kret odwiedził</string>
+    <string name="log_comment">Komentarz</string>
+    <string name="form_log_type">1. Typ logu</string>
+    <string name="form_identify">2.  Identyfikacja GeoKreta</string>
+    <string name="form_code">Tracking Code</string>
+    <string name="form_inventory">Inwentarz</string>
+    <string name="form_location">3. Nowa lokalizacja</string>
+    <string name="form_waypoint">Waypoint</string>
+    <string name="form_oclogs">OC Log</string>
+    <string name="form_cords">Współrzędne</string>
+    <string name="form_gps">GPS</string>
+    <string name="form_home">W domu</string>
+    <string name="form_additional">4. Informacje dodatkowe</string>
+    <string name="form_comment">Komentarz</string>
+    <string name="form_submit">Go!</string>
+    <string name="form_clear">Wyczyść</string>
+    <string name="title_dialog_inventory">Krety, które masz u siebie</string>
+    <string name="title_dialog_ocs">Twoje ostatnie logi z portali OpenCaching</string>
+    <string name="not_implemented_yet">Ta funkcja jeszcze nie działa, poczekaj na nowszą wersję.</string>
+    <string name="download_title">Odświeżanie konta użytkownika</string>
+    <string name="download_login_gk">Logowanie do GeoKrety.org&#8230;</string>
+    <string name="download_getting_gk">Pobieranie listy kretów, które masz u siebie z GeoKrety.org&#8230;</string>
+    <string name="download_getting_uuid">Pobieranie Twojego UUID z</string>
+    <string name="download_getting_ocs">Pobieranie Twoich ostatnich logów z</string>
+    <string name="download_getting_names">Pobieranie nazw geokeszy do których się logowałeś z</string>
+    <string name="download_finish">Odświeżanie zakończone</string>
+    <string name="submit_title">Logowanie GeoKreta</string>
+    <string name="submit_message">Trwa logowanie GeoKreta. Czekaj cierpliwie i niczego nie dotykaj :)&#8230;</string>
+    <string name="submit_finish">GeoKret został zalogowany pomyślnie</string>
+    <string name="submit_fail">Problem z logowaniem GeoKreta:</string>
+    <string name="submit_broken">Przerwano logowanie GeoKreta, ale serwer mógł już zapisać log. Wejdź potem na stronę geokrety.org i w razie konieczności usuń log.</string>
+    <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
+    <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
+    <string name="version">GeoKrety Logger v</string>
+    <string name="button_log">Zaloguj GeoKreta</string>
+    <string name="welcome">GeoKrety Logger to program, który służy do rejestracji przeniesienia przedmiotów (<a href="http://pl.m.wikipedia.org/wiki/Geokrety">GeoKretów</a>) pozostawionych w <a href="http://pl.m.wikipedia.org/wiki/Geocaching">pojemnikach geocache</a>.</string>
+    <string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne. Program jest darmowy, a jego kod źródłowy jest dostępny publicznie na licencji GPL 3.0 (<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>). Jeżeli coś działa nieprawidłowo, poinformuj mnie o tym pisząc najlepiej w formularzu pod adresem: <a href="http://geokrety.org/majluj.php?to=12444">geokrety.org/majluj.php?to=12444</a>. Nie ponoszę odpowiedzialności za szkody wynikające błędnego działania programu lub używania go niezgodnie z przeznaczeniem.</string>
+    <string name="emergency">Jeżeli z powodu błędu w programie nie możesz zalogować GeoKreta, zrób to przez serwis WWW przechodząc bezpośrednio na stronę <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>. Jeżeli logowanie GeoKreta na stronie WWW się powiodło, proszę poinformuj mnie o problemie.</string>
+    <string name="changelog">Historia zmian:\n
+        0.3.0 beta - 2014-01-04\n
+        - możliwość ręcznego umieszczenia GeoKreta w inwentarzu\n
+        - możliwość zalogowania GeoKreta w lokalizacji GPS zamiast w waypoint\n
+        \n
+        0.2.1 beta - 2013-12-29\n
+        - niemieckie tłumaczenie z podziękowaniem dla Schrottie\n
+        \n
+        0.2.0 beta - 2013-12-29\n
+        - obsługa .de, .us, .nl and .org.uk,\n
+        \n
+        0.1.2 beta - 2013-12-26\n
+        - naprawiony problem z odświerzaniem listy kretów i logów w oknie logowania geokreta,\n
+        - pytanie tak/nie/anuluj czy zachować zmiany ustawienia konta,\n
+        - automatyczny powrót do głównego okna po udanym zalogowaniu kreta (widać, że wszystko ok),\n
+        \n 
+        0.1.1 beta - 2013-12-25\n
+        - poprawiony błąd, który powodował kasowanie wprowadzonych danych po wprowadzeniu daty i godziny,\n
+        \n
+        0.1.0 beta - 2013-12-25\n
+        - nie wiesza podczas obracania ekranem,\n
+        - użycie secid zamiast loginu i hasła,\n
+        \n
+        0.0.2 alpha - 2013-12-17\n
+        - polskie tłumaczenie,\n
+        - informacje o programie,\n
+        - poprawki interfejsu,\n
+        \n
+        0.0.1 alpha - 2013-12-14\n
+        - pierwsza wersja z publicznym, gotowym do instalacji pakietem apk,\n
+        - poprawienie błędu uniemożliwiającego działanie pod Androdid 4.x,\n
+        - progress dialog informujący o przebiegu odświeżania i logowania GeoKreta,\n
+        \n
+        0.0.0 alpha - 2013-12-13\n
+        - pierwsza wersja działająca jedynie pod Android 2.1-2.3.x.</string>
+    <string name="title_activity_about">Informacje o GeoKrety Logger</string>
+    <string name="no_account_configured">Najpierw dodaj co najmniej jedno konto!</string>
+    <string name="button_add_account">Dodaj nowe konto</string>
+
+    <string name="account_add_prompt_message">Wprowadź dane pozwalające na zalogowanie się na Twoje konto w GeoKrety.pl i pobranie Twoich ostatnich logów z OpenCaching.pl.</string>
+    <string name="account_edit_prompt_message">Popraw dane pozwalające na zalogowanie się na Twoje konto w GeoKrety.pl i pobranie Twoich ostatnich logów z OpenCaching.pl.</string>
+    
+    <string name="generic_error">Napotkano problem z:</string>
+    <string name="generic_broken">Przerwano</string>
+    <string name="generic_finish">Zakończono pomyślnie</string>
+    
+    <string name="title_activity_account">Konto użytkownika</string>
+    <string name="account_account_name">Nazwa konta:</string>
+    <string name="account_account_name_hint">Nowy użytkownik</string>
+	<string name="account_portals">Których portali używasz?</string>
+	<string name="account_portal_gk">geokrety.org (obowiązkowe)</string>
+	<string name="account_portal_oc0">opencaching.pl</string>
+	<string name="account_portal_oc1">opencaching.de</string>
+	<string name="account_portal_oc2">opencaching.us</string>
+	<string name="account_portal_oc3">opencaching.nl</string>
+	<string name="account_portal_oc4">opencaching.org.uk</string>
+	<string name="account_introduction">Instrukcja: po zaznaczeniu geokrety.org użytkownik zostanie poproszony o podanie loginu i hasła, jakich używa do logowania się na tym portalu. Następnie te dane posłużą do ściągnięcia &quot;secid&quot;. Ten &quot;secid&quot; zostanie zapisany w programie i będzie wykorzystywany do logowania kretów, które zostały przeniesione (login i hasło nie są zapisywane w pamięci).\n\nPo zaznaczeniu opencaching.pl itd. użytkownik zostanie poproszony o podanie tylko loginu, jakiego używa do logowania się na tym portalu. Ten login wykorzystywany jest tylko po to by ściągnąć listę geokeszy, do których użytkownik się logował ostatnio. Ta lista jest wykorzystywana do podpowiadania numeru waypoint podczas logowania geokreta.</string>
+	<string name="account_save">Gotowe!</string>
+
+	<string name="account_save_title">Czy zachować ustawienia konta?</string>
+	<string name="account_save_message">Dokonano zmian w ustawieniach konta. Czy zapisać zmiany?</string>
+	
+	<string name="title_dialog_gk">Login i hasło do GeoKrety.org</string>
+	<string name="title_dialog_oc">Login do</string>
+	<string name="dots">&#8230;</string>
+	
+	<string name="yes">Tak</string>
+	<string name="no">Nie</string>
+	
+	<string name="button_add_geokret">Dodaj ręcznie</string>
+    
+    <string name="title_activity_geo_kret">GeoKret</string>
+    <string name="geokret_id_title">Numer GK:</string>
+    <string name="geokret_id_type">Typ:</string>
+    
+    <string name="geokret_nr_title">Tracking Code:</string>
+    <string name="geokret_nr_hint">np. F65RF3</string>
+    
+    <string name="geokret_name_title">Nazwa:</string>
+    <string name="geokret_name_hint">nazwa GeoKreta</string>
+    <string-array name="geokret_id_types">
+        <item>Tradycyjny</item>
+        <item>Książka/CD/DVD&#8230;</item>
+        <item>Człowiek</item>
+        <item>Toczygrosz</item>
+        <item>Krecia Poczta</item>
+    </string-array>
+    <string name="geokret_sticki_title">Nie usuwaj z inwentarza po odświeżeniu</string>
+    
+    <string name="geokret_save">Zachowaj</string>
+    <string name="geokret_save_title">Zachować ustawienia GeoKreta?</string>
+    <string name="geokret_save_message">Dokonano zmian w ustawieniach GeoKreta. Czy zapisać zmiany?</string>
+    
+</resources>
