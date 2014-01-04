@@ -42,6 +42,7 @@
     <string name="error_password_null">GeoKrety.org password can not be empty</string>
     <string name="error_oc_null">OpenCaching login can not be empty</string>
     <string name="warning">Some problems:</string>
+    <string name="warning_already_logged">There is an entry with this date. Correct the date or the hour.</string>
     
     <string name="accounts_add_title">Add new account</string>
     <string name="accounts_edit_title">Edit account</string>
@@ -89,6 +90,7 @@
     <string name="form_oclogs">OC Log</string>
     <string name="form_cords">Coordinates</string>
     <string name="form_gps">GPS</string>
+    <string name="form_home">Home</string>
     <string name="form_additional">4. Additional data</string>
     <string name="form_comment">Comment</string>
     <string name="form_submit">Go!</string>
@@ -118,6 +120,7 @@
     <string name="changelog">Change log:\n\n
         0.3.0 beta - 2014-01-04\n
         - add GeoKret into inventory manually\n
+        - log GeoKret on GPS location\n
         \n
         0.2.1 beta - 2013-12-29\n
         - german translation, thanks for Schrottie\n

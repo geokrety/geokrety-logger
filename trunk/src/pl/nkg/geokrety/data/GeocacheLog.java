@@ -87,25 +87,26 @@ public class GeocacheLog {
 		return portal;
 	}
 
+	public Geocache getGeoCache() {
+		return StateHolder.getGeoacheMap().get(cache_code);
+	}
+
 	@Override
 	public String toString() {
 		if (StateHolder.getGeoacheMap().containsKey(cache_code)) {
-			return StateHolder.getGeoacheMap().get(cache_code).getName() + " ("
-					+ cache_code + ")";
+			return getGeoCache().getName() + " (" + cache_code + ")";
 		} else {
 			return cache_code;
 		}
 	}
 
-	
 	private static DateFormat dateFormat;
-	
+
 	static {
-		dateFormat = new SimpleDateFormat(FORMAT_DATE_ISO,
-				Locale.getDefault());
-		dateFormat.setTimeZone(TimeZone.getDefault());		
+		dateFormat = new SimpleDateFormat(FORMAT_DATE_ISO, Locale.getDefault());
+		dateFormat.setTimeZone(TimeZone.getDefault());
 	}
-	
+
 	public static Date fromISODateString(String isoDateString)
 			throws ParseException {
 		return dateFormat.parse(isoDateString);

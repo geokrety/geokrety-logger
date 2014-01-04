@@ -42,6 +42,7 @@
     <string name="error_password_null">Nie podałeś hasła do GeoKrety.org</string>
     <string name="error_oc_null">Nie podałeś loginu do OpenCaching</string>
     <string name="warning">Napotkano kilka problemów:</string>
+    <string name="warning_already_logged">Ten GeoKret został już zalogowany w tym miejscu i o tej porze!</string>
     
     <string name="accounts_add_title">Dodaj nowe konto</string>
     <string name="accounts_edit_title">Edytuj konto</string>
@@ -72,6 +73,7 @@
     <string name="form_oclogs">OC Log</string>
     <string name="form_cords">Współrzędne</string>
     <string name="form_gps">GPS</string>
+    <string name="form_home">W domu</string>
     <string name="form_additional">4. Informacje dodatkowe</string>
     <string name="form_comment">Komentarz</string>
     <string name="form_submit">Go!</string>
@@ -101,6 +103,7 @@
     <string name="changelog">Historia zmian:\n
         0.3.0 beta - 2014-01-04\n
         - możliwość ręcznego umieszczenia GeoKreta w inwentarzu\n
+        - możliwość zalogowania GeoKreta w lokalizacji GPS zamiast w waypoint\n
         \n
         0.2.1 beta - 2013-12-29\n
         - niemieckie tłumaczenie z podziękowaniem dla Schrottie\n

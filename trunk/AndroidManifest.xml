@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -26,7 +26,8 @@
     android:versionName="0.3.0 beta" >
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    
     <uses-sdk
         android:minSdkVersion="5"
         android:targetSdkVersion="19" />

@@ -72,8 +72,9 @@ public class AccountDataSource {
 
 	private ContentValues getValues(Account account) {
 		Date lastLoadedDate = account.getLastDataLoaded();
-		long storedLastLoadedDate = lastLoadedDate == null ? 0 : lastLoadedDate.getTime();
-		
+		long storedLastLoadedDate = lastLoadedDate == null ? 0 : lastLoadedDate
+				.getTime();
+
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_USER_NAME, account.getName());
 		values.put(COLUMN_SECID, account.getGeoKreySecredID());
@@ -142,8 +143,8 @@ public class AccountDataSource {
 				ContentValues values = new ContentValues();
 				values.put(COLUMN_REFRESH, account.getLastDataLoaded()
 						.getTime());
-				mergeSimple(db, TABLE, getValues(account), PK_COLUMN,
-						String.valueOf(values));
+				mergeSimple(db, TABLE, values, PK_COLUMN,
+						String.valueOf(account.getID()));
 				return true;
 			}
 		});
@@ -173,12 +174,12 @@ public class AccountDataSource {
 							cursor.getString(1), //
 							cursor.getString(2), //
 							extractUUIDs(cursor.getString(3)));
-					
+
 					long time = cursor.getLong(4);
 					if (time > 0) {
 						account.setLastDataLoaded(new Date(time));
 					}
-					
+
 					accounts.add(account);
 				}
 				cursor.close();

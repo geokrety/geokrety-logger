@@ -124,7 +124,7 @@ public class GeoKretyProvider {
 				if (errors
 						.get(0)
 						.equals("There is an entry with this date. Correct the date or the hour.")) {
-					return true;
+					throw new MessagedException(R.string.warning_already_logged);
 				} else {
 					throw new MessagedException(R.string.submit_fail, "\n"
 							+ TextUtils.join("\n", errors));
