@@ -32,7 +32,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "geokrety.db";
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 
 	public GeoKretySQLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -46,14 +46,14 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (oldVersion == 1) {
+		if (oldVersion <= 1) {
 			createV2(db);
 			db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
 					+ " ADD COLUMN " + AccountDataSource.COLUMN_REFRESH
 					+ " INTEGER NOT NULL DEFAULT 0;");
 		}
 
-		if (oldVersion == 2) {
+		if (oldVersion <= 2) {
 			db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
 					+ " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LAT
 					+ " TEXT NOT NULL DEFAULT '';");
@@ -158,5 +158,16 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 				String whereClause, String... whereArgs) {
 			db.delete(table, whereClause, whereArgs);
 		}
+	}
+
+	public void fixDB1ToDB3UpgradeProblem() {
+		SQLiteDatabase db = getWritableDatabase();
+		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
+				+ " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LAT
+				+ " TEXT NOT NULL DEFAULT '';");
+		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
+				+ " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LON
+				+ " TEXT NOT NULL DEFAULT '';");
+		db.close();
 	}
 }

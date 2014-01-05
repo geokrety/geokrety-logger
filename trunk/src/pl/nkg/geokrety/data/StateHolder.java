@@ -29,6 +29,7 @@ import java.util.Map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteException;
 import android.util.SparseArray;
 import android.widget.ListView;
 
@@ -52,7 +53,15 @@ public class StateHolder {
 		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
 		geoKretDataSource = new GeoKretDataSource(dbHelper);
 		geocacheDataSource = new GeocacheDataSource(dbHelper);
-		accountList = Collections.synchronizedList(accountDataSource.getAll());
+		
+		try {
+			accountList = Collections.synchronizedList(accountDataSource.getAll());
+		} catch (SQLiteException e) {
+			if (e.getMessage().contains("home_lat")) {
+				dbHelper.fixDB1ToDB3UpgradeProblem();
+				accountList = Collections.synchronizedList(accountDataSource.getAll());
+			}
+		}
 		
 		geoCachesMap = new HashMap<String, Geocache>();
 		for (Geocache gc : geocacheDataSource.load()) {

@@ -120,6 +120,9 @@
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <string name="changelog">Change log:\n\n
+        0.4.1 beta - 2014-01-05\n
+        - fix crash after upgrade from 0.2.1 to 0.4.0 version\n
+        \n
         0.4.0 beta - 2014-01-05\n
         - works with third-party QR code scanners,\n
         - add home location,\n
