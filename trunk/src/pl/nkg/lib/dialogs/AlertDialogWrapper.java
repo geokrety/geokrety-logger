@@ -54,6 +54,7 @@ public class AlertDialogWrapper extends AbstractAlertDialogWrapper<AlertDialog> 
 					.from(getManagedDialogsActivity());
 			View promptView = li.inflate(layoutId, null);
 			builder.setView(promptView);
+			builder.setInverseBackgroundForced(true);
 		}
 	}
 
