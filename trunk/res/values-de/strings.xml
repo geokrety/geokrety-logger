@@ -34,7 +34,7 @@
     <string name="version">GeoKrety Logger v</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
-<!-- need translate --><string name="emergency">If this program not working, please visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards please contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
+    <string name="emergency">Sollte die App nicht funktionieren, logge den GeoKret bitte <a href="http://geokrety.org/ruchy.php">direkt auf der Webseite</a>. Anschließend kontaktiere mich bitte über: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <!-- Error messages -->
     <string name="no_account_configured">Du musst ein Konto einrichten!</string>
     
@@ -60,9 +60,9 @@
 	<string name="account_portal_oc3">opencaching.nl</string>
 	<string name="account_portal_oc4">opencaching.org.uk</string>
 	<string name="account_introduction">Anleitung: Wenn die Verbindung zu geokrety.org steht müssen Benutzername und Passwort angegeben werden. Dann wird die &quot;secid&quot; geladen. Die &quot;secid&quot; wird in den App-Daten gespeichert, da sie zum loggen notwendig ist (Login und Passwort werden nicht gespeichert).\n\nSteht die Verbindung zu opencaching.pl etc. muss auch hier der Loginname angegeben werden. Er ist nötig um die letzten Logs zu laden. Die letzten Logs dienen der Wegpunktermittlung zum loggen der Geokrety.</string>
-<!-- need translate --><string name="account_home_location">Home coordinates (optional):</string>
-<!-- need translate --><string name="account_latitude_hint">latitude</string>
-<!-- need translate --><string name="account_longnitude_hint">longnitude</string>
+    <string name="account_home_location">Heimatkoordinaten (optional):</string>
+    <string name="account_latitude_hint">Latitude</string>
+    <string name="account_longnitude_hint">Longnitude</string>
     <string name="account_from_gps">GPS</string>
     <string name="account_save">OK</string>
     <!-- Messages -->
@@ -92,27 +92,27 @@
     <string name="title_activity_inventory">GeoKrety Inventar</string>
     <string name="menu_inventory_refresh">Aktualisieren</string>
     <string name="inventory_error_message">Fehler beim Laden des Inventars. Internetverbindung prüfen.</string>
-<!-- need translate --><string name="button_add_geokret">Add manually</string>
+    <string name="button_add_geokret">Manuell hinzufügen</string>
     
     <!-- GeoKret Activity -->
-<!-- need translate --><string name="title_activity_geo_kret">GeoKret</string>
-<!-- need translate --><string name="geokret_id_title">Reference Number:</string>
-<!-- need translate --><string name="geokret_id_type">Type:</string>
-<!-- need translate --><string name="geokret_nr_title">Tracking Code:</string>
-<!-- need translate --><string name="geokret_nr_hint">i.e. F65RF3</string>    
-<!-- need translate --><string name="geokret_name_title">Name:</string>
-<!-- need translate --><string name="geokret_name_hint">name of GeoKret</string>
+    <string name="title_activity_geo_kret">GeoKret</string>
+    <string name="geokret_id_title">Referenznummer:</string>
+    <string name="geokret_id_type">Typ:</string>
+    <string name="geokret_nr_title">Trackingcode:</string>
+    <string name="geokret_nr_hint">z.B.. F65RF3</string>    
+    <string name="geokret_name_title">Name:</string>
+    <string name="geokret_name_hint">Name des GeoKret</string>
     <string-array name="geokret_id_types">
-        <item>Traditional</item>
-        <item>A book/CD/DVD&#8230;</item>
-        <item>A human</item>
+        <item>Traditionell</item>
+        <item>Ein Buch, eine CD oder DVD&#8230;</item>
+        <item>Eine Person</item>
         <item>A coin</item>
         <item>KretyPost</item>
     </string-array>
-<!-- need translate --><string name="geokret_sticki_title">No remove from inventory after refresh</string>
-<!-- need translate --><string name="geokret_save">Save</string>
-<!-- need translate --><string name="geokret_save_title">Save GeoKret settings?</string>
-<!-- need translate --><string name="geokret_save_message">GeoKret settings changed. Save changes?</string>
+    <string name="geokret_sticki_title">Nach Aktualisieren nicht aus dem Inventar entfernt</string>
+    <string name="geokret_save">Speichern</string>
+    <string name="geokret_save_title">Einstellungen speichern?</string>
+    <string name="geokret_save_message">Einstellungen wurden geändert. Speichern?</string>
     
     <!-- OpenCaching last logs Activity -->
     <string name="title_activity_last_ocs">Letzte Logs aus den Opencaching Portalen</string>
@@ -142,8 +142,8 @@
     <string name="form_oclogs">OC Log</string>
     <string name="form_cords">Koordinaten</string>
     <string name="form_gps">GPS</string>
-<!-- need translate --><string name="form_home">Home</string>
-<!-- need translate --><string name="form_location_description">When you use waypoint then using coordinates is not necessary because GeoKrety.org uses coordinates from waypoint.</string>
+    <string name="form_home">Home</string>
+    <string name="form_location_description">Bei Angabe eines Wegpunktes sind keine Koordinaten erforderlich, da diese dann durch geokrety.org eingetragen werden.</string>
     <string name="form_additional">4. zusätzliche Daten</string>
     <string name="form_comment">Kommentar</string>
     <string name="form_submit">Go!</string>
@@ -152,7 +152,7 @@
     <string name="title_dialog_inventory">Dein Inventar</string>
     <string name="title_dialog_ocs">Deine letzten Logs bei Opencaching</string>
     <!-- Messages -->
-<!-- need translate --><string name="warning_already_logged">There is an entry with this date. Correct the date or the hour.</string>
+    <string name="warning_already_logged">Es existiert bereits ein Eintrag mit diesem Zeitstempel. Bitte korrigiere Datum und Uhrzeit..</string>
     <!-- Log submitting -->
     <string name="submit_title">Übertrage Log</string>
     <string name="submit_message">Log wird übertragen&#8230;</string>
@@ -170,7 +170,7 @@
     <!-- Global messages -->
     <string name="error_current_null">Bitte Konto auswählen.</string>
     <string name="login_error_message">Verbindungsfehler: </string>
-<!-- need translate --><string name="warning">Some problems:</string>
+    <string name="warning">Probleme:</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="generic_error">Fehler:</string>
@@ -179,19 +179,20 @@
     <string name="not_implemented_yet">Noch nicht verfügbar</string>
     
     <!-- GPS -->
-<!-- need translate --><string name="supported_formats">Supported formats: http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
-<!-- need translate --><string name="gps_not_exist">GPS module is not exist in this device</string>
-<!-- need translate --><string name="gps_not_enabled">GPS is off, pleas turn on GPS module</string>
-<!-- need translate --><string name="gps_acquiring">waiting for fix</string>
-<!-- need translate --><string name="gps_pleas_wait">Pleas wait for GPS fix</string>
-<!-- need translate --><string name="gps_fixed">GPS fixed, coords inserted</string>
+	<string name="supported_formats">Unterstützte Formate: http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
+	<string name="gps_not_exist">Kein GPS Modul in diesem Gerät gefunden</string>
+	<string name="gps_not_enabled">GPS ist deaktiviert. Bitte aktiviere das GPS Modul</string>
+	<string name="gps_acquiring">Warte auf Satellitenfix</string>
+	<string name="gps_pleas_wait">Bitte auf Satellitenfix warten</string>
+	<string name="gps_fixed">Position bestimmt, Koordinaten eingefügt</string>
     
     <!-- About Activity -->
     <string name="title_activity_about">Über</string>
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="changelog">Change log:\n\n
         0.4.2 beta - 2014-01-06\n
-        - some fixes and layout improvements\n
+        - some fixes and layout improvements,\n
+        - German translation update, thanks for Schrottie\n
         \n
         0.4.1 beta - 2014-01-05\n
         - fix crash after upgrade from 0.2.1 to 0.4.0 version\n
@@ -235,5 +236,4 @@
         0.0.0 alpha - 2013-12-13\n
         - first public version, \n
         - works only with Android 2.1-2.3.x.</string>
-    
 </resources>

@@ -34,7 +34,7 @@
     <string name="version">GeoKrety Logger v</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
-    <string name="emergency">If this program not working, pleas visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards pleas contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
+    <string name="emergency">If this program not working, please visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards please contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <!-- Error messages -->
     <string name="no_account_configured">You must configure account!</string>
     
@@ -183,7 +183,7 @@
     <!-- GPS -->
     <string name="supported_formats">Supported formats: http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
     <string name="gps_not_exist">GPS module is not exist in this device</string>
-    <string name="gps_not_enabled">GPS is off, pleas turn on GPS module</string>
+    <string name="gps_not_enabled">GPS is off, please turn on GPS module</string>
     <string name="gps_acquiring">waiting for fix</string>
     <string name="gps_pleas_wait">Pleas wait for GPS fix</string>
     <string name="gps_fixed">GPS fixed, coords inserted</string>
@@ -193,7 +193,8 @@
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="changelog">Change log:\n\n
         0.4.2 beta - 2014-01-06\n
-        - some fixes and layout improvements\n
+        - some fixes and layout improvements,\n
+        - German translation update, thanks for Schrottie\n
         \n
         0.4.1 beta - 2014-01-05\n
         - fix crash after upgrade from 0.2.1 to 0.4.0 version\n

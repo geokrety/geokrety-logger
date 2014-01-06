@@ -21,7 +21,9 @@
  -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_height="fill_parent"
+    android:descendantFocusability="beforeDescendants"
+	android:focusableInTouchMode="true" >
 
     <LinearLayout
         android:id="@+id/buttons"
@@ -64,6 +66,12 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin" >
 
+            <!-- <LinearLayout
+    			android:focusable="true" 
+    			android:focusableInTouchMode="true"
+    			android:layout_width="0px" 
+    			android:layout_height="0px"/>-->
+            
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

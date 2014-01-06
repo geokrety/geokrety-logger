@@ -191,7 +191,8 @@
     <string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne. Program jest darmowy, a jego kod źródłowy jest dostępny publicznie na licencji GPL 3.0 (<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>). Jeżeli coś działa nieprawidłowo, poinformuj mnie o tym pisząc najlepiej w formularzu pod adresem: <a href="http://geokrety.org/majluj.php?to=12444">geokrety.org/majluj.php?to=12444</a>. Nie ponoszę odpowiedzialności za szkody wynikające błędnego działania programu lub używania go niezgodnie z przeznaczeniem.</string>
     <string name="changelog">Historia zmian:\n
         0.4.2 beta - 2014-01-06\n
-        - drobne poprawki\n
+        - drobne poprawki,\n
+        - aktualizacja niemieckiego tłumaczenia z podziękowaniem dla Schrottie\n
         \n
         0.4.1 beta - 2014-01-05\n
         - naprawiony błąd uniemożliwiający działanie po upgrade z wersji 0.2.1 do 0.4.0\n
