@@ -21,6 +21,17 @@
  * or see <http://www.gnu.org/licenses/>
 -->
 <resources>
+    <!-- 
+    
+    Native language of this app is Polish.
+    This is English translation (as default).
+    Can you translate to your language or improve this translation?
+    Please translate this file and send to me:
+    nkg753 at gmail dot com
+    
+     -->
+    
+    
 	<!-- Main -->
     <string name="app_name">GeoKrety Logger</string>
     
@@ -35,6 +46,7 @@
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
     <string name="emergency">If this program not working, please visit and log on the <a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a> web page. Afterwards please contact with me on the web site: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
+    <string name="help_in_translation">Suggest a better translation:\n<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a></string>
     <!-- Error messages -->
     <string name="no_account_configured">You must configure account!</string>
     
@@ -55,7 +67,7 @@
     <string name="account_account_name_hint">New user</string>
     <string name="account_portal_gk">geokrety.org (required)</string>
     <string name="account_portal_oc0">opencaching.pl</string>
-    <string name="account_portal_oc1">opencaching.de</string>
+    <string name="account_portal_oc1">opencaching.de (with .es and .it)</string>
     <string name="account_portal_oc2">opencaching.us</string>
     <string name="account_portal_oc3">opencaching.nl</string>
     <string name="account_portal_oc4">opencaching.org.uk</string>

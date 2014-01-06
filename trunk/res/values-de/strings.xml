@@ -35,6 +35,7 @@
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
     <string name="about">WWW: <a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a></string>
     <string name="emergency">Sollte die App nicht funktionieren, logge den GeoKret bitte <a href="http://geokrety.org/ruchy.php">direkt auf der Webseite</a>. Anschließend kontaktiere mich bitte über: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
+    <string name="help_in_translation">Eine bessere Übersetzung vorschlagen | Suggest a better translation:\n<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a></string>
     <!-- Error messages -->
     <string name="no_account_configured">Du musst ein Konto einrichten!</string>
     
@@ -55,7 +56,7 @@
     <string name="account_account_name_hint">Benutzer</string>
 	<string name="account_portal_gk">geokrety.org (erforderlich)</string>
 	<string name="account_portal_oc0">opencaching.pl</string>
-	<string name="account_portal_oc1">opencaching.de</string>
+	<string name="account_portal_oc1">opencaching.de (mit .es und .it)</string>
 	<string name="account_portal_oc2">opencaching.us</string>
 	<string name="account_portal_oc3">opencaching.nl</string>
 	<string name="account_portal_oc4">opencaching.org.uk</string>
