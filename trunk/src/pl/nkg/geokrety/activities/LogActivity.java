@@ -190,6 +190,13 @@ public class LogActivity extends ManagedDialogsActivity implements
 	protected void onStart() {
 		super.onStart();
 
+		if (application.getStateHolder().getAccountList().size() == 0) {
+			Toast.makeText(this, R.string.no_account_configured,
+					Toast.LENGTH_LONG).show();
+			startActivity(new Intent(this, MainActivity.class));
+			return;
+		}
+
 		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
 			@Override
 			public void onFinish(

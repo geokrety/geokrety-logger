@@ -59,10 +59,10 @@
     <string name="account_portal_oc2">opencaching.us</string>
     <string name="account_portal_oc3">opencaching.nl</string>
     <string name="account_portal_oc4">opencaching.org.uk</string>
-    <string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for loggin geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
+    <string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for logging geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
     <string name="account_home_location">Home coordinates (optional):</string>
     <string name="account_latitude_hint">latitude</string>
-    <string name="account_longnitude_hint">longnitude</string>
+    <string name="account_longnitude_hint">longitude</string>
     <string name="account_from_gps">GPS</string>
     <string name="account_save">OK</string>
     <!-- Messages -->
@@ -91,7 +91,7 @@
     <!-- Inventory Activity -->
     <string name="title_activity_inventory">GeoKrety inventory</string>
     <string name="menu_inventory_refresh">Refresh</string>
-    <string name="inventory_error_message">Inventory retriving error. Pleas check your Interent connection.</string>
+    <string name="inventory_error_message">Inventory retrieving error. Pleas check your Interent connection.</string>
     <string name="button_add_geokret">Add manually</string>
     
     <!-- GeoKret Activity -->
@@ -119,7 +119,7 @@
     <!-- OpenCaching last logs Activity -->
     <string name="title_activity_last_ocs">Last log from OpenCaching portals</string>
     <string name="menu_ocs_refresh">Refresh</string>
-    <string name="oclogs_error_message">OpenCaching logs retriving error. Pleas check your Interent connection.</string>
+    <string name="oclogs_error_message">OpenCaching logs retrieving error. Pleas check your Internet connection.</string>
     
     <!-- Log GeoKret Activity -->
     <string name="title_activity_log">Log GeoKret</string>
@@ -208,7 +208,7 @@
         - log GeoKret on GPS location\n
         \n
         0.2.1 beta - 2013-12-29\n
-        - german translation, thanks for Schrottie\n
+        - German translation, thanks for Schrottie\n
         \n
         0.2.0 beta - 2013-12-29\n
         - add support for .de, .us, .nl and .org.uk\n

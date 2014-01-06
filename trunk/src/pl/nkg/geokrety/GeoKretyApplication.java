@@ -48,6 +48,7 @@ public class GeoKretyApplication extends Application {
 	private HttpClient httpClient;
 	private ForegroundTaskHandler foregroundTaskHandler;
 	private StateHolder stateHolder;
+	private boolean noAccountHinted = false;
 
 	@Override
 	public void onCreate() {
@@ -111,6 +112,14 @@ public class GeoKretyApplication extends Application {
 
 	public ForegroundTaskHandler getForegroundTaskHandler() {
 		return foregroundTaskHandler;
+	}
+
+	public boolean isNoAccountHinted() {
+		return noAccountHinted;
+	}
+
+	public void setNoAccountHinted(boolean noAccountHinted) {
+		this.noAccountHinted = noAccountHinted;
 	}
 
 	private void shutdownHttpClient() {

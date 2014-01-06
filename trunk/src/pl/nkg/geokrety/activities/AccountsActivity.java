@@ -42,6 +42,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class AccountsActivity extends ManagedDialogsActivity {
 
@@ -82,6 +83,19 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		});
 
 		registerForContextMenu(mainListView);
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		GeoKretyApplication application = (GeoKretyApplication) getApplication();
+		if (application.getStateHolder().getAccountList().size() == 0
+				&& !application.isNoAccountHinted()) {
+			application.setNoAccountHinted(true);
+			Toast.makeText(this, R.string.no_account_configured,
+					Toast.LENGTH_LONG).show();
+			showNewAccountDialog();
+		}
 	}
 
 	@Override
@@ -177,7 +191,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		removeAccountDialog
 				.show(account.getName(), account.getName(), position);
 	}
-	
+
 	@Override
 	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
 			Serializable arg) {

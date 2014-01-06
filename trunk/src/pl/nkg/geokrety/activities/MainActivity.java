@@ -33,6 +33,8 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
+	private GeoKretyApplication application;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -40,6 +42,15 @@ public class MainActivity extends Activity {
 		TextView appName = (TextView) findViewById(R.id.appNameTextView);
 		appName.setText(getResources().getString(R.string.version)
 				+ Utils.getAppVer());
+		application = (GeoKretyApplication) getApplication();
+	}
+
+	@Override
+	protected void onStart() {
+		super.onStart();
+		if (accountExist() && !application.isNoAccountHinted()) {
+			showAccountsActivity(null);
+		}
 	}
 
 	public void showAccountsActivity(View view) {
@@ -47,14 +58,17 @@ public class MainActivity extends Activity {
 	}
 
 	public void showInventoryActivity(View view) {
-		if (accountExist()) {
+		if (accountExistAndToast()) {
 			startActivity(new Intent(this, InventoryActivity.class));
 		}
 	}
 
 	private boolean accountExist() {
-		if (((GeoKretyApplication) getApplication()).getStateHolder()
-				.getAccountList().size() == 0) {
+		return application.getStateHolder().getAccountList().size() == 0;
+	}
+
+	private boolean accountExistAndToast() {
+		if (accountExist()) {
 			Toast.makeText(this, R.string.no_account_configured,
 					Toast.LENGTH_LONG).show();
 			return false;
@@ -63,13 +77,13 @@ public class MainActivity extends Activity {
 	}
 
 	public void showLastOCsActivity(View view) {
-		if (accountExist()) {
+		if (accountExistAndToast()) {
 			startActivity(new Intent(this, LastOCsActivity.class));
 		}
 	}
 
 	public void showLogGeoKretActivity(View view) {
-		if (accountExist()) {
+		if (accountExistAndToast()) {
 			startActivity(new Intent(this, LogActivity.class));
 		}
 	}

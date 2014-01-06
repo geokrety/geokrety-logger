@@ -212,7 +212,7 @@
         - obsługa .de, .us, .nl and .org.uk,\n
         \n
         0.1.2 beta - 2013-12-26\n
-        - naprawiony problem z odświerzaniem listy kretów i logów w oknie logowania geokreta,\n
+        - naprawiony problem z odświeżaniem listy kretów i logów w oknie logowania geokreta,\n
         - pytanie tak/nie/anuluj czy zachować zmiany ustawienia konta,\n
         - automatyczny powrót do głównego okna po udanym zalogowaniu kreta (widać, że wszystko ok),\n
         \n 

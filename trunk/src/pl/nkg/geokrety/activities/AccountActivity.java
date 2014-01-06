@@ -322,7 +322,8 @@ LocationListener, TextWatcher {
 
 	public void saveClick(View view) {
 		if (Utils.isEmpty(Account.SECID)) {
-			
+			Toast.makeText(this, R.string.error_login_null, Toast.LENGTH_LONG).show();
+			return;
 		}
 		
 		Intent returnIntent = new Intent();
