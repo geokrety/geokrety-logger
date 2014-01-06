@@ -63,6 +63,22 @@
             android:autoLink="web"
             android:linksClickable="true"
             android:text="@string/changelog" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@string/release_plans" />
+        
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"
+            android:autoLink="web"
+            android:linksClickable="true"
+            android:text="@string/help_in_translation" />
     </LinearLayout>
 
 </ScrollView>

@@ -250,4 +250,5 @@
         0.0.0 alpha - 2013-12-13\n
         - first public version, \n
         - works only with Android 2.1-2.3.x.</string>
+     <string name="release_plans">Pleas visit for release plans:\n<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a></string>
 </resources>
