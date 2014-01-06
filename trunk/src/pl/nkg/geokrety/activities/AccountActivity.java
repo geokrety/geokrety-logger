@@ -321,6 +321,10 @@ LocationListener, TextWatcher {
 	}
 
 	public void saveClick(View view) {
+		if (Utils.isEmpty(Account.SECID)) {
+			
+		}
+		
 		Intent returnIntent = new Intent();
 		returnIntent.putExtra(Account.SECID, secid);
 		returnIntent.putExtra(Account.ACCOUNT_ID, accountID);
