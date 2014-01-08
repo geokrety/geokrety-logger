@@ -32,7 +32,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "geokrety.db";
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 
 	public GeoKretySQLiteHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -42,6 +42,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		createV1(db);
 		createV2(db);
+		createV3(db);
 	}
 
 	@Override
@@ -61,6 +62,10 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 					+ " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LON
 					+ " TEXT NOT NULL DEFAULT '';");
 		}
+
+		if (oldVersion <= 4) {
+			createV3(db);
+		}
 	}
 
 	private void createV1(SQLiteDatabase db) {
@@ -71,6 +76,10 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(GeocacheDataSource.TABLE_CREATE);
 		db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
 		db.execSQL(GeoKretDataSource.TABLE_CREATE);
+	}
+
+	private void createV3(SQLiteDatabase db) {
+		db.execSQL(GeoKretLogDataSource.TABLE_CREATE);
 	}
 
 	public boolean runOnReadableDatabase(DBOperation operation) {
@@ -162,11 +171,11 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	public void fixDB1ToDB3UpgradeProblem() {
 		SQLiteDatabase db = getWritableDatabase();
-		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
-				+ " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LAT
+		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE + " ADD COLUMN "
+				+ AccountDataSource.COLUMN_HOME_LAT
 				+ " TEXT NOT NULL DEFAULT '';");
-		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE
-				+ " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LON
+		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE + " ADD COLUMN "
+				+ AccountDataSource.COLUMN_HOME_LON
 				+ " TEXT NOT NULL DEFAULT '';");
 		db.close();
 	}

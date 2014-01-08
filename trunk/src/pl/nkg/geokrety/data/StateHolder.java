@@ -46,6 +46,7 @@ public class StateHolder {
 	private final GeocacheLogDataSource geocacheLogDataSource;
 	private final GeoKretDataSource geoKretDataSource;
 	private final GeocacheDataSource geocacheDataSource;
+	private final GeoKretLogDataSource geoKretLogDataSource;
 
 	public StateHolder(Context context) {
 		GeoKretySQLiteHelper dbHelper = new GeoKretySQLiteHelper(context);
@@ -53,27 +54,34 @@ public class StateHolder {
 		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
 		geoKretDataSource = new GeoKretDataSource(dbHelper);
 		geocacheDataSource = new GeocacheDataSource(dbHelper);
-		
+		geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
+
 		try {
-			accountList = Collections.synchronizedList(accountDataSource.getAll());
+			accountList = Collections.synchronizedList(accountDataSource
+					.getAll());
 		} catch (SQLiteException e) {
 			if (e.getMessage().contains("home_lat")) {
 				dbHelper.fixDB1ToDB3UpgradeProblem();
-				accountList = Collections.synchronizedList(accountDataSource.getAll());
+				accountList = Collections.synchronizedList(accountDataSource
+						.getAll());
 			}
 		}
-		
+
 		geoCachesMap = new HashMap<String, Geocache>();
 		for (Geocache gc : geocacheDataSource.load()) {
 			geoCachesMap.put(gc.getCode(), gc);
 		}
-		
+
 		SparseArray<LinkedList<Geokret>> gks = geoKretDataSource.load();
-		SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
-		
+		SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource
+				.load();
+		SparseArray<LinkedList<GeoKretLog>> geoKretLogs = geoKretLogDataSource
+				.load();
+
 		for (Account account : accountList) {
-			account.setOpenCachingLogs(logs.get((int)account.getID()));
-			account.setInventory(gks.get((int)account.getID()));
+			account.setOpenCachingLogs(logs.get(account.getID()));
+			account.setInventory(gks.get(account.getID()));
+			account.setGeoKretyLogs(geoKretLogs.get(account.getID()));
 		}
 	}
 

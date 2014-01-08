@@ -245,7 +245,8 @@ public class LogActivity extends ManagedDialogsActivity implements
 		int currentAccountNr = holder.getDefaultAccount();
 		if (currentAccountNr != ListView.INVALID_POSITION) {
 			currentAccount = holder.getAccountList().get(currentAccountNr);
-			currentLog.setGeoKretyLogin(currentAccount.getName());
+			//currentLog.setGeoKretyLogin(currentAccount.getName());
+			currentLog.setAccoundID(currentAccount.getID());
 			if (always) {
 				currentAccount.loadData(application, force);
 			} else {
@@ -286,7 +287,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	private void loadFromGeoKretLog(GeoKretLog log) {
 		currentLogType = (log.getLogTypeMapped());
-		accountsButton.setText(log.getGeoKretyLogin());
+		accountsButton.setText(application.getStateHolder().getAccountByID(log.getAccoundID()).getName());
 		trackingCodeEditText.setText(log.getNr());
 		datePicker.setText(log.getData());
 		timePicker.setText(log.getFormatedTime());

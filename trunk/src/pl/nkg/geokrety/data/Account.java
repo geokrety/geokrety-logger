@@ -59,9 +59,10 @@ public class Account {
 
 	private List<GeocacheLog> openCachingLogs;
 	private List<Geokret> inventory;
+	private List<GeoKretLog> geoKretLogs;
 
 	private Date lastDataLoaded;
-	
+
 	private String homeCordLon;
 	private String homeCordLat;
 
@@ -156,6 +157,14 @@ public class Account {
 		return !Utils.isEmpty(openCachingUUIDs[portal]);
 	}
 
+	public List<GeoKretLog> getGeoKretyLogs() {
+		return geoKretLogs;
+	}
+
+	public void setGeoKretyLogs(List<GeoKretLog> geoKretLogs) {
+		this.geoKretLogs = geoKretLogs;
+	}
+
 	public boolean expired() {
 
 		if (lastDataLoaded == null) {
@@ -184,8 +193,8 @@ public class Account {
 		return bundle;
 	}
 
-	public void loadInventoryAndStore(ICancelable cancelable, GeoKretDataSource dataSource)
-			throws MessagedException {
+	public void loadInventoryAndStore(ICancelable cancelable,
+			GeoKretDataSource dataSource) throws MessagedException {
 
 		Map<String, Geokret> gkMap = GeoKretyProvider
 				.loadInventory(geoKretySecredID);
@@ -193,7 +202,7 @@ public class Account {
 		if (cancelable.isCancelled()) {
 			return;
 		}
-		
+
 		// merge with stickys
 		for (Geokret geokret : new LinkedList<Geokret>(getInventory())) {
 			if (geokret.isSticky()) {
@@ -229,14 +238,15 @@ public class Account {
 		accountDataSource.storeLastLoadedDate(this);
 	}
 
-	public void loadOCnamesToBuffer(ICancelable cancelable, List<GeocacheLog> openCachingLogs,
-			int portal) throws MessagedException {
+	public void loadOCnamesToBuffer(ICancelable cancelable,
+			List<GeocacheLog> openCachingLogs, int portal)
+			throws MessagedException {
 		SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
 		HashSet<String> codes = getUnbufferedCacheCodes(openCachingLogs);
 		if (codes.size() == 0) {
 			return;
 		}
-		
+
 		if (cancelable.isCancelled()) {
 			return;
 		}

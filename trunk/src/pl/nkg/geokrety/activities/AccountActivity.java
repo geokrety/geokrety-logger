@@ -57,7 +57,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class AccountActivity extends ManagedDialogsActivity implements
-LocationListener, TextWatcher {
+		LocationListener, TextWatcher {
 
 	private int accountID; // TODO: to moze byc razem z klasa Account
 	private String accountName;
@@ -118,16 +118,18 @@ LocationListener, TextWatcher {
 				.getForegroundTaskHandler());
 
 		setContentView(R.layout.activity_account);
-		latEditText = (EditText)findViewById(R.id.latEditText);
-		lonEditText = (EditText)findViewById(R.id.lonEditText);
+		latEditText = (EditText) findViewById(R.id.latEditText);
+		lonEditText = (EditText) findViewById(R.id.lonEditText);
 
 		accountID = getIntent().getIntExtra(Account.ACCOUNT_ID,
 				ListView.INVALID_POSITION);
 		secid = getIntent().getStringExtra(Account.SECID);
 		ocUUIDs = getIntent().getStringArrayExtra(Account.OCUUIDS);
 		accountName = getIntent().getStringExtra(Account.ACCOUNT_NAME);
-		lonEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(Account.HOME_LON), ""));
-		latEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(Account.HOME_LAT), ""));
+		lonEditText.setText(Utils.defaultIfNull(
+				getIntent().getStringExtra(Account.HOME_LON), ""));
+		latEditText.setText(Utils.defaultIfNull(
+				getIntent().getStringExtra(Account.HOME_LAT), ""));
 
 		if (ocUUIDs == null) {
 			ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -182,7 +184,7 @@ LocationListener, TextWatcher {
 				}
 			});
 		}
-		
+
 		lonEditText.addTextChangedListener(this);
 		latEditText.addTextChangedListener(this);
 	}
@@ -322,17 +324,20 @@ LocationListener, TextWatcher {
 
 	public void saveClick(View view) {
 		if (Utils.isEmpty(Account.SECID)) {
-			Toast.makeText(this, R.string.error_login_null, Toast.LENGTH_LONG).show();
+			Toast.makeText(this, R.string.error_login_null, Toast.LENGTH_LONG)
+					.show();
 			return;
 		}
-		
+
 		Intent returnIntent = new Intent();
 		returnIntent.putExtra(Account.SECID, secid);
 		returnIntent.putExtra(Account.ACCOUNT_ID, accountID);
 		returnIntent.putExtra(Account.OCUUIDS, ocUUIDs);
 		returnIntent.putExtra(Account.ACCOUNT_NAME, accountName);
-		returnIntent.putExtra(Account.HOME_LAT, latEditText.getText().toString());
-		returnIntent.putExtra(Account.HOME_LON, lonEditText.getText().toString());
+		returnIntent.putExtra(Account.HOME_LAT, latEditText.getText()
+				.toString());
+		returnIntent.putExtra(Account.HOME_LON, lonEditText.getText()
+				.toString());
 		setResult(RESULT_OK, returnIntent);
 		finish();
 	}
@@ -345,7 +350,7 @@ LocationListener, TextWatcher {
 			super.onBackPressed();
 		}
 	}
-	
+
 	public void onClickSetCoordinatesFromGPS(View view) {
 		if (GPSAcquirer.checkAndToast(this)) {
 			gpsAcquirer.runRequest(1000, 30);
