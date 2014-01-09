@@ -55,6 +55,7 @@ public class LogSubmitterService extends IntentService {
 		notificationManager = ((NotificationManager)getSystemService(NOTIFICATION_SERVICE));
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	protected void onHandleIntent(final Intent intent) {
 		final List<GeoKretLog> outbox = application.getStateHolder().getGeoKretLogDataSource().loadOutbox();
@@ -64,27 +65,30 @@ public class LogSubmitterService extends IntentService {
 		for (final GeoKretLog log : outbox) {
 			// TODO: need refactor and clean
 			String title = log.getNr();
-			Notification notification = new Notification(android.R.drawable.stat_sys_upload, title + ": sbmitting...", System.currentTimeMillis());;
-			notification.setLatestEventInfo(this, title, "submitting...",
+			Notification notification = new Notification(R.drawable.writing_log, title + ": " + getText(R.string.message_submitting), System.currentTimeMillis());;
+			notification.setLatestEventInfo(this, title, getText(R.string.message_submitting),
 		            PendingIntent.getActivity(this, 1, intent, 0));
 			notificationManager.notify(log.getId(), notification);
 			
-			int icon = android.R.drawable.stat_sys_upload_done;
+			int icon = 0;
 			String message = "";
 			
 			int ret = GeoKretyProvider.submitLog(log);
 			switch (ret) {
 				case GeoKretyProvider.LOG_NO_CONNECTION:
 					connectionProblems = true;
-					message = log.getProblemArg();
+					message = getText(R.string.message_submit_no_connection) + " (" + log.getProblemArg() + ")";
+					icon = R.drawable.writing_log_no_connection;
 					break;
 					
 				case GeoKretyProvider.LOG_PROBLEM:
-					message = getText(log.getProblem()) + " " + log.getProblemArg();
+					message = getText(R.string.message_submit_problem) + ": " +  getText(log.getProblem()) + " " + log.getProblemArg();
+					icon = R.drawable.writing_log_problem;
 					break;
 					
 				case GeoKretyProvider.LOG_SUCCESS:
-					message = getText(R.string.submit_finish).toString();
+					message = getText(R.string.message_submit_success).toString();
+					icon = R.drawable.writing_log_success;
 					break;
 			}
 			

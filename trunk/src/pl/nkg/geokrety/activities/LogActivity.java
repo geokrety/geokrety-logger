@@ -396,11 +396,6 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	public void submit(final View view) {
 		storeToGeoKretLog(currentLog);
-		/*application.getForegroundTaskHandler()
-				.runTask(
-						LogGeoKret.ID,
-						new Pair<GeoKretLog, Account>(currentLog,
-								currentAccount), true);*/
 		currentLog.setState(GeoKretLog.STATE_OUTBOX);
 		if (currentLog.getId() == 0) {
 			application.getStateHolder().getGeoKretLogDataSource().persist(currentLog);
@@ -408,7 +403,7 @@ public class LogActivity extends ManagedDialogsActivity implements
 			application.getStateHolder().getGeoKretLogDataSource().merge(currentLog);
 		}
 		startService(new Intent(this, LogSubmitterService.class));
-		Toast.makeText(this, "Log submitting in background...", Toast.LENGTH_LONG).show();
+		Toast.makeText(this, R.string.message_do_submitting, Toast.LENGTH_LONG).show();
 		finish();
 	}
 

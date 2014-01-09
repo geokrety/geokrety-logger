@@ -200,6 +200,13 @@
     <string name="gps_pleas_wait">Pleas wait for GPS fix</string>
     <string name="gps_fixed">GPS fixed, coords inserted</string>
     
+    <!-- Log submitting service -->
+    <string name="message_do_submitting">Log submitting in background&#8230;</string>
+    <string name="message_submitting">Submitting log&#8230;</string>
+    <string name="message_submit_success">Submitting log successful</string>
+    <string name="message_submit_problem">geokrety.org reject the submission</string>
+    <string name="message_submit_no_connection">Connection error, trying again&#8230;</string>
+    
     <!-- About Activity -->
     <string name="title_activity_about">About</string>
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
