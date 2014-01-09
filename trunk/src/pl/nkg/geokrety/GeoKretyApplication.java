@@ -36,6 +36,7 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 
 import pl.nkg.geokrety.data.StateHolder;
+import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.geokrety.threads.GettingSecidThread;
 import pl.nkg.geokrety.threads.GettingUuidThread;
 import pl.nkg.geokrety.threads.LogGeoKret;
@@ -43,6 +44,7 @@ import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
 
 import android.app.Application;
+import android.content.Intent;
 
 public class GeoKretyApplication extends Application {
 	private HttpClient httpClient;
@@ -61,6 +63,8 @@ public class GeoKretyApplication extends Application {
 		foregroundTaskHandler.registerTask(new RefreshAccount(this));
 		foregroundTaskHandler.registerTask(new GettingSecidThread(this));
 		foregroundTaskHandler.registerTask(new GettingUuidThread(this));
+		
+		startService(new Intent(this, LogSubmitterService.class));
 	}
 
 	@Override

@@ -58,7 +58,7 @@ public class Account {
 
 	private List<GeocacheLog>	openCachingLogs;
 	private List<Geokret>		inventory;
-	private List<GeoKretLog>	geoKretLogs;
+	//private List<GeoKretLog>	geoKretLogs;
 
 	private Date				lastDataLoaded;
 
@@ -93,9 +93,9 @@ public class Account {
 		return null;
 	}
 
-	public List<GeoKretLog> getGeoKretyLogs() {
+	/*public List<GeoKretLog> getGeoKretyLogs() {
 		return geoKretLogs;
-	}
+	}*/
 
 	public String getGeoKreySecredID() {
 		return geoKretySecredID;
@@ -254,9 +254,9 @@ public class Account {
 		return bundle;
 	}
 
-	public void setGeoKretyLogs(final List<GeoKretLog> geoKretLogs) {
+	/*public void setGeoKretyLogs(final List<GeoKretLog> geoKretLogs) {
 		this.geoKretLogs = geoKretLogs;
-	}
+	}*/
 
 	public void setHomeCordLat(final String homeCordLat) {
 		this.homeCordLat = homeCordLat;

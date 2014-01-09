@@ -35,6 +35,7 @@ import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.Dialogs;
+import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.geokrety.threads.LogGeoKret;
 import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
@@ -395,11 +396,20 @@ public class LogActivity extends ManagedDialogsActivity implements
 
 	public void submit(final View view) {
 		storeToGeoKretLog(currentLog);
-		application.getForegroundTaskHandler()
+		/*application.getForegroundTaskHandler()
 				.runTask(
 						LogGeoKret.ID,
 						new Pair<GeoKretLog, Account>(currentLog,
-								currentAccount), true);
+								currentAccount), true);*/
+		currentLog.setState(GeoKretLog.STATE_OUTBOX);
+		if (currentLog.getId() == 0) {
+			application.getStateHolder().getGeoKretLogDataSource().persist(currentLog);
+		} else {
+			application.getStateHolder().getGeoKretLogDataSource().merge(currentLog);
+		}
+		startService(new Intent(this, LogSubmitterService.class));
+		Toast.makeText(this, "Log submitting in background...", Toast.LENGTH_LONG).show();
+		finish();
 	}
 
 	public void refreshButtonClick(final View view) {

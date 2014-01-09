@@ -34,22 +34,34 @@ import android.util.SparseArray;
 import android.widget.ListView;
 
 public class StateHolder {
-	private static final String DEFAULT_ACCOUNT = "current_accounts";
-	private static final int DEFAULT_ACCOUNT_VALUE = ListView.INVALID_POSITION;
+	private static final String				DEFAULT_ACCOUNT			= "current_accounts";
+	private static final int				DEFAULT_ACCOUNT_VALUE	= ListView.INVALID_POSITION;
 
-	private static Map<String, Geocache> geoCachesMap;
+	private static Map<String, Geocache>	geoCachesMap;
 
-	private List<Account> accountList;
-	private int defaultAccount;
+	public static Map<String, Geocache> getGeoacheMap() {
+		if (geoCachesMap == null) {
+			geoCachesMap = Collections.synchronizedMap(new HashMap<String, Geocache>());
+		}
+		return geoCachesMap;
+	}
 
-	private final AccountDataSource accountDataSource;
-	private final GeocacheLogDataSource geocacheLogDataSource;
-	private final GeoKretDataSource geoKretDataSource;
-	private final GeocacheDataSource geocacheDataSource;
-	private final GeoKretLogDataSource geoKretLogDataSource;
+	private static SharedPreferences getPreferences(final Context context) {
+		return context.getSharedPreferences("pl.nkg.geokrety", Context.MODE_PRIVATE);
+	}
 
-	public StateHolder(Context context) {
-		GeoKretySQLiteHelper dbHelper = new GeoKretySQLiteHelper(context);
+	private List<Account>				accountList;
+	private int							defaultAccount;
+	private final AccountDataSource		accountDataSource;
+	private final GeocacheLogDataSource	geocacheLogDataSource;
+	private final GeoKretDataSource		geoKretDataSource;
+
+	private final GeocacheDataSource	geocacheDataSource;
+
+	private final GeoKretLogDataSource	geoKretLogDataSource;
+
+	public StateHolder(final Context context) {
+		final GeoKretySQLiteHelper dbHelper = new GeoKretySQLiteHelper(context);
 		accountDataSource = new AccountDataSource(dbHelper);
 		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
 		geoKretDataSource = new GeoKretDataSource(dbHelper);
@@ -57,36 +69,56 @@ public class StateHolder {
 		geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
 
 		try {
-			accountList = Collections.synchronizedList(accountDataSource
-					.getAll());
-		} catch (SQLiteException e) {
+			accountList = Collections.synchronizedList(accountDataSource.getAll());
+		} catch (final SQLiteException e) {
 			if (e.getMessage().contains("home_lat")) {
 				dbHelper.fixDB1ToDB3UpgradeProblem();
-				accountList = Collections.synchronizedList(accountDataSource
-						.getAll());
+				accountList = Collections.synchronizedList(accountDataSource.getAll());
 			}
 		}
 
 		geoCachesMap = new HashMap<String, Geocache>();
-		for (Geocache gc : geocacheDataSource.load()) {
+		for (final Geocache gc : geocacheDataSource.load()) {
 			geoCachesMap.put(gc.getCode(), gc);
 		}
 
-		SparseArray<LinkedList<Geokret>> gks = geoKretDataSource.load();
-		SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource
-				.load();
-		SparseArray<LinkedList<GeoKretLog>> geoKretLogs = geoKretLogDataSource
-				.load();
+		final SparseArray<LinkedList<Geokret>> gks = geoKretDataSource.load();
+		final SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
+		//final SparseArray<LinkedList<GeoKretLog>> geoKretLogs = geoKretLogDataSource.load();
 
-		for (Account account : accountList) {
+		for (final Account account : accountList) {
 			account.setOpenCachingLogs(logs.get(account.getID()));
 			account.setInventory(gks.get(account.getID()));
-			account.setGeoKretyLogs(geoKretLogs.get(account.getID()));
+			//account.setGeoKretyLogs(geoKretLogs.get(account.getID()));
 		}
+	}
+
+	public Account getAccountByID(final long id) {
+		for (final Account account : getAccountList()) {
+			if (account.getID() == id) {
+				return account;
+			}
+		}
+		return null;
 	}
 
 	public AccountDataSource getAccountDataSource() {
 		return accountDataSource;
+	}
+
+	public List<Account> getAccountList() {
+		return accountList;
+	}
+
+	public int getDefaultAccount() {
+		return accountList.size() > 0 //
+		? defaultAccount < accountList.size() && defaultAccount >= 0 //
+		? defaultAccount : 0 //
+				: DEFAULT_ACCOUNT_VALUE;
+	}
+
+	public GeocacheDataSource getGeocacheDataSource() {
+		return geocacheDataSource;
 	}
 
 	public GeocacheLogDataSource getGeocacheLogDataSource() {
@@ -97,49 +129,16 @@ public class StateHolder {
 		return geoKretDataSource;
 	}
 
-	public GeocacheDataSource getGeocacheDataSource() {
-		return geocacheDataSource;
+	public GeoKretLogDataSource getGeoKretLogDataSource() {
+		return geoKretLogDataSource;
 	}
 
-	public void storeDefaultAccount(Context context) {
-		getPreferences(context).edit().putInt(DEFAULT_ACCOUNT, defaultAccount)
-				.commit();
-	}
-
-	private static SharedPreferences getPreferences(Context context) {
-		return context.getSharedPreferences("pl.nkg.geokrety",
-				Context.MODE_PRIVATE);
-	}
-
-	public List<Account> getAccountList() {
-		return accountList;
-	}
-
-	public int getDefaultAccount() {
-		return accountList.size() > 0 ? (defaultAccount < accountList.size()
-				&& defaultAccount >= 0 ? defaultAccount : 0)
-				: DEFAULT_ACCOUNT_VALUE;
-	}
-
-	public void setDefaultAccount(int defaultAccount) {
+	public void setDefaultAccount(final int defaultAccount) {
 		this.defaultAccount = defaultAccount;
 	}
 
-	public static Map<String, Geocache> getGeoacheMap() {
-		if (geoCachesMap == null) {
-			geoCachesMap = Collections
-					.synchronizedMap(new HashMap<String, Geocache>());
-		}
-		return geoCachesMap;
-	}
-
-	public Account getAccountByID(long id) {
-		for (Account account : getAccountList()) {
-			if (account.getID() == id) {
-				return account;
-			}
-		}
-		return null;
+	public void storeDefaultAccount(final Context context) {
+		getPreferences(context).edit().putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
 	}
 
 	public void storeGeoCachingNames() {
