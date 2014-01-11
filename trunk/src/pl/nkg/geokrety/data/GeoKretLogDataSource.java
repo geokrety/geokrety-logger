@@ -54,6 +54,7 @@ public class GeoKretLogDataSource {
 	// private static final String FETCH_ALL;
 	private static final String			FETCH_OUTBOX;
 	private static final String			FETCH_BY_USER;
+	private static final String			FETCH_BY_ID;
 
 	static {
 		TABLE_CREATE = "CREATE TABLE " //
@@ -114,6 +115,25 @@ public class GeoKretLogDataSource {
 				+ TABLE + " l" //
 				+ " WHERE l." + COLUMN_USER_ID + " = ?" //
 				+ " ORDER BY " + COLUMN_ID;
+		
+		FETCH_BY_ID = "SELECT " //
+				+ "l." + COLUMN_ID + ", " //
+				+ "l." + COLUMN_USER_ID + ", " //
+				+ "l." + COLUMN_STATE + ", " //
+				+ "l." + COLUMN_PROBLEM + ", " //
+				+ "l." + COLUMN_PROBLEM_ARG + ", " //
+				+ "l." + COLUMN_TRACKING_CODE + ", " //
+				+ "l." + COLUMN_WAYPOINT + ", " //
+				+ "l." + COLUMN_FORMNAME + ", " //
+				+ "l." + COLUMN_LATLON + ", " //
+				+ "l." + COLUMN_LOG_TYPE + ", " //
+				+ "l." + COLUMN_DATE + ", " //
+				+ "l." + COLUMN_HOUR + ", " //
+				+ "l." + COLUMN_MINUTE + ", " //
+				+ "l." + COLUMN_COMMENT//
+				+ " FROM " //
+				+ TABLE + " AS l" //
+				+ " WHERE l." + COLUMN_ID + " = ?";
 	}
 
 	public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
@@ -199,5 +219,23 @@ public class GeoKretLogDataSource {
 			}
 
 		});
+	}
+
+	public GeoKretLog loadByID(final long logID) {
+		final LinkedList<GeoKretLog> geoKretLogs = new LinkedList<GeoKretLog>();
+		dbHelper.runOnReadableDatabase(new DBOperation() {
+
+			@Override
+			public boolean inTransaction(final SQLiteDatabase db) {
+				
+				final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[] {String.valueOf(logID)});
+				while (cursor.moveToNext()) {
+					geoKretLogs.add(new GeoKretLog(cursor, 0, false));
+				}
+				cursor.close();
+				return true;
+			}
+		});
+		return geoKretLogs.getFirst();
 	}
 }

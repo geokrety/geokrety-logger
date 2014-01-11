@@ -32,6 +32,7 @@ import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -115,7 +116,10 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements Adapt
 	@Override
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
 		// TODO Auto-generated method stub
-		Toast.makeText(this, String.valueOf(id) + ", pos: " + position, Toast.LENGTH_LONG).show();
+		//Toast.makeText(this, String.valueOf(id) + ", pos: " + position, Toast.LENGTH_LONG).show();
+		Intent intent = new Intent(this, LogActivity.class);
+		intent.putExtra(GeoKretLogDataSource.COLUMN_ID, id);
+		startActivity(intent);
 	}
 
 	@Override
@@ -138,11 +142,15 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements Adapt
 
 	private void refreshListView() {
 		closeCursorIfOpened();
+		if (database.isOpen()) { // FIXME: problem otwierania bazy danych - concurrent
 		geoKretLogsCursor = GeoKretLogDataSource.createLoadByUserIDCurosr(database, account.getID());
 
 		final Adapter adapter = new Adapter(this, geoKretLogsCursor, true);
 		final ListView listView = (ListView) findViewById(R.id.gklListView);
 		listView.setAdapter(adapter);
+		} else {
+			Toast.makeText(this, String.valueOf(database.isOpen()), Toast.LENGTH_LONG).show();			
+		}
 	}
 
 	private void updateListView() {

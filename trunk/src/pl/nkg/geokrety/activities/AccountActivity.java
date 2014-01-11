@@ -40,7 +40,7 @@ import pl.nkg.lib.location.GPSAcquirer;
 import pl.nkg.lib.okapi.SupportedOKAPI;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
@@ -50,50 +50,150 @@ import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
-public class AccountActivity extends ManagedDialogsActivity implements
-		LocationListener, TextWatcher {
+public class AccountActivity extends ManagedDialogsActivity implements LocationListener, TextWatcher {
 
-	private int accountID; // TODO: to moze byc razem z klasa Account
-	private String accountName;
-	private String secid;
-	private String[] ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
-	private boolean modified;
+	// TODO: to moze byc razem z klasa Account
+	private int								accountID;
+	private String							accountName;
+	private String							secid;
+	private String[]						ocUUIDs		= new String[SupportedOKAPI.SUPPORTED.length];
+	private boolean							modified;
 
 	// private TextView accountNameEditText;
-	private CheckBox gkCheckBox;
-	private CheckBox[] ocCheckBox = new CheckBox[SupportedOKAPI.SUPPORTED.length];
-	private Button saveButton;
-	private EditText latEditText;
-	private EditText lonEditText;
+	private CheckBox						gkCheckBox;
+	private final CheckBox[]				ocCheckBox	= new CheckBox[SupportedOKAPI.SUPPORTED.length];
+	private Button							saveButton;
+	private EditText						latEditText;
+	private EditText						lonEditText;
 
-	private AlertDialogWrapper saveModifiedsDialog;
+	private AlertDialogWrapper				saveModifiedsDialog;
 
-	private GKDialog gkDialog;
-	private OCDialog ocDialog;
+	private GKDialog						gkDialog;
+	private OCDialog						ocDialog;
 
-	private GenericProgressDialogWrapper secidProgressDialog;
-	private GenericProgressDialogWrapper uuidProgressDialog;
+	private GenericProgressDialogWrapper	secidProgressDialog;
+	private GenericProgressDialogWrapper	uuidProgressDialog;
 
-	private GettingSecidThread gettingSecidThread;
-	private GettingUuidThread gettingUuidThread;
+	private GettingSecidThread				gettingSecidThread;
+	private GettingUuidThread				gettingUuidThread;
 
-	private GeoKretyApplication application;
-	private GPSAcquirer gpsAcquirer;
+	private GeoKretyApplication				application;
+	private GPSAcquirer						gpsAcquirer;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	public void afterTextChanged(final Editable s) {
+		modified = true;
+	}
+
+	@Override
+	public void beforeTextChanged(final CharSequence s, final int start, final int count, final int after) {}
+
+	@Override
+	public void dialogFinished(final AbstractDialogWrapper<?> dialog, final int buttonId, final Serializable arg) {
+
+		if (dialog.getDialogId() == Dialogs.SAVE_MODIFIEDSDIALOG) {
+			switch (buttonId) {
+				case DialogInterface.BUTTON_POSITIVE:
+					saveClick(null);
+					return;
+
+				case DialogInterface.BUTTON_NEUTRAL:
+					return;
+
+				case DialogInterface.BUTTON_NEGATIVE:
+					modified = false;
+					onBackPressed();
+					return;
+			}
+		}
+
+		updateChecks();
+		if (buttonId != DialogInterface.BUTTON_POSITIVE) {
+			return;
+		}
+
+		if (dialog.getDialogId() == Dialogs.GK_PROMPTDIALOG) {
+			gettingSecidThread.execute(new Pair<String, String>(gkDialog.getGKLogin(), gkDialog.getGKPassword()));
+		} else if (dialog.getDialogId() == Dialogs.OC_PROMPTDIALOG) {
+			final int nr = (Integer) arg;
+			uuidProgressDialog.setProgress(getText(R.string.download_getting_uuid) + " " + SupportedOKAPI.SUPPORTED[nr].host + getText(R.string.dots));
+			gettingUuidThread.execute(new Pair<String, Integer>(ocDialog.getOCLogin(), nr));
+		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (modified) {
+			saveModifiedsDialog.show(null);
+		} else {
+			super.onBackPressed();
+		}
+	}
+
+	public void onClickSetCoordinatesFromGPS(final View view) {
+		if (GPSAcquirer.checkAndToast(this)) {
+			gpsAcquirer.runRequest(1000, 30);
+		}
+	}
+
+	@Override
+	public void onLocationChanged(final Location location) {
+		lonEditText.setText(Utils.latlonFormat.format(location.getLongitude()));
+		latEditText.setText(Utils.latlonFormat.format(location.getLatitude()));
+		Utils.makeCenterToast(this, R.string.gps_fixed).show();
+	}
+
+	@Override
+	public void onProviderDisabled(final String provider) {}
+
+	@Override
+	public void onProviderEnabled(final String provider) {}
+
+	@Override
+	public void onStatusChanged(final String provider, final int status, final Bundle extras) {}
+
+	@Override
+	public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {}
+
+	public void saveClick(final View view) {
+		if (Utils.isEmpty(Account.SECID)) {
+			Toast.makeText(this, R.string.error_login_null, Toast.LENGTH_LONG).show();
+			return;
+		}
+
+		final Intent returnIntent = new Intent();
+		returnIntent.putExtra(Account.SECID, secid);
+		returnIntent.putExtra(Account.ACCOUNT_ID, accountID);
+		returnIntent.putExtra(Account.OCUUIDS, ocUUIDs);
+		returnIntent.putExtra(Account.ACCOUNT_NAME, accountName);
+		returnIntent.putExtra(Account.HOME_LAT, latEditText.getText().toString());
+		returnIntent.putExtra(Account.HOME_LON, lonEditText.getText().toString());
+		setResult(RESULT_OK, returnIntent);
+		finish();
+	}
+
+	private void updateChecks() {
+		gkCheckBox.setChecked(!Utils.isEmpty(secid));
+		for (int i = 0; i < ocCheckBox.length; i++) {
+			ocCheckBox[i].setChecked(!Utils.isEmpty(ocUUIDs[i]));
+		}
+		setTitle(getText(R.string.title_activity_account) + ": " + (Utils.isEmpty(accountName) ? getText(R.string.account_account_name_hint) : accountName));
+		saveButton.setEnabled(gkCheckBox.isChecked());
+	}
+
+	@Override
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		application = (GeoKretyApplication) getApplication();
 
-		saveModifiedsDialog = new AlertDialogWrapper(this,
-				Dialogs.SAVE_MODIFIEDSDIALOG);
+		saveModifiedsDialog = new AlertDialogWrapper(this, Dialogs.SAVE_MODIFIEDSDIALOG);
 		saveModifiedsDialog.setTitle(R.string.account_save_title);
 		saveModifiedsDialog.setMessage(R.string.account_save_message);
 		saveModifiedsDialog.setPositiveButton(getText(R.string.yes));
@@ -103,33 +203,25 @@ public class AccountActivity extends ManagedDialogsActivity implements
 		gkDialog = new GKDialog(this);
 		ocDialog = new OCDialog(this);
 
-		secidProgressDialog = new GenericProgressDialogWrapper(this,
-				Dialogs.SECID_PROGRESSDIALOG);
-		secidProgressDialog.setProgress(getText(R.string.download_login_gk)
-				.toString());
+		secidProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.SECID_PROGRESSDIALOG);
+		secidProgressDialog.setProgress(getText(R.string.download_login_gk).toString());
 
-		uuidProgressDialog = new GenericProgressDialogWrapper(this,
-				Dialogs.UUID_PROMPTDIALOG);
+		uuidProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.UUID_PROMPTDIALOG);
 		// uuidProgressDialog.setProgress(getText(R.string.download_getting_ocs));
 
-		gettingSecidThread = GettingSecidThread.getFromHandler(application
-				.getForegroundTaskHandler());
-		gettingUuidThread = GettingUuidThread.getFromHandler(application
-				.getForegroundTaskHandler());
+		gettingSecidThread = GettingSecidThread.getFromHandler(application.getForegroundTaskHandler());
+		gettingUuidThread = GettingUuidThread.getFromHandler(application.getForegroundTaskHandler());
 
 		setContentView(R.layout.activity_account);
 		latEditText = (EditText) findViewById(R.id.latEditText);
 		lonEditText = (EditText) findViewById(R.id.lonEditText);
 
-		accountID = getIntent().getIntExtra(Account.ACCOUNT_ID,
-				ListView.INVALID_POSITION);
+		accountID = getIntent().getIntExtra(Account.ACCOUNT_ID, AdapterView.INVALID_POSITION);
 		secid = getIntent().getStringExtra(Account.SECID);
 		ocUUIDs = getIntent().getStringArrayExtra(Account.OCUUIDS);
 		accountName = getIntent().getStringExtra(Account.ACCOUNT_NAME);
-		lonEditText.setText(Utils.defaultIfNull(
-				getIntent().getStringExtra(Account.HOME_LON), ""));
-		latEditText.setText(Utils.defaultIfNull(
-				getIntent().getStringExtra(Account.HOME_LAT), ""));
+		lonEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(Account.HOME_LON), ""));
+		latEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(Account.HOME_LAT), ""));
 
 		if (ocUUIDs == null) {
 			ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -153,7 +245,7 @@ public class AccountActivity extends ManagedDialogsActivity implements
 		gkCheckBox.setOnClickListener(new OnClickListener() {
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(final View v) {
 				if (gkCheckBox.isChecked()) {
 					gkDialog.show(null, accountName);
 				} else {
@@ -169,14 +261,12 @@ public class AccountActivity extends ManagedDialogsActivity implements
 			final int nr = i;
 			ocCheckBox[i].setOnClickListener(new OnClickListener() {
 
-				final int portalNr = nr;
+				final int	portalNr	= nr;
 
 				@Override
-				public void onClick(View v) {
+				public void onClick(final View v) {
 					if (ocCheckBox[portalNr].isChecked()) {
-						ocDialog.show(portalNr,
-								SupportedOKAPI.SUPPORTED[portalNr].host,
-								accountName);
+						ocDialog.show(portalNr, SupportedOKAPI.SUPPORTED[portalNr].host, accountName);
 					} else {
 						modified = true;
 						ocUUIDs[portalNr] = null;
@@ -189,121 +279,18 @@ public class AccountActivity extends ManagedDialogsActivity implements
 		latEditText.addTextChangedListener(this);
 	}
 
-	private void updateChecks() {
-		gkCheckBox.setChecked(!Utils.isEmpty(secid));
-		for (int i = 0; i < ocCheckBox.length; i++) {
-			ocCheckBox[i].setChecked(!Utils.isEmpty(ocUUIDs[i]));
-		}
-		setTitle(getText(R.string.title_activity_account)
-				+ ": "
-				+ (Utils.isEmpty(accountName) ? getText(R.string.account_account_name_hint)
-						: accountName));
-		saveButton.setEnabled(gkCheckBox.isChecked());
+	@Override
+	protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		secid = savedInstanceState.getString(Account.SECID);
+		accountID = savedInstanceState.getInt(Account.ACCOUNT_ID);
+		ocUUIDs = savedInstanceState.getStringArray(Account.OCUUIDS);
+		accountName = savedInstanceState.getString(Account.ACCOUNT_NAME);
+		gpsAcquirer.restore(savedInstanceState);
 	}
 
 	@Override
-	protected void onStart() {
-		super.onStart();
-		gpsAcquirer.start();
-		gettingSecidThread.attach(secidProgressDialog,
-				new GenericTaskListener<Pair<String, String>, String, String>(
-						this) {
-
-					@Override
-					public void onFinish(
-							AbstractForegroundTaskWrapper<Pair<String, String>, String, String> sender,
-							Pair<String, String> param, String result) {
-						modified = true;
-						secid = result;
-						accountName = param.first;
-						updateChecks();
-						Toast.makeText(AccountActivity.this, "secid: " + secid,
-								Toast.LENGTH_LONG).show();
-					}
-
-					@Override
-					public void onError(
-							AbstractForegroundTaskWrapper<Pair<String, String>, String, String> sender,
-							Pair<String, String> param, Throwable exception) {
-						super.onError(sender, param, exception);
-						gkDialog.show(null);
-					}
-				});
-
-		gettingUuidThread.attach(uuidProgressDialog,
-				new GenericTaskListener<Pair<String, Integer>, String, String>(
-						this) {
-
-					@Override
-					public void onFinish(
-							AbstractForegroundTaskWrapper<Pair<String, Integer>, String, String> sender,
-							Pair<String, Integer> param, String result) {
-						modified = true;
-						ocUUIDs[param.second] = result;
-						if (Utils.isEmpty(accountName)) {
-							accountName = param.first;
-						}
-						updateChecks();
-						Toast.makeText(
-								AccountActivity.this,
-								SupportedOKAPI.SUPPORTED[param.second].host
-										+ " uuid: " + result, Toast.LENGTH_LONG)
-								.show();
-					}
-
-					@Override
-					public void onError(
-							AbstractForegroundTaskWrapper<Pair<String, Integer>, String, String> sender,
-							Pair<String, Integer> param, Throwable exception) {
-						super.onError(sender, param, exception);
-						ocDialog.show(param.second);
-					}
-
-				});
-
-	}
-
-	@Override
-	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
-			Serializable arg) {
-
-		if (dialog.getDialogId() == Dialogs.SAVE_MODIFIEDSDIALOG) {
-			switch (buttonId) {
-			case Dialog.BUTTON_POSITIVE:
-				saveClick(null);
-				return;
-
-			case Dialog.BUTTON_NEUTRAL:
-				return;
-
-			case Dialog.BUTTON_NEGATIVE:
-				modified = false;
-				onBackPressed();
-				return;
-			}
-		}
-
-		updateChecks();
-		if (buttonId != Dialog.BUTTON_POSITIVE) {
-			return;
-		}
-
-		if (dialog.getDialogId() == Dialogs.GK_PROMPTDIALOG) {
-			gettingSecidThread.execute(new Pair<String, String>(gkDialog
-					.getGKLogin(), gkDialog.getGKPassword()));
-		} else if (dialog.getDialogId() == Dialogs.OC_PROMPTDIALOG) {
-			int nr = (Integer) arg;
-			uuidProgressDialog
-					.setProgress(getText(R.string.download_getting_uuid) + " "
-							+ SupportedOKAPI.SUPPORTED[nr].host
-							+ getText(R.string.dots));
-			gettingUuidThread.execute(new Pair<String, Integer>(ocDialog
-					.getOCLogin(), nr));
-		}
-	}
-
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
+	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		gpsAcquirer.pause(outState);
 		outState.putStringArray(Account.OCUUIDS, ocUUIDs);
@@ -313,80 +300,51 @@ public class AccountActivity extends ManagedDialogsActivity implements
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		secid = savedInstanceState.getString(Account.SECID);
-		accountID = savedInstanceState.getInt(Account.ACCOUNT_ID);
-		ocUUIDs = savedInstanceState.getStringArray(Account.OCUUIDS);
-		accountName = savedInstanceState.getString(Account.ACCOUNT_NAME);
-		gpsAcquirer.restore(savedInstanceState);
-	}
+	protected void onStart() {
+		super.onStart();
+		gpsAcquirer.start();
+		gettingSecidThread.attach(secidProgressDialog, new GenericTaskListener<Pair<String, String>, String, String>(this) {
 
-	public void saveClick(View view) {
-		if (Utils.isEmpty(Account.SECID)) {
-			Toast.makeText(this, R.string.error_login_null, Toast.LENGTH_LONG)
-					.show();
-			return;
-		}
+			@Override
+			public void onError(final AbstractForegroundTaskWrapper<Pair<String, String>, String, String> sender, final Pair<String, String> param,
+					final Throwable exception) {
+				super.onError(sender, param, exception);
+				gkDialog.show(null);
+			}
 
-		Intent returnIntent = new Intent();
-		returnIntent.putExtra(Account.SECID, secid);
-		returnIntent.putExtra(Account.ACCOUNT_ID, accountID);
-		returnIntent.putExtra(Account.OCUUIDS, ocUUIDs);
-		returnIntent.putExtra(Account.ACCOUNT_NAME, accountName);
-		returnIntent.putExtra(Account.HOME_LAT, latEditText.getText()
-				.toString());
-		returnIntent.putExtra(Account.HOME_LON, lonEditText.getText()
-				.toString());
-		setResult(RESULT_OK, returnIntent);
-		finish();
-	}
+			@Override
+			public void onFinish(final AbstractForegroundTaskWrapper<Pair<String, String>, String, String> sender, final Pair<String, String> param,
+					final String result) {
+				modified = true;
+				secid = result;
+				accountName = param.first;
+				updateChecks();
+				Toast.makeText(AccountActivity.this, "secid: " + secid, Toast.LENGTH_LONG).show();
+			}
+		});
 
-	@Override
-	public void onBackPressed() {
-		if (modified) {
-			saveModifiedsDialog.show(null);
-		} else {
-			super.onBackPressed();
-		}
-	}
+		gettingUuidThread.attach(uuidProgressDialog, new GenericTaskListener<Pair<String, Integer>, String, String>(this) {
 
-	public void onClickSetCoordinatesFromGPS(View view) {
-		if (GPSAcquirer.checkAndToast(this)) {
-			gpsAcquirer.runRequest(1000, 30);
-		}
-	}
+			@Override
+			public void onError(final AbstractForegroundTaskWrapper<Pair<String, Integer>, String, String> sender, final Pair<String, Integer> param,
+					final Throwable exception) {
+				super.onError(sender, param, exception);
+				ocDialog.show(param.second);
+			}
 
-	@Override
-	public void onLocationChanged(Location location) {
-		lonEditText.setText(Utils.latlonFormat.format(location.getLongitude()));
-		latEditText.setText(Utils.latlonFormat.format(location.getLatitude()));
-		Utils.makeCenterToast(this, R.string.gps_fixed).show();
-	}
+			@Override
+			public void onFinish(final AbstractForegroundTaskWrapper<Pair<String, Integer>, String, String> sender, final Pair<String, Integer> param,
+					final String result) {
+				modified = true;
+				ocUUIDs[param.second] = result;
+				if (Utils.isEmpty(accountName)) {
+					accountName = param.first;
+				}
+				updateChecks();
+				Toast.makeText(AccountActivity.this, SupportedOKAPI.SUPPORTED[param.second].host + " uuid: " + result, Toast.LENGTH_LONG).show();
+			}
 
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-	}
+		});
 
-	@Override
-	public void onProviderEnabled(String provider) {
-	}
-
-	@Override
-	public void onProviderDisabled(String provider) {
-	}
-
-	@Override
-	public void beforeTextChanged(CharSequence s, int start, int count,
-			int after) {
-	}
-
-	@Override
-	public void onTextChanged(CharSequence s, int start, int before, int count) {
-	}
-
-	@Override
-	public void afterTextChanged(Editable s) {
-		modified = true;
 	}
 }
