@@ -36,8 +36,8 @@ import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.Dialogs;
+import pl.nkg.geokrety.dialogs.RemoveLogDialog;
 import pl.nkg.geokrety.services.LogSubmitterService;
-import pl.nkg.geokrety.threads.LogGeoKret;
 import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
@@ -47,26 +47,25 @@ import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
 import pl.nkg.lib.location.GPSAcquirer;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
-import pl.nkg.lib.threads.GenericTaskListener;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ListView;
 import android.widget.Toast;
 
 public class LogActivity extends ManagedDialogsActivity implements LocationListener {
 
 	private GenericProgressDialogWrapper	refreshProgressDialog;
-	private GenericProgressDialogWrapper	logProgressDialog;
+	// private GenericProgressDialogWrapper logProgressDialog;
+	private RemoveLogDialog					removeLogDialog;
 	private TimePickerDialogWrapper			timePickerDialog;
 	private DatePickerDialogWrapper			datePickerDialog;
 	private AlertDialogWrapper				inventorySpinnerDialog;
@@ -75,7 +74,6 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 
 	private GeoKretyApplication				application;
 	private RefreshAccount					refreshAccount;
-	private LogGeoKret						logGeoKret;
 
 	private GeoKretLog						currentLog;
 	private Account							currentAccount;
@@ -146,7 +144,26 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 				currentLogType = buttonId;
 				updateVisibles();
 				break;
+
+			case Dialogs.REMOVE_LOG_ALERTDIALOG:
+				if (buttonId == DialogInterface.BUTTON_POSITIVE) {
+					if (currentLog.getId() > 0) {
+						application.getStateHolder().getGeoKretLogDataSource().delete(currentLog.getId());
+					}
+					finish();
+				}
+				break;
 		}
+	}
+
+	public void onClickDelete(final View view) {
+		removeLogDialog.show(null);
+	}
+
+	public void onClickDraft(final View view) {
+		saveLog(GeoKretLog.STATE_DRAFT);
+		Toast.makeText(this, R.string.message_draft_saved, Toast.LENGTH_LONG).show();
+		finish();
 	}
 
 	public void onClickSetCoordinatesFromGPS(final View view) {
@@ -157,6 +174,13 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 
 	public void onClickSetHomeCoordinates(final View view) {
 		coordinatesEditText.setText(currentAccount.getHomeCordLat() + " " + currentAccount.getHomeCordLon());
+	}
+
+	public void onClickSubmit(final View view) {
+		saveLog(GeoKretLog.STATE_OUTBOX);
+		startService(new Intent(this, LogSubmitterService.class));
+		Toast.makeText(this, R.string.message_do_submitting, Toast.LENGTH_LONG).show();
+		finish();
 	}
 
 	@Override
@@ -179,12 +203,6 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 		updateCurrentAccount(true, true);
 	}
 
-	public void reset(final View view) {
-		currentLog = new GeoKretLog();
-		updateCurrentAccount(false, false);
-		loadFromGeoKretLog(currentLog);
-	}
-
 	public void showAccountsActivity(final View view) {
 		startActivityForResult(new Intent(this, AccountsActivity.class), 0);
 	}
@@ -203,19 +221,6 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 		if (updateSpinners()) {
 			ocsSpinnerDialog.show(null, currentAccount.getWaypointIndex(waypointEditText.getText().toString()));
 		}
-	}
-
-	public void submit(final View view) {
-		storeToGeoKretLog(currentLog);
-		currentLog.setState(GeoKretLog.STATE_OUTBOX);
-		if (currentLog.getId() == 0) {
-			application.getStateHolder().getGeoKretLogDataSource().persist(currentLog);
-		} else {
-			application.getStateHolder().getGeoKretLogDataSource().merge(currentLog);
-		}
-		startService(new Intent(this, LogSubmitterService.class));
-		Toast.makeText(this, R.string.message_do_submitting, Toast.LENGTH_LONG).show();
-		finish();
 	}
 
 	private boolean canShowUserData() {
@@ -242,6 +247,16 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 		coordinatesEditText.setText(log.getLatlon());
 		commentEditText.setText(log.getComment());
 		updateVisibles();
+	}
+
+	private void saveLog(final int state) {
+		storeToGeoKretLog(currentLog);
+		currentLog.setState(state);
+		if (currentLog.getId() == 0) {
+			application.getStateHolder().getGeoKretLogDataSource().persist(currentLog);
+		} else {
+			application.getStateHolder().getGeoKretLogDataSource().merge(currentLog);
+		}
 	}
 
 	private void showDatePickerDialog() {
@@ -311,7 +326,9 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 		final Intent intent = getIntent();
 
 		refreshProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
-		logProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.LOG_PROGRESSDIALOG);
+		// logProgressDialog = new GenericProgressDialogWrapper(this,
+		// Dialogs.LOG_PROGRESSDIALOG);
+		removeLogDialog = new RemoveLogDialog(this);
 		timePickerDialog = new TimePickerDialogWrapper(this, Dialogs.TIME_PICKERDIALOG);
 		datePickerDialog = new DatePickerDialogWrapper(this, Dialogs.DATE_PICKERDIALOG);
 
@@ -323,14 +340,13 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 
 		logTypeSpinnerDialog = new AlertDialogWrapper(this, Dialogs.TYPE_SPINNERDIALOG);
 
-		logProgressDialog.setTitle(R.string.submit_title);
+		// logProgressDialog.setTitle(R.string.submit_title);
 
 		application = (GeoKretyApplication) getApplication();
 		refreshAccount = RefreshAccount.getFromHandler(application.getForegroundTaskHandler());
-		logGeoKret = LogGeoKret.getFromHandler(application.getForegroundTaskHandler());
 
-		long logID = intent.getLongExtra(GeoKretLogDataSource.COLUMN_ID, ListView.INVALID_ROW_ID);
-		if (logID != ListView.INVALID_ROW_ID) {
+		final long logID = intent.getLongExtra(GeoKretLogDataSource.COLUMN_ID, AdapterView.INVALID_ROW_ID);
+		if (logID != AdapterView.INVALID_ROW_ID) {
 			currentLog = application.getStateHolder().getGeoKretLogDataSource().loadByID(logID);
 			currentAccount = application.getStateHolder().getAccountByID(currentLog.getAccoundID());
 		} else {
@@ -353,7 +369,7 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 		gpsAcquirer = new GPSAcquirer(this, "gpsAcquirer", this);
 
 		final String action = intent.getAction();
-		
+
 		if (!Utils.isEmpty(action) && action.equals(Intent.ACTION_VIEW)) {
 			final Uri data = intent.getData();
 			try {
@@ -429,14 +445,19 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 			}
 		});
 
-		logGeoKret.attach(logProgressDialog, new GenericTaskListener<Pair<GeoKretLog, Account>, String, Boolean>(this) {
-			@Override
-			public void onFinish(final pl.nkg.lib.threads.AbstractForegroundTaskWrapper<android.util.Pair<GeoKretLog, Account>, String, Boolean> sender,
-					final android.util.Pair<GeoKretLog, Account> param, final Boolean result) {
-				super.onFinish(sender, param, result);
-				finish();
-			};
-		}.setFinishMessage(R.string.submit_finish).setBreakMessage(R.string.submit_broken));
+		/*
+		 * logGeoKret.attach(logProgressDialog, new
+		 * GenericTaskListener<Pair<GeoKretLog, Account>, String, Boolean>(this)
+		 * {
+		 * 
+		 * @Override public void onFinish(final
+		 * pl.nkg.lib.threads.AbstractForegroundTaskWrapper
+		 * <android.util.Pair<GeoKretLog, Account>, String, Boolean> sender,
+		 * final android.util.Pair<GeoKretLog, Account> param, final Boolean
+		 * result) { super.onFinish(sender, param, result); finish(); };
+		 * }.setFinishMessage
+		 * (R.string.submit_finish).setBreakMessage(R.string.submit_broken));
+		 */
 		updateCurrentAccount(false, false);
 
 		logTypeSpinnerDialog.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_single_choice, getResources().getStringArray(

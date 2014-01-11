@@ -238,4 +238,15 @@ public class GeoKretLogDataSource {
 		});
 		return geoKretLogs.getFirst();
 	}
+
+	public void delete(final long id) {
+		dbHelper.runOnWritableDatabase(new DBOperation() {
+			
+			@Override
+			public boolean inTransaction(SQLiteDatabase db) {
+				removeSimple(db, TABLE, id);
+				return true;
+			}
+		});
+	}
 }

@@ -161,12 +161,14 @@
     <string name="form_location_description">When you use waypoint then using coordinates is not necessary because GeoKrety.org uses coordinates from waypoint.</string>
     <string name="form_additional">4. Additional data</string>
     <string name="form_comment">Comment</string>
-    <string name="form_submit">Go!</string>
-    <string name="form_clear">Clear</string>
+    <string name="form_submit_button">Send</string>
+    <string name="form_save_draft_button">Postpone</string>
+    <string name="form_remove_button">Delete</string>
     <!-- Spinners -->
     <string name="title_dialog_inventory">Your inventory</string>
     <string name="title_dialog_ocs">Your last logs in OpenCaching portals</string>
     <!-- Messages -->
+    <string name="form_confirm_delete_msg">Delete this log entry?</string>
     <string name="warning_already_logged">There is an entry with this date. Correct the date or the hour.</string>
     <!-- Log submitting -->
     <string name="submit_title">Submitting log</string>
@@ -206,6 +208,7 @@
     
     <!-- Log submitting service -->
     <string name="message_do_submitting">Log submitting in background&#8230;</string>
+    <string name="message_draft_saved">Log saved in drafts&#8230;</string>
     <string name="message_submitting">Submitting log&#8230;</string>
     <string name="message_submit_success">Submitting log successful</string>
     <string name="message_submit_problem">geokrety.org reject the submission</string>
