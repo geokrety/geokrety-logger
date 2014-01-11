@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Sodipodi ("http://www.sodipodi.com/") -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="151.99001"
+   id="svg548"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="writing_log_success.svg"
+   sodipodi:version="0.32"
+   width="151.99001"
+   version="1.1"
+   inkscape:export-filename="/home/nkg/android/geokrety/resources/writing_log_19.png"
+   inkscape:export-xdpi="11.25074"
+   inkscape:export-ydpi="11.25074">
+  <metadata
+     id="metadata6182">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title></dc:title>
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>hash</rdf:li>
+            <rdf:li />
+            <rdf:li>education</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org">
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Nicu Buculei</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs550">
+    <linearGradient
+       id="linearGradient562">
+      <stop
+         id="stop563"
+         offset="0.000000"
+         style="stop-color:#de9500;stop-opacity:1;" />
+      <stop
+         id="stop564"
+         offset="1.000000"
+         style="stop-color:#ffff0f;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient558">
+      <stop
+         id="stop559"
+         offset="0"
+         style="stop-color:#000;stop-opacity:1;" />
+      <stop
+         id="stop560"
+         offset="1"
+         style="stop-color:#fff;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient561"
+       spreadMethod="reflect"
+       x1="343.83105"
+       x2="306.405"
+       xlink:href="#linearGradient562"
+       y1="89.582809"
+       y2="67.144363"
+       gradientTransform="scale(1.0646869,0.93924326)" />
+    <linearGradient
+       id="linearGradient562-8-42">
+      <stop
+         id="stop563-7-0"
+         offset="0.000000"
+         style="stop-color:#de9500;stop-opacity:1;" />
+      <stop
+         id="stop564-1-2"
+         offset="1.000000"
+         style="stop-color:#ffff0f;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient562-8">
+      <stop
+         id="stop563-7"
+         offset="0.000000"
+         style="stop-color:#de9500;stop-opacity:1;" />
+      <stop
+         id="stop564-1"
+         offset="1.000000"
+         style="stop-color:#ffff0f;stop-opacity:1;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient562-8-4">
+      <stop
+         id="stop563-7-9"
+         offset="0.000000"
+         style="stop-color:#de9500;stop-opacity:1;" />
+      <stop
+         id="stop564-1-8"
+         offset="1.000000"
+         style="stop-color:#ffff0f;stop-opacity:1;" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     inkscape:cx="69.114021"
+     inkscape:cy="75.995953"
+     inkscape:window-height="1002"
+     inkscape:window-width="1680"
+     inkscape:window-x="-2"
+     inkscape:window-y="-3"
+     inkscape:zoom="3.1909728"
+     showgrid="false"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg548"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <g
+     id="g7012"
+     transform="matrix(0.3260355,0,0,0.3260355,0.194281,-1.8219239)">
+    <path
+       d="m 66.71343,11.430225 c -11.6412,149.065095 35.262,212.687095 -1.6959,451.942095 0,0 333.2339,3.392 332.3859,3.392 43.456,-250 -25.204,-331.333 2.657,-396.827495 -53.798,-0.7344 -67.099,-59.3545 -67.099,-59.3545 l -266.248,0.8479 z"
+       id="path588"
+       sodipodi:nodetypes="cccccc"
+       style="fill:#ffffff;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:round;stroke-dasharray:none"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m 332.96193,11.4302 -0.849,59.3546 68.681,0 c 3.392,-5.0876 -64.441,-57.6587 -67.832,-59.3546 z"
+       id="path589"
+       sodipodi:nodetypes="cccc"
+       style="fill:#eeebff;fill-rule:evenodd;stroke:#000000;stroke-width:10;stroke-linejoin:round;stroke-dasharray:none"
+       inkscape:connector-curvature="0" />
+  </g>
+  <g
+     transform="matrix(0.42993948,0,0,0.42993948,6.1524626,7.4047356)"
+     id="layer1">
+    <path
+       inkscape:connector-curvature="0"
+       d="M 100,60 60,100 230,270 270,230 100,60 z"
+       id="path4950"
+       style="fill:#ee0000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+    <path
+       inkscape:connector-curvature="0"
+       d="M 60,230 230,60 270,100 100,270 60,230 z"
+       id="path4952"
+       style="fill:#ee0000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+  </g>
+</svg>

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * Copyright (C) 2014 Michał Niedźwiecki
  * 
  * This file is part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -32,8 +32,8 @@ import android.database.sqlite.SQLiteDatabase;
 public class GeoKretLogDataSource {
 
 	public static final String			TABLE					= "geokrety_logs";
-	public static final String			COLUMN_LOG_ID			= "id";
-	public static final String			COLUMN_USER_ID			= "account_id";
+	public static final String			COLUMN_ID				= GeoKretySQLiteHelper.COLUMNT_ID;
+	public static final String			COLUMN_USER_ID			= "user_id";
 	public static final String			COLUMN_STATE			= "state";
 	public static final String			COLUMN_PROBLEM			= "problem_id";
 	public static final String			COLUMN_PROBLEM_ARG		= "problem_arg";
@@ -50,15 +50,15 @@ public class GeoKretLogDataSource {
 	public static final String			TABLE_CREATE;
 
 	private final GeoKretySQLiteHelper	dbHelper;
-	private final static String			PK_COLUMN				= COLUMN_LOG_ID;
 
-	//private static final String			FETCH_ALL;
+	// private static final String FETCH_ALL;
 	private static final String			FETCH_OUTBOX;
+	private static final String			FETCH_BY_USER;
 
 	static {
 		TABLE_CREATE = "CREATE TABLE " //
 				+ TABLE + "(" //
-				+ COLUMN_LOG_ID + " INTEGER PRIMARY KEY autoincrement, " //
+				+ COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
 				+ COLUMN_USER_ID + " INTEGER NOT NULL, " //
 				+ COLUMN_STATE + " INTEGER NOT NULL, " //
 				+ COLUMN_PROBLEM + " INTEGER NOT NULL, " //
@@ -73,27 +73,9 @@ public class GeoKretLogDataSource {
 				+ COLUMN_MINUTE + " INTEGER NOT NULL, " //
 				+ COLUMN_COMMENT + " TEXT NOT NULL" //
 				+ "); ";
-/*
-		FETCH_ALL = "SELECT " //
-				+ COLUMN_LOG_ID + ", " //
-				+ COLUMN_USER_ID + ", " //
-				+ COLUMN_STATE + ", " //
-				+ COLUMN_PROBLEM + ", " //
-				+ COLUMN_PROBLEM_ARG + ", " //
-				+ COLUMN_TRACKING_CODE + ", " //
-				+ COLUMN_WAYPOINT + ", " //
-				+ COLUMN_FORMNAME + ", " //
-				+ COLUMN_LATLON + ", " //
-				+ COLUMN_LOG_TYPE + ", " //
-				+ COLUMN_DATE + ", " //
-				+ COLUMN_HOUR + ", " //
-				+ COLUMN_MINUTE + ", " //
-				+ COLUMN_COMMENT //
-				+ " FROM " //
-				+ TABLE + " ORDER BY " + COLUMN_LOG_ID;
-*/
+		
 		FETCH_OUTBOX = "SELECT " //
-				+ "l." + COLUMN_LOG_ID + ", " //
+				+ "l." + COLUMN_ID + ", " //
 				+ "l." + COLUMN_USER_ID + ", " //
 				+ "l." + COLUMN_STATE + ", " //
 				+ "l." + COLUMN_PROBLEM + ", " //
@@ -108,10 +90,34 @@ public class GeoKretLogDataSource {
 				+ "l." + COLUMN_MINUTE + ", " //
 				+ "l." + COLUMN_COMMENT + ", "//
 				+ "u." + AccountDataSource.COLUMN_SECID + " FROM " //
-				+ TABLE + " l" //
-				+ " JOIN " + AccountDataSource.TABLE + " u ON l." + COLUMN_USER_ID + " = u." + AccountDataSource.COLUMN_USER_ID //
+				+ TABLE + " AS l" //
+				+ " JOIN " + AccountDataSource.TABLE + " AS u ON l." + COLUMN_USER_ID + " = u." + AccountDataSource.COLUMN_ID //
 				+ " WHERE l." + COLUMN_STATE + " = " + GeoKretLog.STATE_OUTBOX //
-				+ " ORDER BY " + COLUMN_LOG_ID;
+				+ " ORDER BY l." + COLUMN_ID;
+
+		FETCH_BY_USER = "SELECT " //
+				+ "l." + COLUMN_ID + ", " //
+				+ "l." + COLUMN_USER_ID + ", " //
+				+ "l." + COLUMN_STATE + ", " //
+				+ "l." + COLUMN_PROBLEM + ", " //
+				+ "l." + COLUMN_PROBLEM_ARG + ", " //
+				+ "l." + COLUMN_TRACKING_CODE + ", " //
+				+ "l." + COLUMN_WAYPOINT + ", " //
+				+ "l." + COLUMN_FORMNAME + ", " //
+				+ "l." + COLUMN_LATLON + ", " //
+				+ "l." + COLUMN_LOG_TYPE + ", " //
+				+ "l." + COLUMN_DATE + ", " //
+				+ "l." + COLUMN_HOUR + ", " //
+				+ "l." + COLUMN_MINUTE + ", " //
+				+ "l." + COLUMN_COMMENT//
+				+ " FROM " //
+				+ TABLE + " l" //
+				+ " WHERE l." + COLUMN_USER_ID + " = ?" //
+				+ " ORDER BY " + COLUMN_ID;
+	}
+
+	public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
+		return db.rawQuery(FETCH_BY_USER, new String[] { String.valueOf(userID) });
 	}
 
 	private static ContentValues getValues(final GeoKretLog log) {
@@ -135,48 +141,24 @@ public class GeoKretLogDataSource {
 	public GeoKretLogDataSource(final GeoKretySQLiteHelper dbHelper) {
 		this.dbHelper = dbHelper;
 	}
-/*
-	@Deprecated
-	public SparseArray<LinkedList<GeoKretLog>> load() {
-		final SparseArray<LinkedList<GeoKretLog>> logs = new SparseArray<LinkedList<GeoKretLog>>();
+
+	public List<GeoKretLog> loadByUserID(final long userID) {
+		final LinkedList<GeoKretLog> geoKretLogs = new LinkedList<GeoKretLog>();
 		dbHelper.runOnReadableDatabase(new DBOperation() {
 
 			@Override
 			public boolean inTransaction(final SQLiteDatabase db) {
-				final Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
+				final Cursor cursor = createLoadByUserIDCurosr(db, userID);
 				while (cursor.moveToNext()) {
-					final GeoKretLog log = new GeoKretLog( //
-							cursor.getInt(0), //
-							cursor.getInt(1), //
-							cursor.getInt(2), //
-							cursor.getInt(3), //
-							cursor.getString(4), //
-							cursor.getString(5), //
-							cursor.getString(6), //
-							cursor.getString(7), //
-							cursor.getString(8), //
-							cursor.getInt(9), //
-							cursor.getString(10), //
-							cursor.getInt(11), //
-							cursor.getInt(12), //
-							cursor.getString(13), //
-							"" //
-					);
-					final int userID = cursor.getInt(1);
-					LinkedList<GeoKretLog> list = logs.get(userID);
-					if (list == null) {
-						list = new LinkedList<GeoKretLog>();
-						logs.put(userID, list);
-					}
-					list.add(log);
+					geoKretLogs.add(new GeoKretLog(cursor, 0, false));
 				}
 				cursor.close();
 				return true;
 			}
 		});
-		return logs;
+		return geoKretLogs;
 	}
-*/
+
 	public List<GeoKretLog> loadOutbox() {
 		final LinkedList<GeoKretLog> outbox = new LinkedList<GeoKretLog>();
 		dbHelper.runOnReadableDatabase(new DBOperation() {
@@ -185,24 +167,7 @@ public class GeoKretLogDataSource {
 			public boolean inTransaction(final SQLiteDatabase db) {
 				final Cursor cursor = db.rawQuery(FETCH_OUTBOX, new String[] {});
 				while (cursor.moveToNext()) {
-					final GeoKretLog log = new GeoKretLog( //
-							cursor.getInt(0), //
-							cursor.getInt(1), //
-							cursor.getInt(2), //
-							cursor.getInt(3), //
-							cursor.getString(4), //
-							cursor.getString(5), //
-							cursor.getString(6), //
-							cursor.getString(7), //
-							cursor.getString(8), //
-							cursor.getInt(9), //
-							cursor.getString(10), //
-							cursor.getInt(11), //
-							cursor.getInt(12), //
-							cursor.getString(13), //
-							cursor.getString(14) //
-					);
-					outbox.add(log);
+					outbox.add(new GeoKretLog(cursor, 0, true));
 				}
 				cursor.close();
 				return true;
@@ -216,7 +181,7 @@ public class GeoKretLogDataSource {
 
 			@Override
 			public boolean inTransaction(final SQLiteDatabase db) {
-				mergeSimple(db, TABLE, getValues(log), PK_COLUMN, String.valueOf(log.getId()));
+				mergeSimple(db, TABLE, getValues(log), log.getId());
 				return true;
 			}
 

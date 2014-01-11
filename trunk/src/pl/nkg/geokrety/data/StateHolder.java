@@ -59,9 +59,14 @@ public class StateHolder {
 	private final GeocacheDataSource	geocacheDataSource;
 
 	private final GeoKretLogDataSource	geoKretLogDataSource;
+	
+	private Long reservedLog;
+	private Long editLog;
+	
+	private final GeoKretySQLiteHelper dbHelper;
 
 	public StateHolder(final Context context) {
-		final GeoKretySQLiteHelper dbHelper = new GeoKretySQLiteHelper(context);
+		dbHelper = new GeoKretySQLiteHelper(context);
 		accountDataSource = new AccountDataSource(dbHelper);
 		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
 		geoKretDataSource = new GeoKretDataSource(dbHelper);
@@ -87,10 +92,14 @@ public class StateHolder {
 		//final SparseArray<LinkedList<GeoKretLog>> geoKretLogs = geoKretLogDataSource.load();
 
 		for (final Account account : accountList) {
-			account.setOpenCachingLogs(logs.get(account.getID()));
-			account.setInventory(gks.get(account.getID()));
+			account.setOpenCachingLogs(logs.get((int)account.getID()));
+			account.setInventory(gks.get((int)account.getID()));
 			//account.setGeoKretyLogs(geoKretLogs.get(account.getID()));
 		}
+	}
+
+	public GeoKretySQLiteHelper getDbHelper() {
+		return dbHelper;
 	}
 
 	public Account getAccountByID(final long id) {
@@ -144,4 +153,39 @@ public class StateHolder {
 	public void storeGeoCachingNames() {
 		getGeocacheDataSource().store(geoCachesMap.values());
 	}
+	
+	public boolean lockForLog(long logID) {
+		synchronized(this) {
+			if (editLog != null && editLog == logID) {
+				return false;
+			} else {
+				reservedLog = logID;
+				return true;
+			}
+		}
+	}
+	
+	public void releaseLockForLog(long logID) {
+		synchronized(this) {
+			reservedLog = null;
+		}
+	}
+	
+	public boolean lockForEdit(long logID) {
+		synchronized(this) {
+			if (reservedLog != null && reservedLog == logID) {
+				return false;
+			} else {
+				editLog = logID;
+				return true;
+			}
+		}
+	}
+	
+	public void releaseLockForEdit(long logID) {
+		synchronized(this) {
+			editLog = null;
+		}
+	}
+
 }

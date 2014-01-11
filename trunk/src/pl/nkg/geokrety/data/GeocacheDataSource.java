@@ -33,6 +33,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class GeocacheDataSource {
 	public static final String TABLE = "geocaches";
+	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
 	public static final String COLUMN_WAYPOINT = "waypoint";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_LOCATION = "location";
@@ -40,6 +41,7 @@ public class GeocacheDataSource {
 	public static final String COLUMN_STATUS = "status";
 
 	public static final String TABLE_CREATE = "CREATE TABLE " + TABLE + "(" //
+			+ COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
 			+ COLUMN_WAYPOINT + " TEXT NOT NULL, " //
 			+ COLUMN_NAME + " TEXT NOT NULL, " //
 			+ COLUMN_LOCATION + " TEXT NOT NULL, " //
@@ -48,10 +50,9 @@ public class GeocacheDataSource {
 			+ "); ";
 
 	private GeoKretySQLiteHelper dbHelper;
-	private final static String PK_COLUMN = COLUMN_WAYPOINT;
 
 	private static final String FETCH_ALL = "SELECT " //
-			+ PK_COLUMN + ", " //
+			+ COLUMN_WAYPOINT + ", " //
 			+ COLUMN_NAME + ", " //
 			+ COLUMN_LOCATION + ", " //
 			+ COLUMN_TYPE + ", " //
@@ -65,7 +66,7 @@ public class GeocacheDataSource {
 
 	private static ContentValues getValues(Geocache geocache) {
 		ContentValues values = new ContentValues();
-		values.put(PK_COLUMN, geocache.getCode());
+		values.put(COLUMN_WAYPOINT, geocache.getCode());
 		values.put(COLUMN_NAME, geocache.getName());
 		values.put(COLUMN_LOCATION, geocache.getLocation());
 		values.put(COLUMN_TYPE, geocache.getType());

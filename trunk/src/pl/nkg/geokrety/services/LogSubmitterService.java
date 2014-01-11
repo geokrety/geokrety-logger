@@ -63,12 +63,16 @@ public class LogSubmitterService extends IntentService {
 		boolean connectionProblems = false;
 
 		for (final GeoKretLog log : outbox) {
+			if (!application.getStateHolder().lockForLog(log.getId())) {
+				continue;
+			}
+			
 			// TODO: need refactor and clean
 			String title = log.getNr();
-			Notification notification = new Notification(R.drawable.writing_log, title + ": " + getText(R.string.message_submitting), System.currentTimeMillis());;
+			Notification notification = new Notification(R.drawable.writing_log_submitting, title + ": " + getText(R.string.message_submitting), System.currentTimeMillis());;
 			notification.setLatestEventInfo(this, title, getText(R.string.message_submitting),
 		            PendingIntent.getActivity(this, 1, intent, 0));
-			notificationManager.notify(log.getId(), notification);
+			notificationManager.notify((int)log.getId(), notification);
 			
 			int icon = 0;
 			String message = "";
@@ -90,13 +94,19 @@ public class LogSubmitterService extends IntentService {
 					message = getText(R.string.message_submit_success).toString();
 					icon = R.drawable.writing_log_success;
 					break;
+					
+				case GeoKretyProvider.LOG_DOUBLE:
+					message = getText(log.getProblem()).toString();
+					icon = R.drawable.writing_log_double;
+					break;
 			}
 			
 			notification = new Notification(icon, title + ": " + message, System.currentTimeMillis());;
 			notification.setLatestEventInfo(this, title, message,
 		            PendingIntent.getActivity(this, 1, intent, 0));
-			notificationManager.notify(log.getId(), notification);
+			notificationManager.notify((int)log.getId(), notification);
 			application.getStateHolder().getGeoKretLogDataSource().merge(log);
+			application.getStateHolder().releaseLockForLog(log.getId());
 		}
 
 		if (connectionProblems) {

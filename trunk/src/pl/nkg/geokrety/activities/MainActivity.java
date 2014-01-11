@@ -87,6 +87,12 @@ public class MainActivity extends Activity {
 			startActivity(new Intent(this, LogActivity.class));
 		}
 	}
+	
+	public void showGeoKretLogsActivity(View view) {
+		if (accountExistAndToast()) {
+			startActivity(new Intent(this, GeoKretLogsActivity.class));
+		}
+	}
 
 	public void showAboutActivity(View view) {
 		startActivity(new Intent(this, AboutActivity.class));

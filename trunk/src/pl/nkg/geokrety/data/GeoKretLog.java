@@ -26,6 +26,7 @@ import java.util.Date;
 
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.text.format.Time;
 
@@ -63,10 +64,10 @@ public class GeoKretLog {
 	private String	latlon;
 
 	private String	wpt;
-	private int		accoundID;
+	private long	accoundID;
 
 	private String	secid;
-	private int		id;
+	private long	id;
 	private int		state;
 	private int		problem;
 
@@ -104,8 +105,8 @@ public class GeoKretLog {
 	}
 
 	public GeoKretLog( //
-			final int id, //
-			final int accoundID, //
+			final long id, //
+			final long accoundID, //
 			final int state, //
 			final int problem, //
 			final String problemArg, //
@@ -138,7 +139,27 @@ public class GeoKretLog {
 		this.secid = secid;
 	}
 
-	public int getAccoundID() {
+	public GeoKretLog(Cursor cursor, int i, boolean secidInQuery) {
+		this( //
+				cursor.getInt(i + 0), //
+				cursor.getInt(i + 1), //
+				cursor.getInt(i + 2), //
+				cursor.getInt(i + 3), //
+				cursor.getString(i + 4), //
+				cursor.getString(i + 5), //
+				cursor.getString(i + 6), //
+				cursor.getString(i + 7), //
+				cursor.getString(i + 8), //
+				cursor.getInt(i + 9), //
+				cursor.getString(i + 10), //
+				cursor.getInt(i + 11), //
+				cursor.getInt(i + 12), //
+				cursor.getString(i + 13), //
+				secidInQuery ? cursor.getString(i + 14) : "" //
+		);
+	}
+
+	public long getAccoundID() {
 		return accoundID;
 	}
 
@@ -164,7 +185,7 @@ public class GeoKretLog {
 		return godzina;
 	}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
@@ -208,7 +229,7 @@ public class GeoKretLog {
 		return wpt;
 	}
 
-	public void setAccoundID(final int accoundID) {
+	public void setAccoundID(final long accoundID) {
 		this.accoundID = accoundID;
 	}
 
@@ -243,7 +264,7 @@ public class GeoKretLog {
 		this.godzina = godzina;
 	}
 
-	public void setId(final int id) {
+	public void setId(final long id) {
 		this.id = id;
 	}
 
@@ -295,11 +316,16 @@ public class GeoKretLog {
 		outState.putString(LATLON, latlon);
 		outState.putString(WAYPOINT, wpt);
 
-		outState.putInt(ACCOUNT_ID, accoundID);
+		outState.putLong(ACCOUNT_ID, accoundID);
 	}
 
 	@Deprecated
 	public boolean submitLog(final Account account) throws MessagedException {
 		return GeoKretyProvider.submitLog(account.getGeoKreySecredID(), this);
+	}
+	
+	@Override
+	public String toString() {
+		return getNr() + " (" +getState() + ")";
 	}
 }

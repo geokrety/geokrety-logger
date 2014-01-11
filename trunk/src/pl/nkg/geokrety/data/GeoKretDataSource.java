@@ -35,6 +35,7 @@ import android.util.SparseArray;
 public class GeoKretDataSource {
 
 	public static final String TABLE = "inventory";
+	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
 	public static final String COLUMN_GK_CODE = "geokret_code"; // id
 	public static final String COLUMN_DISTANCE = "dist";
 	public static final String COLUMN_OWNER_ID = "owner_id";
@@ -46,6 +47,7 @@ public class GeoKretDataSource {
 	public static final String COLUMN_STICKY = "sticky";
 
 	public static final String TABLE_CREATE = "CREATE TABLE " + TABLE + "(" //
+			+ COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
 			+ COLUMN_GK_CODE + " INTEGER NOT NULL, " //
 			+ COLUMN_DISTANCE + " INTEGER NOT NULL, " //
 			+ COLUMN_OWNER_ID + " INTEGER NOT NULL, " //
@@ -99,7 +101,7 @@ public class GeoKretDataSource {
 		this.dbHelper = dbHelper;
 	}
 
-	private static ContentValues getValues(Geokret geokret, int userID) {
+	private static ContentValues getValues(Geokret geokret, long userID) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_GK_CODE, geokret.getID());
 		values.put(COLUMN_DISTANCE, geokret.getDist());
@@ -113,7 +115,7 @@ public class GeoKretDataSource {
 		return values;
 	}
 
-	public void store(final Collection<Geokret> logs, final int userID) {
+	public void store(final Collection<Geokret> logs, final long userID) {
 		dbHelper.runOnWritableDatabase(new DBOperation() {
 
 			@Override
@@ -164,7 +166,7 @@ public class GeoKretDataSource {
 		return gks;
 	}
 
-	public List<Geokret> load(final int userID) {
+	public List<Geokret> load(final long userID) {
 		final LinkedList<Geokret> gks = new LinkedList<Geokret>();
 		dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
 

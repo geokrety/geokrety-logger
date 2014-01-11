@@ -54,7 +54,8 @@
 		<activity android:name=".activities.AccountsActivity" android:label="@string/title_activity_accounts" />
 		<activity android:name=".activities.InventoryActivity" android:label="@string/title_activity_inventory" />
 		<activity android:name=".activities.LastOCsActivity" android:label="@string/title_activity_last_ocs" />
-		<activity android:name=".activities.LogActivity" android:label="@string/title_activity_log">
+		<activity android:name=".activities.GeoKretLogsActivity" android:label="@string/title_activity_geokretlogs" />
+				<activity android:name=".activities.LogActivity" android:label="@string/title_activity_log">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 
@@ -131,7 +132,6 @@
 		</receiver>
 
 		<service android:name=".services.LogSubmitterService" android:exported="false" />
-
 	</application>
 
 </manifest>

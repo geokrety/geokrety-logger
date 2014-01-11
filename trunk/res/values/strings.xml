@@ -41,6 +41,7 @@
     <string name="button_inventory">Inventory</string>
     <string name="button_ocs">OpenCaching last logs</string>
     <string name="button_log">Log GeoKret</string>
+    <string name="button_gkl">Saved logs</string>
     <string name="button_about">About</string>
     <string name="version">GeoKrety Logger v</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
@@ -173,6 +174,9 @@
     <string name="submit_finish">GeoKret logged finish</string>
     <string name="submit_broken">GeoKret logged broken but GeoKret still be logged</string>
     <string name="submit_fail">Submit fail: </string>
+    
+    <!-- GeoKretLogs Activity -->
+    <string name="title_activity_geokretlogs">GeoKret logs</string>
     
     <!-- Refresing progress bar -->
     <string name="download_title">Refreshing user account</string>

@@ -36,6 +36,7 @@ import android.util.SparseArray;
 public class GeocacheLogDataSource {
 
 	public static final String TABLE = "logs";
+	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
 	public static final String COLUMN_LOG_UUID = "log_uuid";
 	public static final String COLUMN_USER_ID = "user_id";
 	public static final String COLUMN_WAYPOINT = "cache_code";
@@ -46,6 +47,7 @@ public class GeocacheLogDataSource {
 
 	public static final String TABLE_CREATE = "CREATE TABLE " //
 			+ TABLE + "(" //
+				+ COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
 			+ COLUMN_LOG_UUID + " TEXT NOT NULL, " //
 			+ COLUMN_USER_ID + " INTEGER NOT NULL, " //
 			+ COLUMN_WAYPOINT + " TEXT NOT NULL, " //
@@ -56,10 +58,9 @@ public class GeocacheLogDataSource {
 			+ "); ";
 
 	private GeoKretySQLiteHelper dbHelper;
-	private final static String PK_COLUMN = COLUMN_LOG_UUID;
 
 	private static final String FETCH_ALL = "SELECT " //
-			+ PK_COLUMN + ", " //
+			+ COLUMN_LOG_UUID + ", " //
 			+ COLUMN_USER_ID + ", " //
 			+ COLUMN_WAYPOINT + ", " //
 			+ COLUMN_TYPE + ", " //
@@ -70,7 +71,7 @@ public class GeocacheLogDataSource {
 			+ TABLE + " ORDER BY " + COLUMN_DATE + " DESC";
 
 	private static final String FETCH_BY_USER = "SELECT " //
-			+ PK_COLUMN
+			+ COLUMN_LOG_UUID
 			+ ", " //
 			+ COLUMN_USER_ID
 			+ ", " //
@@ -92,9 +93,9 @@ public class GeocacheLogDataSource {
 		this.dbHelper = dbHelper;
 	}
 
-	private static ContentValues getValues(GeocacheLog log, int userID) {
+	private static ContentValues getValues(GeocacheLog log, long userID) {
 		ContentValues values = new ContentValues();
-		values.put(PK_COLUMN, log.getUUID());
+		values.put(COLUMN_LOG_UUID, log.getUUID());
 		values.put(COLUMN_USER_ID, userID);
 		values.put(COLUMN_WAYPOINT, log.getCacheCode());
 		values.put(COLUMN_TYPE, log.getType());
@@ -104,7 +105,7 @@ public class GeocacheLogDataSource {
 		return values;
 	}
 
-	public void store(final Collection<GeocacheLog> logs, final int userID,
+	public void store(final Collection<GeocacheLog> logs, final long userID,
 			final int portal) {
 		dbHelper.runOnWritableDatabase(new DBOperation() {
 
@@ -156,7 +157,7 @@ public class GeocacheLogDataSource {
 		return logs;
 	}
 
-	public List<GeocacheLog> load(final int userID) {
+	public List<GeocacheLog> load(final long userID) {
 		final LinkedList<GeocacheLog> list = new LinkedList<GeocacheLog>();
 		dbHelper.runOnReadableDatabase(new DBOperation() {
 

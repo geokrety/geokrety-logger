@@ -41,6 +41,7 @@ public class GeoKretyProvider {
 	public static final int		LOG_SUCCESS			= 1;
 	public static final int		LOG_PROBLEM			= 2;
 	public static final int		LOG_NO_CONNECTION	= 3;
+	public static final int		LOG_DOUBLE	= 4;
 
 	private static final String	URL_LOGIN			= "http://geokrety.org/api-login2secid.php";
 	private static final String	URL_EXPORT2			= "http://geokrety.org/export2.php";
@@ -126,14 +127,15 @@ public class GeoKretyProvider {
 
 			if (errors.size() > 0) {
 
+				log.setState(GeoKretLog.STATE_PROBLEM);
 				if (errors.get(0).equals("There is an entry with this date. Correct the date or the hour.")) {
 					log.setProblem(R.string.warning_already_logged);
+					return LOG_DOUBLE;
 				} else {
 					log.setProblem(R.string.submit_fail);
 					log.setProblemArg(TextUtils.join("\n", errors));
+					return LOG_PROBLEM;
 				}
-				log.setState(GeoKretLog.STATE_PROBLEM);
-				return LOG_PROBLEM;
 			} else {
 				log.setState(GeoKretLog.STATE_SENT);
 				return LOG_SUCCESS;

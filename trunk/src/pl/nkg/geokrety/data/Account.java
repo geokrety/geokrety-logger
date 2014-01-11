@@ -50,13 +50,16 @@ public class Account {
 
 	private static final long	EXPIRED			= 24 * 60 * 60 * 1000;
 
-	private int					id;
+	private long				id;
 	private String				name;
 
 	private String				geoKretySecredID;
 	private String[]			openCachingUUIDs;
 
+	@Deprecated
 	private List<GeocacheLog>	openCachingLogs;
+	
+	@Deprecated
 	private List<Geokret>		inventory;
 	//private List<GeoKretLog>	geoKretLogs;
 
@@ -109,10 +112,11 @@ public class Account {
 		return homeCordLon;
 	}
 
-	public int getID() {
+	public long getID() {
 		return id;
 	}
 
+	@Deprecated
 	public List<Geokret> getInventory() {
 		if (inventory == null) {
 			inventory = new ArrayList<Geokret>();
@@ -128,6 +132,7 @@ public class Account {
 		return name;
 	}
 
+	@Deprecated
 	public List<GeocacheLog> getOpenCachingLogs() {
 		if (openCachingLogs == null) {
 			openCachingLogs = new ArrayList<GeocacheLog>();
@@ -246,7 +251,7 @@ public class Account {
 
 	public Bundle pack(final Bundle bundle) {
 		bundle.putStringArray(Account.OCUUIDS, openCachingUUIDs);
-		bundle.putInt(Account.ACCOUNT_ID, id);
+		bundle.putLong(Account.ACCOUNT_ID, id);
 		bundle.putString(Account.SECID, geoKretySecredID);
 		bundle.putString(Account.ACCOUNT_NAME, name);
 		bundle.putString(Account.HOME_LAT, homeCordLat);
@@ -266,10 +271,11 @@ public class Account {
 		this.homeCordLon = homeCordLon;
 	}
 
-	public void setID(final int id) {
+	public void setID(final long id) {
 		this.id = id;
 	}
 
+	@Deprecated
 	public void setInventory(final List<Geokret> gks) {
 		inventory = gks;
 	}
@@ -282,6 +288,7 @@ public class Account {
 		this.name = name;
 	}
 
+	@Deprecated
 	public void setOpenCachingLogs(final List<GeocacheLog> openCachingLogs) {
 		this.openCachingLogs = openCachingLogs;
 	}
