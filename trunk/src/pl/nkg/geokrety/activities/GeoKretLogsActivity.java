@@ -109,14 +109,10 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements Adapt
 
 	@Override
 	public void dialogFinished(final AbstractDialogWrapper<?> dialog, final int buttonId, final Serializable arg) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
 	public void onItemClick(final AdapterView<?> parent, final View view, final int position, final long id) {
-		// TODO Auto-generated method stub
-		//Toast.makeText(this, String.valueOf(id) + ", pos: " + position, Toast.LENGTH_LONG).show();
 		Intent intent = new Intent(this, LogActivity.class);
 		intent.putExtra(GeoKretLogDataSource.COLUMN_ID, id);
 		startActivity(intent);
@@ -142,15 +138,11 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements Adapt
 
 	private void refreshListView() {
 		closeCursorIfOpened();
-		if (database.isOpen()) { // FIXME: problem otwierania bazy danych - concurrent
 		geoKretLogsCursor = GeoKretLogDataSource.createLoadByUserIDCurosr(database, account.getID());
 
 		final Adapter adapter = new Adapter(this, geoKretLogsCursor, true);
 		final ListView listView = (ListView) findViewById(R.id.gklListView);
 		listView.setAdapter(adapter);
-		} else {
-			Toast.makeText(this, String.valueOf(database.isOpen()), Toast.LENGTH_LONG).show();			
-		}
 	}
 
 	private void updateListView() {
@@ -179,14 +171,14 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements Adapt
 	protected void onPause() {
 		super.onPause();
 		closeCursorIfOpened();
-		database.close();
+		((GeoKretyApplication) getApplication()).getStateHolder().getDbHelper().closeDatabase();
 	}
 
 	@Override
 	protected void onStart() {
 		super.onStart();
 		final StateHolder holder = ((GeoKretyApplication) getApplication()).getStateHolder();
-		database = holder.getDbHelper().getReadableDatabase();
+		database = holder.getDbHelper().openDatabase();
 		if (holder.getDefaultAccount() != AdapterView.INVALID_POSITION) {
 			account = holder.getAccountList().get(holder.getDefaultAccount());
 			updateListView();

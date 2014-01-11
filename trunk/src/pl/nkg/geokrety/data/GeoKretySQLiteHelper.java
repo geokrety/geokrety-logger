@@ -24,6 +24,7 @@ package pl.nkg.geokrety.data;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -82,15 +83,20 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	private static final int	DATABASE_VERSION	= 6;
 
+	private final AtomicInteger	openCounter;
+	private SQLiteDatabase		dataBase;
+
 	public GeoKretySQLiteHelper(final Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		openCounter = new AtomicInteger(0);
 	}
 
-	public void fixDB1ToDB3UpgradeProblem() {
-		final SQLiteDatabase db = getWritableDatabase();
-		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE + " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LAT + " TEXT NOT NULL DEFAULT '';");
-		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE + " ADD COLUMN " + AccountDataSource.COLUMN_HOME_LON + " TEXT NOT NULL DEFAULT '';");
-		db.close();
+	public void closeDatabase() {
+		synchronized (this) {
+			if (openCounter.decrementAndGet() == 0) {
+				dataBase.close();
+			}
+		}
 	}
 
 	@Override
@@ -114,13 +120,22 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 		}
 	}
 
+	public SQLiteDatabase openDatabase() {
+		synchronized (this) {
+			if (openCounter.incrementAndGet() == 1) {
+				dataBase = getWritableDatabase();
+			}
+			return dataBase;
+		}
+	}
+
 	public boolean runOnReadableDatabase(final DBOperation operation) {
 		if (!operation.preTransaction()) {
 			return false;
 		}
-		final SQLiteDatabase db = getReadableDatabase();
+		final SQLiteDatabase db = openDatabase();
 		final boolean ret = operation.inTransaction(db);
-		db.close();
+		closeDatabase();
 		if (ret) {
 			operation.postCommit();
 			return true;
@@ -134,18 +149,18 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 		if (!operation.preTransaction()) {
 			return false;
 		}
-		final SQLiteDatabase db = getWritableDatabase();
+		final SQLiteDatabase db = openDatabase();
 		db.beginTransaction();
 		final boolean ret = operation.inTransaction(db);
 		if (ret) {
 			db.setTransactionSuccessful();
 			db.endTransaction();
-			db.close();
+			closeDatabase();
 			operation.postCommit();
 			return true;
 		} else {
 			db.endTransaction();
-			db.close();
+			closeDatabase();
 			operation.postRollback();
 			return false;
 		}
@@ -191,8 +206,8 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 		sb.append(TextUtils.join(", ", oldColumns));
 		sb.append(" FROM tmp_" + AccountDataSource.TABLE).append(";");
 
-		String query = sb.toString();
-		
+		final String query = sb.toString();
+
 		db.execSQL(query);
 		dropTableIfExist(db, "tmp_" + AccountDataSource.TABLE);
 	}

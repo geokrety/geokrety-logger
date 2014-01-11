@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -73,14 +74,7 @@ public class StateHolder {
 		geocacheDataSource = new GeocacheDataSource(dbHelper);
 		geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
 
-		try {
-			accountList = Collections.synchronizedList(accountDataSource.getAll());
-		} catch (final SQLiteException e) {
-			if (e.getMessage().contains("home_lat")) {
-				dbHelper.fixDB1ToDB3UpgradeProblem();
-				accountList = Collections.synchronizedList(accountDataSource.getAll());
-			}
-		}
+		accountList = Collections.synchronizedList(accountDataSource.getAll());
 
 		geoCachesMap = new HashMap<String, Geocache>();
 		for (final Geocache gc : geocacheDataSource.load()) {
