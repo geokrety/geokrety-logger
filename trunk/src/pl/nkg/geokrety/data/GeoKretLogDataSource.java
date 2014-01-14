@@ -236,7 +236,7 @@ public class GeoKretLogDataSource {
 				return true;
 			}
 		});
-		return geoKretLogs.getFirst();
+		return geoKretLogs.isEmpty() ? null : geoKretLogs.getFirst();
 	}
 
 	public void delete(final long id) {

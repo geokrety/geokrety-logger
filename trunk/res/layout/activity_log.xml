@@ -18,12 +18,12 @@
  * along with this source code; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
- -->
+-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:descendantFocusability="beforeDescendants"
-	android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true" >
 
     <LinearLayout
         android:id="@+id/buttons"
@@ -39,24 +39,24 @@
             android:id="@+id/submitButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClickSubmit"
             android:layout_weight="1"
+            android:onClick="onClickSubmit"
             android:text="@string/form_submit_button" />
-        
+
         <Button
             android:id="@+id/draftButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClickDraft"
             android:layout_weight="1"
+            android:onClick="onClickDraft"
             android:text="@string/form_save_draft_button" />
 
         <Button
             android:id="@+id/deleteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="onClickDelete"
             android:layout_weight="1"
+            android:onClick="onClickDelete"
             android:text="@string/form_remove_button" />
     </LinearLayout>
 
@@ -74,12 +74,14 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin" >
 
-            <!-- <LinearLayout
+            <!--
+                 <LinearLayout
     			android:focusable="true" 
     			android:focusableInTouchMode="true"
     			android:layout_width="0px" 
-    			android:layout_height="0px"/>-->
-            
+    			android:layout_height="0px"/>
+            -->
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -107,6 +109,13 @@
                 android:text="@string/log_drop" />
 
             <TextView
+                android:id="@+id/errorTextView"
+                style="@style/row_log_errorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/form_identify"
@@ -131,7 +140,6 @@
                     android:layout_height="wrap_content"
                     android:onClick="refreshButtonClick"
                     android:text="@string/menu_inventory_refresh" />
-
             </LinearLayout>
 
             <LinearLayout
@@ -181,7 +189,7 @@
                     android:onClick="showOcs"
                     android:text="@string/form_oclogs" />
             </LinearLayout>
-            
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
@@ -200,30 +208,29 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/form_gps"
-                    android:src="@drawable/ic_menu_mylocation"
-                    android:onClick="onClickSetCoordinatesFromGPS" />
+                    android:onClick="onClickSetCoordinatesFromGPS"
+                    android:src="@drawable/ic_menu_mylocation" />
+
                 <ImageButton
                     android:id="@+id/homeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:contentDescription="@string/form_home"
-                    android:src="@drawable/ic_menu_home"
-                    android:onClick="onClickSetHomeCoordinates" />
-                
+                    android:onClick="onClickSetHomeCoordinates"
+                    android:src="@drawable/ic_menu_home" />
             </LinearLayout>
-            
+
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/form_location_description" />
-            
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/form_location_description" />
+
             <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:autoLink="web"
-            		android:linksClickable="true"
-                    android:text="@string/supported_formats" />
-            
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:autoLink="web"
+                android:linksClickable="true"
+                android:text="@string/supported_formats" />
 
             <TextView
                 android:layout_width="wrap_content"

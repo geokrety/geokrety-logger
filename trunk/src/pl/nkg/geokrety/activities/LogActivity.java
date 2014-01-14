@@ -60,6 +60,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class LogActivity extends ManagedDialogsActivity implements LocationListener {
@@ -330,6 +331,7 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_log);
 
         final Intent intent = getIntent();
 
@@ -358,12 +360,20 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
                 AdapterView.INVALID_ROW_ID);
         if (logID != AdapterView.INVALID_ROW_ID) {
             currentLog = application.getStateHolder().getGeoKretLogDataSource().loadByID(logID);
-            currentAccount = application.getStateHolder().getAccountByID(currentLog.getAccoundID());
-        } else {
-            currentLog = new GeoKretLog(savedInstanceState);
         }
 
-        setContentView(R.layout.activity_log);
+        
+        if (currentLog == null) {
+            currentLog = new GeoKretLog(savedInstanceState);
+        } else {
+            currentAccount = application.getStateHolder().getAccountByID(currentLog.getAccoundID());
+            if (currentLog.getState() == GeoKretLog.STATE_PROBLEM) {
+                TextView errorTextView = (TextView)findViewById(R.id.errorTextView);
+                errorTextView.setText(getText(currentLog.getProblem()) + " " + currentLog.getProblemArg());
+                errorTextView.setVisibility(View.VISIBLE);
+            }
+        }
+
 
         logTypeButton = (Button) findViewById(R.id.logTypeButton);
         accountsButton = (Button) findViewById(R.id.accountsButton);

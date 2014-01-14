@@ -139,10 +139,10 @@
     <string name="form_identify">2.  Identyfikacja GeoKreta</string>
     <string name="form_code">Tracking Code</string>
     <string name="form_profile">Kto? &#8230;</string>
-    <string name="form_inventory">Inwentarz</string>
+    <string name="form_inventory">Inwentarz &#8230;</string>
     <string name="form_location">3. Nowa lokalizacja</string>
     <string name="form_waypoint">Waypoint</string>
-    <string name="form_oclogs">OC Log</string>
+    <string name="form_oclogs">OC Log &#8230;</string>
     <string name="form_cords">Współrzędne</string>
     <string name="form_gps">GPS</string>
     <string name="form_home">W domu</string>
