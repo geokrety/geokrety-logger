@@ -401,6 +401,7 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
                     final String godzina = data.getQueryParameter("godzina");
                     final String minuta = data.getQueryParameter("minuta");
                     final String username = data.getQueryParameter("username");
+                    String rrUsername = data.getQueryParameter("net.rygielski.roadrunner:profile_name");
 
                     if (!Utils.isEmpty(date)) {
                         currentLog.setData(date);
@@ -416,6 +417,8 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 
                     if (!Utils.isEmpty(username)) {
                         currentAccount = application.getStateHolder().matchAccount(username);
+                    } else if (!Utils.isEmpty(rrUsername)) {
+                        currentAccount = application.getStateHolder().matchAccount(rrUsername);
                     }
                 } else if (data.getHost().equals("coord.info")) {
                     final String path = data.getPath();
@@ -474,9 +477,10 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
         // updateCurrentAccount(false, false);
         if (currentAccount == null) {
             currentAccount = application.getStateHolder().getDefaultAccount();
-            if (currentAccount != null) {
-                currentLog.setAccoundID(currentAccount.getID());
-            }
+        }
+        
+        if (currentAccount != null) {
+            currentLog.setAccoundID(currentAccount.getID());
         }
 
         logTypeSpinnerDialog.setAdapter(new ArrayAdapter<String>(this,
