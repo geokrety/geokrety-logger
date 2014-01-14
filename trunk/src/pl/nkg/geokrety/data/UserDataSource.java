@@ -33,7 +33,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 
-public class AccountDataSource {
+public class UserDataSource {
 
 	public static final String			TABLE				= "users";
 	public static final String			COLUMN_ID			= GeoKretySQLiteHelper.COLUMNT_ID;
@@ -76,19 +76,19 @@ public class AccountDataSource {
 				+ " ORDER BY " + COLUMN_USER_NAME;
 	}
 
-	public AccountDataSource(final GeoKretySQLiteHelper dbHelper) {
+	public UserDataSource(final GeoKretySQLiteHelper dbHelper) {
 		this.dbHelper = dbHelper;
 	}
 
-	public List<Account> getAll() {
-		final ArrayList<Account> accounts = new ArrayList<Account>();
+	public List<User> getAll() {
+		final ArrayList<User> accounts = new ArrayList<User>();
 		dbHelper.runOnReadableDatabase(new DBOperation() {
 
 			@Override
 			public boolean inTransaction(final SQLiteDatabase db) {
 				final Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
 				while (cursor.moveToNext()) {
-					final Account account = new Account(//
+					final User account = new User(//
 							cursor.getInt(0), //
 							cursor.getString(1), //
 							cursor.getString(2), //
@@ -111,7 +111,7 @@ public class AccountDataSource {
 		return accounts;
 	}
 
-	public void merge(final Account account) {
+	public void merge(final User account) {
 		dbHelper.runOnWritableDatabase(new DBOperation() {
 
 			@Override
@@ -122,7 +122,7 @@ public class AccountDataSource {
 		});
 	}
 
-	public void persist(final Account account) {
+	public void persist(final User account) {
 		dbHelper.runOnWritableDatabase(new DBOperation() {
 
 			@Override
@@ -145,7 +145,7 @@ public class AccountDataSource {
 		});
 	}
 
-	public void storeLastLoadedDate(final Account account) {
+	public void storeLastLoadedDate(final User account) {
 		dbHelper.runOnWritableDatabase(new DBOperation() {
 
 			@Override
@@ -170,7 +170,7 @@ public class AccountDataSource {
 		return ret;
 	}
 
-	private ContentValues getValues(final Account account) {
+	private ContentValues getValues(final User account) {
 		final Date lastLoadedDate = account.getLastDataLoaded();
 		final long storedLastLoadedDate = lastLoadedDate == null ? 0 : lastLoadedDate.getTime();
 

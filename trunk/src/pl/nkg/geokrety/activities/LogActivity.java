@@ -28,7 +28,7 @@ import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
-import pl.nkg.geokrety.data.Account;
+import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.Geocache;
@@ -76,7 +76,7 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 	private RefreshAccount					refreshAccount;
 
 	private GeoKretLog						currentLog;
-	private Account							currentAccount;
+	private User							currentAccount;
 	private int								currentLogType	= 0;
 
 	private Button							logTypeButton;
@@ -439,7 +439,7 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 
 		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
 			@Override
-			public void onFinish(final AbstractForegroundTaskWrapper<Account, String, String> sender, final Account param, final String result) {
+			public void onFinish(final AbstractForegroundTaskWrapper<User, String, String> sender, final User param, final String result) {
 				super.onFinish(sender, param, result);
 				configAdapters();
 			}

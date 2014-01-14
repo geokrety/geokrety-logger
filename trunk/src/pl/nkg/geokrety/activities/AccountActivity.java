@@ -26,7 +26,7 @@ import java.io.Serializable;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
-import pl.nkg.geokrety.data.Account;
+import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.GKDialog;
 import pl.nkg.geokrety.dialogs.OCDialog;
@@ -162,18 +162,18 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 	public void onTextChanged(final CharSequence s, final int start, final int before, final int count) {}
 
 	public void saveClick(final View view) {
-		if (Utils.isEmpty(Account.SECID)) {
+		if (Utils.isEmpty(User.SECID)) {
 			Toast.makeText(this, R.string.error_login_null, Toast.LENGTH_LONG).show();
 			return;
 		}
 
 		final Intent returnIntent = new Intent();
-		returnIntent.putExtra(Account.SECID, secid);
-		returnIntent.putExtra(Account.ACCOUNT_ID, accountID);
-		returnIntent.putExtra(Account.OCUUIDS, ocUUIDs);
-		returnIntent.putExtra(Account.ACCOUNT_NAME, accountName);
-		returnIntent.putExtra(Account.HOME_LAT, latEditText.getText().toString());
-		returnIntent.putExtra(Account.HOME_LON, lonEditText.getText().toString());
+		returnIntent.putExtra(User.SECID, secid);
+		returnIntent.putExtra(User.ACCOUNT_ID, accountID);
+		returnIntent.putExtra(User.OCUUIDS, ocUUIDs);
+		returnIntent.putExtra(User.ACCOUNT_NAME, accountName);
+		returnIntent.putExtra(User.HOME_LAT, latEditText.getText().toString());
+		returnIntent.putExtra(User.HOME_LON, lonEditText.getText().toString());
 		setResult(RESULT_OK, returnIntent);
 		finish();
 	}
@@ -216,12 +216,12 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 		latEditText = (EditText) findViewById(R.id.latEditText);
 		lonEditText = (EditText) findViewById(R.id.lonEditText);
 
-		accountID = getIntent().getIntExtra(Account.ACCOUNT_ID, AdapterView.INVALID_POSITION);
-		secid = getIntent().getStringExtra(Account.SECID);
-		ocUUIDs = getIntent().getStringArrayExtra(Account.OCUUIDS);
-		accountName = getIntent().getStringExtra(Account.ACCOUNT_NAME);
-		lonEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(Account.HOME_LON), ""));
-		latEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(Account.HOME_LAT), ""));
+		accountID = getIntent().getIntExtra(User.ACCOUNT_ID, AdapterView.INVALID_POSITION);
+		secid = getIntent().getStringExtra(User.SECID);
+		ocUUIDs = getIntent().getStringArrayExtra(User.OCUUIDS);
+		accountName = getIntent().getStringExtra(User.ACCOUNT_NAME);
+		lonEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.HOME_LON), ""));
+		latEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.HOME_LAT), ""));
 
 		if (ocUUIDs == null) {
 			ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -282,10 +282,10 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 	@Override
 	protected void onRestoreInstanceState(final Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
-		secid = savedInstanceState.getString(Account.SECID);
-		accountID = savedInstanceState.getInt(Account.ACCOUNT_ID);
-		ocUUIDs = savedInstanceState.getStringArray(Account.OCUUIDS);
-		accountName = savedInstanceState.getString(Account.ACCOUNT_NAME);
+		secid = savedInstanceState.getString(User.SECID);
+		accountID = savedInstanceState.getInt(User.ACCOUNT_ID);
+		ocUUIDs = savedInstanceState.getStringArray(User.OCUUIDS);
+		accountName = savedInstanceState.getString(User.ACCOUNT_NAME);
 		gpsAcquirer.restore(savedInstanceState);
 	}
 
@@ -293,10 +293,10 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 	protected void onSaveInstanceState(final Bundle outState) {
 		super.onSaveInstanceState(outState);
 		gpsAcquirer.pause(outState);
-		outState.putStringArray(Account.OCUUIDS, ocUUIDs);
-		outState.putInt(Account.ACCOUNT_ID, accountID);
-		outState.putString(Account.SECID, secid);
-		outState.putString(Account.ACCOUNT_NAME, accountName);
+		outState.putStringArray(User.OCUUIDS, ocUUIDs);
+		outState.putInt(User.ACCOUNT_ID, accountID);
+		outState.putString(User.SECID, secid);
+		outState.putString(User.ACCOUNT_NAME, accountName);
 	}
 
 	@Override

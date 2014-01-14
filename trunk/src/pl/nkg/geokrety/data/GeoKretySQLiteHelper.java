@@ -101,7 +101,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
-		db.execSQL(AccountDataSource.TABLE_CREATE);
+		db.execSQL(UserDataSource.TABLE_CREATE);
 		db.execSQL(GeoKretLogDataSource.TABLE_CREATE);
 		db.execSQL(GeocacheDataSource.TABLE_CREATE);
 		db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
@@ -178,37 +178,37 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 	}
 
 	private void importUsersFromOlderThan6(final SQLiteDatabase db, final int oldVersion) {
-		db.execSQL("ALTER TABLE " + AccountDataSource.TABLE + " RENAME TO tmp_" + AccountDataSource.TABLE + ";");
-		db.execSQL(AccountDataSource.TABLE_CREATE);
+		db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " RENAME TO tmp_" + UserDataSource.TABLE + ";");
+		db.execSQL(UserDataSource.TABLE_CREATE);
 
 		final List<String> oldColumns = new LinkedList<String>(Arrays.asList("user_id", //
-				AccountDataSource.COLUMN_SECID, //
-				AccountDataSource.COLUMN_USER_NAME, //
-				AccountDataSource.COLUMN_UUIDS));
+				UserDataSource.COLUMN_SECID, //
+				UserDataSource.COLUMN_USER_NAME, //
+				UserDataSource.COLUMN_UUIDS));
 
-		final List<String> newColumns = new LinkedList<String>(Arrays.asList(AccountDataSource.COLUMN_ID, //
-				AccountDataSource.COLUMN_SECID, //
-				AccountDataSource.COLUMN_USER_NAME, //
-				AccountDataSource.COLUMN_UUIDS));
+		final List<String> newColumns = new LinkedList<String>(Arrays.asList(UserDataSource.COLUMN_ID, //
+				UserDataSource.COLUMN_SECID, //
+				UserDataSource.COLUMN_USER_NAME, //
+				UserDataSource.COLUMN_UUIDS));
 
 		if (oldVersion >= 3) {
-			oldColumns.add(AccountDataSource.COLUMN_HOME_LAT);
-			oldColumns.add(AccountDataSource.COLUMN_HOME_LON);
+			oldColumns.add(UserDataSource.COLUMN_HOME_LAT);
+			oldColumns.add(UserDataSource.COLUMN_HOME_LON);
 
-			newColumns.add(AccountDataSource.COLUMN_HOME_LAT);
-			newColumns.add(AccountDataSource.COLUMN_HOME_LON);
+			newColumns.add(UserDataSource.COLUMN_HOME_LAT);
+			newColumns.add(UserDataSource.COLUMN_HOME_LON);
 		}
 
 		final StringBuilder sb = new StringBuilder();
-		sb.append("INSERT INTO " + AccountDataSource.TABLE + "(");
+		sb.append("INSERT INTO " + UserDataSource.TABLE + "(");
 		sb.append(TextUtils.join(", ", newColumns));
 		sb.append(") SELECT ");
 		sb.append(TextUtils.join(", ", oldColumns));
-		sb.append(" FROM tmp_" + AccountDataSource.TABLE).append(";");
+		sb.append(" FROM tmp_" + UserDataSource.TABLE).append(";");
 
 		final String query = sb.toString();
 
 		db.execSQL(query);
-		dropTableIfExist(db, "tmp_" + AccountDataSource.TABLE);
+		dropTableIfExist(db, "tmp_" + UserDataSource.TABLE);
 	}
 }

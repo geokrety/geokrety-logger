@@ -25,12 +25,12 @@ import android.content.Context;
 import android.widget.Toast;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.R;
-import pl.nkg.geokrety.data.Account;
+import pl.nkg.geokrety.data.User;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.GenericTaskListener;
 
 public class RefreshListener extends
-		GenericTaskListener<Account, String, String> {
+		GenericTaskListener<User, String, String> {
 
 	public RefreshListener(Context context) {
 		super(context);
@@ -38,8 +38,8 @@ public class RefreshListener extends
 
 	@Override
 	public void onFinish(
-			AbstractForegroundTaskWrapper<Account, String, String> sender,
-			Account param, String result) {
+			AbstractForegroundTaskWrapper<User, String, String> sender,
+			User param, String result) {
 		if (Utils.isEmpty(result)) {
 			Toast.makeText(context, R.string.download_finish, Toast.LENGTH_LONG)
 					.show();

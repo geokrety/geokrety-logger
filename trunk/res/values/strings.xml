@@ -179,6 +179,9 @@
     
     <!-- GeoKretLogs Activity -->
     <string name="title_activity_geokretlogs">GeoKret logs</string>
+    <string name="row_log_icon_contentDescription">Log type</string>
+    <string name="row_log_statusLabel">Status:</string>
+    <string name="row_log_profileLabel">User:</string>
     
     <!-- Refresing progress bar -->
     <string name="download_title">Refreshing user account</string>

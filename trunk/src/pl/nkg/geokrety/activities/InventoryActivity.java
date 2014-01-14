@@ -27,7 +27,7 @@ import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
-import pl.nkg.geokrety.data.Account;
+import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.Geokret;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
@@ -52,7 +52,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 	public final static int ADD_GEOKRET = 1; 
 	public final static int EDIT_GEOKRET = 2; 
 	
-	private Account account;
+	private User account;
 	private RefreshProgressDialog refreshProgressDialog;
 	private GeoKretyApplication application;
 	private RefreshAccount refreshAccount;
@@ -71,7 +71,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 		setContentView(R.layout.activity_inventory);
 		Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
 		spin.setOnItemSelectedListener(this);
-		ArrayAdapter<Account> aa = new ArrayAdapter<Account>(this,
+		ArrayAdapter<User> aa = new ArrayAdapter<User>(this,
 				android.R.layout.simple_spinner_item, holder.getAccountList());
 
 		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -87,8 +87,8 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
 			@Override
 			public void onFinish(
-					AbstractForegroundTaskWrapper<Account, String, String> sender,
-					Account param, String result) {
+					AbstractForegroundTaskWrapper<User, String, String> sender,
+					User param, String result) {
 				super.onFinish(sender, param, result);
 				refreshListView();
 			}
@@ -195,7 +195,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 		String oldTrackingCode = ib.getString(GeoKretActivity.TRACKING_CODE_OLD);
 		String name = ib.getString(GeoKretActivity.NAME);
 		boolean sticky = ib.getBoolean(GeoKretActivity.STICKY);
-		Account a = application.getStateHolder().getAccountByID(userId);
+		User a = application.getStateHolder().getAccountByID(userId);
 		Geokret geokret = a.getGeoKretByTrackingCode(oldTrackingCode);
 		if (Utils.isEmpty(oldTrackingCode) || geokret == null) {
 			geokret = new Geokret(0, 0, 0, 0, 0, name, trackingCode, sticky);

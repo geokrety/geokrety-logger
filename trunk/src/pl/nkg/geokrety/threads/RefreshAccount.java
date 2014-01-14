@@ -26,7 +26,7 @@ import java.util.List;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
-import pl.nkg.geokrety.data.Account;
+import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.exceptions.MessagedException;
@@ -38,7 +38,7 @@ import pl.nkg.lib.threads.TaskListener;
 import android.content.Context;
 
 public class RefreshAccount extends
-		AbstractForegroundTaskWrapper<Account, String, String> {
+		AbstractForegroundTaskWrapper<User, String, String> {
 
 	public static final int ID = 1;
 	private String[] messages;
@@ -66,7 +66,7 @@ public class RefreshAccount extends
 	@Override
 	public void attach(
 			AbstractProgressDialogWrapper<String> progressDialogWrapper,
-			TaskListener<Account, String, String> listener) {
+			TaskListener<User, String, String> listener) {
 		super.attach(progressDialogWrapper, listener);
 	}
 
@@ -77,9 +77,9 @@ public class RefreshAccount extends
 	}
 
 	@Override
-	protected String runInBackground(Thread thread, Account param)
+	protected String runInBackground(Thread thread, User param)
 			throws Throwable {
-		Account account = param;
+		User account = param;
 		StringBuilder report = new StringBuilder();
 		StateHolder holder = ((GeoKretyApplication) getApplication())
 				.getStateHolder();

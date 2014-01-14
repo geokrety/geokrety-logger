@@ -69,7 +69,7 @@ public class LogSubmitterService extends IntentService {
 			
 			// TODO: need refactor and clean
 			String title = log.getNr();
-			Notification notification = new Notification(R.drawable.writing_log_submitting, title + ": " + getText(R.string.message_submitting), System.currentTimeMillis());;
+			Notification notification = new Notification(R.drawable.ic_stat_notify_log_submitting, title + ": " + getText(R.string.message_submitting), System.currentTimeMillis());;
 			notification.setLatestEventInfo(this, title, getText(R.string.message_submitting),
 		            PendingIntent.getActivity(this, 1, intent, 0));
 			notificationManager.notify((int)log.getId(), notification);
@@ -82,22 +82,22 @@ public class LogSubmitterService extends IntentService {
 				case GeoKretyProvider.LOG_NO_CONNECTION:
 					connectionProblems = true;
 					message = getText(R.string.message_submit_no_connection) + " (" + log.getProblemArg() + ")";
-					icon = R.drawable.writing_log_no_connection;
+					icon = R.drawable.ic_stat_notify_log_no_connection;
 					break;
 					
 				case GeoKretyProvider.LOG_PROBLEM:
 					message = getText(R.string.message_submit_problem) + ": " +  getText(log.getProblem()) + " " + log.getProblemArg();
-					icon = R.drawable.writing_log_problem;
+					icon = R.drawable.ic_stat_notify_log_problem;
 					break;
 					
 				case GeoKretyProvider.LOG_SUCCESS:
 					message = getText(R.string.message_submit_success).toString();
-					icon = R.drawable.writing_log_success;
+					icon = R.drawable.ic_stat_notify_log_success;
 					break;
 					
 				case GeoKretyProvider.LOG_DOUBLE:
 					message = getText(log.getProblem()).toString();
-					icon = R.drawable.writing_log_double;
+					icon = R.drawable.ic_stat_notify_log_double;
 					break;
 			}
 			

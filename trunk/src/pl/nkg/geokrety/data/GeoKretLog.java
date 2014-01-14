@@ -320,7 +320,7 @@ public class GeoKretLog {
 	}
 
 	@Deprecated
-	public boolean submitLog(final Account account) throws MessagedException {
+	public boolean submitLog(final User account) throws MessagedException {
 		return GeoKretyProvider.submitLog(account.getGeoKreySecredID(), this);
 	}
 	

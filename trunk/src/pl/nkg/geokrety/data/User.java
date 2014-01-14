@@ -40,7 +40,7 @@ import pl.nkg.lib.threads.ICancelable;
 import android.os.Bundle;
 import android.widget.AdapterView;
 
-public class Account {
+public class User {
 	public static final String	ACCOUNT_ID		= "accountID";
 	public static final String	ACCOUNT_NAME	= "accountName";
 	public static final String	SECID			= "secid";
@@ -68,11 +68,11 @@ public class Account {
 	private String				homeCordLon;
 	private String				homeCordLat;
 
-	public Account(final Bundle bundle) {
+	public User(final Bundle bundle) {
 		unpack(bundle);
 	}
 
-	public Account(final int id, final String name, final String geoKretySecredID, final String[] openCachingUUIDs) {
+	public User(final int id, final String name, final String geoKretySecredID, final String[] openCachingUUIDs) {
 		this.id = id;
 		this.name = name;
 		this.geoKretySecredID = geoKretySecredID;
@@ -250,12 +250,12 @@ public class Account {
 	}
 
 	public Bundle pack(final Bundle bundle) {
-		bundle.putStringArray(Account.OCUUIDS, openCachingUUIDs);
-		bundle.putLong(Account.ACCOUNT_ID, id);
-		bundle.putString(Account.SECID, geoKretySecredID);
-		bundle.putString(Account.ACCOUNT_NAME, name);
-		bundle.putString(Account.HOME_LAT, homeCordLat);
-		bundle.putString(Account.HOME_LON, homeCordLon);
+		bundle.putStringArray(User.OCUUIDS, openCachingUUIDs);
+		bundle.putLong(User.ACCOUNT_ID, id);
+		bundle.putString(User.SECID, geoKretySecredID);
+		bundle.putString(User.ACCOUNT_NAME, name);
+		bundle.putString(User.HOME_LAT, homeCordLat);
+		bundle.putString(User.HOME_LON, homeCordLon);
 		return bundle;
 	}
 
@@ -298,18 +298,18 @@ public class Account {
 		return name;
 	}
 
-	public void touchLastLoadedDate(final AccountDataSource accountDataSource) {
+	public void touchLastLoadedDate(final UserDataSource accountDataSource) {
 		lastDataLoaded = new Date();
 		accountDataSource.storeLastLoadedDate(this);
 	}
 
 	public Bundle unpack(final Bundle bundle) {
-		geoKretySecredID = bundle.getString(Account.SECID);
-		id = bundle.getInt(Account.ACCOUNT_ID);
-		openCachingUUIDs = bundle.getStringArray(Account.OCUUIDS);
-		name = bundle.getString(Account.ACCOUNT_NAME);
-		homeCordLat = bundle.getString(Account.HOME_LAT);
-		homeCordLon = bundle.getString(Account.HOME_LON);
+		geoKretySecredID = bundle.getString(User.SECID);
+		id = bundle.getInt(User.ACCOUNT_ID);
+		openCachingUUIDs = bundle.getStringArray(User.OCUUIDS);
+		name = bundle.getString(User.ACCOUNT_NAME);
+		homeCordLat = bundle.getString(User.HOME_LAT);
+		homeCordLon = bundle.getString(User.HOME_LON);
 		return bundle;
 	}
 

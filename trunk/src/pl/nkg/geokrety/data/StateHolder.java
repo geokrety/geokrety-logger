@@ -51,9 +51,9 @@ public class StateHolder {
 		return context.getSharedPreferences("pl.nkg.geokrety", Context.MODE_PRIVATE);
 	}
 
-	private List<Account>				accountList;
+	private List<User>				accountList;
 	private int							defaultAccount;
-	private final AccountDataSource		accountDataSource;
+	private final UserDataSource		accountDataSource;
 	private final GeocacheLogDataSource	geocacheLogDataSource;
 	private final GeoKretDataSource		geoKretDataSource;
 
@@ -68,7 +68,7 @@ public class StateHolder {
 
 	public StateHolder(final Context context) {
 		dbHelper = new GeoKretySQLiteHelper(context);
-		accountDataSource = new AccountDataSource(dbHelper);
+		accountDataSource = new UserDataSource(dbHelper);
 		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
 		geoKretDataSource = new GeoKretDataSource(dbHelper);
 		geocacheDataSource = new GeocacheDataSource(dbHelper);
@@ -85,7 +85,7 @@ public class StateHolder {
 		final SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
 		//final SparseArray<LinkedList<GeoKretLog>> geoKretLogs = geoKretLogDataSource.load();
 
-		for (final Account account : accountList) {
+		for (final User account : accountList) {
 			account.setOpenCachingLogs(logs.get((int)account.getID()));
 			account.setInventory(gks.get((int)account.getID()));
 			//account.setGeoKretyLogs(geoKretLogs.get(account.getID()));
@@ -96,8 +96,8 @@ public class StateHolder {
 		return dbHelper;
 	}
 
-	public Account getAccountByID(final long id) {
-		for (final Account account : getAccountList()) {
+	public User getAccountByID(final long id) {
+		for (final User account : getAccountList()) {
 			if (account.getID() == id) {
 				return account;
 			}
@@ -105,11 +105,11 @@ public class StateHolder {
 		return null;
 	}
 
-	public AccountDataSource getAccountDataSource() {
+	public UserDataSource getAccountDataSource() {
 		return accountDataSource;
 	}
 
-	public List<Account> getAccountList() {
+	public List<User> getAccountList() {
 		return accountList;
 	}
 

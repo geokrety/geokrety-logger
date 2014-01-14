@@ -25,7 +25,7 @@ import java.io.Serializable;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
-import pl.nkg.geokrety.data.Account;
+import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.RemoveAccountDialog;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
@@ -47,7 +47,7 @@ import android.widget.Toast;
 public class AccountsActivity extends ManagedDialogsActivity {
 
 	private ListView mainListView;
-	private ArrayAdapter<Account> listAdapter;
+	private ArrayAdapter<User> listAdapter;
 
 	private RemoveAccountDialog removeAccountDialog;
 
@@ -67,7 +67,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 
 		mainListView = (ListView) findViewById(R.id.accountListView);
 
-		listAdapter = new ArrayAdapter<Account>(this,
+		listAdapter = new ArrayAdapter<User>(this,
 				android.R.layout.simple_list_item_single_choice,
 				holder.getAccountList());
 
@@ -159,14 +159,14 @@ public class AccountsActivity extends ManagedDialogsActivity {
 				.getStateHolder();
 
 		if (resultCode == RESULT_OK) {
-			int id = data.getIntExtra(Account.ACCOUNT_ID,
+			int id = data.getIntExtra(User.ACCOUNT_ID,
 					ListView.INVALID_POSITION);
 			if (id == ListView.INVALID_POSITION) {
-				Account account = new Account(data.getExtras());
+				User account = new User(data.getExtras());
 				holder.getAccountDataSource().persist(account);
 				holder.getAccountList().add(account);
 			} else {
-				Account account = holder.getAccountByID(id);
+				User account = holder.getAccountByID(id);
 				account.unpack(data.getExtras());
 				holder.getAccountDataSource().merge(account);
 			}
@@ -176,7 +176,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 
 	private void showEditAccountDialog(int position) {
 
-		Account account = ((GeoKretyApplication) getApplication())
+		User account = ((GeoKretyApplication) getApplication())
 				.getStateHolder().getAccountList().get(position);
 
 		Intent intent = new Intent(this, AccountActivity.class);
@@ -185,7 +185,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	}
 
 	private void showRemoveAccountDialog(int position) {
-		Account account = ((GeoKretyApplication) getApplication())
+		User account = ((GeoKretyApplication) getApplication())
 				.getStateHolder().getAccountList().get(position);
 		// removeAccountDialog.setPosition(position);
 		removeAccountDialog
@@ -201,7 +201,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 				&& buttonId == Dialog.BUTTON_POSITIVE) {
 			mainListView.setItemChecked(holder.getDefaultAccount(), false);
 			int pos = (Integer) removeAccountDialog.getPosition();
-			Account account = holder.getAccountList().remove(pos);
+			User account = holder.getAccountList().remove(pos);
 			holder.setDefaultAccount(ListView.INVALID_POSITION);
 			holder.getAccountDataSource().remove(account.getID());
 		}

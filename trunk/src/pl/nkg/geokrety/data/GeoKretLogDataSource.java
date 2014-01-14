@@ -90,9 +90,9 @@ public class GeoKretLogDataSource {
 				+ "l." + COLUMN_HOUR + ", " //
 				+ "l." + COLUMN_MINUTE + ", " //
 				+ "l." + COLUMN_COMMENT + ", "//
-				+ "u." + AccountDataSource.COLUMN_SECID + " FROM " //
+				+ "u." + UserDataSource.COLUMN_SECID + " FROM " //
 				+ TABLE + " AS l" //
-				+ " JOIN " + AccountDataSource.TABLE + " AS u ON l." + COLUMN_USER_ID + " = u." + AccountDataSource.COLUMN_ID //
+				+ " JOIN " + UserDataSource.TABLE + " AS u ON l." + COLUMN_USER_ID + " = u." + UserDataSource.COLUMN_ID //
 				+ " WHERE l." + COLUMN_STATE + " = " + GeoKretLog.STATE_OUTBOX //
 				+ " ORDER BY l." + COLUMN_ID;
 
