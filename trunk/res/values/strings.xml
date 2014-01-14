@@ -151,10 +151,11 @@
     </string-array>
     <string name="form_identify">2. Identify GeoKret</string>
     <string name="form_code">Tracking code</string>
-    <string name="form_inventory">Inventory</string>
+    <string name="form_profile">Check profile&#8230;</string>
+    <string name="form_inventory">Inventory&#8230;</string>
     <string name="form_location">3. New location</string>
     <string name="form_waypoint">Waypoint</string>
-    <string name="form_oclogs">OC Log</string>
+    <string name="form_oclogs">OC Log&#8230;</string>
     <string name="form_cords">Coordinates</string>
     <string name="form_gps">GPS</string>
     <string name="form_home">Home</string>

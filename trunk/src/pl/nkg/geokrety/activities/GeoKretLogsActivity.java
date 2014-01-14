@@ -280,7 +280,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
         usersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(usersAdapter);
-        spin.setSelection(holder.getDefaultAccount());
+        spin.setSelection(holder.getDefaultAccountNr());
 
         listView = (ListView) findViewById(R.id.gklListView);
         listView.setOnItemClickListener(this);
@@ -292,15 +292,20 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         closeCursorIfOpened();
         ((GeoKretyApplication) getApplication()).getStateHolder().getDbHelper().closeDatabase();
     }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        final StateHolder holder = ((GeoKretyApplication) getApplication()).getStateHolder();
+        database = holder.getDbHelper().openDatabase();
+        if (holder.getDefaultAccountNr() != AdapterView.INVALID_POSITION) {
+            account = holder.getDefaultAccount();
+            updateListView();
+        }
+    }
 
     @Override
     protected void onStart() {
-        super.onStart();
-        final StateHolder holder = ((GeoKretyApplication) getApplication()).getStateHolder();
-        database = holder.getDbHelper().openDatabase();
-        if (holder.getDefaultAccount() != AdapterView.INVALID_POSITION) {
-            account = holder.getAccountList().get(holder.getDefaultAccount());
-            updateListView();
-        }
+        super.onStart(); // FIXME: test me
     }
 }

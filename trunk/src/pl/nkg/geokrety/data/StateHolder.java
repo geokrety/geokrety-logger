@@ -26,11 +26,9 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteException;
 import android.util.SparseArray;
 import android.widget.ListView;
 
@@ -113,11 +111,20 @@ public class StateHolder {
 		return accountList;
 	}
 
-	public int getDefaultAccount() {
-		return accountList.size() > 0 //
-		? defaultAccount < accountList.size() && defaultAccount >= 0 //
-		? defaultAccount : 0 //
-				: DEFAULT_ACCOUNT_VALUE;
+	public int getDefaultAccountNr() {
+	    if (accountList.size() == 1) {
+	        return 0;
+	    } else if (accountList.size() > 1) {
+	        if (defaultAccount < accountList.size() && defaultAccount >= 0) {
+	            return defaultAccount;
+	        }
+	    }
+		return  DEFAULT_ACCOUNT_VALUE;
+	}
+	
+	public User getDefaultAccount() {
+	    int nr = getDefaultAccountNr();
+	    return nr == DEFAULT_ACCOUNT_VALUE ? null : accountList.get(nr);
 	}
 
 	public GeocacheDataSource getGeocacheDataSource() {
@@ -182,4 +189,12 @@ public class StateHolder {
 		}
 	}
 
+    public User matchAccount(String username) {
+        for (final User account : getAccountList()) {
+            if (account.getName().equals(username)) {
+                return account;
+            }
+        }
+        return null;
+    }
 }

@@ -72,7 +72,7 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 
 		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spin.setAdapter(aa);
-		spin.setSelection(holder.getDefaultAccount());
+		spin.setSelection(holder.getDefaultAccountNr());
 
 	}
 
@@ -90,8 +90,8 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 				refreshListView();
 			}
 		});
-		if (holder.getDefaultAccount() != ListView.INVALID_POSITION) {
-			account = holder.getAccountList().get(holder.getDefaultAccount());
+		if (holder.getDefaultAccountNr() != ListView.INVALID_POSITION) {
+			account = holder.getAccountList().get(holder.getDefaultAccountNr());
 			updateListView();
 		}
 	}

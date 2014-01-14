@@ -100,7 +100,7 @@
 
             <Button
                 android:id="@+id/logTypeButton"
-                style="@android:style/Widget.Spinner"
+                style="@style/log_activity_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="showLogType"
@@ -119,7 +119,7 @@
 
                 <Button
                     android:id="@+id/accountsButton"
-                    style="@android:style/Widget.Spinner"
+                    style="@style/log_activity_spinner"
                     android:layout_width="0dip"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -149,7 +149,6 @@
 
                 <Button
                     android:id="@+id/inventoryButton"
-                    style="@android:style/Widget.Spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="showInventory"
@@ -177,7 +176,6 @@
 
                 <Button
                     android:id="@+id/ocsButton"
-                    style="@android:style/Widget.Spinner"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="showOcs"

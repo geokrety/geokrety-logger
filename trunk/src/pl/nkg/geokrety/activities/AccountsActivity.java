@@ -72,7 +72,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 				holder.getAccountList());
 
 		mainListView.setAdapter(listAdapter);
-		mainListView.setItemChecked(holder.getDefaultAccount(), true);
+		mainListView.setItemChecked(holder.getDefaultAccountNr(), true);
 
 		mainListView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -137,7 +137,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 	@Override
 	public void onBackPressed() {
 		setResult(((GeoKretyApplication) getApplication()).getStateHolder()
-				.getDefaultAccount());
+				.getDefaultAccountNr());
 		finish();
 		super.onBackPressed();
 	}
@@ -199,7 +199,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 				.getStateHolder();
 		if (dialog.getDialogId() == removeAccountDialog.getDialogId()
 				&& buttonId == Dialog.BUTTON_POSITIVE) {
-			mainListView.setItemChecked(holder.getDefaultAccount(), false);
+			mainListView.setItemChecked(holder.getDefaultAccountNr(), false);
 			int pos = (Integer) removeAccountDialog.getPosition();
 			User account = holder.getAccountList().remove(pos);
 			holder.setDefaultAccount(ListView.INVALID_POSITION);

@@ -75,5 +75,7 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#ffcc0000</item>
     </style>
+    
+    <style name="log_activity_spinner" parent="@android:style/Widget.Spinner" />
 
 </resources>

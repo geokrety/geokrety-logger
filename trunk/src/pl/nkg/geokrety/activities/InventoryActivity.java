@@ -76,7 +76,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 
 		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spin.setAdapter(aa);
-		spin.setSelection(holder.getDefaultAccount());
+		spin.setSelection(holder.getDefaultAccountNr());
 		
 		((ListView)findViewById(R.id.inventoryListView)).setOnItemClickListener(this);
 	}
@@ -95,8 +95,8 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 		});
 		StateHolder holder = ((GeoKretyApplication) getApplication())
 				.getStateHolder();
-		if (holder.getDefaultAccount() != ListView.INVALID_POSITION) {
-			account = holder.getAccountList().get(holder.getDefaultAccount());
+		if (holder.getDefaultAccountNr() != ListView.INVALID_POSITION) {
+			account = holder.getAccountList().get(holder.getDefaultAccountNr());
 			updateListView();
 		}
 	}
