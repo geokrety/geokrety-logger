@@ -194,6 +194,12 @@ public class StateHolder {
             if (account.getName().equals(username)) {
                 return account;
             }
+            
+            for (String login : account.getOpenCachingLogins()) {
+                if (login.equals(username)) {
+                    return account;
+                }
+            }
         }
         return null;
     }

@@ -72,7 +72,7 @@
     <string name="account_portal_oc2">opencaching.us</string>
     <string name="account_portal_oc3">opencaching.nl</string>
     <string name="account_portal_oc4">opencaching.org.uk</string>
-    <string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for logging geokrety moving (login and password are not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
+    <string name="account_introduction">Introduction: after check geokrety.org you will need to enter your login and password. After it the &quot;secid&quot; will be acquired. The &quot;secid&quot; is stored in application data and used for logging geokrety moving (password is not stored).\n\nAfter check opencaching.pl etc. you will need to enter your login. Login is used to get your last logs. Last logs is used for hinting waypoint code when you log geokret moving.</string>
     <string name="account_home_location">Home coordinates (optional):</string>
     <string name="account_latitude_hint">latitude</string>
     <string name="account_longnitude_hint">longitude</string>

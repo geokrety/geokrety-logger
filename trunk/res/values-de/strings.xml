@@ -61,7 +61,7 @@
 	<string name="account_portal_oc2">opencaching.us</string>
 	<string name="account_portal_oc3">opencaching.nl</string>
 	<string name="account_portal_oc4">opencaching.org.uk</string>
-	<string name="account_introduction">Anleitung: Wenn die Verbindung zu geokrety.org steht müssen Benutzername und Passwort angegeben werden. Dann wird die &quot;secid&quot; geladen. Die &quot;secid&quot; wird in den App-Daten gespeichert, da sie zum loggen notwendig ist (Login und Passwort werden nicht gespeichert).\n\nSteht die Verbindung zu opencaching.pl etc. muss auch hier der Loginname angegeben werden. Er ist nötig um die letzten Logs zu laden. Die letzten Logs dienen der Wegpunktermittlung zum loggen der Geokrety.</string>
+<!-- changed: Login is stored, only password is not stored --><string name="account_introduction">Anleitung: Wenn die Verbindung zu geokrety.org steht müssen Benutzername und Passwort angegeben werden. Dann wird die &quot;secid&quot; geladen. Die &quot;secid&quot; wird in den App-Daten gespeichert, da sie zum loggen notwendig ist (Login und Passwort werden nicht gespeichert).\n\nSteht die Verbindung zu opencaching.pl etc. muss auch hier der Loginname angegeben werden. Er ist nötig um die letzten Logs zu laden. Die letzten Logs dienen der Wegpunktermittlung zum loggen der Geokrety.</string>
     <string name="account_home_location">Heimatkoordinaten (optional):</string>
     <string name="account_latitude_hint">Latitude</string>
     <string name="account_longnitude_hint">Longnitude</string>
