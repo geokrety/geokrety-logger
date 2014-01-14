@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.data;
 
 import java.util.ArrayList;
@@ -41,276 +42,282 @@ import android.os.Bundle;
 import android.widget.AdapterView;
 
 public class User {
-	public static final String	ACCOUNT_ID		= "accountID";
-	public static final String	ACCOUNT_NAME	= "accountName";
-	public static final String	SECID			= "secid";
-	public static final String	OCUUIDS			= "ocUUIDs";
-	public static final String	HOME_LON		= "homeCordLon";
-	public static final String	HOME_LAT		= "homeCordLat";
+    public static final String ACCOUNT_ID = "accountID";
+    public static final String ACCOUNT_NAME = "accountName";
+    public static final String SECID = "secid";
+    public static final String OCUUIDS = "ocUUIDs";
+    public static final String HOME_LON = "homeCordLon";
+    public static final String HOME_LAT = "homeCordLat";
 
-	private static final long	EXPIRED			= 24 * 60 * 60 * 1000;
+    // private static final long EXPIRED = 24 * 60 * 60 * 1000; // TODO: turn off during refresh in bacground
 
-	private long				id;
-	private String				name;
+    private long id;
+    private String name;
 
-	private String				geoKretySecredID;
-	private String[]			openCachingUUIDs;
+    private String geoKretySecredID;
+    private String[] openCachingUUIDs;
 
-	@Deprecated
-	private List<GeocacheLog>	openCachingLogs;
-	
-	@Deprecated
-	private List<Geokret>		inventory;
-	//private List<GeoKretLog>	geoKretLogs;
+    @Deprecated
+    private List<GeocacheLog> openCachingLogs;
 
-	private Date				lastDataLoaded;
+    @Deprecated
+    private List<Geokret> inventory;
+    // private List<GeoKretLog> geoKretLogs;
 
-	private String				homeCordLon;
-	private String				homeCordLat;
+    private Date lastDataLoaded;
 
-	public User(final Bundle bundle) {
-		unpack(bundle);
-	}
+    private String homeCordLon;
+    private String homeCordLat;
 
-	public User(final int id, final String name, final String geoKretySecredID, final String[] openCachingUUIDs) {
-		this.id = id;
-		this.name = name;
-		this.geoKretySecredID = geoKretySecredID;
-		this.openCachingUUIDs = openCachingUUIDs;
-	}
+    public User(final Bundle bundle) {
+        unpack(bundle);
+    }
 
-	public boolean expired() {
+    public User(final int id, final String name, final String geoKretySecredID,
+            final String[] openCachingUUIDs) {
+        this.id = id;
+        this.name = name;
+        this.geoKretySecredID = geoKretySecredID;
+        this.openCachingUUIDs = openCachingUUIDs;
+    }
 
-		if (lastDataLoaded == null) {
-			return true;
-		}
-		return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
-	}
+    public boolean expired() {
 
-	public Geokret getGeoKretByTrackingCode(final String trackingCode) {
-		for (final Geokret gk : getInventory()) {
-			if (gk.getTackingCode().equals(trackingCode)) {
-				return gk;
-			}
-		}
-		return null;
-	}
+        if (lastDataLoaded == null) {
+            return true;
+        }
+        // return new Date().getTime() - lastDataLoaded.getTime() > EXPIRED;
+        return false; // TODO: turn off during refresh in background
+                      // implementation
+    }
 
-	/*public List<GeoKretLog> getGeoKretyLogs() {
-		return geoKretLogs;
-	}*/
+    public Geokret getGeoKretByTrackingCode(final String trackingCode) {
+        for (final Geokret gk : getInventory()) {
+            if (gk.getTackingCode().equals(trackingCode)) {
+                return gk;
+            }
+        }
+        return null;
+    }
 
-	public String getGeoKreySecredID() {
-		return geoKretySecredID;
-	}
+    /*
+     * public List<GeoKretLog> getGeoKretyLogs() { return geoKretLogs; }
+     */
 
-	public String getHomeCordLat() {
-		return homeCordLat;
-	}
+    public String getGeoKreySecredID() {
+        return geoKretySecredID;
+    }
 
-	public String getHomeCordLon() {
-		return homeCordLon;
-	}
+    public String getHomeCordLat() {
+        return homeCordLat;
+    }
 
-	public long getID() {
-		return id;
-	}
+    public String getHomeCordLon() {
+        return homeCordLon;
+    }
 
-	@Deprecated
-	public List<Geokret> getInventory() {
-		if (inventory == null) {
-			inventory = new ArrayList<Geokret>();
-		}
-		return inventory;
-	}
+    public long getID() {
+        return id;
+    }
 
-	public Date getLastDataLoaded() {
-		return lastDataLoaded;
-	}
+    @Deprecated
+    public List<Geokret> getInventory() {
+        if (inventory == null) {
+            inventory = new ArrayList<Geokret>();
+        }
+        return inventory;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public Date getLastDataLoaded() {
+        return lastDataLoaded;
+    }
 
-	@Deprecated
-	public List<GeocacheLog> getOpenCachingLogs() {
-		if (openCachingLogs == null) {
-			openCachingLogs = new ArrayList<GeocacheLog>();
-		}
-		return openCachingLogs;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String[] getOpenCachingUUIDs() {
-		return openCachingUUIDs;
-	}
+    @Deprecated
+    public List<GeocacheLog> getOpenCachingLogs() {
+        if (openCachingLogs == null) {
+            openCachingLogs = new ArrayList<GeocacheLog>();
+        }
+        return openCachingLogs;
+    }
 
-	public int getTrackingCodeIndex(final String trackingCode) {
-		int pos = 0;
-		for (final Geokret g : getInventory()) {
-			if (g.getTackingCode().equalsIgnoreCase(trackingCode)) {
-				return pos;
-			}
-			pos++;
-		}
-		return AdapterView.INVALID_POSITION;
-	}
+    public String[] getOpenCachingUUIDs() {
+        return openCachingUUIDs;
+    }
 
-	private HashSet<String> getUnbufferedCacheCodes(final Collection<GeocacheLog> openCachingLogs) {
-		final HashSet<String> caches = new HashSet<String>();
-		for (final GeocacheLog log : new ArrayList<GeocacheLog>(openCachingLogs)) {
-			if (!StateHolder.getGeoacheMap().containsKey(log.getCacheCode())) {
-				caches.add(log.getCacheCode());
-			}
-		}
-		return caches;
-	}
+    public int getTrackingCodeIndex(final String trackingCode) {
+        int pos = 0;
+        for (final Geokret g : getInventory()) {
+            if (g.getTackingCode().equalsIgnoreCase(trackingCode)) {
+                return pos;
+            }
+            pos++;
+        }
+        return AdapterView.INVALID_POSITION;
+    }
 
-	public int getWaypointIndex(final String waypoint) {
-		int pos = 0;
-		for (final GeocacheLog l : getOpenCachingLogs()) {
-			if (l.getCacheCode().equalsIgnoreCase(waypoint)) {
-				return pos;
-			}
-			pos++;
-		}
-		return AdapterView.INVALID_POSITION;
-	}
+    private HashSet<String> getUnbufferedCacheCodes(final Collection<GeocacheLog> openCachingLogs) {
+        final HashSet<String> caches = new HashSet<String>();
+        for (final GeocacheLog log : new ArrayList<GeocacheLog>(openCachingLogs)) {
+            if (!StateHolder.getGeoacheMap().containsKey(log.getCacheCode())) {
+                caches.add(log.getCacheCode());
+            }
+        }
+        return caches;
+    }
 
-	public boolean hasOpenCachingUUID(final int portal) {
-		if (openCachingUUIDs == null || portal < 0 || portal >= openCachingUUIDs.length) {
-			return false;
-		}
+    public int getWaypointIndex(final String waypoint) {
+        int pos = 0;
+        for (final GeocacheLog l : getOpenCachingLogs()) {
+            if (l.getCacheCode().equalsIgnoreCase(waypoint)) {
+                return pos;
+            }
+            pos++;
+        }
+        return AdapterView.INVALID_POSITION;
+    }
 
-		return !Utils.isEmpty(openCachingUUIDs[portal]);
-	}
+    public boolean hasOpenCachingUUID(final int portal) {
+        if (openCachingUUIDs == null || portal < 0 || portal >= openCachingUUIDs.length) {
+            return false;
+        }
 
-	public void loadData(final GeoKretyApplication application, final boolean force) {
-		application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this, force);
-	}
+        return !Utils.isEmpty(openCachingUUIDs[portal]);
+    }
 
-	public boolean loadIfExpired(final GeoKretyApplication application, final boolean force) {
-		if (expired()) {
-			loadData(application, force);
-			return true;
-		} else {
-			return false;
-		}
-	}
+    public void loadData(final GeoKretyApplication application, final boolean force) {
+        application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this, force);
+    }
 
-	public void loadInventoryAndStore(final ICancelable cancelable, final GeoKretDataSource dataSource) throws MessagedException {
+    public boolean loadIfExpired(final GeoKretyApplication application, final boolean force) {
+        if (expired()) {
+            loadData(application, force);
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-		final Map<String, Geokret> gkMap = GeoKretyProvider.loadInventory(geoKretySecredID);
+    public void loadInventoryAndStore(final ICancelable cancelable,
+            final GeoKretDataSource dataSource) throws MessagedException {
 
-		if (cancelable.isCancelled()) {
-			return;
-		}
+        final Map<String, Geokret> gkMap = GeoKretyProvider.loadInventory(geoKretySecredID);
 
-		// merge with stickys
-		for (final Geokret geokret : new LinkedList<Geokret>(getInventory())) {
-			if (geokret.isSticky()) {
-				final Geokret gk2 = gkMap.get(geokret.getTackingCode());
-				if (gk2 == null) {
-					gkMap.put(geokret.getTackingCode(), geokret);
-				} else {
-					gk2.setSticky(true);
-				}
-			}
-		}
+        if (cancelable.isCancelled()) {
+            return;
+        }
 
-		final ArrayList<Geokret> afterMerge = new ArrayList<Geokret>(gkMap.size());
+        // merge with stickys
+        for (final Geokret geokret : new LinkedList<Geokret>(getInventory())) {
+            if (geokret.isSticky()) {
+                final Geokret gk2 = gkMap.get(geokret.getTackingCode());
+                if (gk2 == null) {
+                    gkMap.put(geokret.getTackingCode(), geokret);
+                } else {
+                    gk2.setSticky(true);
+                }
+            }
+        }
 
-		for (final Geokret geokret : gkMap.values()) {
-			afterMerge.add(geokret);
-		}
+        final ArrayList<Geokret> afterMerge = new ArrayList<Geokret>(gkMap.size());
 
-		dataSource.store(afterMerge, getID());
-		setInventory(dataSource.load(getID()));
-	}
+        for (final Geokret geokret : gkMap.values()) {
+            afterMerge.add(geokret);
+        }
 
-	public void loadOCnamesToBuffer(final ICancelable cancelable, final List<GeocacheLog> openCachingLogs, final int portal) throws MessagedException {
-		final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
-		final HashSet<String> codes = getUnbufferedCacheCodes(openCachingLogs);
-		if (codes.size() == 0) {
-			return;
-		}
+        dataSource.store(afterMerge, getID());
+        setInventory(dataSource.load(getID()));
+    }
 
-		if (cancelable.isCancelled()) {
-			return;
-		}
+    public void loadOCnamesToBuffer(final ICancelable cancelable,
+            final List<GeocacheLog> openCachingLogs, final int portal) throws MessagedException {
+        final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
+        final HashSet<String> codes = getUnbufferedCacheCodes(openCachingLogs);
+        if (codes.size() == 0) {
+            return;
+        }
 
-		for (final Geocache geocache : OKAPIProvider.loadOCnames(codes, okapi)) {
-			StateHolder.getGeoacheMap().put(geocache.getCode(), geocache);
-		}
-	}
+        if (cancelable.isCancelled()) {
+            return;
+        }
 
-	public List<GeocacheLog> loadOpenCachingLogs(final int portal) throws MessagedException {
+        for (final Geocache geocache : OKAPIProvider.loadOCnames(codes, okapi)) {
+            StateHolder.getGeoacheMap().put(geocache.getCode(), geocache);
+        }
+    }
 
-		final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
-		return OKAPIProvider.loadOpenCachingLogs(okapi, openCachingUUIDs[portal]);
-	}
+    public List<GeocacheLog> loadOpenCachingLogs(final int portal) throws MessagedException {
 
-	public Bundle pack(final Bundle bundle) {
-		bundle.putStringArray(User.OCUUIDS, openCachingUUIDs);
-		bundle.putLong(User.ACCOUNT_ID, id);
-		bundle.putString(User.SECID, geoKretySecredID);
-		bundle.putString(User.ACCOUNT_NAME, name);
-		bundle.putString(User.HOME_LAT, homeCordLat);
-		bundle.putString(User.HOME_LON, homeCordLon);
-		return bundle;
-	}
+        final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
+        return OKAPIProvider.loadOpenCachingLogs(okapi, openCachingUUIDs[portal]);
+    }
 
-	/*public void setGeoKretyLogs(final List<GeoKretLog> geoKretLogs) {
-		this.geoKretLogs = geoKretLogs;
-	}*/
+    public Bundle pack(final Bundle bundle) {
+        bundle.putStringArray(User.OCUUIDS, openCachingUUIDs);
+        bundle.putLong(User.ACCOUNT_ID, id);
+        bundle.putString(User.SECID, geoKretySecredID);
+        bundle.putString(User.ACCOUNT_NAME, name);
+        bundle.putString(User.HOME_LAT, homeCordLat);
+        bundle.putString(User.HOME_LON, homeCordLon);
+        return bundle;
+    }
 
-	public void setHomeCordLat(final String homeCordLat) {
-		this.homeCordLat = homeCordLat;
-	}
+    /*
+     * public void setGeoKretyLogs(final List<GeoKretLog> geoKretLogs) {
+     * this.geoKretLogs = geoKretLogs; }
+     */
 
-	public void setHomeCordLon(final String homeCordLon) {
-		this.homeCordLon = homeCordLon;
-	}
+    public void setHomeCordLat(final String homeCordLat) {
+        this.homeCordLat = homeCordLat;
+    }
 
-	public void setID(final long id) {
-		this.id = id;
-	}
+    public void setHomeCordLon(final String homeCordLon) {
+        this.homeCordLon = homeCordLon;
+    }
 
-	@Deprecated
-	public void setInventory(final List<Geokret> gks) {
-		inventory = gks;
-	}
+    public void setID(final long id) {
+        this.id = id;
+    }
 
-	public void setLastDataLoaded(final Date lastDataLoaded) {
-		this.lastDataLoaded = lastDataLoaded;
-	}
+    @Deprecated
+    public void setInventory(final List<Geokret> gks) {
+        inventory = gks;
+    }
 
-	public void setName(final String name) {
-		this.name = name;
-	}
+    public void setLastDataLoaded(final Date lastDataLoaded) {
+        this.lastDataLoaded = lastDataLoaded;
+    }
 
-	@Deprecated
-	public void setOpenCachingLogs(final List<GeocacheLog> openCachingLogs) {
-		this.openCachingLogs = openCachingLogs;
-	}
+    public void setName(final String name) {
+        this.name = name;
+    }
 
-	@Override
-	public String toString() {
-		return name;
-	}
+    @Deprecated
+    public void setOpenCachingLogs(final List<GeocacheLog> openCachingLogs) {
+        this.openCachingLogs = openCachingLogs;
+    }
 
-	public void touchLastLoadedDate(final UserDataSource accountDataSource) {
-		lastDataLoaded = new Date();
-		accountDataSource.storeLastLoadedDate(this);
-	}
+    @Override
+    public String toString() {
+        return name;
+    }
 
-	public Bundle unpack(final Bundle bundle) {
-		geoKretySecredID = bundle.getString(User.SECID);
-		id = bundle.getInt(User.ACCOUNT_ID);
-		openCachingUUIDs = bundle.getStringArray(User.OCUUIDS);
-		name = bundle.getString(User.ACCOUNT_NAME);
-		homeCordLat = bundle.getString(User.HOME_LAT);
-		homeCordLon = bundle.getString(User.HOME_LON);
-		return bundle;
-	}
+    public void touchLastLoadedDate(final UserDataSource accountDataSource) {
+        lastDataLoaded = new Date();
+        accountDataSource.storeLastLoadedDate(this);
+    }
+
+    public Bundle unpack(final Bundle bundle) {
+        geoKretySecredID = bundle.getString(User.SECID);
+        id = bundle.getInt(User.ACCOUNT_ID);
+        openCachingUUIDs = bundle.getStringArray(User.OCUUIDS);
+        name = bundle.getString(User.ACCOUNT_NAME);
+        homeCordLat = bundle.getString(User.HOME_LAT);
+        homeCordLon = bundle.getString(User.HOME_LON);
+        return bundle;
+    }
 
 }

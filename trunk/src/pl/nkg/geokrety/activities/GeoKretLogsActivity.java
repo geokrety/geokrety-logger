@@ -37,7 +37,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -163,7 +162,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
             if (log.getProblem() == R.string.warning_already_logged) {
                 return getText(R.string.warning_already_logged);
             } else {
-                return getText(log.getProblem()) + ": " + log.getProblemArg();
+                return getText(log.getProblem()) + " " + log.getProblemArg();
             }
         }
 
