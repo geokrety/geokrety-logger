@@ -30,6 +30,7 @@
     <string name="button_inventory">Inventar</string>
     <string name="button_ocs">Letzte Opencaching Logs</string>
     <string name="button_log">Log GeoKret</string>
+<!-- need translate --><string name="button_gkl">Saved logs</string>
     <string name="button_about">Über</string>
     <string name="version">GeoKrety Logger v</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
@@ -137,6 +138,7 @@
     </string-array>
     <string name="form_identify">2. GeoKret identifizieren</string>
     <string name="form_code">Trackingcode</string>
+<!-- need translate --><string name="form_profile">Who? &#8230;</string>
     <string name="form_inventory">Inventar</string>
     <string name="form_location">3. Neuer Ort</string>
     <string name="form_waypoint">Wegpunkt</string>
@@ -147,12 +149,14 @@
     <string name="form_location_description">Bei Angabe eines Wegpunktes sind keine Koordinaten erforderlich, da diese dann durch geokrety.org eingetragen werden.</string>
     <string name="form_additional">4. zusätzliche Daten</string>
     <string name="form_comment">Kommentar</string>
-    <string name="form_submit">Go!</string>
-    <string name="form_clear">Clear</string>
+<!-- need translate --><string name="form_submit_button">Send</string>
+<!-- need translate --><string name="form_save_draft_button">Postpone</string>
+<!-- need translate --><string name="form_remove_button">Delete</string>
     <!-- Spinners -->
     <string name="title_dialog_inventory">Dein Inventar</string>
     <string name="title_dialog_ocs">Deine letzten Logs bei Opencaching</string>
     <!-- Messages -->
+<!-- need translate --><string name="form_confirm_delete_msg">Delete this log entry?</string>
     <string name="warning_already_logged">Es existiert bereits ein Eintrag mit diesem Zeitstempel. Bitte korrigiere Datum und Uhrzeit..</string>
     <!-- Log submitting -->
     <string name="submit_title">Übertrage Log</string>
@@ -160,6 +164,19 @@
     <string name="submit_finish">GeoKret erfolgreich geloggt</string>
     <string name="submit_broken">Übertragung fehlerhaft, aber Geokret wurde möglicherweise geloggt</string>
     <string name="submit_fail">Übertragungsfehler: </string>
+
+    <!-- GeoKretLogs Activity -->
+<!-- need translate --><string name="title_activity_geokretlogs">GeoKret logs</string>
+<!-- need translate --><string name="row_log_icon_contentDescription">Log type</string>
+<!-- need translate --><string name="row_log_statusLabel">Status:</string>
+<!-- need translate --><string name="row_log_profileLabel">User:</string>
+<!-- need translate --><string name="log_status_draft">Draft</string>
+<!-- need translate --><string name="log_status_new">New</string>
+<!-- need translate --><string name="log_status_double">Duplicated</string>
+<!-- need translate --><string name="log_status_problem">Error</string>
+<!-- need translate --><string name="log_status_success">Success</string>
+<!-- need translate --><string name="log_status_queue">Queue</string>
+<!-- need translate --><string name="log_status_unidentified">Unidentified</string>
     
     <!-- Refresing progress bar -->
     <string name="download_title">Aktualisieren</string>
@@ -187,10 +204,21 @@
 	<string name="gps_pleas_wait">Bitte auf Satellitenfix warten</string>
 	<string name="gps_fixed">Position bestimmt, Koordinaten eingefügt</string>
     
+	<!-- Log submitting service -->
+<!-- need translate --><string name="message_do_submitting">Log submitting in background&#8230;</string>
+<!-- need translate --><string name="message_draft_saved">Log saved in drafts&#8230;</string>
+<!-- need translate --><string name="message_submitting">Submitting log&#8230;</string>
+<!-- need translate --><string name="message_submit_success">Submitting log successful</string>
+<!-- need translate --><string name="message_submit_problem">geokrety.org reject the submission</string>
+<!-- need translate --><string name="message_submit_no_connection">Connection error, trying again&#8230;</string>
+	
     <!-- About Activity -->
     <string name="title_activity_about">Über</string>
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="changelog">Change log:\n\n
+        0.5.0 beta - 2014-01-15\n
+        - log submitting in background,\n
+        \n
         0.4.2 beta - 2014-01-06\n
         - some fixes and layout improvements,\n
         - German translation update, thanks for Schrottie\n
@@ -237,4 +265,5 @@
         0.0.0 alpha - 2013-12-13\n
         - first public version, \n
         - works only with Android 2.1-2.3.x.</string>
+<!-- need translate --><string name="release_plans">Pleas visit for release plans:\n<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a></string>
 </resources>

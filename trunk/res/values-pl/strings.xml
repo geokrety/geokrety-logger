@@ -30,6 +30,7 @@
     <string name="button_inventory">Krety, które masz u siebie</string>
     <string name="button_ocs">Twoje ostatnie logi z OpenCaching</string>
     <string name="button_log">Zaloguj GeoKreta</string>
+    <string name="button_gkl">Zapisane logi</string>
     <string name="button_about">Informacje</string>
     <string name="version">GeoKrety Logger v</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
@@ -137,6 +138,7 @@
     </string-array>
     <string name="form_identify">2.  Identyfikacja GeoKreta</string>
     <string name="form_code">Tracking Code</string>
+    <string name="form_profile">Kto? &#8230;</string>
     <string name="form_inventory">Inwentarz</string>
     <string name="form_location">3. Nowa lokalizacja</string>
     <string name="form_waypoint">Waypoint</string>
@@ -147,12 +149,14 @@
     <string name="form_location_description">Jeżeli podałeś waypoint to nie musisz podawać współrzędnych bo GeoKrety.org i tak użyją współrzędnych z waypoint.</string>
     <string name="form_additional">4. Informacje dodatkowe</string>
     <string name="form_comment">Komentarz</string>
-    <string name="form_submit">Go!</string>
-    <string name="form_clear">Wyczyść</string>
+    <string name="form_submit_button">Wyślij</string>
+    <string name="form_save_draft_button">Odłóż</string>
+    <string name="form_remove_button">Usuń</string>
     <!-- Spinners -->
     <string name="title_dialog_inventory">Krety, które masz u siebie</string>
     <string name="title_dialog_ocs">Twoje ostatnie logi z portali OpenCaching</string>
     <!-- Messages -->
+    <string name="form_confirm_delete_msg">Usunąć ten wpis?</string>
     <string name="warning_already_logged">Ten GeoKret został już zalogowany w tym miejscu i o tej porze!</string>
     <!-- Log submitting -->
     <string name="submit_title">Logowanie GeoKreta</string>
@@ -160,6 +164,19 @@
     <string name="submit_finish">GeoKret został zalogowany pomyślnie</string>
     <string name="submit_broken">Przerwano logowanie GeoKreta, ale serwer mógł już zapisać log. Wejdź potem na stronę geokrety.org i w razie konieczności usuń log.</string>
     <string name="submit_fail">Problem z logowaniem GeoKreta:</string>
+    
+    <!-- GeoKretLogs Activity -->
+    <string name="title_activity_geokretlogs">Zapisane logi GeoKretów</string>
+    <string name="row_log_icon_contentDescription">Typ logu</string>
+    <string name="row_log_statusLabel">Stan:</string>
+    <string name="row_log_profileLabel">Użytkownik:</string>
+    <string name="log_status_draft">Szkic</string>
+    <string name="log_status_new">Nowy</string>
+    <string name="log_status_double">Zdublowany</string>
+    <string name="log_status_problem">Błąd</string>
+    <string name="log_status_success">Wysłany</string>
+    <string name="log_status_queue">W kolejce</string>
+    <string name="log_status_unidentified">Niezidentyfikowany</string>
     
     <!-- Refresing progress bar -->
     <string name="download_title">Odświeżanie konta użytkownika</string>
@@ -189,6 +206,7 @@
     
     <!-- Log submitting service -->
     <string name="message_do_submitting">Logowanie GeoKreta w tle&#8230;</string>
+    <string name="message_draft_saved">Zapisano jako szkic&#8230;</string>
     <string name="message_submitting">Logowanie GeoKreta&#8230;</string>
     <string name="message_submit_success">Udało się zalogować GeoKreta!</string>
     <string name="message_submit_problem">Logowanie odrzucone przez geokrety.org</string>
@@ -198,6 +216,9 @@
     <string name="title_activity_about">Informacje o GeoKrety Logger</string>
     <string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne. Program jest darmowy, a jego kod źródłowy jest dostępny publicznie na licencji GPL 3.0 (<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>). Jeżeli coś działa nieprawidłowo, poinformuj mnie o tym pisząc najlepiej w formularzu pod adresem: <a href="http://geokrety.org/majluj.php?to=12444">geokrety.org/majluj.php?to=12444</a>. Nie ponoszę odpowiedzialności za szkody wynikające błędnego działania programu lub używania go niezgodnie z przeznaczeniem.</string>
     <string name="changelog">Historia zmian:\n
+        0.5.0 beta - 2014-01-15\n
+        - logowanie GeoKreta w tle,\n
+        \n
         0.4.2 beta - 2014-01-06\n
         - drobne poprawki,\n
         - aktualizacja niemieckiego tłumaczenia z podziękowaniem dla Schrottie\n

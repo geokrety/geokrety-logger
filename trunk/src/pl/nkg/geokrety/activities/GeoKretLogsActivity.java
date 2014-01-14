@@ -85,32 +85,16 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
             }
         }
 
-        private CharSequence formatProfileName(GeoKretLog log) {
-            // TODO Auto-generated method stub
-            return holder.getAccountByID(log.getAccoundID()).getName();
+        @Override
+        public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
+            return inflater.inflate(layout, parent, false);
         }
 
-        private CharSequence formatCacheName(GeoKretLog log) {
-            // TODO Auto-generated method stub
-            if (StateHolder.getGeoacheMap().containsKey(log.getWpt())) {
-                return StateHolder.getGeoacheMap().get(log.getWpt()).getName();
-            } else {
-                return "";
-            }
-        }
-
-        private void bindCacheCode(View view, GeoKretLog log) {
-            TextView cacheCodeTextView = (TextView)view.findViewById(R.id.cacheCodeTextView);
-            cacheCodeTextView.setText(Utils.isEmpty(log.getWpt()) ? log.getLatlon() : log.getWpt());
-            
-            cacheCodeTextView.setCompoundDrawablesWithIntrinsicBounds(adjustCacheDrawable(log), 0, 0, 0);
-        }
-
-        private int adjustCacheDrawable(GeoKretLog log) {
+        private int adjustCacheDrawable(final GeoKretLog log) {
             // TODO Auto-generated method stub
             if (StateHolder.getGeoacheMap().containsKey(log.getWpt())) {
-                String type = StateHolder.getGeoacheMap().get(log.getWpt()).getType();
-                
+                final String type = StateHolder.getGeoacheMap().get(log.getWpt()).getType();
+
                 if (type.equals("Traditional")) {
                     return R.drawable.ic_cache_traditional_small;
                 } else if (type.equals("Multi")) {
@@ -128,34 +112,37 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
             return 0;
         }
 
-        private CharSequence formatGeoKretName(GeoKretLog log) {
-            // TODO Auto-generated method stub
-            return "";
-        }
+        private void bindCacheCode(final View view, final GeoKretLog log) {
+            final TextView cacheCodeTextView = (TextView) view.findViewById(R.id.cacheCodeTextView);
+            cacheCodeTextView.setText(Utils.isEmpty(log.getWpt()) ? log.getLatlon() : log.getWpt());
 
-        private CharSequence formatGeoKretCode(GeoKretLog log) {
-            // TODO Auto-generated method stub
-            return log.getNr();
-        }
-
-        @Override
-        public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-            return inflater.inflate(layout, parent, false);
+            cacheCodeTextView.setCompoundDrawablesWithIntrinsicBounds(adjustCacheDrawable(log), 0,
+                    0, 0);
         }
 
         private void bindIcon(final View view, final GeoKretLog log) {
-            final int drawable = checkHumanGeokret(log) ? LOG_TYPE_ICON_MAP_HUMAN[log.getLogTypeMapped()] : LOG_TYPE_ICON_MAP_GK[log.getLogTypeMapped()];
+            final int drawable = checkHumanGeokret(log) ? LOG_TYPE_ICON_MAP_HUMAN[log
+                    .getLogTypeMapped()] : LOG_TYPE_ICON_MAP_GK[log.getLogTypeMapped()];
             ((ImageView) view.findViewById(android.R.id.icon)).setImageDrawable(getResources()
                     .getDrawable(drawable));
         }
 
-        private boolean checkHumanGeokret(GeoKretLog log) {
+        private void bindTextView(final View view, final int id, final CharSequence content) {
+            ((TextView) view.findViewById(id)).setText(content);
+        }
+
+        private boolean checkHumanGeokret(final GeoKretLog log) {
             // TODO Auto-generated method stub
             return false;
         }
 
-        private void bindTextView(final View view, final int id, final CharSequence content) {
-            ((TextView) view.findViewById(id)).setText(content);
+        private CharSequence formatCacheName(final GeoKretLog log) {
+            // TODO Auto-generated method stub
+            if (StateHolder.getGeoacheMap().containsKey(log.getWpt())) {
+                return StateHolder.getGeoacheMap().get(log.getWpt()).getName();
+            } else {
+                return "";
+            }
         }
 
         private CharSequence formatErrorMessage(final GeoKretLog log) {
@@ -166,28 +153,42 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
             }
         }
 
+        private CharSequence formatGeoKretCode(final GeoKretLog log) {
+            // TODO Auto-generated method stub
+            return log.getNr();
+        }
+
+        private CharSequence formatGeoKretName(final GeoKretLog log) {
+            // TODO Auto-generated method stub
+            return "";
+        }
+
+        private CharSequence formatProfileName(final GeoKretLog log) {
+            // TODO Auto-generated method stub
+            return holder.getAccountByID(log.getAccoundID()).getName();
+        }
+
         private CharSequence formatStatus(final GeoKretLog log) {
-            // TODO: use values
             switch (log.getState()) {
                 case GeoKretLog.STATE_DRAFT:
-                    return "draft";
+                    return getText(R.string.log_status_draft);
 
                 case GeoKretLog.STATE_NEW:
                     // TODO: probably newer used
-                    return "new";
+                    return getText(R.string.log_status_new);
 
                 case GeoKretLog.STATE_PROBLEM:
-                    return log.getProblem() == R.string.warning_already_logged ? "double"
-                            : "problem";
+                    return log.getProblem() == R.string.warning_already_logged ? getText(R.string.log_status_double)
+                            : getText(R.string.log_status_problem);
 
                 case GeoKretLog.STATE_SENT:
-                    return "success";
+                    return getText(R.string.log_status_success);
 
                 case GeoKretLog.STATE_OUTBOX:
-                    return "queue";
+                    return getText(R.string.log_status_queue);
 
                 default:
-                    return "";
+                    return getText(R.string.log_status_unidentified);
             }
         }
 
@@ -215,9 +216,11 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
     private Cursor geoKretLogsCursor;
     private ListView listView;
-    
+
     private GeoKretyApplication application;
     private StateHolder holder;
+
+    private Spinner accountsSpinner;
 
     @Override
     public void dialogFinished(final AbstractDialogWrapper<?> dialog, final int buttonId,
@@ -265,13 +268,11 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     private void updateListView() {
         refreshListView();
     }
-    
-    private Spinner accountsSpinner;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        application = ((GeoKretyApplication) getApplication());
+        application = (GeoKretyApplication) getApplication();
 
         holder = application.getStateHolder();
         setContentView(R.layout.activity_geokretlogs);
@@ -294,13 +295,13 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         closeCursorIfOpened();
         ((GeoKretyApplication) getApplication()).getStateHolder().getDbHelper().closeDatabase();
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
         final StateHolder holder = ((GeoKretyApplication) getApplication()).getStateHolder();
         database = holder.getDbHelper().openDatabase();
-        int nr = accountsSpinner.getSelectedItemPosition();
+        final int nr = accountsSpinner.getSelectedItemPosition();
         if (nr != AdapterView.INVALID_POSITION) {
             account = holder.getAccountList().get(nr);
             updateListView();
