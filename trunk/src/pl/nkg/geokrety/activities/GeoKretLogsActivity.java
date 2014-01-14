@@ -265,6 +265,8 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     private void updateListView() {
         refreshListView();
     }
+    
+    private Spinner accountsSpinner;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -273,14 +275,14 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
         holder = application.getStateHolder();
         setContentView(R.layout.activity_geokretlogs);
-        final Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
-        spin.setOnItemSelectedListener(this);
+        accountsSpinner = (Spinner) findViewById(R.id.accountsSpiner);
+        accountsSpinner.setOnItemSelectedListener(this);
         final ArrayAdapter<User> usersAdapter = new ArrayAdapter<User>(this,
                 android.R.layout.simple_spinner_item, holder.getAccountList());
 
         usersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin.setAdapter(usersAdapter);
-        spin.setSelection(holder.getDefaultAccountNr());
+        accountsSpinner.setAdapter(usersAdapter);
+        accountsSpinner.setSelection(holder.getDefaultAccountNr());
 
         listView = (ListView) findViewById(R.id.gklListView);
         listView.setOnItemClickListener(this);
@@ -298,14 +300,10 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         super.onResume();
         final StateHolder holder = ((GeoKretyApplication) getApplication()).getStateHolder();
         database = holder.getDbHelper().openDatabase();
-        if (holder.getDefaultAccountNr() != AdapterView.INVALID_POSITION) {
-            account = holder.getDefaultAccount();
+        int nr = accountsSpinner.getSelectedItemPosition();
+        if (nr != AdapterView.INVALID_POSITION) {
+            account = holder.getAccountList().get(nr);
             updateListView();
         }
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart(); // FIXME: test me
     }
 }
