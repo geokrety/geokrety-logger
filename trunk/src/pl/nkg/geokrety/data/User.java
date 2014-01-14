@@ -46,6 +46,7 @@ public class User {
     public static final String ACCOUNT_NAME = "accountName";
     public static final String SECID = "secid";
     public static final String OCUUIDS = "ocUUIDs";
+    public static final String OCLOGINS = "ocLogins";
     public static final String HOME_LON = "homeCordLon";
     public static final String HOME_LAT = "homeCordLat";
 
@@ -56,6 +57,7 @@ public class User {
 
     private String geoKretySecredID;
     private String[] openCachingUUIDs;
+    private String[] openCachingLogins;
 
     @Deprecated
     private List<GeocacheLog> openCachingLogs;
@@ -74,11 +76,16 @@ public class User {
     }
 
     public User(final int id, final String name, final String geoKretySecredID,
-            final String[] openCachingUUIDs) {
+            final String[] openCachingUUIDs, final String[] openCachingLogins) {
         this.id = id;
         this.name = name;
         this.geoKretySecredID = geoKretySecredID;
         this.openCachingUUIDs = openCachingUUIDs;
+        this.openCachingLogins = openCachingLogins;
+    }
+
+    public String[] getOpenCachingLogins() {
+        return openCachingLogins;
     }
 
     public boolean expired() {
@@ -257,6 +264,7 @@ public class User {
 
     public Bundle pack(final Bundle bundle) {
         bundle.putStringArray(User.OCUUIDS, openCachingUUIDs);
+        bundle.putStringArray(User.OCLOGINS, openCachingLogins);
         bundle.putLong(User.ACCOUNT_ID, id);
         bundle.putString(User.SECID, geoKretySecredID);
         bundle.putString(User.ACCOUNT_NAME, name);
@@ -312,7 +320,7 @@ public class User {
 
     public Bundle unpack(final Bundle bundle) {
         geoKretySecredID = bundle.getString(User.SECID);
-        id = bundle.getInt(User.ACCOUNT_ID);
+        id = bundle.getLong(User.ACCOUNT_ID);
         openCachingUUIDs = bundle.getStringArray(User.OCUUIDS);
         name = bundle.getString(User.ACCOUNT_NAME);
         homeCordLat = bundle.getString(User.HOME_LAT);

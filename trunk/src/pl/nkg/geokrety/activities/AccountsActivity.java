@@ -159,7 +159,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 				.getStateHolder();
 
 		if (resultCode == RESULT_OK) {
-			int id = data.getIntExtra(User.ACCOUNT_ID,
+			long id = data.getLongExtra(User.ACCOUNT_ID,
 					ListView.INVALID_POSITION);
 			if (id == ListView.INVALID_POSITION) {
 				User account = new User(data.getExtras());

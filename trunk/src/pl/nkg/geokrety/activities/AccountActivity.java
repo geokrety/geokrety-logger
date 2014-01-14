@@ -59,10 +59,11 @@ import android.widget.Toast;
 public class AccountActivity extends ManagedDialogsActivity implements LocationListener, TextWatcher {
 
 	// TODO: to moze byc razem z klasa Account
-	private int								accountID;
+	private long								accountID;
 	private String							accountName;
 	private String							secid;
 	private String[]						ocUUIDs		= new String[SupportedOKAPI.SUPPORTED.length];
+	private String[]                       ocLogins     = new String[SupportedOKAPI.SUPPORTED.length];
 	private boolean							modified;
 
 	// private TextView accountNameEditText;
@@ -216,9 +217,10 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 		latEditText = (EditText) findViewById(R.id.latEditText);
 		lonEditText = (EditText) findViewById(R.id.lonEditText);
 
-		accountID = getIntent().getIntExtra(User.ACCOUNT_ID, AdapterView.INVALID_POSITION);
+		accountID = getIntent().getLongExtra(User.ACCOUNT_ID, AdapterView.INVALID_POSITION);
 		secid = getIntent().getStringExtra(User.SECID);
 		ocUUIDs = getIntent().getStringArrayExtra(User.OCUUIDS);
+		ocLogins = getIntent().getStringArrayExtra(User.OCLOGINS);
 		accountName = getIntent().getStringExtra(User.ACCOUNT_NAME);
 		lonEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.HOME_LON), ""));
 		latEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.HOME_LAT), ""));
@@ -226,6 +228,10 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 		if (ocUUIDs == null) {
 			ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
 		}
+		
+		if (ocLogins == null) {
+		    ocLogins = new String[SupportedOKAPI.SUPPORTED.length];
+        }
 
 		// accountNameEditText = (TextView)
 		// findViewById(R.id.accountNameTextView);
@@ -266,7 +272,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 				@Override
 				public void onClick(final View v) {
 					if (ocCheckBox[portalNr].isChecked()) {
-						ocDialog.show(portalNr, SupportedOKAPI.SUPPORTED[portalNr].host, accountName);
+						ocDialog.show(portalNr, SupportedOKAPI.SUPPORTED[portalNr].host, Utils.isEmpty(ocLogins[portalNr]) ? accountName : ocLogins[portalNr]);
 					} else {
 						modified = true;
 						ocUUIDs[portalNr] = null;
@@ -285,6 +291,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 		secid = savedInstanceState.getString(User.SECID);
 		accountID = savedInstanceState.getInt(User.ACCOUNT_ID);
 		ocUUIDs = savedInstanceState.getStringArray(User.OCUUIDS);
+		ocLogins = savedInstanceState.getStringArray(User.OCLOGINS);
 		accountName = savedInstanceState.getString(User.ACCOUNT_NAME);
 		gpsAcquirer.restore(savedInstanceState);
 	}
@@ -294,7 +301,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 		super.onSaveInstanceState(outState);
 		gpsAcquirer.pause(outState);
 		outState.putStringArray(User.OCUUIDS, ocUUIDs);
-		outState.putInt(User.ACCOUNT_ID, accountID);
+		outState.putStringArray(User.OCLOGINS, ocLogins);
+		outState.putLong(User.ACCOUNT_ID, accountID);
 		outState.putString(User.SECID, secid);
 		outState.putString(User.ACCOUNT_NAME, accountName);
 	}
@@ -337,6 +345,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 					final String result) {
 				modified = true;
 				ocUUIDs[param.second] = result;
+				ocLogins[param.second] = param.first;
 				if (Utils.isEmpty(accountName)) {
 					accountName = param.first;
 				}

@@ -40,6 +40,7 @@ public class UserDataSource {
 	public static final String			COLUMN_USER_NAME	= "name";
 	public static final String			COLUMN_SECID		= "secid";
 	public static final String			COLUMN_UUIDS		= "uuids";
+    public static final String          COLUMN_OCLOGINS        = "oc_logins";
 	public static final String			COLUMN_REFRESH		= "refresh";
 	public static final String			COLUMN_HOME_LON		= "home_lon";
 	public static final String			COLUMN_HOME_LAT		= "home_lat";
@@ -58,6 +59,7 @@ public class UserDataSource {
 				+ COLUMN_USER_NAME + " TEXT NOT NULL, " //
 				+ COLUMN_SECID + " TEXT NOT NULL, " //
 				+ COLUMN_UUIDS + " TEXT NOT NULL, " //
+                + COLUMN_OCLOGINS + " TEXT NOT NULL DEFAULT '', " //
 				+ COLUMN_REFRESH + " INTEGER NOT NULL DEFAULT 0," //
 				+ COLUMN_HOME_LAT + " TEXT NOT NULL DEFAULT ''," //
 				+ COLUMN_HOME_LON + " TEXT NOT NULL DEFAULT ''" //
@@ -68,6 +70,7 @@ public class UserDataSource {
 				+ COLUMN_USER_NAME + ", " //
 				+ COLUMN_SECID + ", " //
 				+ COLUMN_UUIDS + ", "//
+                + COLUMN_OCLOGINS + ", "//
 				+ COLUMN_REFRESH + ", " //
 				+ COLUMN_HOME_LAT + ", " //
 				+ COLUMN_HOME_LON //
@@ -92,12 +95,13 @@ public class UserDataSource {
 							cursor.getInt(0), //
 							cursor.getString(1), //
 							cursor.getString(2), //
-							extractUUIDs(cursor.getString(3)));
+							extractUUIDs(cursor.getString(3)),
+							extractUUIDs(cursor.getString(4)));
 
-					account.setHomeCordLat(cursor.getString(5));
-					account.setHomeCordLon(cursor.getString(6));
+					account.setHomeCordLat(cursor.getString(6));
+					account.setHomeCordLon(cursor.getString(7));
 
-					final long time = cursor.getLong(4);
+					final long time = cursor.getLong(5);
 					if (time > 0) {
 						account.setLastDataLoaded(new Date(time));
 					}
@@ -178,6 +182,7 @@ public class UserDataSource {
 		values.put(COLUMN_USER_NAME, account.getName());
 		values.put(COLUMN_SECID, account.getGeoKreySecredID());
 		values.put(COLUMN_UUIDS, joinUUIDs(account.getOpenCachingUUIDs()));
+        values.put(COLUMN_OCLOGINS, joinUUIDs(account.getOpenCachingLogins()));
 		values.put(COLUMN_REFRESH, storedLastLoadedDate);
 		values.put(COLUMN_HOME_LAT, account.getHomeCordLat());
 		values.put(COLUMN_HOME_LON, account.getHomeCordLon());
