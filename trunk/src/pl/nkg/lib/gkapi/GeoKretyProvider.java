@@ -98,7 +98,7 @@ public class GeoKretyProvider {
 
 		final String[][] postData = new String[][] { //
 				new String[] { "secid", log.getSecid() }, //
-				new String[] { "nr", log.getNr() }, //
+				new String[] { "nr", log.getNr().toUpperCase() }, //
 				new String[] { "formname", log.getFormname() }, //
 				new String[] { "logtype", log.getLogType() }, //
 				new String[] { "data", log.getData() }, //
