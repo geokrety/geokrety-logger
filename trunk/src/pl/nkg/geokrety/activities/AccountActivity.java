@@ -180,7 +180,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
     }
 
     public void saveClick(final View view) {
-        if (Utils.isEmpty(User.SECID)) {
+        if (Utils.isEmpty(secid)) {
             Toast.makeText(this, R.string.error_login_null, Toast.LENGTH_LONG).show();
             return;
         }
