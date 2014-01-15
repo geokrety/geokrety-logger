@@ -219,6 +219,10 @@
     <string name="title_activity_about">Über</string>
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="changelog">Change log:\n\n
+        0.5.1 beta - 2014-01-16\n
+        - German translation update, thanks for Schrottie,\n
+        - some fixes,
+        \n
         0.5.0 beta - 2014-01-15\n
         - log submitting in background,\n
         \n

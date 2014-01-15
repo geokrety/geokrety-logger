@@ -105,7 +105,7 @@
     <!-- Inventory Activity -->
     <string name="title_activity_inventory">GeoKrety inventory</string>
     <string name="menu_inventory_refresh">Refresh</string>
-    <string name="inventory_error_message">Inventory retrieving error. Pleas check your Interent connection.</string>
+    <string name="inventory_error_message">Inventory retrieving error. Please check your Interent connection.</string>
     <string name="button_add_geokret">Add manually</string>
     
     <!-- GeoKret Activity -->
@@ -133,7 +133,7 @@
     <!-- OpenCaching last logs Activity -->
     <string name="title_activity_last_ocs">Last log from OpenCaching portals</string>
     <string name="menu_ocs_refresh">Refresh</string>
-    <string name="oclogs_error_message">OpenCaching logs retrieving error. Pleas check your Internet connection.</string>
+    <string name="oclogs_error_message">OpenCaching logs retrieving error. Please check your Internet connection.</string>
     
     <!-- Log GeoKret Activity -->
     <string name="title_activity_log">Log GeoKret</string>
@@ -200,7 +200,7 @@
     <string name="download_finish">Refresh finish</string>
     
     <!-- Global messages -->
-    <string name="error_current_null">Pleas select profile.</string>
+    <string name="error_current_null">Please select profile.</string>
     <string name="login_error_message">Connection error: </string>
     <string name="warning">Some problems:</string>
     <string name="yes">Yes</string>
@@ -215,7 +215,7 @@
     <string name="gps_not_exist">GPS module is not exist in this device</string>
     <string name="gps_not_enabled">GPS is off, please turn on GPS module</string>
     <string name="gps_acquiring">waiting for fix</string>
-    <string name="gps_pleas_wait">Pleas wait for GPS fix</string>
+    <string name="gps_pleas_wait">Please wait for GPS fix</string>
     <string name="gps_fixed">GPS fixed, coords inserted</string>
     
     <!-- Log submitting service -->
@@ -230,6 +230,10 @@
     <string name="title_activity_about">About</string>
     <string name="foot">License: GPL 3.0, <a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.</string>
     <string name="changelog">Change log:\n\n
+        0.5.1 beta - 2014-01-16\n
+        - German translation update, thanks for Schrottie,\n
+        - some fixes,
+        \n
         0.5.0 beta - 2014-01-15\n
         - log submitting in background,\n
         \n
@@ -279,5 +283,5 @@
         0.0.0 alpha - 2013-12-13\n
         - first public version, \n
         - works only with Android 2.1-2.3.x.</string>
-     <string name="release_plans">Pleas visit for release plans:\n<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a></string>
+     <string name="release_plans">Please visit for release plans:\n<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a></string>
 </resources>
