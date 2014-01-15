@@ -37,7 +37,7 @@
     
     <!-- Main Activity -->
     <string name="welcome">GeoKrety Logger is a program to logging of moving of GeoKrets. GeoKrety (<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>) is a similar game to TravelBug(TM) or GeoLutins, aiming at tracking objects you leave in geocache containers (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).</string>
-    <string name="accounts_button">Accounts</string>
+    <string name="accounts_button">Profiles (accounts)</string>
     <string name="button_inventory">Inventory</string>
     <string name="button_ocs">OpenCaching last logs</string>
     <string name="button_log">Log GeoKret</string>
@@ -52,18 +52,18 @@
     <string name="no_account_configured">You must configure account!</string>
     
     <!-- Accounts Activity -->
-    <string name="title_activity_accounts">GeoKrety accounts manager</string>
-    <string name="button_add_account">Add account</string>
+    <string name="title_activity_accounts">GeoKrety profiles manager</string>
+    <string name="button_add_account">Add profile</string>
     <string name="account_edit">Edit</string>
     <string name="account_remove">Remove</string>
-    <string name="accounts_remove_question">Are you sure to remove account </string>
+    <string name="accounts_remove_question">Are you sure to remove profile </string>
     <string-array name="context_menu_account">
         <item>@string/account_edit</item>
         <item>@string/account_remove</item>
     </string-array>
     
     <!-- Account Activity -->
-    <string name="title_activity_account">Account</string>
+    <string name="title_activity_account">Profile</string>
     <string name="account_portals">Choice portals what you use</string>
     <string name="account_account_name_hint">New user</string>
     <string name="account_portal_gk">geokrety.org (required)</string>
@@ -79,8 +79,8 @@
     <string name="account_from_gps">GPS</string>
     <string name="account_save">OK</string>
     <!-- Messages -->
-    <string name="account_save_title">Save account settings?</string>
-    <string name="account_save_message">Account settings changed. Save changes?</string>
+    <string name="account_save_title">Save profile settings?</string>
+    <string name="account_save_message">Profile settings changed. Save changes?</string>
     <string name="download_login_gk">Login to GeoKrety.org&#8230;</string>
     <string name="download_getting_uuid">Getting UUID from</string>
     <string name="dots">&#8230;</string>
@@ -193,14 +193,14 @@
     <string name="log_status_unidentified">Unidentified</string>
     
     <!-- Refresing progress bar -->
-    <string name="download_title">Refreshing user account</string>
+    <string name="download_title">Refreshing user profile</string>
     <string name="download_getting_gk">Getting inventory from GeoKrety.org&#8230;</string>
     <string name="download_getting_ocs">Getting last logs from</string>
     <string name="download_getting_names">Getting geocache names from</string>
     <string name="download_finish">Refresh finish</string>
     
     <!-- Global messages -->
-    <string name="error_current_null">Pleas select account.</string>
+    <string name="error_current_null">Pleas select profile.</string>
     <string name="login_error_message">Connection error: </string>
     <string name="warning">Some problems:</string>
     <string name="yes">Yes</string>

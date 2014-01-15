@@ -28,7 +28,7 @@
     
     <!-- Main Activity -->
     <string name="welcome">GeoKrety Logger ist eine app zum Loggen von Geokrety. GeoKrety (<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>) sind ähnliche wie TravelBug(TM) oder GeoLutins, verfolgbare Objekte die in Geocaches abgelegt werden (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).</string>
-    <string name="accounts_button">Konten</string>
+    <string name="accounts_button">Profil (Konten)</string>
     <string name="button_inventory">Inventar</string>
     <string name="button_ocs">Letzte Opencaching Logs</string>
     <string name="button_log">Log GeoKret</string>
@@ -40,21 +40,21 @@
     <string name="emergency">Sollte die App nicht funktionieren, logge den GeoKret bitte <a href="http://geokrety.org/ruchy.php">direkt auf der Webseite</a>. Anschließend kontaktiere mich bitte über: <a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.</string>
     <string name="help_in_translation">Eine bessere Übersetzung vorschlagen | Suggest a better translation:\n<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a></string>
     <!-- Error messages -->
-    <string name="no_account_configured">Du musst ein Konto einrichten!</string>
+    <string name="no_account_configured">Du musst ein Profil einrichten!</string>
     
     <!-- Accounts Activity -->
-    <string name="title_activity_accounts">GeoKrety Kontomanager</string>
-    <string name="button_add_account">Konto hinzufügen</string>
+    <string name="title_activity_accounts">GeoKrety Profilmanager</string>
+    <string name="button_add_account">Profil hinzufügen</string>
     <string name="account_edit">Bearbeiten</string>
     <string name="account_remove">Entfernen</string>
-    <string name="accounts_remove_question">Soll das Konto wirklich entfernt werden </string>
+    <string name="accounts_remove_question">Soll das Profil wirklich entfernt werden </string>
     <string-array name="context_menu_account">
         <item>@string/account_edit</item>
         <item>@string/account_remove</item>
     </string-array>
     
     <!-- Account Activity -->
-    <string name="title_activity_account">Konto</string>
+    <string name="title_activity_account">Profil</string>
     <string name="account_portals">Wähle die zu nutzenden Portale</string>
     <string name="account_account_name_hint">Benutzer</string>
 	<string name="account_portal_gk">geokrety.org (erforderlich)</string>
@@ -70,7 +70,7 @@
     <string name="account_from_gps">GPS</string>
     <string name="account_save">OK</string>
     <!-- Messages -->
-	<string name="account_save_title">Kontoeinstellungen speichern?</string>
+	<string name="account_save_title">Profileinstellungen speichern?</string>
 	<string name="account_save_message">Einstellungen wurden verändert. Speichern?</string>
     <string name="download_login_gk">Login bei GeoKrety.org&#8230;</string>
     <string name="download_getting_uuid">Hole UUID von</string>
@@ -189,7 +189,7 @@
     <string name="download_finish">Aktualisierung abgeschlossen</string>
     
     <!-- Global messages -->
-    <string name="error_current_null">Bitte Konto auswählen.</string>
+    <string name="error_current_null">Bitte Profil auswählen.</string>
     <string name="login_error_message">Verbindungsfehler: </string>
     <string name="warning">Probleme:</string>
     <string name="yes">Ja</string>
