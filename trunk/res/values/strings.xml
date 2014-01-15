@@ -96,6 +96,7 @@
     <string name="login_error_password_message">Invalid GeoKrety login or password.</string>
     
     <!-- Opencaching account dialog -->
+    <string name="title_dialog_oc">Login to:</string>
     <string name="oc">OC login:</string>
     <string name="oc_hint">OpenCaching login</string>
     <string name="error_oc_null">OpenCaching login can not be empty</string>

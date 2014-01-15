@@ -78,7 +78,7 @@ public class OCDialog extends AlertDialogWrapper {
 	}
 
 	public void show(Serializable arg, String title, String login) {
-		setTitle(getManagedDialogsActivity().getText(R.string.title_dialog_gk)
+		setTitle(getManagedDialogsActivity().getText(R.string.title_dialog_oc)
 				+ " " + title);
 		setOCLogin(login);
 		super.show(arg);

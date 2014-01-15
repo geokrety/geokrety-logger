@@ -50,7 +50,8 @@ public class User {
     public static final String HOME_LON = "homeCordLon";
     public static final String HOME_LAT = "homeCordLat";
 
-    // private static final long EXPIRED = 24 * 60 * 60 * 1000; // TODO: turn off during refresh in bacground
+    // private static final long EXPIRED = 24 * 60 * 60 * 1000; // TODO: turn
+    // off during refresh in bacground
 
     private long id;
     private String name;
@@ -322,6 +323,7 @@ public class User {
         geoKretySecredID = bundle.getString(User.SECID);
         id = bundle.getLong(User.ACCOUNT_ID);
         openCachingUUIDs = bundle.getStringArray(User.OCUUIDS);
+        openCachingLogins = bundle.getStringArray(User.OCLOGINS);
         name = bundle.getString(User.ACCOUNT_NAME);
         homeCordLat = bundle.getString(User.HOME_LAT);
         homeCordLon = bundle.getString(User.HOME_LON);

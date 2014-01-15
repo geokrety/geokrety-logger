@@ -85,6 +85,7 @@
     <string name="login_error_password_message">Zły login lub hasło do GeoKrety.org</string>
     
     <!-- Opencaching account dialog -->
+    <string name="title_dialog_oc">Login do:</string>
     <string name="oc">OC login:</string>
     <string name="oc_hint">OpenCaching login</string>
     <string name="error_oc_null">Nie podałeś loginu do OpenCaching</string>

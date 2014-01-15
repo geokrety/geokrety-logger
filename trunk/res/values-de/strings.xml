@@ -19,18 +19,20 @@
  * along with this source code; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
+ *
+ * Thanks for Schrottie!
  -->
 <resources>
 	<!-- Main -->
     <string name="app_name">GeoKrety Logger</string>
     
     <!-- Main Activity -->
-    <string name="welcome">GeoKrety Logger is a program to logging of moving of GeoKrets. GeoKrety (<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>) is a similar game to TravelBug(TM) or GeoLutins, aiming at tracking objects you leave in geocache containers (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).</string>
+    <string name="welcome">GeoKrety Logger ist eine app zum Loggen von Geokrety. GeoKrety (<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>) sind ähnliche wie TravelBug(TM) oder GeoLutins, verfolgbare Objekte die in Geocaches abgelegt werden (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).</string>
     <string name="accounts_button">Konten</string>
     <string name="button_inventory">Inventar</string>
     <string name="button_ocs">Letzte Opencaching Logs</string>
     <string name="button_log">Log GeoKret</string>
-<!-- need translate --><string name="button_gkl">Saved logs</string>
+    <string name="button_gkl">Gespeicherte Logs</string>
     <string name="button_about">Über</string>
     <string name="version">GeoKrety Logger v</string>
     <string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
@@ -85,6 +87,7 @@
     <string name="login_error_password_message">Ungültiger GeoKrety Login oder Passwort.</string>
     
     <!-- Opencaching account dialog -->
+    <string name="title_dialog_oc">Login für:</string>
     <string name="oc">OC Login:</string>
     <string name="oc_hint">Opencaching Login</string>
     <string name="error_oc_null">Opencaching Login darf nicht leer sein</string>
@@ -138,7 +141,7 @@
     </string-array>
     <string name="form_identify">2. GeoKret identifizieren</string>
     <string name="form_code">Trackingcode</string>
-<!-- need translate --><string name="form_profile">Who? &#8230;</string>
+    <string name="form_profile">Wer? &#8230;</string>
     <string name="form_inventory">Inventar</string>
     <string name="form_location">3. Neuer Ort</string>
     <string name="form_waypoint">Wegpunkt</string>
@@ -149,14 +152,14 @@
     <string name="form_location_description">Bei Angabe eines Wegpunktes sind keine Koordinaten erforderlich, da diese dann durch geokrety.org eingetragen werden.</string>
     <string name="form_additional">4. zusätzliche Daten</string>
     <string name="form_comment">Kommentar</string>
-<!-- need translate --><string name="form_submit_button">Send</string>
-<!-- need translate --><string name="form_save_draft_button">Postpone</string>
-<!-- need translate --><string name="form_remove_button">Delete</string>
+    <string name="form_submit_button">Senden</string>
+    <string name="form_save_draft_button">Entwurf</string>
+    <string name="form_remove_button">Löschen</string>
     <!-- Spinners -->
     <string name="title_dialog_inventory">Dein Inventar</string>
     <string name="title_dialog_ocs">Deine letzten Logs bei Opencaching</string>
     <!-- Messages -->
-<!-- need translate --><string name="form_confirm_delete_msg">Delete this log entry?</string>
+    <string name="form_confirm_delete_msg">Diesen Logeintrag löschen?</string>
     <string name="warning_already_logged">Es existiert bereits ein Eintrag mit diesem Zeitstempel. Bitte korrigiere Datum und Uhrzeit..</string>
     <!-- Log submitting -->
     <string name="submit_title">Übertrage Log</string>
@@ -166,17 +169,17 @@
     <string name="submit_fail">Übertragungsfehler: </string>
 
     <!-- GeoKretLogs Activity -->
-<!-- need translate --><string name="title_activity_geokretlogs">GeoKret logs</string>
-<!-- need translate --><string name="row_log_icon_contentDescription">Log type</string>
-<!-- need translate --><string name="row_log_statusLabel">Status:</string>
-<!-- need translate --><string name="row_log_profileLabel">User:</string>
-<!-- need translate --><string name="log_status_draft">Draft</string>
-<!-- need translate --><string name="log_status_new">New</string>
-<!-- need translate --><string name="log_status_double">Duplicated</string>
-<!-- need translate --><string name="log_status_problem">Error</string>
-<!-- need translate --><string name="log_status_success">Success</string>
-<!-- need translate --><string name="log_status_queue">Queue</string>
-<!-- need translate --><string name="log_status_unidentified">Unidentified</string>
+    <string name="title_activity_geokretlogs">GeoKret Logs</string>
+    <string name="row_log_icon_contentDescription">Logtyp</string>
+    <string name="row_log_statusLabel">Status:</string>
+    <string name="row_log_profileLabel">Benutzer:</string>
+    <string name="log_status_draft">Entwurf</string>
+    <string name="log_status_new">Neu</string>
+    <string name="log_status_double">Duplikat</string>
+    <string name="log_status_problem">Fehler</string>
+    <string name="log_status_success">Erledigt</string>
+    <string name="log_status_queue">Queue</string>
+    <string name="log_status_unidentified">Unbekannt</string>
     
     <!-- Refresing progress bar -->
     <string name="download_title">Aktualisieren</string>
@@ -205,12 +208,12 @@
 	<string name="gps_fixed">Position bestimmt, Koordinaten eingefügt</string>
     
 	<!-- Log submitting service -->
-<!-- need translate --><string name="message_do_submitting">Log submitting in background&#8230;</string>
-<!-- need translate --><string name="message_draft_saved">Log saved in drafts&#8230;</string>
-<!-- need translate --><string name="message_submitting">Submitting log&#8230;</string>
-<!-- need translate --><string name="message_submit_success">Submitting log successful</string>
-<!-- need translate --><string name="message_submit_problem">geokrety.org reject the submission</string>
-<!-- need translate --><string name="message_submit_no_connection">Connection error, trying again&#8230;</string>
+    <string name="message_do_submitting">Logs werden im Hintergrund übertragen&#8230;</string>
+    <string name="message_draft_saved">Log in Entwürfe gespeichert&#8230;</string>
+    <string name="message_submitting">Übertrage Log&#8230;</string>
+    <string name="message_submit_success">Logübertragung abgeschlossen</string>
+    <string name="message_submit_problem">geokrety.org hat die Übertragung abgewiesen</string>
+    <string name="message_submit_no_connection">Verbindungsfehler, noch einmal versuchen&#8230;</string>
 	
     <!-- About Activity -->
     <string name="title_activity_about">Über</string>
@@ -265,5 +268,5 @@
         0.0.0 alpha - 2013-12-13\n
         - first public version, \n
         - works only with Android 2.1-2.3.x.</string>
-<!-- need translate --><string name="release_plans">Pleas visit for release plans:\n<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a></string>
+    <string name="release_plans">Mehr Infos zu kommenden Versionen:\n<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a></string>
 </resources>
