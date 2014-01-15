@@ -79,9 +79,22 @@ public class RefreshAccount extends
 	@Override
 	protected String runInBackground(Thread thread, User param)
 			throws Throwable {
-		User account = param;
-		StringBuilder report = new StringBuilder();
-		StateHolder holder = ((GeoKretyApplication) getApplication())
+        StringBuilder report = new StringBuilder();
+        StateHolder holder = ((GeoKretyApplication) getApplication())
+                .getStateHolder();
+		//User account = param;
+        // TODO: refactor in 0.6.0
+        for (User user : holder.getAccountList()) {
+            if (!refreshProfile(thread, report, user)) {
+                return "";
+            }
+        }
+		return report.toString();
+	}
+
+    private boolean refreshProfile(Thread thread, StringBuilder report, User account)
+            throws MessagedException {
+        StateHolder holder = ((GeoKretyApplication) getApplication())
 				.getStateHolder();
 
 		try {
@@ -111,7 +124,7 @@ public class RefreshAccount extends
 				}
 
 				if (thread.isCancelled()) {
-					return "";
+					return false;
 				}
 
 				publishProgress(getProgressMessage(2) + " "
@@ -121,13 +134,13 @@ public class RefreshAccount extends
 		}
 
 		if (thread.isCancelled()) {
-			return "";
+			return false;
 		}
 
 		holder.storeGeoCachingNames();
 		account.setOpenCachingLogs(holder.getGeocacheLogDataSource().load(
 				account.getID()));
 		account.touchLastLoadedDate(holder.getAccountDataSource());
-		return report.toString();
-	}
+		return true;
+    }
 }
