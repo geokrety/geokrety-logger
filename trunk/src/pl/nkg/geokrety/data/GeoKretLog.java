@@ -100,7 +100,7 @@ public class GeoKretLog {
 			latlon = savedInstanceState.getString(LATLON);
 			wpt = savedInstanceState.getString(WAYPOINT);
 
-			accoundID = savedInstanceState.getInt(ACCOUNT_ID);
+			accoundID = savedInstanceState.getLong(ACCOUNT_ID);
 		}
 	}
 
