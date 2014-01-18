@@ -1,7 +1,7 @@
 /*
  * Copyright (C) 2014 Michał Niedźwiecki
  * 
- * This file is part of GeoKrety Logger
+ * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
  * 
  * GeoKrety Logger is free software; you can redistribute it and/or modify
