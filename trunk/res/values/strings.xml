@@ -39,7 +39,7 @@
 	<string name="welcome">GeoKrety Logger is a program to assist in the logging or moving of GeoKrets. GeoKrety\'s 
 		(<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>)
 		are similar to a TravelBug(TM) or GeoLutins, their purpose being to track objects you leave in
-		geocache containers. 
+		geocache containers
 		(<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).
 	</string>
 	<string name="accounts_button">Profiles (accounts)</string>
