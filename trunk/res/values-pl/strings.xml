@@ -2,7 +2,7 @@
 <!--
  * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
- * This file is part of GeoKrety Logger
+ * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
  * 
  * GeoKrety Logger is free software; you can redistribute it and/or modify
@@ -250,6 +250,9 @@
 		niezgodnie z przeznaczeniem.
 	</string>
 	<string name="changelog">Historia zmian:\n
+		0.5.3 beta - 2014-01-18\n
+		- aktualizacja angielskiego tłumaczenia z podziękowaniem dla Mr.Yuck\n
+		\n
 		0.5.2 beta - 2014-01-17\n
 		- drobne poprawki\n
 		\n
