@@ -34,7 +34,7 @@ import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
-import pl.nkg.geokrety.data.Geokret;
+import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.RemoveLogDialog;
@@ -126,9 +126,9 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
                 break;
 
             case Dialogs.INVENTORY_SPINNERDIALOG:
-                final Geokret kret = (Geokret) inventorySpinnerDialog.getAdapter()
+                final GeoKret kret = (GeoKret) inventorySpinnerDialog.getAdapter()
                         .getItem(buttonId);
-                trackingCodeEditText.setText(kret.getTackingCode());
+                trackingCodeEditText.setText(kret.getTrackingCode());
                 break;
 
             case Dialogs.OCS_SPINNERDIALOG:
@@ -223,8 +223,8 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 
     public void showInventory(final View view) {
         if (updateSpinners()) {
-            inventorySpinnerDialog.show(null,
-                    currentAccount.getTrackingCodeIndex(trackingCodeEditText.getText().toString()));
+            // FIXME:
+            //inventorySpinnerDialog.show(null, currentAccount.getTrackingCodeIndex(trackingCodeEditText.getText().toString()));
         }
     }
 
@@ -248,8 +248,8 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
     }
 
     private void configAdapters() {
-        inventorySpinnerDialog.setAdapter(new ArrayAdapter<Geokret>(this,
-                android.R.layout.simple_list_item_single_choice, currentAccount.getInventory()));
+        // FIXME:
+        //inventorySpinnerDialog.setAdapter(new ArrayAdapter<GeoKret>(this, android.R.layout.simple_list_item_single_choice, currentAccount.getInventory()));
 
         ocsSpinnerDialog.setAdapter(new ArrayAdapter<GeocacheLog>(this,
                 android.R.layout.simple_list_item_single_choice, currentAccount

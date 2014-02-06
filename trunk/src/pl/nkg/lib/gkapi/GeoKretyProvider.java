@@ -32,7 +32,7 @@ import org.w3c.dom.NodeList;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKretLog;
-import pl.nkg.geokrety.data.Geokret;
+import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import android.text.TextUtils;
 
@@ -51,8 +51,8 @@ public class GeoKretyProvider {
 		return logtype_mapped == 1 || logtype_mapped == 4;
 	}
 
-	public static Map<String, Geokret> loadInventory(final String geoKretySecredID) throws MessagedException {
-		final HashMap<String, Geokret> inventory = new HashMap<String, Geokret>();
+	public static Map<String, GeoKret> loadInventory(final String geoKretySecredID) throws MessagedException {
+		final HashMap<String, GeoKret> inventory = new HashMap<String, GeoKret>();
 
 		final String[][] getData = new String[][] { //
 				new String[] { "secid", geoKretySecredID }, //
@@ -65,8 +65,8 @@ public class GeoKretyProvider {
 
 			for (int i = 0; i < nl.getLength(); i++) {
 				final Node node = nl.item(i);
-				final Geokret geokret = new Geokret(node);
-				inventory.put(geokret.getTackingCode(), geokret);
+				final GeoKret geokret = new GeoKret(node);
+				inventory.put(geokret.getTrackingCode(), geokret);
 			}
 			return inventory;
 		} catch (final Exception e) {

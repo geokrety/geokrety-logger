@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.data;
 
 import java.util.Collection;
@@ -26,169 +27,173 @@ import java.util.LinkedList;
 import java.util.List;
 
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.SparseArray;
 
 public class InventoryDataSource {
 
-	public static final String TABLE = "inventory";
-	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
-	public static final String COLUMN_GK_CODE = "geokret_code"; // id
-	public static final String COLUMN_DISTANCE = "dist";
-	public static final String COLUMN_OWNER_ID = "owner_id";
-	public static final String COLUMN_STATE = "state";
-	public static final String COLUMN_TYPE = "type";
-	public static final String COLUMN_NAME = "name";
-	public static final String COLUMN_TRACKING_CODE = "tracking_code"; // nr
-	public static final String COLUMN_USER_ID = "user_id";
-	public static final String COLUMN_STICKY = "sticky";
+    public static final String TABLE = "inventory";
+    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
+    public static final String COLUMN_TRACKING_CODE = "tracking_code"; // nr
+    public static final String COLUMN_USER_ID = "user_id";
+    public static final String COLUMN_STICKY = "sticky";
 
-	public static final String TABLE_CREATE = "CREATE TABLE " + TABLE + "(" //
-			+ COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
-			+ COLUMN_GK_CODE + " INTEGER NOT NULL, " //
-			+ COLUMN_DISTANCE + " INTEGER NOT NULL, " //
-			+ COLUMN_OWNER_ID + " INTEGER NOT NULL, " //
-			+ COLUMN_STATE + " INTEGER, " //
-			+ COLUMN_TYPE + " INTEGER NOT NULL, " //
-			+ COLUMN_NAME + " TEXT NOT NULL, " //
-			+ COLUMN_TRACKING_CODE + " TEXT NOT NULL, " //
-			+ COLUMN_USER_ID + " INTEGER NOT NULL, " //
-			+ COLUMN_STICKY + " INTEGER NOT NULL DEFAULT 0" //
-			+ "); ";
+    public static final String TABLE_CREATE = "CREATE TABLE " + TABLE + "(" //
+            + COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
+            + COLUMN_TRACKING_CODE + " TEXT NOT NULL, " //
+            + COLUMN_USER_ID + " INTEGER NOT NULL, " //
+            + COLUMN_STICKY + " INTEGER NOT NULL DEFAULT 0" //
+            + "); ";
 
-	private GeoKretySQLiteHelper dbHelper;
+    public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
+        return db.rawQuery(FETCH_BY_USER, new String[] {
+                String.valueOf(userID)
+        });
+    }
 
-	private static final String FETCH_ALL = "SELECT " //
-			+ COLUMN_GK_CODE + ", " //
-			+ COLUMN_DISTANCE + ", " //
-			+ COLUMN_OWNER_ID + ", " //
-			+ COLUMN_STATE + ", " //
-			+ COLUMN_TYPE + ", " //
-			+ COLUMN_NAME + ", " //
-			+ COLUMN_TRACKING_CODE + ", " //
-			+ COLUMN_USER_ID + ", " //
-			+ COLUMN_STICKY //
-			+ " FROM " //
-			+ TABLE + " ORDER BY " + COLUMN_NAME;
+    private final GeoKretySQLiteHelper dbHelper;
 
-	private static final String FETCH_BY_USER = "SELECT " //
-			+ COLUMN_GK_CODE
-			+ ", " //
-			+ COLUMN_DISTANCE
-			+ ", " //
-			+ COLUMN_OWNER_ID
-			+ ", " //
-			+ COLUMN_STATE
-			+ ", " //
-			+ COLUMN_TYPE
-			+ ", " //
-			+ COLUMN_NAME
-			+ ", " //
-			+ COLUMN_TRACKING_CODE
-			+ ", " //
-			+ COLUMN_USER_ID
-			+ ", " //
-			+ COLUMN_STICKY //
-			+ " FROM " //
-			+ TABLE + " WHERE " + COLUMN_USER_ID
-			+ " = ? ORDER BY "
-			+ COLUMN_NAME;
+    private static final String PREFIX_FETCH_BY = "SELECT " //
+            + "i." + COLUMN_ID + " AS " + COLUMN_ID
+            + ", " //
+            + "i." + COLUMN_TRACKING_CODE
+            + ", " //
+            + "i." + COLUMN_STICKY
+            + ", " //
+            + "g." + GeoKretDataSource.COLUMN_GK_CODE
+            + ", " //
+            + "g." + GeoKretDataSource.COLUMN_DISTANCE
+            + ", " //
+            + "g." + GeoKretDataSource.COLUMN_OWNER_ID
+            + ", " //
+            + "g." + GeoKretDataSource.COLUMN_STATE
+            + ", " //
+            + "g." + GeoKretDataSource.COLUMN_TYPE
+            + ", " //
+            + "g." + GeoKretDataSource.COLUMN_NAME
+            + ", " //
+            + "g." + GeoKretDataSource.COLUMN_SYNCHRO_STATE
+            + "," //
+            + "g."
+            + GeoKretDataSource.COLUMN_SYNCHRO_ERROR //
+            + " FROM " + TABLE
+            + " AS i" //
+            + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i." + COLUMN_TRACKING_CODE
+            + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE;
 
-	public InventoryDataSource(GeoKretySQLiteHelper dbHelper) {
-		this.dbHelper = dbHelper;
-	}
+    private static final String FETCH_BY_USER = PREFIX_FETCH_BY +  " WHERE i." + COLUMN_USER_ID + " = ? ORDER BY g." + GeoKretDataSource.COLUMN_NAME;
+    private static final String FETCH_BY_ID = PREFIX_FETCH_BY +  " WHERE i." + COLUMN_ID + " = ? ";
+    
+    private static ContentValues getValues(final GeoKret geokret, final long userID) {
+        final ContentValues values = new ContentValues();
+        values.put(COLUMN_TRACKING_CODE, geokret.getTrackingCode());
+        values.put(COLUMN_USER_ID, userID);
+        values.put(COLUMN_STICKY, geokret.isSticky());
+        return values;
+    }
 
-	private static ContentValues getValues(Geokret geokret, long userID) {
-		ContentValues values = new ContentValues();
-		values.put(COLUMN_GK_CODE, geokret.getID());
-		values.put(COLUMN_DISTANCE, geokret.getDist());
-		values.put(COLUMN_OWNER_ID, geokret.getOwnerID());
-		values.put(COLUMN_STATE, geokret.getState());
-		values.put(COLUMN_TYPE, geokret.getType());
-		values.put(COLUMN_NAME, geokret.getName());
-		values.put(COLUMN_TRACKING_CODE, geokret.getTackingCode());
-		values.put(COLUMN_USER_ID, userID);
-		values.put(COLUMN_STICKY, geokret.isSticky());
-		return values;
-	}
+    public InventoryDataSource(final GeoKretySQLiteHelper dbHelper) {
+        this.dbHelper = dbHelper;
+    }
 
-	public void store(final Collection<Geokret> logs, final long userID) {
-		dbHelper.runOnWritableDatabase(new DBOperation() {
+    public List<String> loadStickyList(final long userId) {
+        final LinkedList<String> gks = new LinkedList<String>();
+        dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
 
-			@Override
-			public boolean inTransaction(SQLiteDatabase db) {
-				remove(db, //
-						TABLE, //
-						COLUMN_USER_ID + " = ?", //
-						String.valueOf(userID));
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                final Cursor cursor = db.query(TABLE, new String[] {
+                        COLUMN_TRACKING_CODE
+                }, COLUMN_STICKY + " != 0 AND " + COLUMN_USER_ID + " = ?", new String[] {
+                        Long.toString(userId)
+                }, null, null, null);
+                while (cursor.moveToNext()) {
+                    gks.add(cursor.getString(0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return gks;
+    }
 
-				LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
-				for (Geokret log : logs) {
-					cv.add(getValues(log, userID));
-				}
-				persistAll(db, TABLE, cv);
-				return true;
-			}
-		});
-	}
+    public void storeInventory(final Collection<GeoKret> geoKretList, final long userId,
+            final boolean removeNoSticky, final String... trackingCodesToRemove) {
+        dbHelper.runOnWritableDatabase(new DBOperation() {
 
-	public SparseArray<LinkedList<Geokret>> load() {
-		final SparseArray<LinkedList<Geokret>> gks = new SparseArray<LinkedList<Geokret>>();
-		dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                if (removeNoSticky) {
+                    remove(db,
+                            TABLE,
+                            COLUMN_USER_ID + " = ? AND " + COLUMN_STICKY + " = 0",
+                            String.valueOf(userId));
+                }
+                
+                for (String trackingCodeToRemove : trackingCodesToRemove) {
+                    remove(db,
+                            TABLE,
+                            COLUMN_USER_ID + " = ? AND " + COLUMN_TRACKING_CODE + " = ?",
+                            String.valueOf(userId), trackingCodeToRemove);
+                }
+                
+                final LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
+                for (final GeoKret geoKret : geoKretList) {
+                    remove(db,
+                            TABLE,
+                            COLUMN_USER_ID + " = ? AND " + COLUMN_TRACKING_CODE + " = ?",
+                            String.valueOf(userId), geoKret.getTrackingCode());
+                    cv.add(getValues(geoKret, userId));
+                }
+                persistAll(db, TABLE, cv);
+                return true;
+            }
+        });
+    }
 
-			@Override
-			public boolean inTransaction(SQLiteDatabase db) {
-				Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
-				while (cursor.moveToNext()) {
-					Geokret gk = new Geokret(cursor.getInt(0), //
-							cursor.getInt(1), //
-							cursor.getInt(2), //
-							cursor.getInt(3), //
-							cursor.getInt(4), //
-							cursor.getString(5), //
-							cursor.getString(6), //
-							cursor.getInt(8) > 0);
-					int userID = cursor.getInt(7);
-					LinkedList<Geokret> list = gks.get(userID);
-					if (list == null) {
-						list = new LinkedList<Geokret>();
-						gks.put(userID, list);
-					}
-					list.add(gk);
-				}
-				cursor.close();
-				return true;
-			}
-		});
-		return gks;
-	}
+    public List<String> loadNeedUpdateList() {
+        final LinkedList<String> gks = new LinkedList<String>();
+        dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
 
-	public List<Geokret> load(final long userID) {
-		final LinkedList<Geokret> gks = new LinkedList<Geokret>();
-		dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                final Cursor cursor = db.rawQuery("SELECT i." + COLUMN_TRACKING_CODE
+                        + " FROM " + TABLE
+                        + " AS i"
+                        + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i."
+                        + COLUMN_TRACKING_CODE
+                        + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE
+                        + " WHERE g." + GeoKretDataSource.COLUMN_SYNCHRO_ERROR + " IS NULL OR g."
+                        + GeoKretDataSource.COLUMN_SYNCHRO_STATE + " < 1", null);
 
-			@Override
-			public boolean inTransaction(SQLiteDatabase db) {
-				Cursor cursor = db.rawQuery(FETCH_BY_USER,
-						new String[] { String.valueOf(userID) });
-				while (cursor.moveToNext()) {
-					Geokret gk = new Geokret(cursor.getInt(0), //
-							cursor.getInt(1), //
-							cursor.getInt(2), //
-							cursor.getInt(3), //
-							cursor.getInt(4), //
-							cursor.getString(5), //
-							cursor.getString(6), //
-							cursor.getInt(8) > 0);
-					gks.add(gk);
-				}
-				cursor.close();
-				return true;
-			}
-		});
-		return gks;
-	}
+                while (cursor.moveToNext()) {
+                    gks.add(cursor.getString(0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return gks;
+    }
+    
+    public GeoKret loadByID(final long logID) {
+        final LinkedList<GeoKret> geoKretLogs = new LinkedList<GeoKret>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[] {
+                        String.valueOf(logID)
+                });
+                while (cursor.moveToNext()) {
+                    geoKretLogs.add(new GeoKret(cursor));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return geoKretLogs.isEmpty() ? null : geoKretLogs.getFirst();
+    }
 }

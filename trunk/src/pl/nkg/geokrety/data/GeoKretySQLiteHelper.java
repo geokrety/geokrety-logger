@@ -81,7 +81,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 	public static final String	COLUMNT_ID			= "_id";
 	private static final String	DATABASE_NAME		= "geokrety.db";
 
-	private static final int	DATABASE_VERSION	= 6;
+	private static final int	DATABASE_VERSION	= 7;
 
 	private final AtomicInteger	openCounter;
 	private SQLiteDatabase		dataBase;
@@ -106,6 +106,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(GeocacheDataSource.TABLE_CREATE);
 		db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
 		db.execSQL(InventoryDataSource.TABLE_CREATE);
+		db.execSQL(GeoKretDataSource.TABLE_CREATE);
 	}
 
 	@Override
@@ -117,6 +118,17 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 			db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
 			db.execSQL(InventoryDataSource.TABLE_CREATE);
 			importUsersFromOlderThan6(db, oldVersion);
+		}
+		
+		if (oldVersion <= 6) {
+		    db.execSQL(GeoKretDataSource.TABLE_CREATE);
+		    // FIXME: must be tested
+		    db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN geokret_code");
+            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN dist");
+            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN owner_id");
+            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN state");
+            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN type");
+            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN name");
 		}
 	}
 

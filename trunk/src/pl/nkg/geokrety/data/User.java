@@ -63,8 +63,8 @@ public class User {
     @Deprecated
     private List<GeocacheLog> openCachingLogs;
 
-    @Deprecated
-    private List<Geokret> inventory;
+    //@Deprecated
+    //private List<GeoKret> inventory;
     // private List<GeoKretLog> geoKretLogs;
 
     private Date lastDataLoaded;
@@ -99,14 +99,14 @@ public class User {
                       // implementation
     }
 
-    public Geokret getGeoKretByTrackingCode(final String trackingCode) {
-        for (final Geokret gk : getInventory()) {
-            if (gk.getTackingCode().equals(trackingCode)) {
+    /*public GeoKret getGeoKretByTrackingCode(final String trackingCode) {
+        for (final GeoKret gk : getInventory()) {
+            if (gk.getTrackingCode().equals(trackingCode)) {
                 return gk;
             }
         }
         return null;
-    }
+    }*/
 
     /*
      * public List<GeoKretLog> getGeoKretyLogs() { return geoKretLogs; }
@@ -128,13 +128,13 @@ public class User {
         return id;
     }
 
-    @Deprecated
-    public List<Geokret> getInventory() {
+    /*@Deprecated
+    public List<GeoKret> getInventory() {
         if (inventory == null) {
-            inventory = new ArrayList<Geokret>();
+            inventory = new ArrayList<GeoKret>();
         }
         return inventory;
-    }
+    }*/
 
     public Date getLastDataLoaded() {
         return lastDataLoaded;
@@ -156,16 +156,16 @@ public class User {
         return openCachingUUIDs;
     }
 
-    public int getTrackingCodeIndex(final String trackingCode) {
+    /*public int getTrackingCodeIndex(final String trackingCode) {
         int pos = 0;
-        for (final Geokret g : getInventory()) {
-            if (g.getTackingCode().equalsIgnoreCase(trackingCode)) {
+        for (final GeoKret g : getInventory()) {
+            if (g.getTrackingCode().equalsIgnoreCase(trackingCode)) {
                 return pos;
             }
             pos++;
         }
         return AdapterView.INVALID_POSITION;
-    }
+    }*/
 
     private HashSet<String> getUnbufferedCacheCodes(final Collection<GeocacheLog> openCachingLogs) {
         final HashSet<String> caches = new HashSet<String>();
@@ -209,35 +209,25 @@ public class User {
         }
     }
 
+    @Deprecated
     public void loadInventoryAndStore(final ICancelable cancelable,
-            final InventoryDataSource dataSource) throws MessagedException {
+            final InventoryDataSource dataSource, final GeoKretDataSource gkDataSource) throws MessagedException {
 
-        final Map<String, Geokret> gkMap = GeoKretyProvider.loadInventory(geoKretySecredID);
+        final Map<String, GeoKret> gkMap = GeoKretyProvider.loadInventory(geoKretySecredID);
 
         if (cancelable.isCancelled()) {
             return;
         }
-
-        // merge with stickys
-        for (final Geokret geokret : new LinkedList<Geokret>(getInventory())) {
-            if (geokret.isSticky()) {
-                final Geokret gk2 = gkMap.get(geokret.getTackingCode());
-                if (gk2 == null) {
-                    gkMap.put(geokret.getTackingCode(), geokret);
-                } else {
-                    gk2.setSticky(true);
-                }
+        
+        HashSet<String> sticky = new HashSet<String>(dataSource.loadStickyList(id));
+        for (GeoKret gk : gkMap.values()) {
+            if (sticky.contains(gk.getTrackingCode())) {
+                gk.setSticky(true);
             }
         }
 
-        final ArrayList<Geokret> afterMerge = new ArrayList<Geokret>(gkMap.size());
-
-        for (final Geokret geokret : gkMap.values()) {
-            afterMerge.add(geokret);
-        }
-
-        dataSource.store(afterMerge, getID());
-        setInventory(dataSource.load(getID()));
+        dataSource.storeInventory(gkMap.values(), getID(), true);
+        gkDataSource.update(gkMap.values());
     }
 
     public void loadOCnamesToBuffer(final ICancelable cancelable,
@@ -291,10 +281,10 @@ public class User {
         this.id = id;
     }
 
-    @Deprecated
-    public void setInventory(final List<Geokret> gks) {
+    /*@Deprecated
+    public void setInventory(final List<GeoKret> gks) {
         inventory = gks;
-    }
+    }*/
 
     public void setLastDataLoaded(final Date lastDataLoaded) {
         this.lastDataLoaded = lastDataLoaded;

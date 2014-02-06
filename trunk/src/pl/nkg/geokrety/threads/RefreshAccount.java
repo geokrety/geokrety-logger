@@ -99,7 +99,7 @@ public class RefreshAccount extends
 
 		try {
 			publishProgress(getProgressMessage(0));
-			account.loadInventoryAndStore(thread, holder.getGeoKretDataSource());
+			account.loadInventoryAndStore(thread, holder.getInventoryDataSource(), holder.getGeoKretDataSource());
 
 		} catch (MessagedException e) {
 			report.append("\n");

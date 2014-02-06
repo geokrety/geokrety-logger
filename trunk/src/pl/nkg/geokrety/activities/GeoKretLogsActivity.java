@@ -33,6 +33,7 @@ import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.services.LogSubmitterService;
+import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
@@ -59,15 +60,10 @@ import android.widget.TextView;
 public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         AdapterView.OnItemSelectedListener, OnItemClickListener {
 
-    private class Adapter extends CursorAdapter {
-
-        private final int layout;
-        private final LayoutInflater inflater;
+    private class Adapter extends ExtendedCursorAdapter {
 
         public Adapter(final Context context, final Cursor c, final boolean autoRequery) {
-            super(context, c, true);
-            layout = R.layout.row_log;
-            inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            super(context, c, true, R.layout.row_log);
         }
 
         @Override
@@ -89,11 +85,6 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
                 bindTextView(view, R.id.profileContentTextView, formatProfileName(log));
                 bindTextView(view, R.id.statusContentTextView, formatStatus(log));
             }
-        }
-
-        @Override
-        public View newView(final Context context, final Cursor cursor, final ViewGroup parent) {
-            return inflater.inflate(layout, parent, false);
         }
 
         private int adjustCacheDrawable(final GeoKretLog log) {
@@ -131,10 +122,6 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
                     .getLogTypeMapped()] : LOG_TYPE_ICON_MAP_GK[log.getLogTypeMapped()];
             ((ImageView) view.findViewById(android.R.id.icon)).setImageDrawable(getResources()
                     .getDrawable(drawable));
-        }
-
-        private void bindTextView(final View view, final int id, final CharSequence content) {
-            ((TextView) view.findViewById(id)).setText(content);
         }
 
         private boolean checkHumanGeokret(final GeoKretLog log) {

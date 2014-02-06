@@ -53,7 +53,8 @@ public class StateHolder {
 	private int							defaultAccount;
 	private final UserDataSource		accountDataSource;
 	private final GeocacheLogDataSource	geocacheLogDataSource;
-	private final InventoryDataSource		geoKretDataSource;
+	private final InventoryDataSource		inventoryDataSource;
+	private final GeoKretDataSource      geoKretDataSource;
 
 	private final GeocacheDataSource	geocacheDataSource;
 
@@ -68,7 +69,8 @@ public class StateHolder {
 		dbHelper = new GeoKretySQLiteHelper(context);
 		accountDataSource = new UserDataSource(dbHelper);
 		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
-		geoKretDataSource = new InventoryDataSource(dbHelper);
+		inventoryDataSource = new InventoryDataSource(dbHelper);
+		geoKretDataSource = new GeoKretDataSource(dbHelper);
 		geocacheDataSource = new GeocacheDataSource(dbHelper);
 		geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
 
@@ -79,13 +81,13 @@ public class StateHolder {
 			geoCachesMap.put(gc.getCode(), gc);
 		}
 
-		final SparseArray<LinkedList<Geokret>> gks = geoKretDataSource.load();
+		//final SparseArray<LinkedList<GeoKret>> gks = inventoryDataSource.load();
 		final SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
 		//final SparseArray<LinkedList<GeoKretLog>> geoKretLogs = geoKretLogDataSource.load();
 
 		for (final User account : accountList) {
 			account.setOpenCachingLogs(logs.get((int)account.getID()));
-			account.setInventory(gks.get((int)account.getID()));
+			//account.setInventory(gks.get((int)account.getID()));
 			//account.setGeoKretyLogs(geoKretLogs.get(account.getID()));
 		}
 	}
@@ -135,10 +137,14 @@ public class StateHolder {
 		return geocacheLogDataSource;
 	}
 
-	public InventoryDataSource getGeoKretDataSource() {
-		return geoKretDataSource;
+	public InventoryDataSource getInventoryDataSource() {
+		return inventoryDataSource;
 	}
 
+    public GeoKretDataSource getGeoKretDataSource() {
+        return geoKretDataSource;
+    }
+	
 	public GeoKretLogDataSource getGeoKretLogDataSource() {
 		return geoKretLogDataSource;
 	}
