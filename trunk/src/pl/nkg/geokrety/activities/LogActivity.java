@@ -29,6 +29,7 @@ import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
+import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
@@ -40,6 +41,7 @@ import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.RemoveLogDialog;
 import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.geokrety.threads.RefreshAccount;
+import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
@@ -48,8 +50,10 @@ import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
 import pl.nkg.lib.location.GPSAcquirer;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
@@ -63,7 +67,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LogActivity extends ManagedDialogsActivity implements LocationListener {
+public class LogActivity extends AbstractGeoKretyActivity implements LocationListener {
 
     private GenericProgressDialogWrapper refreshProgressDialog;
     // private GenericProgressDialogWrapper logProgressDialog;
@@ -126,8 +130,8 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
                 break;
 
             case Dialogs.INVENTORY_SPINNERDIALOG:
-                final GeoKret kret = (GeoKret) inventorySpinnerDialog.getAdapter()
-                        .getItem(buttonId);
+                final GeoKret kret = new GeoKret((Cursor)inventorySpinnerDialog.getAdapter()
+                        .getItem(buttonId));
                 trackingCodeEditText.setText(kret.getTrackingCode());
                 break;
 
@@ -223,8 +227,18 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
 
     public void showInventory(final View view) {
         if (updateSpinners()) {
-            // FIXME:
-            //inventorySpinnerDialog.show(null, currentAccount.getTrackingCodeIndex(trackingCodeEditText.getText().toString()));
+            inventoryCursor.moveToFirst();
+            int pos = -1;
+            int i = 0;
+            String tc = trackingCodeEditText.getText().toString();
+            while (inventoryCursor.moveToNext()) {
+                if (tc.contains(new GeoKret(inventoryCursor).getTrackingCode())) {
+                    pos = i;
+                    break;
+                }
+                i++;
+            }
+            inventorySpinnerDialog.show(null, pos);
         }
     }
 
@@ -246,10 +260,29 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
         }
         return true;
     }
+    
+    private class InventoryAdapter extends ExtendedCursorAdapter {
 
+        public InventoryAdapter(final Context context, final Cursor c, final boolean autoRequery) {
+            super(context, c, true, android.R.layout.simple_list_item_single_choice);
+        }
+
+        @Override
+        public void bindView(final View view, final Context context, final Cursor cursor) {
+            final GeoKret gk = new GeoKret(cursor);
+            bindTextView(view, android.R.id.text1, gk.toString());
+        }
+    }
+
+    private Cursor inventoryCursor;
     private void configAdapters() {
-        // FIXME:
-        //inventorySpinnerDialog.setAdapter(new ArrayAdapter<GeoKret>(this, android.R.layout.simple_list_item_single_choice, currentAccount.getInventory()));
+        // FIXME: not work after rotate, please back to ArrayAdapter
+        closeCursorIfOpened(inventoryCursor);
+        inventoryCursor = InventoryDataSource
+                .createLoadByUserIDCurosr(database, currentAccount.getID());
+        registerOpenedCursor(inventoryCursor);
+        
+        inventorySpinnerDialog.setAdapter(new InventoryAdapter(this, inventoryCursor, true));
 
         ocsSpinnerDialog.setAdapter(new ArrayAdapter<GeocacheLog>(this,
                 android.R.layout.simple_list_item_single_choice, currentAccount
@@ -331,6 +364,7 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        turnOnDatabaseUse();
         setContentView(R.layout.activity_log);
 
         final Intent intent = getIntent();
@@ -487,10 +521,15 @@ public class LogActivity extends ManagedDialogsActivity implements LocationListe
                 android.R.layout.simple_list_item_single_choice, getResources().getStringArray(
                         R.array.log_array)));
 
-        updateSpinners();
         loadFromGeoKretLog(currentLog);
         logTypeSpinnerDialog.setCheckedItem(currentLogType);
         gpsAcquirer.start();
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateSpinners();
     }
 
     @Override

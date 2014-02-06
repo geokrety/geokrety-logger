@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -60,7 +60,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView;
 
-public class InventoryActivity extends ManagedDialogsActivity implements
+public class InventoryActivity extends AbstractGeoKretyActivity implements
         AdapterView.OnItemSelectedListener, OnItemClickListener {
 
     public final static int ADD_GEOKRET = 1;
@@ -68,7 +68,6 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 
     private User account;
     private RefreshProgressDialog refreshProgressDialog;
-    private GeoKretyApplication application;
     private RefreshAccount refreshAccount;
 
     private class Adapter extends ExtendedCursorAdapter {
@@ -92,35 +91,15 @@ public class InventoryActivity extends ManagedDialogsActivity implements
             } else {
                 bindTextView(view, android.R.id.text2, gk.getName() + " (" + gk.getType() + ")");
             }
-            // bindTextView(view, R.id.commentTextView, log.getComment());
-            /*
-             * if (log.getState() == GeoKretLog.STATE_PROBLEM) {
-             * view.findViewById
-             * (R.id.errorTextView).setVisibility(View.VISIBLE);
-             * view.findViewById
-             * (R.id.logDescriptionLinearLayout).setVisibility(View.GONE);
-             * bindTextView(view, R.id.errorTextView, formatErrorMessage(log));
-             * } else {
-             * view.findViewById(R.id.errorTextView).setVisibility(View.GONE);
-             * view
-             * .findViewById(R.id.logDescriptionLinearLayout).setVisibility(View
-             * .VISIBLE); bindCacheCode(view, log); bindTextView(view,
-             * R.id.cacheNameTextView, formatCacheName(log)); bindTextView(view,
-             * R.id.profileContentTextView, formatProfileName(log));
-             * bindTextView(view, R.id.statusContentTextView,
-             * formatStatus(log)); }
-             */
         }
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        StateHolder holder = ((GeoKretyApplication) getApplication())
-                .getStateHolder();
         super.onCreate(savedInstanceState);
+        turnOnDatabaseUse();
         refreshProgressDialog = new RefreshProgressDialog(this);
 
-        application = (GeoKretyApplication) getApplication();
         refreshAccount = RefreshAccount.getFromHandler(application
                 .getForegroundTaskHandler());
 
@@ -128,11 +107,11 @@ public class InventoryActivity extends ManagedDialogsActivity implements
         Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
         spin.setOnItemSelectedListener(this);
         ArrayAdapter<User> aa = new ArrayAdapter<User>(this,
-                android.R.layout.simple_spinner_item, holder.getAccountList());
+                android.R.layout.simple_spinner_item, stateHolder.getAccountList());
 
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spin.setAdapter(aa);
-        spin.setSelection(holder.getDefaultAccountNr());
+        spin.setSelection(stateHolder.getDefaultAccountNr());
 
         ((ListView) findViewById(R.id.inventoryListView)).setOnItemClickListener(this);
     }
@@ -152,25 +131,11 @@ public class InventoryActivity extends ManagedDialogsActivity implements
     }
 
     private Cursor inventoryCursor;
-
-    private void closeCursorIfOpened() {
-        if (inventoryCursor != null) {
-            inventoryCursor.close();
-            inventoryCursor = null;
-        }
-    }
-
     private void refreshListView() {
-        /*
-         * ArrayAdapter<GeoKret> adapter = new ArrayAdapter<GeoKret>(
-         * InventoryActivity.this, android.R.layout.simple_list_item_1,
-         * account.getInventory()); ListView listView = (ListView)
-         * findViewById(R.id.inventoryListView); listView.setAdapter(adapter);
-         */
-        closeCursorIfOpened();
+        closeCursorIfOpened(inventoryCursor);
         inventoryCursor = InventoryDataSource
                 .createLoadByUserIDCurosr(database, account.getID());
-
+        registerOpenedCursor(inventoryCursor);
         final Adapter adapter = new Adapter(this, inventoryCursor, true);
         final ListView listView = (ListView) findViewById(R.id.inventoryListView);
         listView.setAdapter(adapter);
@@ -189,16 +154,12 @@ public class InventoryActivity extends ManagedDialogsActivity implements
         return true;
     }
 
-    private SQLiteDatabase database;
 
     @Override
     protected void onResume() {
         super.onResume();
-        database = application.getStateHolder().getDbHelper().openDatabase();
-        StateHolder holder = ((GeoKretyApplication) getApplication())
-                .getStateHolder();
-        if (holder.getDefaultAccountNr() != ListView.INVALID_POSITION) {
-            account = holder.getAccountList().get(holder.getDefaultAccountNr());
+        if (stateHolder.getDefaultAccountNr() != ListView.INVALID_POSITION) {
+            account = stateHolder.getAccountList().get(stateHolder.getDefaultAccountNr());
             updateListView();
         }
 
@@ -239,13 +200,6 @@ public class InventoryActivity extends ManagedDialogsActivity implements
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        closeCursorIfOpened();
-        ((GeoKretyApplication) getApplication()).getStateHolder().getDbHelper().closeDatabase();
-    }
-
-    @Override
     public void onNothingSelected(AdapterView<?> arg0) {
     }
 
@@ -263,13 +217,9 @@ public class InventoryActivity extends ManagedDialogsActivity implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position,
             long id) {
-        // GeoKret gk = account.getInventory().get(position);
         Intent intent = new Intent(this, GeoKretActivity.class);
         intent.putExtra(GeoKretActivity.USER_ID, account.getID());
         intent.putExtra(InventoryDataSource.COLUMN_ID, id);
-        // intent.putExtra(GeoKretActivity.TRACKING_CODE, gk.getTrackingCode());
-        // intent.putExtra(GeoKretActivity.NAME, gk.getName());
-        // intent.putExtra(GeoKretActivity.STICKY, gk.isSticky());
         startActivityForResult(intent, EDIT_GEOKRET);
     }
 
@@ -290,19 +240,6 @@ public class InventoryActivity extends ManagedDialogsActivity implements
         String oldTrackingCode = ib.getString(GeoKretActivity.TRACKING_CODE_OLD);
         application.getStateHolder().getInventoryDataSource()
                 .storeInventory(gkl, userId, false, oldTrackingCode);
-        // String name = ib.getString(GeoKretActivity.NAME);
-        // boolean sticky = ib.getBoolean(GeoKretActivity.STICKY);
-        // User a = application.getStateHolder().getAccountByID(userId);
-        /*
-         * GeoKret geokret = a.getGeoKretByTrackingCode(oldTrackingCode); if
-         * (Utils.isEmpty(oldTrackingCode) || geokret == null) { geokret = new
-         * GeoKret(0, 0, 0, 0, 0, name, trackingCode, sticky);
-         * a.getInventory().add(geokret); } else { geokret.setSticky(sticky);
-         * geokret.setName(name); geokret.setTrackingCode(trackingCode); }
-         * application
-         * .getStateHolder().getInventoryDataSource().storeInventory(a
-         * .getInventory(), userId);
-         */
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
