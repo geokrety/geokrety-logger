@@ -52,7 +52,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
 	private AlertDialogWrapper saveModifiedsDialog;
 	private boolean modified;
 
-	private int userId;
+	private long userId;
 	private String oldTrackingCode;
 
 	private EditText trackingCodeEditText;
@@ -80,7 +80,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
 
 		Bundle ib = getIntent().getExtras();
 
-		userId = ib.getInt(USER_ID);
+		userId = ib.getLong(USER_ID);
 		oldTrackingCode = ib.getString(TRACKING_CODE);
 		trackingCodeEditText.setText(ib.getString(TRACKING_CODE));
 		nameEditText.setText(ib.getString(NAME));
@@ -126,14 +126,14 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
 
 	@Override
 	protected void onSaveInstanceState(Bundle outState) {
-		outState.putInt(USER_ID, userId);
+		outState.putLong(USER_ID, userId);
 		outState.putString(TRACKING_CODE_OLD, oldTrackingCode);
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
 	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		userId = savedInstanceState.getInt(USER_ID);
+		userId = savedInstanceState.getLong(USER_ID);
 		oldTrackingCode = savedInstanceState.getString(TRACKING_CODE_OLD);
 		super.onRestoreInstanceState(savedInstanceState);
 	}

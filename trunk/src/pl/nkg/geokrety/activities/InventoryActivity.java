@@ -190,7 +190,7 @@ public class InventoryActivity extends ManagedDialogsActivity implements
 		}
 		
 		Bundle ib = data.getExtras();
-		int userId = ib.getInt(GeoKretActivity.USER_ID);
+		long userId = ib.getLong(GeoKretActivity.USER_ID);
 		String trackingCode = ib.getString(GeoKretActivity.TRACKING_CODE);
 		String oldTrackingCode = ib.getString(GeoKretActivity.TRACKING_CODE_OLD);
 		String name = ib.getString(GeoKretActivity.NAME);
