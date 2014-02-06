@@ -105,7 +105,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 		db.execSQL(GeoKretLogDataSource.TABLE_CREATE);
 		db.execSQL(GeocacheDataSource.TABLE_CREATE);
 		db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
-		db.execSQL(GeoKretDataSource.TABLE_CREATE);
+		db.execSQL(InventoryDataSource.TABLE_CREATE);
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 			db.execSQL(GeoKretLogDataSource.TABLE_CREATE);
 			db.execSQL(GeocacheDataSource.TABLE_CREATE);
 			db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
-			db.execSQL(GeoKretDataSource.TABLE_CREATE);
+			db.execSQL(InventoryDataSource.TABLE_CREATE);
 			importUsersFromOlderThan6(db, oldVersion);
 		}
 	}
@@ -173,7 +173,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 	private void dropUncompatible6Tables(final SQLiteDatabase db) {
 		dropTableIfExist(db, GeocacheDataSource.TABLE);
 		dropTableIfExist(db, GeocacheLogDataSource.TABLE);
-		dropTableIfExist(db, GeoKretDataSource.TABLE);
+		dropTableIfExist(db, InventoryDataSource.TABLE);
 		dropTableIfExist(db, GeoKretLogDataSource.TABLE);
 	}
 

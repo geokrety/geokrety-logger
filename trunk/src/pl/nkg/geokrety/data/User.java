@@ -210,7 +210,7 @@ public class User {
     }
 
     public void loadInventoryAndStore(final ICancelable cancelable,
-            final GeoKretDataSource dataSource) throws MessagedException {
+            final InventoryDataSource dataSource) throws MessagedException {
 
         final Map<String, Geokret> gkMap = GeoKretyProvider.loadInventory(geoKretySecredID);
 

@@ -53,7 +53,7 @@ public class StateHolder {
 	private int							defaultAccount;
 	private final UserDataSource		accountDataSource;
 	private final GeocacheLogDataSource	geocacheLogDataSource;
-	private final GeoKretDataSource		geoKretDataSource;
+	private final InventoryDataSource		geoKretDataSource;
 
 	private final GeocacheDataSource	geocacheDataSource;
 
@@ -68,7 +68,7 @@ public class StateHolder {
 		dbHelper = new GeoKretySQLiteHelper(context);
 		accountDataSource = new UserDataSource(dbHelper);
 		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
-		geoKretDataSource = new GeoKretDataSource(dbHelper);
+		geoKretDataSource = new InventoryDataSource(dbHelper);
 		geocacheDataSource = new GeocacheDataSource(dbHelper);
 		geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
 
@@ -135,7 +135,7 @@ public class StateHolder {
 		return geocacheLogDataSource;
 	}
 
-	public GeoKretDataSource getGeoKretDataSource() {
+	public InventoryDataSource getGeoKretDataSource() {
 		return geoKretDataSource;
 	}
 

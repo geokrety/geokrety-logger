@@ -32,7 +32,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
 
-public class GeoKretDataSource {
+public class InventoryDataSource {
 
 	public static final String TABLE = "inventory";
 	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
@@ -97,7 +97,7 @@ public class GeoKretDataSource {
 			+ " = ? ORDER BY "
 			+ COLUMN_NAME;
 
-	public GeoKretDataSource(GeoKretySQLiteHelper dbHelper) {
+	public InventoryDataSource(GeoKretySQLiteHelper dbHelper) {
 		this.dbHelper = dbHelper;
 	}
 
