@@ -255,6 +255,11 @@
 		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.
 	</string>
 	<string name="changelog">Change log:\n\n
+		0.5.5 beta - 2014-02-06\n
+		- manually add to inventory fix,\n
+		- send all drafts button,\n
+		- remove all saved logs button\n
+		\n
 		0.5.3 beta - 2014-01-18\n
 		- English translation update, thanks to Mr.Yuck\n
 		\n

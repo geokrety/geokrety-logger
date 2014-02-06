@@ -253,6 +253,11 @@
 		niezgodnie z przeznaczeniem.
 	</string>
 	<string name="changelog">Historia zmian:\n
+		0.5.5 beta - 2014-02-06\n
+		- naprawiony błąd z ręcznym dodawaniem geokreta do inwentarza,\n
+		- przycisk Wyślij wszystkie szkice,\n
+		- przycisk Usuń wszystkie zapisane logi\n
+		\n
 		0.5.3 beta - 2014-01-18\n
 		- aktualizacja angielskiego tłumaczenia z podziękowaniem dla Mr.Yuck\n
 		\n
