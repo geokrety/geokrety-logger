@@ -200,9 +200,9 @@
 	<string name="log_status_success">Erledigt</string>
 	<string name="log_status_queue">Queue</string>
 	<string name="log_status_unidentified">Unbekannt</string>
-<!-- NEED PROOF OF GERMAN --><string name="button_submit_all_drafts">Senden alle</string>
-<!-- NEED PROOF OF GERMAN --><string name="button_remove_all_saved_logs">Löschen alle</string>
-<!-- NEED PROOF OF GERMAN --><string name="form_confirm_delete_all_msg">Diesen alle Logeintrag löschen?</string>
+    <string name="button_submit_all_drafts">Alle senden</string>
+    <string name="button_remove_all_saved_logs">Alle löschen</string>
+    <string name="form_confirm_delete_all_msg">Wirklich alle Logeinträge löschen?</string>
     
     <!-- Refresing progress bar -->
 	<string name="download_title">Aktualisieren</string>
