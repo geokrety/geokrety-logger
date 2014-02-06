@@ -1,5 +1,5 @@
 <!--
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -19,20 +19,47 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ 
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true" >
+
+    <LinearLayout
+        android:id="@+id/buttons"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin" >
+
+        <Button
+            android:id="@+id/submitAllButton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickSubmitAll"
+            android:text="@string/form_submit_button" />
+    </LinearLayout>
 
     <Spinner
         android:id="@+id/accountsSpiner"
         android:layout_width="match_parent"
+        android:layout_alignParentTop="true"
         android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/gklListView"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingTop="@dimen/activity_vertical_margin" 
+        android:layout_above="@+id/buttons"
+        android:layout_below="@+id/accountsSpiner" >
+
     </ListView>
 
-</LinearLayout>
+</RelativeLayout>

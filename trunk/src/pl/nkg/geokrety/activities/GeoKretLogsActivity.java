@@ -31,6 +31,7 @@ import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.data.User;
+import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.content.Context;
@@ -306,5 +307,11 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
             account = holder.getAccountList().get(nr);
             updateListView();
         }
+    }
+    
+    public void onClickSubmitAll(View view) {
+        application.getStateHolder().getGeoKretLogDataSource().moveAllDraftsToOutbox(account.getID());
+        updateListView();
+        startService(new Intent(this, LogSubmitterService.class));
     }
 }
