@@ -202,6 +202,9 @@
 	<string name="log_status_success">Wysłany</string>
 	<string name="log_status_queue">W kolejce</string>
 	<string name="log_status_unidentified">Niezidentyfikowany</string>
+	<string name="button_submit_all_drafts">Wyślij wszystkie</string>
+	<string name="button_remove_all_saved_logs">Usuń wszystkie</string>
+	<string name="form_confirm_delete_all_msg">Usunąć wszystkie zachowane wpisy?</string>
     
     <!-- Refresing progress bar -->
 	<string name="download_title">Odświeżanie konta użytkownika</string>

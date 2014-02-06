@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -40,5 +40,6 @@ public class Dialogs {
 	public static final int UUID_PROMPTDIALOG = 1014;
 	
 	public static final int SAVE_MODIFIEDSDIALOG = 1015;
-	public static final int REMOVE_LOG_ALERTDIALOG = 1015;
+	public static final int REMOVE_LOG_ALERTDIALOG = 1016;
+	public static final int REMOVE_ALL_LOGS_ALERTDIALOG = 1017;
 }

@@ -42,7 +42,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClickSubmitAll"
-            android:text="@string/form_submit_button" />
+            android:text="@string/button_submit_all_drafts" />
+        
+        <Button
+            android:id="@+id/removeAllButton"
+            android:layout_width="0dip"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="onClickRemoveAll"
+            android:text="@string/button_remove_all_saved_logs" />
     </LinearLayout>
 
     <Spinner

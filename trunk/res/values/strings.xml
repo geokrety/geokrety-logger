@@ -210,6 +210,9 @@
 	<string name="log_status_success">Success</string>
 	<string name="log_status_queue">Queue</string>
 	<string name="log_status_unidentified">Unidentified</string>
+	<string name="button_submit_all_drafts">Submit drafts</string>
+	<string name="button_remove_all_saved_logs">Remove all</string>
+	<string name="form_confirm_delete_all_msg">Delete all log entries?</string>
     
     <!-- Refresing progress bar -->
 	<string name="download_title">Refreshing user profile</string>

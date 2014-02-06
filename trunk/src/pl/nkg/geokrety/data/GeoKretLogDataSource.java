@@ -156,7 +156,7 @@ public class GeoKretLogDataSource {
 
     public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
         return db.rawQuery(FETCH_BY_USER, new String[] {
-            String.valueOf(userID)
+                String.valueOf(userID)
         });
     }
 
@@ -180,6 +180,37 @@ public class GeoKretLogDataSource {
 
     public GeoKretLogDataSource(final GeoKretySQLiteHelper dbHelper) {
         this.dbHelper = dbHelper;
+    }
+
+    public void delete(final long id) {
+        dbHelper.runOnWritableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                removeSimple(db, TABLE, id);
+                return true;
+            }
+        });
+    }
+
+    public GeoKretLog loadByID(final long logID) {
+        final LinkedList<GeoKretLog> geoKretLogs = new LinkedList<GeoKretLog>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[] {
+                        String.valueOf(logID)
+                });
+                while (cursor.moveToNext()) {
+                    geoKretLogs.add(new GeoKretLog(cursor, 0, false));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return geoKretLogs.isEmpty() ? null : geoKretLogs.getFirst();
     }
 
     public List<GeoKretLog> loadByUserID(final long userID) {
@@ -258,34 +289,17 @@ public class GeoKretLogDataSource {
         });
     }
 
-    public GeoKretLog loadByID(final long logID) {
-        final LinkedList<GeoKretLog> geoKretLogs = new LinkedList<GeoKretLog>();
-        dbHelper.runOnReadableDatabase(new DBOperation() {
-
-            @Override
-            public boolean inTransaction(final SQLiteDatabase db) {
-
-                final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[] {
-                    String.valueOf(logID)
-                });
-                while (cursor.moveToNext()) {
-                    geoKretLogs.add(new GeoKretLog(cursor, 0, false));
-                }
-                cursor.close();
-                return true;
-            }
-        });
-        return geoKretLogs.isEmpty() ? null : geoKretLogs.getFirst();
-    }
-
-    public void delete(final long id) {
+    public void removeAllLogs(final long userId) {
         dbHelper.runOnWritableDatabase(new DBOperation() {
 
             @Override
-            public boolean inTransaction(SQLiteDatabase db) {
-                removeSimple(db, TABLE, id);
+            public boolean inTransaction(final SQLiteDatabase db) {
+                db.delete(TABLE, COLUMN_USER_ID + " = ?", new String[] {
+                        Long.toString(userId)
+                });
                 return true;
             }
+
         });
     }
 }

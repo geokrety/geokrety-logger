@@ -131,7 +131,10 @@ public class GeoKretyProvider {
 				if (errors.get(0).equals("There is an entry with this date. Correct the date or the hour.")) {
 					log.setProblem(R.string.warning_already_logged);
 					return LOG_DOUBLE;
-				} else {
+				} else if (errors.get(0).equals("Identical log has been submited.")) {
+				    // login just submitted
+				    return LOG_SUCCESS;
+                } else {
 					log.setProblem(R.string.submit_fail);
 					log.setProblemArg(TextUtils.join("\n", errors));
 					return LOG_PROBLEM;

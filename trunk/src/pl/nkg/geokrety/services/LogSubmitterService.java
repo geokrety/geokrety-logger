@@ -39,6 +39,11 @@ import android.os.Handler;
 
 public class LogSubmitterService extends IntentService {
 
+    public static final String BROADCAST_SUBMITS_START = "pl.nkg.geokrety.services.LogSubmitterService.Submits.Start";
+    public static final String BROADCAST_SUBMIT_START = "pl.nkg.geokrety.services.LogSubmitterService.Submit.Start";
+    public static final String BROADCAST_SUBMIT_DONE = "pl.nkg.geokrety.services.LogSubmitterService.Submit.Done";
+    public static final String BROADCAST_SUBMITS_FINISH = "pl.nkg.geokrety.services.LogSubmitterService.Submits.Finish";
+
     private static final String TAG = LogSubmitterService.class.getName();
     private static final int RETRY_DELAY = 1000 * 60 * 5;
 
@@ -65,10 +70,20 @@ public class LogSubmitterService extends IntentService {
 
         boolean connectionProblems = false;
 
+        if (outbox.size() > 0) {
+            sendBroadcast(new Intent(BROADCAST_SUBMITS_START));
+        }
+
         for (final GeoKretLog log : outbox) {
             if (!application.getStateHolder().lockForLog(log.getId())) {
                 continue;
             }
+
+            Intent broadcastStart = new Intent(BROADCAST_SUBMIT_START);
+            Intent broadcastDone = new Intent(BROADCAST_SUBMIT_DONE);
+            broadcastStart.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
+            broadcastDone.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
+            sendBroadcast(broadcastStart);
 
             String title = log.getNr();
             int notifyId = (int) log.getId();
@@ -117,6 +132,7 @@ public class LogSubmitterService extends IntentService {
 
             application.getStateHolder().getGeoKretLogDataSource().merge(log);
             application.getStateHolder().releaseLockForLog(log.getId());
+            sendBroadcast(broadcastDone);
         }
 
         if (connectionProblems) {
@@ -128,6 +144,10 @@ public class LogSubmitterService extends IntentService {
                     startService(new Intent(LogSubmitterService.this, LogSubmitterService.class));
                 }
             }, RETRY_DELAY);
+        }
+
+        if (outbox.size() > 0) {
+            sendBroadcast(new Intent(BROADCAST_SUBMITS_FINISH));
         }
     }
 

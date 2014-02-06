@@ -31,11 +31,16 @@ import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.data.User;
+import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
+import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -195,6 +200,13 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
     }
 
+    private final BroadcastReceiver submitDoneBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            refreshListView();
+        }
+    };
+
     private static final int[] LOG_TYPE_ICON_MAP_GK = {
             R.drawable.ic_log_gk_drop_gk,
             R.drawable.ic_log_gk_grab_gk,
@@ -223,9 +235,29 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
     private Spinner accountsSpinner;
 
+    private AlertDialogWrapper removeLogDialog;
+
     @Override
     public void dialogFinished(final AbstractDialogWrapper<?> dialog, final int buttonId,
             final Serializable arg) {
+        if (dialog.getDialogId() == removeLogDialog.getDialogId()) {
+            if (buttonId == DialogInterface.BUTTON_POSITIVE) {
+                application.getStateHolder().getGeoKretLogDataSource()
+                        .removeAllLogs(account.getID());
+                updateListView();
+            }
+        }
+    }
+
+    public void onClickRemoveAll(final View view) {
+        removeLogDialog.show(null);
+    }
+
+    public void onClickSubmitAll(final View view) {
+        application.getStateHolder().getGeoKretLogDataSource()
+                .moveAllDraftsToOutbox(account.getID());
+        updateListView();
+        startService(new Intent(this, LogSubmitterService.class));
     }
 
     @Override
@@ -274,6 +306,9 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         application = (GeoKretyApplication) getApplication();
+        removeLogDialog = new AlertDialogWrapper(this, Dialogs.REMOVE_ALL_LOGS_ALERTDIALOG);
+        removeLogDialog.setMessage(R.string.form_confirm_delete_all_msg);
+        removeLogDialog.setOkCancelButtons();
 
         holder = application.getStateHolder();
         setContentView(R.layout.activity_geokretlogs);
@@ -293,6 +328,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(submitDoneBroadcastReceiver);
         closeCursorIfOpened();
         ((GeoKretyApplication) getApplication()).getStateHolder().getDbHelper().closeDatabase();
     }
@@ -307,11 +343,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
             account = holder.getAccountList().get(nr);
             updateListView();
         }
-    }
-    
-    public void onClickSubmitAll(View view) {
-        application.getStateHolder().getGeoKretLogDataSource().moveAllDraftsToOutbox(account.getID());
-        updateListView();
-        startService(new Intent(this, LogSubmitterService.class));
+        registerReceiver(submitDoneBroadcastReceiver, new IntentFilter(
+                LogSubmitterService.BROADCAST_SUBMIT_DONE));
     }
 }
