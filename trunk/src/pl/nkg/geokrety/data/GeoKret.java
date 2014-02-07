@@ -167,7 +167,7 @@ public class GeoKret {
     }
 
     public String getFormatedCode() {
-        if (mGeoKretId == null /*|| mGeoKretId == 0*/) {
+        if (mGeoKretId == null) {
             return "...";
         } else {
             return "GK" + Integer.toHexString(mGeoKretId).toUpperCase(Locale.ENGLISH);

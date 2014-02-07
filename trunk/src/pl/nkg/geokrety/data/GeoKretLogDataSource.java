@@ -94,7 +94,12 @@ public class GeoKretLogDataSource {
                 + "l." + COLUMN_MINUTE + ", " //
                 + "l." + COLUMN_COMMENT;
         
-        FETCH_FULL_COLUMNS = FETCH_GK_LOG_COLUMNS + ", " + GeocacheDataSource.FETCH_COLUMNS + ", " + GeoKretDataSource.FETCH_COLUMNS;
+        FETCH_FULL_COLUMNS = FETCH_GK_LOG_COLUMNS + ", " //
+                + "c." +  GeocacheDataSource.COLUMN_WAYPOINT + ", " //
+                + GeocacheDataSource.FETCH_COLUMNS + ", " //
+                + "g." +  GeoKretDataSource.COLUMN_TRACKING_CODE + ", " //
+                + "0, " //
+                + GeoKretDataSource.FETCH_COLUMNS;
         
         FETCH_OUTBOX = "SELECT " //
                 + FETCH_GK_LOG_COLUMNS + ", "//
@@ -114,12 +119,11 @@ public class GeoKretLogDataSource {
         FETCH_BY_USER = FETCH_FULL_USER //
                 + " WHERE l." + COLUMN_USER_ID + " = ?" //
                 + " ORDER BY l." + COLUMN_ID;
-
+        
         FETCH_BY_ID = FETCH_FULL_USER + " WHERE l." + COLUMN_ID + " = ?";
     }
 
     public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
-        // FIXME: 02-07 15:03:15.514: E/CursorWindow(7906): Bad request for field slot 0,29. numRows = 2, numColumns = 26
         return db.rawQuery(FETCH_BY_USER, new String[] {
                 String.valueOf(userID)
         });
