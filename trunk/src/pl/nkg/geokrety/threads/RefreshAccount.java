@@ -113,10 +113,7 @@ public class RefreshAccount extends
 				publishProgress(getProgressMessage(1) + " "
 						+ SupportedOKAPI.SUPPORTED[i].host + dots);
 				try {
-					List<GeocacheLog> logs = account.loadOpenCachingLogs(i);
-					holder.getGeocacheLogDataSource().store(logs,
-							account.getID(), i);
-					openCachingLogs.addAll(logs);
+					account.loadOpenCachingLogs(i, holder.getGeocacheLogDataSource(), holder.getGeocacheDataSource());
 				} catch (MessagedException e) {
 					report.append("\n");
 					report.append(e.getFormatedMessage(getApplication()
@@ -129,7 +126,7 @@ public class RefreshAccount extends
 
 				publishProgress(getProgressMessage(2) + " "
 						+ SupportedOKAPI.SUPPORTED[i].host + dots);
-				account.loadOCnamesToBuffer(thread, openCachingLogs, i);
+				account.loadOCnamesToBuffer(thread, openCachingLogs, i, holder.getGeocacheLogDataSource(), holder.getGeocacheDataSource());
 			}
 		}
 
@@ -137,9 +134,6 @@ public class RefreshAccount extends
 			return false;
 		}
 
-		holder.storeGeoCachingNames();
-		account.setOpenCachingLogs(holder.getGeocacheLogDataSource().load(
-				account.getID()));
 		account.touchLastLoadedDate(holder.getAccountDataSource());
 		return true;
     }

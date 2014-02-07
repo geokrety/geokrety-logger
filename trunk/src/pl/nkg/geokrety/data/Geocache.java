@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -24,6 +24,8 @@ package pl.nkg.geokrety.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.database.Cursor;
+
 public class Geocache {
 
 	private final String name;
@@ -40,6 +42,7 @@ public class Geocache {
 		status = jsonObject.getString("status");
 	}
 
+	@Deprecated
 	public Geocache(String code, String name, String location, String type,
 			String status) {
 		super();
@@ -50,7 +53,15 @@ public class Geocache {
 		this.status = status;
 	}
 
-	public String getName() {
+	public Geocache(Cursor cursor) {
+        this.code = cursor.getString(6);
+	    this.name = cursor.getString(7);
+        this.location =  cursor.getString(8);
+        this.type =  cursor.getString(9);
+        this.status =  cursor.getString(10);
+    }
+
+    public String getName() {
 		return name;
 	}
 

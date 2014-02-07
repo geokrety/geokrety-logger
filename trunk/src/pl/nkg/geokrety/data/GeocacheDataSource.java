@@ -74,6 +74,7 @@ public class GeocacheDataSource {
 		return values;
 	}
 
+	@Deprecated
 	public List<Geocache> load() {
 		final LinkedList<Geocache> gcs = new LinkedList<Geocache>();
 		dbHelper.runOnReadableDatabase(new DBOperation() {
@@ -97,6 +98,7 @@ public class GeocacheDataSource {
 		return gcs;
 	}
 
+	@Deprecated
 	public void store(final Collection<Geocache> geocaches) {
 		dbHelper.runOnWritableDatabase(new DBOperation() {
 
@@ -112,4 +114,24 @@ public class GeocacheDataSource {
 			}
 		});
 	}
+	
+	public void update(final Collection<Geocache> geocacheList) {
+        dbHelper.runOnWritableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
+                for (final Geocache gc : geocacheList) {
+                    cv.add(getValues(gc));
+                    remove(db,
+                            TABLE,
+                            COLUMN_WAYPOINT + " = ?",
+                            gc.getCode());
+                }
+                persistAll(db, TABLE, cv);
+                return true;
+            }
+        });
+    }
 }

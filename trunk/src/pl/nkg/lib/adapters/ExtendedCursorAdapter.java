@@ -36,7 +36,7 @@ public abstract class ExtendedCursorAdapter extends CursorAdapter {
 
     public ExtendedCursorAdapter(Context context, Cursor c, boolean autoRequery, int layoutId) {
         super(context, c, autoRequery);
-        layout = android.R.layout.simple_list_item_2;
+        layout = layoutId;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 

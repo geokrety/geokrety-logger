@@ -71,27 +71,33 @@ public class GeocacheLogDataSource {
 			+ TABLE + " ORDER BY " + COLUMN_DATE + " DESC";
 
 	private static final String FETCH_BY_USER = "SELECT " //
-			+ COLUMN_LOG_UUID
-			+ ", " //
-			+ COLUMN_USER_ID
-			+ ", " //
-			+ COLUMN_WAYPOINT
-			+ ", " //
-			+ COLUMN_TYPE
-			+ ", " //
-			+ COLUMN_DATE
-			+ ", " //
-			+ COLUMN_COMMENT
-			+ ", " //
-			+ COLUMN_PORTAL //
-			+ " FROM " //
-			+ TABLE + " WHERE " + COLUMN_USER_ID
+            + "l." + COLUMN_ID + " AS " + COLUMN_ID + ", " //
+			+ "l." + COLUMN_LOG_UUID + ", " //
+			+ "l." + COLUMN_TYPE + ", " //
+			+ "l." + COLUMN_DATE + ", " //
+			+ "l." + COLUMN_COMMENT + ", " //
+			+ "l." + COLUMN_PORTAL + "," //
+            + "l." + COLUMN_WAYPOINT + ", " //
+            + "g." + GeocacheDataSource.COLUMN_NAME + ", " //
+            + "g." + GeocacheDataSource.COLUMN_LOCATION + ", " //
+            + "g." + GeocacheDataSource.COLUMN_TYPE + ", " //
+            + "g." + GeocacheDataSource.COLUMN_STATUS //			
+            + " FROM " //
+			+ TABLE + " AS l"
+			+ " LEFT JOIN " + GeocacheDataSource.TABLE + " AS g ON l." + COLUMN_WAYPOINT + " = g." + GeocacheDataSource.COLUMN_WAYPOINT
+			+ " WHERE l." + COLUMN_USER_ID
 			+ " = ? ORDER BY "
-			+ COLUMN_DATE + " DESC";
+			+ "l." + COLUMN_DATE + " DESC";
 
 	public GeocacheLogDataSource(GeoKretySQLiteHelper dbHelper) {
 		this.dbHelper = dbHelper;
 	}
+	
+	public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
+        return db.rawQuery(FETCH_BY_USER, new String[] {
+                String.valueOf(userID)
+        });
+    }
 
 	private static ContentValues getValues(GeocacheLog log, long userID) {
 		ContentValues values = new ContentValues();
@@ -128,6 +134,7 @@ public class GeocacheLogDataSource {
 		});
 	}
 
+	@Deprecated
 	public SparseArray<LinkedList<GeocacheLog>> load() {
 		final SparseArray<LinkedList<GeocacheLog>> logs = new SparseArray<LinkedList<GeocacheLog>>();
 		dbHelper.runOnReadableDatabase(new DBOperation() {
@@ -157,6 +164,7 @@ public class GeocacheLogDataSource {
 		return logs;
 	}
 
+	@Deprecated
 	public List<GeocacheLog> load(final long userID) {
 		final LinkedList<GeocacheLog> list = new LinkedList<GeocacheLog>();
 		dbHelper.runOnReadableDatabase(new DBOperation() {
@@ -166,12 +174,7 @@ public class GeocacheLogDataSource {
 				Cursor cursor = db.rawQuery(FETCH_BY_USER,
 						new String[] { String.valueOf(userID) });
 				while (cursor.moveToNext()) {
-					GeocacheLog log = new GeocacheLog(cursor.getString(0), //
-							cursor.getString(2), //
-							cursor.getString(3), //
-							new Date(cursor.getLong(4)), //
-							cursor.getString(5), //
-							cursor.getInt(6));
+					GeocacheLog log = new GeocacheLog(cursor);
 					list.add(log);
 				}
 				cursor.close();
@@ -180,4 +183,47 @@ public class GeocacheLogDataSource {
 		});
 		return list;
 	}
+	
+	public GeocacheLog[] loadLastLogs(final long userID) {
+        final LinkedList<GeocacheLog> list = new LinkedList<GeocacheLog>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(SQLiteDatabase db) {
+                Cursor cursor = createLoadByUserIDCurosr(db, userID);
+                while (cursor.moveToNext()) {
+                    GeocacheLog log = new GeocacheLog(cursor);
+                    list.add(log);
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return list.toArray(new GeocacheLog[list.size()]);
+    }
+	
+	public List<String> loadNeedUpdateList(final int portal) {
+        final LinkedList<String> gks = new LinkedList<String>();
+        dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                final Cursor cursor = db.rawQuery("SELECT l." + COLUMN_WAYPOINT
+                        + " FROM " + TABLE
+                        + " AS l"
+                        + " LEFT JOIN " + GeocacheDataSource.TABLE + " AS g ON l."
+                        + COLUMN_WAYPOINT
+                        + " = g." + GeocacheDataSource.COLUMN_WAYPOINT
+                        + " WHERE (g." + GeocacheDataSource.COLUMN_NAME + " IS NULL OR g."
+                        + GeocacheDataSource.COLUMN_NAME + " = ?) AND l." + COLUMN_PORTAL + " = ?", new String[]{"", Integer.toString(portal)});
+
+                while (cursor.moveToNext()) {
+                    gks.add(cursor.getString(0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return gks;
+    }
 }

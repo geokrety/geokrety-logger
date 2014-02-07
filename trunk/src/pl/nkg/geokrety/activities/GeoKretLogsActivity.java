@@ -44,6 +44,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,8 +90,8 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
         private int adjustCacheDrawable(final GeoKretLog log) {
             // TODO Auto-generated method stub
-            if (StateHolder.getGeoacheMap().containsKey(log.getWpt())) {
-                final String type = StateHolder.getGeoacheMap().get(log.getWpt()).getType();
+            if (log.getGeoCache() != null) {
+                final String type = log.getGeoCache().getType();
 
                 if (type.equals("Traditional")) {
                     return R.drawable.ic_cache_traditional_small;
@@ -120,8 +121,9 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         private void bindIcon(final View view, final GeoKretLog log) {
             final int drawable = checkHumanGeokret(log) ? LOG_TYPE_ICON_MAP_HUMAN[log
                     .getLogTypeMapped()] : LOG_TYPE_ICON_MAP_GK[log.getLogTypeMapped()];
-            ((ImageView) view.findViewById(android.R.id.icon)).setImageDrawable(getResources()
-                    .getDrawable(drawable));
+            ImageView im = ((ImageView) view.findViewById(android.R.id.icon));
+            Drawable image = getResources().getDrawable(drawable);
+            im.setImageDrawable(image);
         }
 
         private boolean checkHumanGeokret(final GeoKretLog log) {
@@ -131,8 +133,8 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
         private CharSequence formatCacheName(final GeoKretLog log) {
             // TODO Auto-generated method stub
-            if (StateHolder.getGeoacheMap().containsKey(log.getWpt())) {
-                return StateHolder.getGeoacheMap().get(log.getWpt()).getName();
+            if (log.getGeoCache() != null) {
+                return log.getGeoCache().getName();
             } else {
                 return "";
             }

@@ -31,6 +31,8 @@ import java.util.TimeZone;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.database.Cursor;
+
 public class GeocacheLog {
 
 	public static String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ssZ";
@@ -41,6 +43,7 @@ public class GeocacheLog {
 	private final String type;
 	private final String comment;
 	private final int portal;
+	private Geocache geocache;
 
 	public GeocacheLog(JSONObject jsonObject, int portal) throws JSONException,
 			ParseException {
@@ -52,6 +55,7 @@ public class GeocacheLog {
 		this.portal = portal;
 	}
 
+	@Deprecated
 	public GeocacheLog(String uuid, String cache_code, String type, Date date,
 			String comment, int portal) {
 		super();
@@ -63,7 +67,17 @@ public class GeocacheLog {
 		this.portal = portal;
 	}
 
-	public String getUUID() {
+	public GeocacheLog(Cursor cursor) {
+	    this.uuid = cursor.getString(1);
+        this.type = cursor.getString(2);
+        this.date = new Date(cursor.getLong(3));
+        this.comment = cursor.getString(4);
+        this.portal = cursor.getInt(5);
+        this.cache_code = cursor.getString(6);
+        this.geocache = new Geocache(cursor);
+    }
+
+    public String getUUID() {
 		return uuid;
 	}
 
@@ -88,12 +102,12 @@ public class GeocacheLog {
 	}
 
 	public Geocache getGeoCache() {
-		return StateHolder.getGeoacheMap().get(cache_code);
+		return geocache;
 	}
 
 	@Override
 	public String toString() {
-		if (StateHolder.getGeoacheMap().containsKey(cache_code)) {
+		if (getGeoCache() != null) {
 			return getGeoCache().getName() + " (" + cache_code + ")";
 		} else {
 			return cache_code;

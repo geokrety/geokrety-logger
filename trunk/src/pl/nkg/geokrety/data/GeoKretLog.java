@@ -328,4 +328,10 @@ public class GeoKretLog {
 	public String toString() {
 		return getNr() + " (" +getState() + ")";
 	}
+
+    public Geocache getGeoCache() {
+        // TODO Auto-generated method stub
+        // FIXME: load cache in GeoKretLog
+        return null;
+    }
 }

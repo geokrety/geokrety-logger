@@ -60,8 +60,8 @@ public class User {
     private String[] openCachingUUIDs;
     private String[] openCachingLogins;
 
-    @Deprecated
-    private List<GeocacheLog> openCachingLogs;
+    //@Deprecated
+    //private List<GeocacheLog> openCachingLogs;
 
     //@Deprecated
     //private List<GeoKret> inventory;
@@ -144,13 +144,13 @@ public class User {
         return name;
     }
 
-    @Deprecated
+    /*@Deprecated
     public List<GeocacheLog> getOpenCachingLogs() {
         if (openCachingLogs == null) {
             openCachingLogs = new ArrayList<GeocacheLog>();
         }
         return openCachingLogs;
-    }
+    }*/
 
     public String[] getOpenCachingUUIDs() {
         return openCachingUUIDs;
@@ -167,7 +167,7 @@ public class User {
         return AdapterView.INVALID_POSITION;
     }*/
 
-    private HashSet<String> getUnbufferedCacheCodes(final Collection<GeocacheLog> openCachingLogs) {
+    /*private HashSet<String> getUnbufferedCacheCodes(final Collection<GeocacheLog> openCachingLogs) {
         final HashSet<String> caches = new HashSet<String>();
         for (final GeocacheLog log : new ArrayList<GeocacheLog>(openCachingLogs)) {
             if (!StateHolder.getGeoacheMap().containsKey(log.getCacheCode())) {
@@ -186,7 +186,7 @@ public class User {
             pos++;
         }
         return AdapterView.INVALID_POSITION;
-    }
+    }*/
 
     public boolean hasOpenCachingUUID(final int portal) {
         if (openCachingUUIDs == null || portal < 0 || portal >= openCachingUUIDs.length) {
@@ -209,6 +209,7 @@ public class User {
         }
     }
 
+    // TODO: need refactor and move to background
     @Deprecated
     public void loadInventoryAndStore(final ICancelable cancelable,
             final InventoryDataSource dataSource, final GeoKretDataSource gkDataSource) throws MessagedException {
@@ -230,10 +231,13 @@ public class User {
         gkDataSource.update(gkMap.values());
     }
 
+    // TODO: need refactor and move to background
+    @Deprecated
     public void loadOCnamesToBuffer(final ICancelable cancelable,
-            final List<GeocacheLog> openCachingLogs, final int portal) throws MessagedException {
+            final List<GeocacheLog> openCachingLogs, final int portal, final GeocacheLogDataSource gclDataSource, final GeocacheDataSource gcDataSource) throws MessagedException {
         final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
-        final HashSet<String> codes = getUnbufferedCacheCodes(openCachingLogs);
+        final HashSet<String> codes = new HashSet<String>(gclDataSource.loadNeedUpdateList(portal));
+
         if (codes.size() == 0) {
             return;
         }
@@ -241,16 +245,16 @@ public class User {
         if (cancelable.isCancelled()) {
             return;
         }
-
-        for (final Geocache geocache : OKAPIProvider.loadOCnames(codes, okapi)) {
-            StateHolder.getGeoacheMap().put(geocache.getCode(), geocache);
-        }
+        
+        gcDataSource.update(OKAPIProvider.loadOCnames(codes, okapi));
     }
 
-    public List<GeocacheLog> loadOpenCachingLogs(final int portal) throws MessagedException {
+    // TODO: need refactor and move to background
+    @Deprecated
+    public void loadOpenCachingLogs(final int portal, final GeocacheLogDataSource gclDataSource, final GeocacheDataSource gcDataSource) throws MessagedException {
 
         final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
-        return OKAPIProvider.loadOpenCachingLogs(okapi, openCachingUUIDs[portal]);
+        gclDataSource.store(OKAPIProvider.loadOpenCachingLogs(okapi, openCachingUUIDs[portal]), id, portal);
     }
 
     public Bundle pack(final Bundle bundle) {
@@ -294,10 +298,10 @@ public class User {
         this.name = name;
     }
 
-    @Deprecated
+    /*@Deprecated
     public void setOpenCachingLogs(final List<GeocacheLog> openCachingLogs) {
         this.openCachingLogs = openCachingLogs;
-    }
+    }*/
 
     @Override
     public String toString() {

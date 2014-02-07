@@ -44,12 +44,11 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-public class LastOCsActivity extends ManagedDialogsActivity implements
+public class LastOCsActivity extends AbstractGeoKretyActivity implements
 		AdapterView.OnItemSelectedListener {
 
 	private User account;
 	private GenericProgressDialogWrapper refreshProgressDialog;
-	private GeoKretyApplication application;
 	private RefreshAccount refreshAccount;
 
 	@Override
@@ -58,7 +57,6 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 		refreshProgressDialog = new GenericProgressDialogWrapper(this,
 				Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
 
-		application = (GeoKretyApplication) getApplication();
 		refreshAccount = RefreshAccount.getFromHandler(application
 				.getForegroundTaskHandler());
 
@@ -97,9 +95,11 @@ public class LastOCsActivity extends ManagedDialogsActivity implements
 	}
 
 	private void refreshListView() {
+	    // TODO: refactor to CursorAdapter
 		ArrayAdapter<GeocacheLog> adapter = new ArrayAdapter<GeocacheLog>(this,
 				android.R.layout.simple_list_item_1,
-				account.getOpenCachingLogs());
+				stateHolder.getGeocacheLogDataSource().loadLastLogs(account.getID()));
+		
 		ListView listView = (ListView) findViewById(R.id.ocsListView);
 		listView.setAdapter(adapter);
 	}

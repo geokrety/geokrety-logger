@@ -235,7 +235,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     public void showOcs(final View view) {
         if (updateSpinners()) {
             ocsSpinnerDialog.show(null,
-                    currentAccount.getWaypointIndex(waypointEditText.getText().toString()));
+                    lastLogsAdapter.indexOf(waypointEditText.getText().toString()));
         }
     }
 
@@ -263,14 +263,30 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             return -1;
         }
     }
+    
+    private LastLogsAdapter lastLogsAdapter;
+    private class LastLogsAdapter extends ArrayAdapter<GeocacheLog> {
+
+        public LastLogsAdapter() {
+            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder.getGeocacheLogDataSource().loadLastLogs(currentAccount.getID()));
+        }
+        
+        public int indexOf(String waypoint) {
+            for (int i = 0; i < getCount(); i++) {
+                if (waypoint.toUpperCase(Locale.ENGLISH).contains(getItem(i).getCacheCode().toUpperCase(Locale.ENGLISH))) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
 
     private void configAdapters() {
         inventoryAdapter = new InventoryAdapter();
         inventorySpinnerDialog.setAdapter(inventoryAdapter);
 
-        ocsSpinnerDialog.setAdapter(new ArrayAdapter<GeocacheLog>(this,
-                android.R.layout.simple_list_item_single_choice, currentAccount
-                        .getOpenCachingLogs()));
+        lastLogsAdapter = new LastLogsAdapter();
+        ocsSpinnerDialog.setAdapter(lastLogsAdapter);
     }
 
     private void loadFromGeoKretLog(final GeoKretLog log) {

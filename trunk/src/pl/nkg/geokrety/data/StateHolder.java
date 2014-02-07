@@ -22,28 +22,24 @@
 package pl.nkg.geokrety.data;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.SparseArray;
 import android.widget.ListView;
 
 public class StateHolder {
 	private static final String				DEFAULT_ACCOUNT			= "current_accounts";
 	private static final int				DEFAULT_ACCOUNT_VALUE	= ListView.INVALID_POSITION;
 
-	private static Map<String, Geocache>	geoCachesMap;
+	//private static Map<String, Geocache>	geoCachesMap;
 
-	public static Map<String, Geocache> getGeoacheMap() {
+	/*public static Map<String, Geocache> getGeoacheMap() {
 		if (geoCachesMap == null) {
 			geoCachesMap = Collections.synchronizedMap(new HashMap<String, Geocache>());
 		}
 		return geoCachesMap;
-	}
+	}*/
 
 	private static SharedPreferences getPreferences(final Context context) {
 		return context.getSharedPreferences("pl.nkg.geokrety", Context.MODE_PRIVATE);
@@ -76,20 +72,20 @@ public class StateHolder {
 
 		accountList = Collections.synchronizedList(accountDataSource.getAll());
 
-		geoCachesMap = new HashMap<String, Geocache>();
+		/*geoCachesMap = new HashMap<String, Geocache>();
 		for (final Geocache gc : geocacheDataSource.load()) {
 			geoCachesMap.put(gc.getCode(), gc);
-		}
+		}*/
 
 		//final SparseArray<LinkedList<GeoKret>> gks = inventoryDataSource.load();
-		final SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
+		//final SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
 		//final SparseArray<LinkedList<GeoKretLog>> geoKretLogs = geoKretLogDataSource.load();
 
-		for (final User account : accountList) {
+		/*for (final User account : accountList) {
 			account.setOpenCachingLogs(logs.get((int)account.getID()));
 			//account.setInventory(gks.get((int)account.getID()));
 			//account.setGeoKretyLogs(geoKretLogs.get(account.getID()));
-		}
+		}*/
 	}
 
 	public GeoKretySQLiteHelper getDbHelper() {
@@ -157,9 +153,9 @@ public class StateHolder {
 		getPreferences(context).edit().putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
 	}
 
-	public void storeGeoCachingNames() {
+	/*public void storeGeoCachingNames() {
 		getGeocacheDataSource().store(geoCachesMap.values());
-	}
+	}*/
 	
 	public boolean lockForLog(long logID) {
 		synchronized(this) {
