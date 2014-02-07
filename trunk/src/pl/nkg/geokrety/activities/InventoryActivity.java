@@ -31,8 +31,6 @@ import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.GeoKretDataSource;
-import pl.nkg.geokrety.data.GeoKretLog;
-import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKret;
@@ -41,21 +39,16 @@ import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
 import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
-import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView;
@@ -130,15 +123,21 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
         });
     }
 
-    private Cursor inventoryCursor;
     private void refreshListView() {
-        closeCursorIfOpened(inventoryCursor);
-        inventoryCursor = InventoryDataSource
-                .createLoadByUserIDCurosr(database, account.getID());
-        registerOpenedCursor(inventoryCursor);
-        final Adapter adapter = new Adapter(this, inventoryCursor, true);
-        final ListView listView = (ListView) findViewById(R.id.inventoryListView);
-        listView.setAdapter(adapter);
+        // FIXME: reload after refresh
+        openCursor();
+    }
+    
+    @Override
+    protected Cursor openCursor() {
+        super.openCursor();
+        if (account != null) {
+            cursor = InventoryDataSource.createLoadByUserIDCurosr(database, account.getID());
+            final Adapter adapter = new Adapter(this, cursor, true);
+            final ListView listView = (ListView) findViewById(R.id.inventoryListView);
+            listView.setAdapter(adapter);
+        }
+        return cursor;
     }
 
     @Override

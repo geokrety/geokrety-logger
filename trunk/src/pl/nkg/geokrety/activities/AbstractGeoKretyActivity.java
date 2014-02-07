@@ -21,16 +21,12 @@
  */
 package pl.nkg.geokrety.activities;
 
-import java.io.Serializable;
-import java.util.HashSet;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.data.StateHolder;
-import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 
 public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
@@ -38,7 +34,7 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
     protected GeoKretyApplication application;
     protected StateHolder stateHolder;
     protected SQLiteDatabase database;
-    private HashSet<Cursor> openedCursors; // TODO: one cursor, hashSet not need
+    protected Cursor cursor;
     private boolean useDataBase = false;
     
     @Override
@@ -53,10 +49,7 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
         super.onPause();
         if (useDataBase) {
             database = null;
-            for (Cursor c : openedCursors) {
-                c.close();
-            }
-            openedCursors.clear();
+            closeCursorIfOpened();
             stateHolder.getDbHelper().closeDatabase();
         }
     }
@@ -66,31 +59,29 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
         super.onResume();
         if (useDataBase) {
             database = stateHolder.getDbHelper().openDatabase();
+            openCursor();
         }
     }
     
-    protected void registerOpenedCursor(Cursor cursor) {
-        if (useDataBase == false) {
-            throw new RuntimeException("You forgot to use turnOnDatabaseUse() in onCreate()");
-        }
-        openedCursors.add(cursor);
-    }    
-    
-    protected void closeCursorIfOpened(Cursor cursor) {
+    protected Cursor openCursor() {
+        closeCursorIfOpened();
+        return null;
+    }
+
+    protected void closeCursorIfOpened() {
         if (useDataBase == false) {
             throw new RuntimeException("You forgot to use turnOnDatabaseUse() in onCreate()");
         }
         
-        if (cursor != null && openedCursors.contains(cursor)) {
-            openedCursors.remove(cursor);
+        if (cursor != null) {
             cursor.close();
+            cursor = null;
         }
     }
     
     protected void turnOnDatabaseUse() {
         if (useDataBase == false) {
             useDataBase = true;
-            openedCursors = new HashSet<Cursor>();
         }
     }
 }

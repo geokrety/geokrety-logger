@@ -26,15 +26,18 @@ import java.io.Serializable;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
+import pl.nkg.geokrety.data.GeocacheLogDataSource;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.threads.RefreshAccount;
+import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
-import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,9 +54,29 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 	private GenericProgressDialogWrapper refreshProgressDialog;
 	private RefreshAccount refreshAccount;
 
+	private class Adapter extends ExtendedCursorAdapter {
+
+        public Adapter(final Context context, final Cursor c, final boolean autoRequery) {
+            super(context, c, true, android.R.layout.simple_list_item_2);
+        }
+
+        @Override
+        public void bindView(final View view, final Context context, final Cursor cursor) {
+            final GeocacheLog gk = new GeocacheLog(cursor, 1);
+            // bindIcon(view, log);
+            if (gk.getGeoCache() == null || gk.getGeoCache().getName() == null) {
+                bindTextView(view, android.R.id.text1, gk.getCacheCode());
+            } else {
+                bindTextView(view, android.R.id.text1, gk.getGeoCache().getName() + " (" + gk.getCacheCode() + ")");
+            }
+            bindTextView(view, android.R.id.text2, GeocacheLog.toReadableDateString(gk.getDate()) + ", " + gk.getType());
+        }
+    }
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		turnOnDatabaseUse();
 		refreshProgressDialog = new GenericProgressDialogWrapper(this,
 				Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
 
@@ -73,12 +96,22 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 		spin.setSelection(holder.getDefaultAccountNr());
 
 	}
+	
+	@Override
+    protected Cursor openCursor() {
+        super.openCursor();
+        if (account != null) {
+            cursor = GeocacheLogDataSource.createLoadByUserIDCurosr(database, account.getID());
+            final Adapter adapter = new Adapter(this, cursor, true);
+            final ListView listView = (ListView) findViewById(R.id.ocsListView);
+            listView.setAdapter(adapter);
+        }
+        return cursor;
+    }
 
 	@Override
 	protected void onStart() {
 		super.onStart();
-		StateHolder holder = ((GeoKretyApplication) getApplication())
-				.getStateHolder();
 		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
 			@Override
 			public void onFinish(
@@ -88,20 +121,20 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 				refreshListView();
 			}
 		});
-		if (holder.getDefaultAccountNr() != ListView.INVALID_POSITION) {
-			account = holder.getAccountList().get(holder.getDefaultAccountNr());
-			updateListView();
-		}
 	}
 
+	@Override
+	protected void onResume() {
+	    super.onResume();
+        if (stateHolder.getDefaultAccountNr() != ListView.INVALID_POSITION) {
+            account = stateHolder.getAccountList().get(stateHolder.getDefaultAccountNr());
+            updateListView();
+        }
+	}
+	
 	private void refreshListView() {
-	    // TODO: refactor to CursorAdapter
-		ArrayAdapter<GeocacheLog> adapter = new ArrayAdapter<GeocacheLog>(this,
-				android.R.layout.simple_list_item_1,
-				stateHolder.getGeocacheLogDataSource().loadLastLogs(account.getID()));
-		
-		ListView listView = (ListView) findViewById(R.id.ocsListView);
-		listView.setAdapter(adapter);
+	    // FIXME: reload after refresh
+        openCursor();
 	}
 
 	@Override

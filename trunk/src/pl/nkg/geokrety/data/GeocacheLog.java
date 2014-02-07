@@ -36,6 +36,7 @@ import android.database.Cursor;
 public class GeocacheLog {
 
 	public static String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ssZ";
+	public static String FORMAT_DATE_READABLE = "yyyy-MM-dd HH:mm";
 
 	private final String uuid;
 	private final Date date;
@@ -115,14 +116,21 @@ public class GeocacheLog {
 	}
 
 	private static DateFormat dateFormat;
+	private static DateFormat readableDateFormat;
 
 	static {
 		dateFormat = new SimpleDateFormat(FORMAT_DATE_ISO, Locale.getDefault());
 		dateFormat.setTimeZone(TimeZone.getDefault());
+		readableDateFormat = new SimpleDateFormat(FORMAT_DATE_READABLE, Locale.getDefault());
+		readableDateFormat.setTimeZone(TimeZone.getDefault());
 	}
 
 	public static Date fromISODateString(String isoDateString)
 			throws ParseException {
 		return dateFormat.parse(isoDateString);
+	}
+	
+	public static String toReadableDateString(Date date) {
+	    return readableDateFormat.format(date);
 	}
 }
