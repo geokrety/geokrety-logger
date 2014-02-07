@@ -109,7 +109,7 @@ public class GeoKretLogDataSource {
                 + FETCH_FULL_COLUMNS
                 + " FROM " + TABLE + " AS l" //
                 + " LEFT JOIN " + GeocacheDataSource.TABLE + " AS c ON l." + COLUMN_WAYPOINT + " = c." + GeocacheDataSource.COLUMN_WAYPOINT
-                + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON l." + COLUMN_TRACKING_CODE;
+                + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON l." + COLUMN_TRACKING_CODE + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE;
         
         FETCH_BY_USER = FETCH_FULL_USER //
                 + " WHERE l." + COLUMN_USER_ID + " = ?" //
