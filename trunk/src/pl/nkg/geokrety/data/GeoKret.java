@@ -26,9 +26,16 @@ import java.util.Locale;
 
 import org.w3c.dom.Node;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 
 public class GeoKret {
+    public static final int TYPE_TRADITIONAL = 0;
+    public static final int TYPE_BOOK = 1;
+    public static final int TYPE_HUMAN = 2;
+    public static final int TYPE_COIN = 3;
+    public static final int TYPE_POST = 4;
+    
     private Integer mGeoKretId;
     private Integer mDist;
     private Integer mOwnerId;
@@ -166,6 +173,7 @@ public class GeoKret {
         return mName + " (" + mTrackingCode + ")";
     }
 
+    @SuppressLint("DefaultLocale")
     public String getFormatedCode() {
         if (mGeoKretId == null) {
             return "...";

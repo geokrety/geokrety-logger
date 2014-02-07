@@ -61,8 +61,8 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     private String oldTrackingCode = "";
 
     private EditText trackingCodeEditText;
-    @Deprecated
-    private EditText nameEditText;
+    //@Deprecated
+    //private EditText nameEditText;
     private CheckBox stickyCheckBox;
 
     // private GeoKret geoKret;
@@ -83,7 +83,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
         saveModifiedsDialog.setNeutralButton(getText(android.R.string.cancel));
 
         trackingCodeEditText = (EditText) findViewById(R.id.trackingCodeEditText);
-        nameEditText = (EditText) findViewById(R.id.nameEditText);
+        //nameEditText = (EditText) findViewById(R.id.nameEditText);
         stickyCheckBox = (CheckBox) findViewById(R.id.stickyCheckBox);
 
         Bundle ib = getIntent().getExtras();
@@ -98,7 +98,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
             stickyCheckBox.setChecked(geoKret.isSticky());
         }
 
-        nameEditText.addTextChangedListener(this);
+        //nameEditText.addTextChangedListener(this);
         trackingCodeEditText.addTextChangedListener(this);
         stickyCheckBox.setOnCheckedChangeListener(this);
         modified = false;

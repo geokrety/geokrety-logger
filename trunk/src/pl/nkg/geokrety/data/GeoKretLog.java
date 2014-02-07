@@ -338,8 +338,6 @@ public class GeoKretLog {
 	}
 
     public Geocache getGeoCache() {
-        // TODO Auto-generated method stub
-        // FIXME: load cache in GeoKretLog
         return geocache;
     }
     

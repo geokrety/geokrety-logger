@@ -27,6 +27,7 @@ import java.io.Serializable;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.StateHolder;
@@ -127,12 +128,13 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         }
 
         private boolean checkHumanGeokret(final GeoKretLog log) {
-            // TODO Auto-generated method stub
+            if (log.getGeoKret() != null && log.getGeoKret().getType() != null) {
+                return log.getGeoKret().getType() == GeoKret.TYPE_HUMAN;
+            }
             return false;
         }
 
         private CharSequence formatCacheName(final GeoKretLog log) {
-            // TODO Auto-generated method stub
             if (log.getGeoCache() != null) {
                 return log.getGeoCache().getName();
             } else {
@@ -149,13 +151,15 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         }
 
         private CharSequence formatGeoKretCode(final GeoKretLog log) {
-            // TODO Auto-generated method stub
-            return log.getNr();
+            if (log.getGeoKret() != null) {
+                return log.getGeoKret().getFormatedCode() + " (" + log.getNr() + ")";
+            } else {
+                return log.getNr();
+            }
         }
 
         private CharSequence formatGeoKretName(final GeoKretLog log) {
-            // TODO Auto-generated method stub
-            return "";
+            return Utils.defaultIfNull(log.getGeoKret().getName(), "...");
         }
 
         private CharSequence formatProfileName(final GeoKretLog log) {

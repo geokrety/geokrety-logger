@@ -78,9 +78,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
+                        android:textAllCaps="true"
+                        android:inputType="textCapCharacters"
                         android:hint="@string/geokret_nr_hint" />
                 </TableRow>
-                
+                <!-- 
                 <TableRow
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" >
@@ -97,7 +99,7 @@
                         android:ems="10"
                         android:hint="@string/geokret_name_hint" />
                 </TableRow>
-
+ -->
             </TableLayout>
 
             <CheckBox
