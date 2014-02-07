@@ -24,12 +24,13 @@ package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
-import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
@@ -41,7 +42,6 @@ import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.RemoveLogDialog;
 import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.geokrety.threads.RefreshAccount;
-import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
@@ -53,7 +53,6 @@ import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
@@ -78,7 +77,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private AlertDialogWrapper ocsSpinnerDialog;
     private AlertDialogWrapper logTypeSpinnerDialog;
 
-    private GeoKretyApplication application;
     private RefreshAccount refreshAccount;
 
     private GeoKretLog currentLog;
@@ -130,8 +128,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 break;
 
             case Dialogs.INVENTORY_SPINNERDIALOG:
-                final GeoKret kret = new GeoKret((Cursor)inventorySpinnerDialog.getAdapter()
-                        .getItem(buttonId));
+                final GeoKret kret = (GeoKret) inventorySpinnerDialog.getAdapter()
+                        .getItem(buttonId);
                 trackingCodeEditText.setText(kret.getTrackingCode());
                 break;
 
@@ -158,8 +156,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             case Dialogs.REMOVE_LOG_ALERTDIALOG:
                 if (buttonId == DialogInterface.BUTTON_POSITIVE) {
                     if (currentLog.getId() > 0) {
-                        application.getStateHolder().getGeoKretLogDataSource()
-                                .delete(currentLog.getId());
+                        stateHolder.getGeoKretLogDataSource().delete(currentLog.getId());
                     }
                     finish();
                 }
@@ -227,18 +224,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     public void showInventory(final View view) {
         if (updateSpinners()) {
-            inventoryCursor.moveToFirst();
-            int pos = -1;
-            int i = 0;
-            String tc = trackingCodeEditText.getText().toString();
-            while (inventoryCursor.moveToNext()) {
-                if (tc.contains(new GeoKret(inventoryCursor).getTrackingCode())) {
-                    pos = i;
-                    break;
-                }
-                i++;
-            }
-            inventorySpinnerDialog.show(null, pos);
+            inventorySpinnerDialog.show(null, inventoryAdapter.indexOf(trackingCodeEditText.getText().toString()));
         }
     }
 
@@ -261,28 +247,26 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         return true;
     }
     
-    private class InventoryAdapter extends ExtendedCursorAdapter {
+    private InventoryAdapter inventoryAdapter;
+    private class InventoryAdapter extends ArrayAdapter<GeoKret> {
 
-        public InventoryAdapter(final Context context, final Cursor c, final boolean autoRequery) {
-            super(context, c, true, android.R.layout.simple_list_item_single_choice);
+        public InventoryAdapter() {
+            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder.getInventoryDataSource().loadInventory(currentAccount.getID()));
         }
-
-        @Override
-        public void bindView(final View view, final Context context, final Cursor cursor) {
-            final GeoKret gk = new GeoKret(cursor);
-            bindTextView(view, android.R.id.text1, gk.toString());
+        
+        public int indexOf(String trackingCode) {
+            for (int i = 0; i < getCount(); i++) {
+                if (trackingCode.toUpperCase(Locale.ENGLISH).contains(getItem(i).getTrackingCode().toUpperCase(Locale.ENGLISH))) {
+                    return i;
+                }
+            }
+            return -1;
         }
     }
 
-    private Cursor inventoryCursor;
     private void configAdapters() {
-        // FIXME: not work after rotate, please back to ArrayAdapter
-        closeCursorIfOpened(inventoryCursor);
-        inventoryCursor = InventoryDataSource
-                .createLoadByUserIDCurosr(database, currentAccount.getID());
-        registerOpenedCursor(inventoryCursor);
-        
-        inventorySpinnerDialog.setAdapter(new InventoryAdapter(this, inventoryCursor, true));
+        inventoryAdapter = new InventoryAdapter();
+        inventorySpinnerDialog.setAdapter(inventoryAdapter);
 
         ocsSpinnerDialog.setAdapter(new ArrayAdapter<GeocacheLog>(this,
                 android.R.layout.simple_list_item_single_choice, currentAccount
@@ -290,7 +274,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     private void loadFromGeoKretLog(final GeoKretLog log) {
-        currentAccount = application.getStateHolder().getAccountByID(log.getAccoundID());
+        currentAccount = stateHolder.getAccountByID(log.getAccoundID());
         currentLogType = log.getLogTypeMapped();
         // accountsButton.setText(application.getStateHolder().getAccountByID(log.getAccoundID()).getName());
         accountsButton.setText(currentAccount == null ? getText(R.string.form_profile)
@@ -308,9 +292,9 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         storeToGeoKretLog(currentLog);
         currentLog.setState(state);
         if (currentLog.getId() == 0) {
-            application.getStateHolder().getGeoKretLogDataSource().persist(currentLog);
+            stateHolder.getGeoKretLogDataSource().persist(currentLog);
         } else {
-            application.getStateHolder().getGeoKretLogDataSource().merge(currentLog);
+            stateHolder.getGeoKretLogDataSource().merge(currentLog);
         }
     }
 
@@ -355,7 +339,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     @Override
     protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        currentAccount = application.getStateHolder().getDefaultAccount();
+        currentAccount = stateHolder.getDefaultAccount();
         storeToGeoKretLog(currentLog);
         loadFromGeoKretLog(currentLog);
         super.onActivityResult(requestCode, resultCode, data);
@@ -364,7 +348,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        turnOnDatabaseUse();
         setContentView(R.layout.activity_log);
 
         final Intent intent = getIntent();
@@ -387,20 +370,19 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         // logProgressDialog.setTitle(R.string.submit_title);
 
-        application = (GeoKretyApplication) getApplication();
         refreshAccount = RefreshAccount.getFromHandler(application.getForegroundTaskHandler());
 
         final long logID = intent.getLongExtra(GeoKretLogDataSource.COLUMN_ID,
                 AdapterView.INVALID_ROW_ID);
         if (logID != AdapterView.INVALID_ROW_ID) {
-            currentLog = application.getStateHolder().getGeoKretLogDataSource().loadByID(logID);
+            currentLog = stateHolder.getGeoKretLogDataSource().loadByID(logID);
         }
 
         
         if (currentLog == null) {
             currentLog = new GeoKretLog(savedInstanceState);
         } else {
-            currentAccount = application.getStateHolder().getAccountByID(currentLog.getAccoundID());
+            currentAccount = stateHolder.getAccountByID(currentLog.getAccoundID());
             if (currentLog.getState() == GeoKretLog.STATE_PROBLEM) {
                 TextView errorTextView = (TextView)findViewById(R.id.errorTextView);
                 errorTextView.setText(getText(currentLog.getProblem()) + " " + currentLog.getProblemArg());
@@ -450,9 +432,9 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                     }
 
                     if (!Utils.isEmpty(username)) {
-                        currentAccount = application.getStateHolder().matchAccount(username);
+                        currentAccount = stateHolder.matchAccount(username);
                     } else if (!Utils.isEmpty(rrUsername)) {
-                        currentAccount = application.getStateHolder().matchAccount(rrUsername);
+                        currentAccount = stateHolder.matchAccount(rrUsername);
                     }
                 } else if (data.getHost().equals("coord.info")) {
                     final String path = data.getPath();
@@ -493,7 +475,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     protected void onStart() {
         super.onStart();
 
-        if (application.getStateHolder().getAccountList().size() == 0) {
+        if (stateHolder.getAccountList().size() == 0) {
             Toast.makeText(this, R.string.no_account_configured, Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, MainActivity.class));
             return;
@@ -510,7 +492,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         // updateCurrentAccount(false, false);
         if (currentAccount == null) {
-            currentAccount = application.getStateHolder().getDefaultAccount();
+            currentAccount = stateHolder.getDefaultAccount();
         }
         
         if (currentAccount != null) {
@@ -521,15 +503,10 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 android.R.layout.simple_list_item_single_choice, getResources().getStringArray(
                         R.array.log_array)));
 
+        updateSpinners();
         loadFromGeoKretLog(currentLog);
         logTypeSpinnerDialog.setCheckedItem(currentLogType);
         gpsAcquirer.start();
-    }
-    
-    @Override
-    protected void onResume() {
-        super.onResume();
-        updateSpinners();
     }
 
     @Override

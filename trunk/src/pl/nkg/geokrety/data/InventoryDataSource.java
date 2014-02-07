@@ -22,6 +22,7 @@
 
 package pl.nkg.geokrety.data;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -195,5 +196,23 @@ public class InventoryDataSource {
             }
         });
         return geoKretLogs.isEmpty() ? null : geoKretLogs.getFirst();
+    }
+
+    public GeoKret[] loadInventory(final long id) {
+        final LinkedList<GeoKret> geoKrets = new LinkedList<GeoKret>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final Cursor cursor = createLoadByUserIDCurosr(db, id);
+                while (cursor.moveToNext()) {
+                    geoKrets.add(new GeoKret(cursor));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return geoKrets.toArray(new GeoKret[geoKrets.size()]);
     }
 }

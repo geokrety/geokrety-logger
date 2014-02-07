@@ -151,14 +151,8 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
         }
 
         if (oldVersion <= 6) {
+            importInventoryFromOlderThan7(db, oldVersion);
             db.execSQL(GeoKretDataSource.TABLE_CREATE);
-            // FIXME: must be tested
-            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN geokret_code");
-            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN dist");
-            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN owner_id");
-            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN state");
-            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN type");
-            db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " DROP COLUMN name");
         }
     }
 
@@ -254,5 +248,34 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
         db.execSQL(query);
         dropTableIfExist(db, "tmp_" + UserDataSource.TABLE);
+    }
+    
+    private void importInventoryFromOlderThan7(final SQLiteDatabase db, final int oldVersion) {
+        db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " RENAME TO tmp_" + InventoryDataSource.TABLE
+                + ";");
+        db.execSQL(InventoryDataSource.TABLE_CREATE);
+
+        final List<String> oldColumns = new LinkedList<String>(Arrays.asList("user_id", //
+                InventoryDataSource.COLUMN_USER_ID, //
+                InventoryDataSource.COLUMN_STICKY, //
+                InventoryDataSource.COLUMN_TRACKING_CODE));
+
+        final List<String> newColumns = new LinkedList<String>(Arrays.asList(
+                InventoryDataSource.COLUMN_ID, //
+                InventoryDataSource.COLUMN_USER_ID, //
+                InventoryDataSource.COLUMN_STICKY, //
+                InventoryDataSource.COLUMN_TRACKING_CODE));
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append("INSERT INTO " + InventoryDataSource.TABLE + "(");
+        sb.append(TextUtils.join(", ", newColumns));
+        sb.append(") SELECT ");
+        sb.append(TextUtils.join(", ", oldColumns));
+        sb.append(" FROM tmp_" + InventoryDataSource.TABLE).append(";");
+
+        final String query = sb.toString();
+
+        db.execSQL(query);
+        dropTableIfExist(db, "tmp_" + InventoryDataSource.TABLE);
     }
 }
