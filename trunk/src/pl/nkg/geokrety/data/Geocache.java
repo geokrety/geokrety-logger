@@ -53,12 +53,12 @@ public class Geocache {
 		this.status = status;
 	}
 
-	public Geocache(Cursor cursor) {
-        this.code = cursor.getString(6);
-	    this.name = cursor.getString(7);
-        this.location =  cursor.getString(8);
-        this.type =  cursor.getString(9);
-        this.status =  cursor.getString(10);
+	public Geocache(Cursor cursor, int i) {
+        this.code = cursor.getString(i + 0);
+	    this.name = cursor.getString(i + 1);
+        this.location =  cursor.getString(i + 2);
+        this.type =  cursor.getString(i + 3);
+        this.status =  cursor.getString(i + 4);
     }
 
     public String getName() {

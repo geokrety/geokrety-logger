@@ -56,28 +56,10 @@ public class InventoryDataSource {
     private final GeoKretySQLiteHelper dbHelper;
 
     private static final String PREFIX_FETCH_BY = "SELECT " //
-            + "i." + COLUMN_ID + " AS " + COLUMN_ID
-            + ", " //
-            + "i." + COLUMN_TRACKING_CODE
-            + ", " //
-            + "i." + COLUMN_STICKY
-            + ", " //
-            + "g." + GeoKretDataSource.COLUMN_GK_CODE
-            + ", " //
-            + "g." + GeoKretDataSource.COLUMN_DISTANCE
-            + ", " //
-            + "g." + GeoKretDataSource.COLUMN_OWNER_ID
-            + ", " //
-            + "g." + GeoKretDataSource.COLUMN_STATE
-            + ", " //
-            + "g." + GeoKretDataSource.COLUMN_TYPE
-            + ", " //
-            + "g." + GeoKretDataSource.COLUMN_NAME
-            + ", " //
-            + "g." + GeoKretDataSource.COLUMN_SYNCHRO_STATE
-            + "," //
-            + "g."
-            + GeoKretDataSource.COLUMN_SYNCHRO_ERROR //
+            + "i." + COLUMN_ID + " AS " + COLUMN_ID + ", " //
+            + "i." + COLUMN_TRACKING_CODE + ", " //
+            + "i." + COLUMN_STICKY + ", " //
+            + GeoKretDataSource.FETCH_COLUMNS
             + " FROM " + TABLE
             + " AS i" //
             + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i." + COLUMN_TRACKING_CODE
@@ -189,7 +171,7 @@ public class InventoryDataSource {
                         String.valueOf(logID)
                 });
                 while (cursor.moveToNext()) {
-                    geoKretLogs.add(new GeoKret(cursor));
+                    geoKretLogs.add(new GeoKret(cursor, 1));
                 }
                 cursor.close();
                 return true;
@@ -207,7 +189,7 @@ public class InventoryDataSource {
 
                 final Cursor cursor = createLoadByUserIDCurosr(db, id);
                 while (cursor.moveToNext()) {
-                    geoKrets.add(new GeoKret(cursor));
+                    geoKrets.add(new GeoKret(cursor, 1));
                 }
                 cursor.close();
                 return true;

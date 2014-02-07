@@ -67,14 +67,14 @@ public class GeocacheLog {
 		this.portal = portal;
 	}
 
-	public GeocacheLog(Cursor cursor) {
-	    this.uuid = cursor.getString(1);
-        this.type = cursor.getString(2);
-        this.date = new Date(cursor.getLong(3));
-        this.comment = cursor.getString(4);
-        this.portal = cursor.getInt(5);
-        this.cache_code = cursor.getString(6);
-        this.geocache = new Geocache(cursor);
+	public GeocacheLog(Cursor cursor, int i) {
+	    this.uuid = cursor.getString(i + 0);
+        this.type = cursor.getString(i + 1);
+        this.date = new Date(cursor.getLong(i + 2));
+        this.comment = cursor.getString(i + 3);
+        this.portal = cursor.getInt(i + 4);
+        this.cache_code = cursor.getString(i + 5);
+        this.geocache = new Geocache(cursor, i + 5);
     }
 
     public String getUUID() {

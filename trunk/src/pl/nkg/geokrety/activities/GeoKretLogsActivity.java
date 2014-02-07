@@ -69,7 +69,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
         @Override
         public void bindView(final View view, final Context context, final Cursor cursor) {
-            final GeoKretLog log = new GeoKretLog(cursor, 0, false);
+            final GeoKretLog log = new GeoKretLog(cursor, 0, false, true);
             bindIcon(view, log);
             bindTextView(view, R.id.gkCodeTextView, formatGeoKretCode(log));
             bindTextView(view, R.id.gkNameTextView, formatGeoKretName(log));
@@ -90,7 +90,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
         private int adjustCacheDrawable(final GeoKretLog log) {
             // TODO Auto-generated method stub
-            if (log.getGeoCache() != null) {
+            if (log.getGeoCache() != null && log.getGeoCache().getType() != null) {
                 final String type = log.getGeoCache().getType();
 
                 if (type.equals("Traditional")) {

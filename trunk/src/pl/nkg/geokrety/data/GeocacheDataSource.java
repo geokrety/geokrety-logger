@@ -50,6 +50,12 @@ public class GeocacheDataSource {
 			+ "); ";
 
 	private GeoKretySQLiteHelper dbHelper;
+	
+	public static final String FETCH_COLUMNS = "c." + COLUMN_NAME + ", " //
+            + "c." + COLUMN_LOCATION + ", " //
+            + "c." + COLUMN_TYPE + ", " //
+            + "c." + COLUMN_STATUS;            
+
 
 	private static final String FETCH_ALL = "SELECT " //
 			+ COLUMN_WAYPOINT + ", " //

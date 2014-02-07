@@ -78,7 +78,7 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
 
         @Override
         public void bindView(final View view, final Context context, final Cursor cursor) {
-            final GeoKret gk = new GeoKret(cursor);
+            final GeoKret gk = new GeoKret(cursor, 1);
             // bindIcon(view, log);
             bindTextView(view, android.R.id.text1,
                     gk.getFormatedCode() + " (" + gk.getTrackingCode() + ")");

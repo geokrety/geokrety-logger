@@ -78,13 +78,10 @@ public class GeocacheLogDataSource {
 			+ "l." + COLUMN_COMMENT + ", " //
 			+ "l." + COLUMN_PORTAL + "," //
             + "l." + COLUMN_WAYPOINT + ", " //
-            + "g." + GeocacheDataSource.COLUMN_NAME + ", " //
-            + "g." + GeocacheDataSource.COLUMN_LOCATION + ", " //
-            + "g." + GeocacheDataSource.COLUMN_TYPE + ", " //
-            + "g." + GeocacheDataSource.COLUMN_STATUS //			
+            + GeocacheDataSource.FETCH_COLUMNS			
             + " FROM " //
 			+ TABLE + " AS l"
-			+ " LEFT JOIN " + GeocacheDataSource.TABLE + " AS g ON l." + COLUMN_WAYPOINT + " = g." + GeocacheDataSource.COLUMN_WAYPOINT
+			+ " LEFT JOIN " + GeocacheDataSource.TABLE + " AS c ON l." + COLUMN_WAYPOINT + " = c." + GeocacheDataSource.COLUMN_WAYPOINT
 			+ " WHERE l." + COLUMN_USER_ID
 			+ " = ? ORDER BY "
 			+ "l." + COLUMN_DATE + " DESC";
@@ -174,7 +171,7 @@ public class GeocacheLogDataSource {
 				Cursor cursor = db.rawQuery(FETCH_BY_USER,
 						new String[] { String.valueOf(userID) });
 				while (cursor.moveToNext()) {
-					GeocacheLog log = new GeocacheLog(cursor);
+					GeocacheLog log = new GeocacheLog(cursor, 1);
 					list.add(log);
 				}
 				cursor.close();
@@ -192,7 +189,7 @@ public class GeocacheLogDataSource {
             public boolean inTransaction(SQLiteDatabase db) {
                 Cursor cursor = createLoadByUserIDCurosr(db, userID);
                 while (cursor.moveToNext()) {
-                    GeocacheLog log = new GeocacheLog(cursor);
+                    GeocacheLog log = new GeocacheLog(cursor, 1);
                     list.add(log);
                 }
                 cursor.close();

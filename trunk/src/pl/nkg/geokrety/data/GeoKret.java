@@ -68,17 +68,17 @@ public class GeoKret {
         mSynchroError = synchroError;
     }
 
-    public GeoKret(Cursor cursor) {
-        mTrackingCode = cursor.getString(1);
-        mSticky = cursor.getInt(2) != 0;
-        mGeoKretId = cursor.isNull(3) ? null : cursor.getInt(3);
-        mDist = cursor.isNull(4) ? null : cursor.getInt(4);
-        mOwnerId = cursor.isNull(5) ? null : cursor.getInt(5);
-        mState = cursor.isNull(6) ? null : cursor.getInt(6);
-        mType = cursor.isNull(7) ? null : cursor.getInt(7);
-        mName = cursor.isNull(8) ? null : cursor.getString(8);
-        mSynchroState = cursor.isNull(9) ? GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED : cursor.getInt(9);
-        mSynchroError = cursor.isNull(10) ? null : cursor.getString(10);
+    public GeoKret(Cursor cursor, int i) {
+        mTrackingCode = cursor.getString(i + 0);
+        mSticky = cursor.getInt(i + 1) != 0;
+        mGeoKretId = cursor.isNull(i + 2) ? null : cursor.getInt(i + 2);
+        mDist = cursor.isNull(i + 3) ? null : cursor.getInt(i + 3);
+        mOwnerId = cursor.isNull(i + 4) ? null : cursor.getInt(i + 4);
+        mState = cursor.isNull(i + 5) ? null : cursor.getInt(i + 5);
+        mType = cursor.isNull(i + 6) ? null : cursor.getInt(i + 6);
+        mName = cursor.isNull(i + 7) ? null : cursor.getString(i + 7);
+        mSynchroState = cursor.isNull(i + 8) ? GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED : cursor.getInt(i + 8);
+        mSynchroError = cursor.isNull(i + 9) ? null : cursor.getString(i + 9);
     }
 
     public int getDist() {

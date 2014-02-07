@@ -61,6 +61,16 @@ public class GeoKretDataSource {
             + COLUMN_SYNCHRO_STATE + " INTEGER DEFAULT 0," //
             + COLUMN_SYNCHRO_ERROR + " TEXT" //
             + "); ";
+    
+    public static final String FETCH_COLUMNS = "g." + COLUMN_GK_CODE + ", " //
+            + "g." + COLUMN_DISTANCE + ", " //
+            + "g." + COLUMN_OWNER_ID + ", " //
+            + "g." + COLUMN_STATE + ", " //
+            + "g." + COLUMN_TYPE + ", " //
+            + "g." + COLUMN_NAME + ", " //
+            + "g." + COLUMN_SYNCHRO_STATE + ", " //
+            + "g." + COLUMN_SYNCHRO_ERROR;
+
 
     private static ContentValues getValues(final GeoKret geokret) {
         final ContentValues values = new ContentValues();

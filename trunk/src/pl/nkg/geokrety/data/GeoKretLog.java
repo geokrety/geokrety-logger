@@ -72,6 +72,9 @@ public class GeoKretLog {
 	private int		problem;
 
 	private String	problemArg;
+	
+	private GeoKret geoKret;
+	private Geocache geocache;
 
 	public GeoKretLog() {
 		nr = "";
@@ -139,7 +142,7 @@ public class GeoKretLog {
 		this.secid = secid;
 	}
 
-	public GeoKretLog(Cursor cursor, int i, boolean secidInQuery) {
+	public GeoKretLog(Cursor cursor, int i, boolean secidInQuery, boolean joinsInQuery) {
 		this( //
 				cursor.getInt(i + 0), //
 				cursor.getInt(i + 1), //
@@ -157,6 +160,11 @@ public class GeoKretLog {
 				cursor.getString(i + 13), //
 				secidInQuery ? cursor.getString(i + 14) : "" //
 		);
+		
+		if (joinsInQuery) {
+		    geocache = new Geocache(cursor, i + 15);
+		    geoKret = new GeoKret(cursor, i + 20);
+		}
 	}
 
 	public long getAccoundID() {
@@ -332,6 +340,10 @@ public class GeoKretLog {
     public Geocache getGeoCache() {
         // TODO Auto-generated method stub
         // FIXME: load cache in GeoKretLog
-        return null;
+        return geocache;
+    }
+    
+    public GeoKret getGeoKret() {
+        return geoKret;
     }
 }

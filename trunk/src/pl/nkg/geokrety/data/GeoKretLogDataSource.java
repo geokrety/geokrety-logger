@@ -53,9 +53,12 @@ public class GeoKretLogDataSource {
     private final GeoKretySQLiteHelper dbHelper;
 
     // private static final String FETCH_ALL;
+    private static final String FETCH_GK_LOG_COLUMNS;
+    private static final String FETCH_FULL_COLUMNS;
     private static final String FETCH_OUTBOX;
     private static final String FETCH_BY_USER;
     private static final String FETCH_BY_ID;
+    private static final String FETCH_FULL_USER;
 
     static {
         TABLE_CREATE = "CREATE TABLE " //
@@ -76,85 +79,47 @@ public class GeoKretLogDataSource {
                 + COLUMN_COMMENT + " TEXT NOT NULL" //
                 + "); ";
 
+        FETCH_GK_LOG_COLUMNS = "l." + COLUMN_ID + " AS " + COLUMN_ID + ", " //
+                + "l." + COLUMN_USER_ID + ", " //
+                + "l." + COLUMN_STATE + ", " //
+                + "l." + COLUMN_PROBLEM + ", " //
+                + "l." + COLUMN_PROBLEM_ARG + ", " //
+                + "l." + COLUMN_TRACKING_CODE + ", " //
+                + "l." + COLUMN_WAYPOINT + ", " //
+                + "l." + COLUMN_FORMNAME + ", " //
+                + "l." + COLUMN_LATLON + ", " //
+                + "l." + COLUMN_LOG_TYPE + ", " //
+                + "l." + COLUMN_DATE + ", " //
+                + "l." + COLUMN_HOUR + ", " //
+                + "l." + COLUMN_MINUTE + ", " //
+                + "l." + COLUMN_COMMENT;
+        
+        FETCH_FULL_COLUMNS = FETCH_GK_LOG_COLUMNS + ", " + GeocacheDataSource.FETCH_COLUMNS + ", " + GeoKretDataSource.FETCH_COLUMNS;
+        
         FETCH_OUTBOX = "SELECT " //
-                + "l." + COLUMN_ID
-                + ", " //
-                + "l." + COLUMN_USER_ID
-                + ", " //
-                + "l." + COLUMN_STATE
-                + ", " //
-                + "l." + COLUMN_PROBLEM
-                + ", " //
-                + "l." + COLUMN_PROBLEM_ARG
-                + ", " //
-                + "l." + COLUMN_TRACKING_CODE
-                + ", " //
-                + "l." + COLUMN_WAYPOINT
-                + ", " //
-                + "l." + COLUMN_FORMNAME
-                + ", " //
-                + "l." + COLUMN_LATLON
-                + ", " //
-                + "l." + COLUMN_LOG_TYPE
-                + ", " //
-                + "l." + COLUMN_DATE
-                + ", " //
-                + "l." + COLUMN_HOUR
-                + ", " //
-                + "l." + COLUMN_MINUTE
-                + ", " //
-                + "l." + COLUMN_COMMENT
-                + ", "//
+                + FETCH_GK_LOG_COLUMNS + ", "//
                 + "u." + UserDataSource.COLUMN_SECID
                 + " FROM " //
-                + TABLE
-                + " AS l" //
-                + " JOIN " + UserDataSource.TABLE + " AS u ON l." + COLUMN_USER_ID + " = u."
-                + UserDataSource.COLUMN_ID //
+                + TABLE + " AS l" //
+                + " JOIN " + UserDataSource.TABLE + " AS u ON l." + COLUMN_USER_ID + " = u." + UserDataSource.COLUMN_ID //
                 + " WHERE l." + COLUMN_STATE + " = " + GeoKretLog.STATE_OUTBOX //
                 + " ORDER BY l." + COLUMN_ID;
 
-        FETCH_BY_USER = "SELECT " //
-                + "l." + COLUMN_ID + ", " //
-                + "l." + COLUMN_USER_ID + ", " //
-                + "l." + COLUMN_STATE + ", " //
-                + "l." + COLUMN_PROBLEM + ", " //
-                + "l." + COLUMN_PROBLEM_ARG + ", " //
-                + "l." + COLUMN_TRACKING_CODE + ", " //
-                + "l." + COLUMN_WAYPOINT + ", " //
-                + "l." + COLUMN_FORMNAME + ", " //
-                + "l." + COLUMN_LATLON + ", " //
-                + "l." + COLUMN_LOG_TYPE + ", " //
-                + "l." + COLUMN_DATE + ", " //
-                + "l." + COLUMN_HOUR + ", " //
-                + "l." + COLUMN_MINUTE + ", " //
-                + "l." + COLUMN_COMMENT//
-                + " FROM " //
-                + TABLE + " l" //
+        FETCH_FULL_USER = "SELECT " //
+                + FETCH_FULL_COLUMNS
+                + " FROM " + TABLE + " AS l" //
+                + " LEFT JOIN " + GeocacheDataSource.TABLE + " AS c ON l." + COLUMN_WAYPOINT + " = c." + GeocacheDataSource.COLUMN_WAYPOINT
+                + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON l." + COLUMN_TRACKING_CODE;
+        
+        FETCH_BY_USER = FETCH_FULL_USER //
                 + " WHERE l." + COLUMN_USER_ID + " = ?" //
-                + " ORDER BY " + COLUMN_ID;
+                + " ORDER BY l." + COLUMN_ID;
 
-        FETCH_BY_ID = "SELECT " //
-                + "l." + COLUMN_ID + ", " //
-                + "l." + COLUMN_USER_ID + ", " //
-                + "l." + COLUMN_STATE + ", " //
-                + "l." + COLUMN_PROBLEM + ", " //
-                + "l." + COLUMN_PROBLEM_ARG + ", " //
-                + "l." + COLUMN_TRACKING_CODE + ", " //
-                + "l." + COLUMN_WAYPOINT + ", " //
-                + "l." + COLUMN_FORMNAME + ", " //
-                + "l." + COLUMN_LATLON + ", " //
-                + "l." + COLUMN_LOG_TYPE + ", " //
-                + "l." + COLUMN_DATE + ", " //
-                + "l." + COLUMN_HOUR + ", " //
-                + "l." + COLUMN_MINUTE + ", " //
-                + "l." + COLUMN_COMMENT//
-                + " FROM " //
-                + TABLE + " AS l" //
-                + " WHERE l." + COLUMN_ID + " = ?";
+        FETCH_BY_ID = FETCH_FULL_USER + " WHERE l." + COLUMN_ID + " = ?";
     }
 
     public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
+        // FIXME: 02-07 15:03:15.514: E/CursorWindow(7906): Bad request for field slot 0,29. numRows = 2, numColumns = 26
         return db.rawQuery(FETCH_BY_USER, new String[] {
                 String.valueOf(userID)
         });
@@ -204,7 +169,7 @@ public class GeoKretLogDataSource {
                         String.valueOf(logID)
                 });
                 while (cursor.moveToNext()) {
-                    geoKretLogs.add(new GeoKretLog(cursor, 0, false));
+                    geoKretLogs.add(new GeoKretLog(cursor, 0, false, true));
                 }
                 cursor.close();
                 return true;
@@ -221,7 +186,7 @@ public class GeoKretLogDataSource {
             public boolean inTransaction(final SQLiteDatabase db) {
                 final Cursor cursor = createLoadByUserIDCurosr(db, userID);
                 while (cursor.moveToNext()) {
-                    geoKretLogs.add(new GeoKretLog(cursor, 0, false));
+                    geoKretLogs.add(new GeoKretLog(cursor, 0, false, true));
                 }
                 cursor.close();
                 return true;
@@ -238,7 +203,7 @@ public class GeoKretLogDataSource {
             public boolean inTransaction(final SQLiteDatabase db) {
                 final Cursor cursor = db.rawQuery(FETCH_OUTBOX, new String[] {});
                 while (cursor.moveToNext()) {
-                    outbox.add(new GeoKretLog(cursor, 0, true));
+                    outbox.add(new GeoKretLog(cursor, 0, true, false));
                 }
                 cursor.close();
                 return true;
