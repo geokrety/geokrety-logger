@@ -42,7 +42,6 @@ import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.geokrety.services.RefreshService;
 import pl.nkg.geokrety.threads.GettingSecidThread;
 import pl.nkg.geokrety.threads.GettingUuidThread;
-import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
 
 import android.app.Application;
@@ -62,7 +61,6 @@ public class GeoKretyApplication extends Application {
 		stateHolder = new StateHolder(getApplicationContext());
 		httpClient = createHttpClient();
 		foregroundTaskHandler = new ForegroundTaskHandler();
-		foregroundTaskHandler.registerTask(new RefreshAccount(this));
 		foregroundTaskHandler.registerTask(new GettingSecidThread(this));
 		foregroundTaskHandler.registerTask(new GettingUuidThread(this));
 		

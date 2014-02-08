@@ -26,6 +26,8 @@ import java.util.Locale;
 
 import org.w3c.dom.Node;
 
+import pl.nkg.geokrety.Utils;
+
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 
@@ -170,7 +172,11 @@ public class GeoKret {
 
     @Override
     public String toString() {
-        return mName + " (" + mTrackingCode + ")";
+        if (mGeoKretId == null) {
+            return mTrackingCode;
+        } else {
+            return getFormatedCode() + " (" + mTrackingCode + "): " + mName;
+        }
     }
 
     @SuppressLint("DefaultLocale")

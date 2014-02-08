@@ -51,6 +51,7 @@ public class RefreshService extends IntentService {
     public static final String BROADCAST_ERROR = "pl.nkg.geokrety.services.RefreshService.Error";
     public static final String BROADCAST_CANCELED = "pl.nkg.geokrety.services.RefreshService.Canceled";
     public static final String BROADCAST_FINISH = "pl.nkg.geokrety.services.RefreshService.Submits.Finish";
+    public static final String INTENT_ERROR_MESSAGE = "error";
 
     private static final String TAG = RefreshService.class.getName();
     private static final int RETRY_DELAY = 1000 * 60 * 5;
@@ -77,14 +78,24 @@ public class RefreshService extends IntentService {
 
     @Override
     protected void onHandleIntent(final Intent intent) {
+        String error = null;
+        
         try {
             sendBroadcast(new Intent(BROADCAST_START));
             runInBackground();
             notificationManager.cancel(NOTIFY_ID);
             sendBroadcast(new Intent(BROADCAST_FINISH));
+        } catch (MessagedException e) {
+            error = e.getFormatedMessage(this);
         } catch (Throwable e) {
-            showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_error, getText(R.string.message_submit_problem), e.getLocalizedMessage());
-            sendBroadcast(new Intent(BROADCAST_ERROR));
+            error = e.getLocalizedMessage();
+        }
+        
+        if (error != null) {
+            showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_error, getText(R.string.message_submit_problem), error);
+            Intent broadcast = new Intent(BROADCAST_ERROR);
+            broadcast.putExtra(INTENT_ERROR_MESSAGE, error);
+            sendBroadcast(broadcast);
         }
     }
     

@@ -33,7 +33,6 @@ import java.util.Map;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.exceptions.MessagedException;
-import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 import pl.nkg.lib.okapi.OKAPIProvider;
 import pl.nkg.lib.okapi.SupportedOKAPI;

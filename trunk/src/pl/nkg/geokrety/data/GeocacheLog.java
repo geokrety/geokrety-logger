@@ -108,7 +108,7 @@ public class GeocacheLog {
 
 	@Override
 	public String toString() {
-		if (getGeoCache() != null) {
+		if (getGeoCache() != null && getGeoCache().getName() != null) {
 			return getGeoCache().getName() + " (" + cache_code + ")";
 		} else {
 			return cache_code;

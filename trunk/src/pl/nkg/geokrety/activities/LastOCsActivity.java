@@ -31,7 +31,6 @@ import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.Dialogs;
-import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;

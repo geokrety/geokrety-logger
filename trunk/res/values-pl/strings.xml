@@ -241,7 +241,12 @@
 	<string name="message_submit_problem">Logowanie odrzucone przez geokrety.org</string>
 	<string name="message_submit_no_connection">Brak połączenia, za chwilę spróbuję ponownie&#8230;</string>
     
-    <!-- About Activity -->
+	<!-- Refresh service -->
+	<string name="toast_notify_refresh_start">Rozpoczęto odświeżanie inwentarza i listy ostatnich logów z Opencaching&#8230;</string>
+	<string name="toast_notify_refresh_finish">Odświeżanie zakończone</string>
+	<string name="toast_notify_refresh_error">Błąd połączenia:</string>
+	
+	<!-- About Activity -->
 	<string name="title_activity_about">Informacje o GeoKrety Logger</string>
 	<string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne.
 		Program jest darmowy, a jego kod źródłowy jest dostępny publicznie na licencji GPL 3.0 (

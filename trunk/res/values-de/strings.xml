@@ -239,7 +239,12 @@
 	<string name="message_submit_problem">geokrety.org hat die Übertragung abgewiesen</string>
 	<string name="message_submit_no_connection">Verbindungsfehler, noch einmal versuchen&#8230;</string>
 	
-    <!-- About Activity -->
+	<!-- Refresh service -->
+<!-- NEED TRANSLATE --><string name="toast_notify_refresh_start">Inventory and last Opencaching logs is refreshing in background&#8230;</string>
+<!-- NEED TRANSLATE --><string name="toast_notify_refresh_finish">Refresh done</string>
+<!-- NEED TRANSLATE --><string name="toast_notify_refresh_error">Connection error:</string>
+	
+	<!-- About Activity -->
 	<string name="title_activity_about">Über</string>
 	<string name="foot">License: GPL 3.0,
 		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.

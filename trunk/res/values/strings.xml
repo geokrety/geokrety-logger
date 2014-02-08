@@ -252,7 +252,7 @@
 	<!-- Refresh service -->
 	<string name="toast_notify_refresh_start">Inventory and last Opencaching logs is refreshing in background&#8230;</string>
 	<string name="toast_notify_refresh_finish">Refresh done</string>
-	<string name="toast_notify_refresh_error">Refresh error:</string>
+	<string name="toast_notify_refresh_error">Connection error:</string>
 	
     <!-- About Activity -->
 	<string name="title_activity_about">About</string>

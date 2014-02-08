@@ -56,7 +56,8 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
     private final BroadcastReceiver refreshErrorBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            Toast.makeText(AbstractGeoKretyActivity.this, R.string.toast_notify_refresh_error, Toast.LENGTH_LONG).show();
+            String error = intent.getExtras().getString(RefreshService.INTENT_ERROR_MESSAGE);
+            Toast.makeText(AbstractGeoKretyActivity.this, getText(R.string.toast_notify_refresh_error) + " " + error, Toast.LENGTH_LONG).show();
             onRefreshError();
         }
     };
