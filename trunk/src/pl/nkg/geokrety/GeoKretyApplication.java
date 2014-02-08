@@ -45,7 +45,10 @@ import pl.nkg.geokrety.threads.GettingUuidThread;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.widget.Toast;
 
 public class GeoKretyApplication extends Application {
@@ -139,8 +142,22 @@ public class GeoKretyApplication extends Application {
             Intent intent = new Intent(this, RefreshService.class);
             stopService(intent);
             lastRefresh = new Date().getTime();
-            startService(intent);
-            Toast.makeText(this, R.string.toast_notify_refresh_start, Toast.LENGTH_LONG).show();
+            if (isOnline()) {
+                startService(intent);
+                Toast.makeText(this, R.string.toast_notify_refresh_start, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, R.string.toast_notify_refresh_no_connection, Toast.LENGTH_LONG).show();
+            }
 	    }
+	}
+	
+	public boolean isOnline() {
+	    ConnectivityManager cm =
+	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
+	    if (netInfo != null && netInfo.isConnected()) {
+	        return true;
+	    }
+	    return false;
 	}
 }

@@ -47,7 +47,7 @@ public class StateHolder {
 
 	private List<User>				accountList;
 	private int							defaultAccount;
-	private final UserDataSource		accountDataSource;
+	private final UserDataSource		userDataSource;
 	private final GeocacheLogDataSource	geocacheLogDataSource;
 	private final InventoryDataSource		inventoryDataSource;
 	private final GeoKretDataSource      geoKretDataSource;
@@ -63,14 +63,14 @@ public class StateHolder {
 
 	public StateHolder(final Context context) {
 		dbHelper = new GeoKretySQLiteHelper(context);
-		accountDataSource = new UserDataSource(dbHelper);
+		userDataSource = new UserDataSource(dbHelper);
 		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
 		inventoryDataSource = new InventoryDataSource(dbHelper);
 		geoKretDataSource = new GeoKretDataSource(dbHelper);
 		geocacheDataSource = new GeocacheDataSource(dbHelper);
 		geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
 
-		accountList = Collections.synchronizedList(accountDataSource.getAll());
+		accountList = Collections.synchronizedList(userDataSource.getAll());
 
 		/*geoCachesMap = new HashMap<String, Geocache>();
 		for (final Geocache gc : geocacheDataSource.load()) {
@@ -101,8 +101,8 @@ public class StateHolder {
 		return null;
 	}
 
-	public UserDataSource getAccountDataSource() {
-		return accountDataSource;
+	public UserDataSource getUserDataSource() {
+		return userDataSource;
 	}
 
 	public List<User> getAccountList() {

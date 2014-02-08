@@ -209,7 +209,7 @@ public class User {
     }*/
 
     // TODO: need refactor and move to background
-    @Deprecated
+    /*@Deprecated
     public void loadInventoryAndStore(final ICancelable cancelable,
             final InventoryDataSource dataSource, final GeoKretDataSource gkDataSource) throws MessagedException {
 
@@ -228,10 +228,10 @@ public class User {
 
         dataSource.storeInventory(gkMap.values(), getID(), true);
         gkDataSource.update(gkMap.values());
-    }
+    }*/
 
     // TODO: need refactor and move to background
-    @Deprecated
+    /*@Deprecated
     public void loadOCnamesToBuffer(final ICancelable cancelable,
             final List<GeocacheLog> openCachingLogs, final int portal, final GeocacheLogDataSource gclDataSource, final GeocacheDataSource gcDataSource) throws MessagedException {
         final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
@@ -246,15 +246,15 @@ public class User {
         }
         
         gcDataSource.update(OKAPIProvider.loadOCnames(codes, okapi));
-    }
+    }*/
 
     // TODO: need refactor and move to background
-    @Deprecated
+    /*@Deprecated
     public void loadOpenCachingLogs(final int portal, final GeocacheLogDataSource gclDataSource, final GeocacheDataSource gcDataSource) throws MessagedException {
 
         final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
         gclDataSource.store(OKAPIProvider.loadOpenCachingLogs(okapi, openCachingUUIDs[portal]), id, portal);
-    }
+    }*/
 
     public Bundle pack(final Bundle bundle) {
         bundle.putStringArray(User.OCUUIDS, openCachingUUIDs);

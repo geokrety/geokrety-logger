@@ -243,6 +243,14 @@
 <!-- NEED TRANSLATE --><string name="toast_notify_refresh_start">Inventory and last Opencaching logs is refreshing in background&#8230;</string>
 <!-- NEED TRANSLATE --><string name="toast_notify_refresh_finish">Refresh done</string>
 <!-- NEED TRANSLATE --><string name="toast_notify_refresh_error">Connection error:</string>
+<!-- NEED TRANSLATE --><string name="toast_notify_refresh_no_connection">No Internet connection</string>
+<!-- NEED TRANSLATE --><string name="notify_refresh_inventory">Refreshing inventory</string>
+<!-- NEED TRANSLATE --><string name="notify_refresh_last_logs">Refreshing list of last logs</string>
+<!-- NEED TRANSLATE --><string name="notify_refresh_oc_names">Refreshing data of geocaches</string>
+<!-- NEED TRANSLATE --><string name="notify_refresh_error_inventory">Inventory:</string>
+<!-- NEED TRANSLATE --><string name="notify_refresh_error_last_logs">Last logs:</string>
+<!-- NEED TRANSLATE --><string name="notify_refresh_error_broken">Refreshing has been broken</string>
+<!-- NEED TRANSLATE --><string name="notify_refresh_error_lost_connection">Internet connection lost</string>
 	
 	<!-- About Activity -->
 	<string name="title_activity_about">Über</string>

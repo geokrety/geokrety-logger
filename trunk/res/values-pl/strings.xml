@@ -245,6 +245,14 @@
 	<string name="toast_notify_refresh_start">Rozpoczęto odświeżanie inwentarza i listy ostatnich logów z Opencaching&#8230;</string>
 	<string name="toast_notify_refresh_finish">Odświeżanie zakończone</string>
 	<string name="toast_notify_refresh_error">Błąd połączenia:</string>
+	<string name="toast_notify_refresh_no_connection">No Internet connection</string>
+	<string name="notify_refresh_inventory">Odświeżanie inwentarza</string>
+	<string name="notify_refresh_last_logs">Odświeżanie listy ostatnich logów</string>
+	<string name="notify_refresh_oc_names">Odświeżanie nazw geokeszy</string>
+	<string name="notify_refresh_error_inventory">Inwentarz:</string>
+	<string name="notify_refresh_error_last_logs">Ostatnie logi:</string>
+	<string name="notify_refresh_error_broken">Odświeżanie zostało przerwane</string>
+	<string name="notify_refresh_error_lost_connection">Utracono połączenie z Internetem</string>
 	
 	<!-- About Activity -->
 	<string name="title_activity_about">Informacje o GeoKrety Logger</string>

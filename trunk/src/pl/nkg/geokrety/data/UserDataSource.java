@@ -23,6 +23,7 @@ package pl.nkg.geokrety.data;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import pl.nkg.geokrety.Utils;
@@ -32,6 +33,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Pair;
 
 public class UserDataSource {
 
@@ -114,6 +116,23 @@ public class UserDataSource {
 		});
 		return accounts;
 	}
+	/*
+	public List<Pair<Long, String>> loadSecIds() {
+        final List<Pair<Long, String>> secIds = new LinkedList<Pair<Long, String>>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                final Cursor cursor = db.query(TABLE, new String[] {COLUMN_ID, COLUMN_SECID}, null , null, null, null, null);
+                while (cursor.moveToNext()) {
+                    secIds.add(new Pair<Long, String>(cursor.getLong(0), cursor.getString(1)));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return secIds;
+    }*/
 
 	public void merge(final User account) {
 		dbHelper.runOnWritableDatabase(new DBOperation() {
