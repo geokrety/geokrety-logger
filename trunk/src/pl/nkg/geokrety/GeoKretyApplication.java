@@ -136,8 +136,9 @@ public class GeoKretyApplication extends Application {
 	private long lastRefresh = 0;
 	public void runRefreshService(boolean force) {
 	    if (force || lastRefresh + REFRESH_PERIOD < new Date().getTime()) {
+            Intent intent = new Intent(this, RefreshService.class);
+            stopService(intent);
             lastRefresh = new Date().getTime();
-	        Intent intent = new Intent(this, RefreshService.class);
             startService(intent);
             Toast.makeText(this, R.string.toast_notify_refresh_start, Toast.LENGTH_LONG).show();
 	    }

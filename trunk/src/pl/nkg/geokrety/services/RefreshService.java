@@ -27,6 +27,7 @@ import java.util.List;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.LogActivity;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
@@ -37,12 +38,14 @@ import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 import pl.nkg.lib.okapi.SupportedOKAPI;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper.Thread;
+import pl.nkg.lib.threads.ICancelable;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 
 public class RefreshService extends IntentService {
 
@@ -62,6 +65,17 @@ public class RefreshService extends IntentService {
     private CharSequence dots;
     
     private static final int NOTIFY_ID = 2000000000;
+    
+    // TODO: refactor
+    private class Cancel implements ICancelable {
+        
+        public boolean cancel;
+        @Override
+        public boolean isCancelled() {
+            return cancel;
+        }
+    }
+    private Cancel cancelable = new Cancel();
 
     public RefreshService() {
         super(TAG);
@@ -74,17 +88,22 @@ public class RefreshService extends IntentService {
         application = (GeoKretyApplication) getApplication();
         handler = new Handler();
         notificationManager = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
+        Log.println(Log.INFO, TAG, "Create");
+        cancelable = new Cancel();
     }
 
     @Override
     protected void onHandleIntent(final Intent intent) {
         String error = null;
-        
+        Log.println(Log.INFO, TAG, "Run refresh service...");
         try {
             sendBroadcast(new Intent(BROADCAST_START));
-            runInBackground();
-            notificationManager.cancel(NOTIFY_ID);
-            sendBroadcast(new Intent(BROADCAST_FINISH));
+            error = runInBackground();
+            if (Utils.isEmpty(error)) {
+                notificationManager.cancel(NOTIFY_ID);
+                sendBroadcast(new Intent(BROADCAST_FINISH));
+                error = null;
+            }
         } catch (MessagedException e) {
             error = e.getFormatedMessage(this);
         } catch (Throwable e) {
@@ -97,6 +116,7 @@ public class RefreshService extends IntentService {
             broadcast.putExtra(INTENT_ERROR_MESSAGE, error);
             sendBroadcast(broadcast);
         }
+        Log.println(Log.INFO, TAG, "Finish refresh service");
     }
     
     @SuppressWarnings("deprecation")
@@ -132,7 +152,7 @@ public class RefreshService extends IntentService {
 
         try {
             publishProgress(getProgressMessage(0));
-            account.loadInventoryAndStore(null, holder.getInventoryDataSource(), holder.getGeoKretDataSource());
+            account.loadInventoryAndStore(cancelable, holder.getInventoryDataSource(), holder.getGeoKretDataSource());
 
         } catch (MessagedException e) {
             report.append("\n");
@@ -153,19 +173,19 @@ public class RefreshService extends IntentService {
                             .getApplicationContext()));
                 }
 
-                /*if (thread.isCancelled()) {
+                if (cancelable.isCancelled()) {
                     return false;
-                }*/
+                }
 
                 publishProgress(getProgressMessage(2) + " "
                         + SupportedOKAPI.SUPPORTED[i].host + dots);
-                account.loadOCnamesToBuffer(null, openCachingLogs, i, holder.getGeocacheLogDataSource(), holder.getGeocacheDataSource());
+                account.loadOCnamesToBuffer(cancelable, openCachingLogs, i, holder.getGeocacheLogDataSource(), holder.getGeocacheDataSource());
             }
         }
 
-        /*if (thread.isCancelled()) {
+        if (cancelable.isCancelled()) {
             return false;
-        }*/
+        }
 
         account.touchLastLoadedDate(holder.getAccountDataSource());
         return true;
@@ -184,5 +204,12 @@ public class RefreshService extends IntentService {
     private void publishProgress(CharSequence progress) {
         showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_sync, progress,
                 getText(R.string.menu_ocs_refresh));
+    }
+    
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        cancelable.cancel = true;
+        Log.println(Log.INFO, TAG, "Destroy");
     }
 }
