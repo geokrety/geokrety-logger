@@ -67,15 +67,16 @@ public class RefreshService extends IntentService {
     private static final int NOTIFY_ID = 2000000000;
     
     // TODO: refactor
-    private class Cancel implements ICancelable {
+    private class CancelHolder implements ICancelable {
         
         public boolean cancel;
+        
         @Override
         public boolean isCancelled() {
             return cancel;
         }
     }
-    private Cancel cancelable = new Cancel();
+    private CancelHolder currentCancelHolder;
 
     public RefreshService() {
         super(TAG);
@@ -89,16 +90,23 @@ public class RefreshService extends IntentService {
         handler = new Handler();
         notificationManager = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
         Log.println(Log.INFO, TAG, "Create");
-        cancelable = new Cancel();
     }
 
     @Override
     protected void onHandleIntent(final Intent intent) {
+        if (currentCancelHolder != null) {
+            currentCancelHolder.cancel = true;
+            currentCancelHolder = null;
+        }
+        
+        CancelHolder cancelHolder = new CancelHolder();
+        currentCancelHolder = cancelHolder;
+        
         String error = null;
         Log.println(Log.INFO, TAG, "Run refresh service...");
         try {
             sendBroadcast(new Intent(BROADCAST_START));
-            error = runInBackground();
+            error = runInBackground(cancelHolder);
             if (Utils.isEmpty(error)) {
                 notificationManager.cancel(NOTIFY_ID);
                 sendBroadcast(new Intent(BROADCAST_FINISH));
@@ -131,28 +139,28 @@ public class RefreshService extends IntentService {
         notificationManager.notify(id, notification);
     }
 
-    protected String runInBackground()
+    protected String runInBackground(CancelHolder cancelHolder)
             throws Throwable {
         StringBuilder report = new StringBuilder();
         StateHolder holder = application.getStateHolder();
         //User account = param;
         // TODO: refactor in 0.6.0
         for (User user : holder.getAccountList()) {
-            if (!refreshProfile(report, user)) {
+            if (!refreshProfile(cancelHolder, report, user)) {
                 return "";
             }
         }
         return report.toString();
     }
 
-    private boolean refreshProfile(StringBuilder report, User account)
+    private boolean refreshProfile(CancelHolder cancelHolder, StringBuilder report, User account)
             throws MessagedException {
         StateHolder holder = ((GeoKretyApplication) getApplication())
                 .getStateHolder();
 
         try {
             publishProgress(getProgressMessage(0));
-            account.loadInventoryAndStore(cancelable, holder.getInventoryDataSource(), holder.getGeoKretDataSource());
+            account.loadInventoryAndStore(cancelHolder, holder.getInventoryDataSource(), holder.getGeoKretDataSource());
 
         } catch (MessagedException e) {
             report.append("\n");
@@ -173,17 +181,17 @@ public class RefreshService extends IntentService {
                             .getApplicationContext()));
                 }
 
-                if (cancelable.isCancelled()) {
+                if (cancelHolder.isCancelled()) {
                     return false;
                 }
 
                 publishProgress(getProgressMessage(2) + " "
                         + SupportedOKAPI.SUPPORTED[i].host + dots);
-                account.loadOCnamesToBuffer(cancelable, openCachingLogs, i, holder.getGeocacheLogDataSource(), holder.getGeocacheDataSource());
+                account.loadOCnamesToBuffer(cancelHolder, openCachingLogs, i, holder.getGeocacheLogDataSource(), holder.getGeocacheDataSource());
             }
         }
 
-        if (cancelable.isCancelled()) {
+        if (cancelHolder.isCancelled()) {
             return false;
         }
 
@@ -209,7 +217,10 @@ public class RefreshService extends IntentService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        cancelable.cancel = true;
+        if (currentCancelHolder != null) {
+            currentCancelHolder.cancel = true;
+            currentCancelHolder = null;
+        }
         Log.println(Log.INFO, TAG, "Destroy");
     }
 }
