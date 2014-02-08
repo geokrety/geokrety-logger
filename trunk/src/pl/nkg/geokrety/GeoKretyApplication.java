@@ -141,12 +141,14 @@ public class GeoKretyApplication extends Application {
 	    if (force || lastRefresh + REFRESH_PERIOD < new Date().getTime()) {
             Intent intent = new Intent(this, RefreshService.class);
             stopService(intent);
-            lastRefresh = new Date().getTime();
             if (isOnline()) {
+                lastRefresh = new Date().getTime();
                 startService(intent);
                 Toast.makeText(this, R.string.toast_notify_refresh_start, Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, R.string.toast_notify_refresh_no_connection, Toast.LENGTH_LONG).show();
+                if (force) {
+                    Toast.makeText(this, R.string.toast_notify_refresh_no_connection, Toast.LENGTH_LONG).show();
+                }
             }
 	    }
 	}
