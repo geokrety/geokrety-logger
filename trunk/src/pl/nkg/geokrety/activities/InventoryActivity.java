@@ -197,18 +197,18 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
             long arg3) {
-        ListView listView = (ListView) findViewById(R.id.inventoryListView);
-        listView.setAdapter(null);
-        StateHolder holder = ((GeoKretyApplication) getApplication())
-                .getStateHolder();
-        account = holder.getAccountList().get(arg2);
+        //ListView listView = (ListView) findViewById(R.id.inventoryListView);
+        //listView.setAdapter(null);
+        //StateHolder holder = ((GeoKretyApplication) getApplication())
+                //.getStateHolder();
+        account = stateHolder.getAccountList().get(arg2);
         updateListView();
     }
 
     private void updateListView() {
-        if (!account.loadIfExpired((GeoKretyApplication) getApplication(), false)) {
+        //if (!account.loadIfExpired((GeoKretyApplication) getApplication(), false)) {
             onRefreshDatabase();
-        }
+        //}
     }
 
     @Override

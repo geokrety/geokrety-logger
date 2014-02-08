@@ -28,8 +28,10 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import pl.nkg.geokrety.GeoKretyApplication;
+import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.geokrety.services.RefreshService;
@@ -46,12 +48,23 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
     private final BroadcastReceiver refreshFinishBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
+            Toast.makeText(AbstractGeoKretyActivity.this, R.string.toast_notify_refresh_finish, Toast.LENGTH_LONG).show();
             onRefreshDatabase();
         }
     };
     
+    private final BroadcastReceiver refreshErrorBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            Toast.makeText(AbstractGeoKretyActivity.this, R.string.toast_notify_refresh_error, Toast.LENGTH_LONG).show();
+            onRefreshError();
+        }
+    };
+    
     protected void onRefreshDatabase() {
-        
+    }
+    
+    protected void onRefreshError() {
     }
     
     @Override
@@ -64,6 +77,7 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(refreshErrorBroadcastReceiver);
         unregisterReceiver(refreshFinishBroadcastReceiver);
         if (useDataBase) {
             database = null;
@@ -82,6 +96,8 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
         application.runRefreshService(false);
         registerReceiver(refreshFinishBroadcastReceiver, new IntentFilter(
                 RefreshService.BROADCAST_FINISH));
+        registerReceiver(refreshErrorBroadcastReceiver, new IntentFilter(
+                RefreshService.BROADCAST_ERROR));
     }
     
     protected Cursor openCursor() {

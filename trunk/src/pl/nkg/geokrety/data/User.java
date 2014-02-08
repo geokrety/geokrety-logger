@@ -196,18 +196,18 @@ public class User {
         return !Utils.isEmpty(openCachingUUIDs[portal]);
     }
 
-    public void loadData(final GeoKretyApplication application, final boolean force) {
+    /*public void loadData(final GeoKretyApplication application, final boolean force) {
         application.getForegroundTaskHandler().runTask(RefreshAccount.ID, this, force);
-    }
+    }*/
 
-    public boolean loadIfExpired(final GeoKretyApplication application, final boolean force) {
+    /*public boolean loadIfExpired(final GeoKretyApplication application, final boolean force) {
         if (expired()) {
             loadData(application, force);
             return true;
         } else {
             return false;
         }
-    }
+    }*/
 
     // TODO: need refactor and move to background
     @Deprecated

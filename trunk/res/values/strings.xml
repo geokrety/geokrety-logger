@@ -249,6 +249,11 @@
 	<string name="message_submit_problem">geokrety.org rejected the submission</string>
 	<string name="message_submit_no_connection">Connection error, trying again&#8230;</string>
     
+	<!-- Refresh service -->
+	<string name="toast_notify_refresh_start">Inventory and last Opencaching logs is refreshing in background&#8230;</string>
+	<string name="toast_notify_refresh_finish">Refresh done</string>
+	<string name="toast_notify_refresh_error">Refresh error:</string>
+	
     <!-- About Activity -->
 	<string name="title_activity_about">About</string>
 	<string name="foot">License: GPL 3.0,

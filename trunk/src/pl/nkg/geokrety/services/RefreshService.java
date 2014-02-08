@@ -59,6 +59,8 @@ public class RefreshService extends IntentService {
     private Handler handler;
     private NotificationManager notificationManager;
     private CharSequence dots;
+    
+    private static final int NOTIFY_ID = 2000000000;
 
     public RefreshService() {
         super(TAG);
@@ -78,10 +80,10 @@ public class RefreshService extends IntentService {
         try {
             sendBroadcast(new Intent(BROADCAST_START));
             runInBackground();
-            notificationManager.cancel(2000000000);
+            notificationManager.cancel(NOTIFY_ID);
             sendBroadcast(new Intent(BROADCAST_FINISH));
         } catch (Throwable e) {
-            showNotify(new Intent(), 2000000000, android.R.drawable.stat_notify_error, getText(R.string.message_submit_problem), e.getLocalizedMessage());
+            showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_error, getText(R.string.message_submit_problem), e.getLocalizedMessage());
             sendBroadcast(new Intent(BROADCAST_ERROR));
         }
     }
@@ -169,7 +171,7 @@ public class RefreshService extends IntentService {
     }
     
     private void publishProgress(CharSequence progress) {
-        showNotify(new Intent(), 2000000000, android.R.drawable.stat_notify_sync, progress,
+        showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_sync, progress,
                 getText(R.string.menu_ocs_refresh));
     }
 }

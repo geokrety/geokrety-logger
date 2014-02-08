@@ -51,8 +51,8 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 		AdapterView.OnItemSelectedListener {
 
 	private User account;
-	private GenericProgressDialogWrapper refreshProgressDialog;
-	private RefreshAccount refreshAccount;
+	//private GenericProgressDialogWrapper refreshProgressDialog;
+	//private RefreshAccount refreshAccount;
 
 	private class Adapter extends ExtendedCursorAdapter {
 
@@ -73,27 +73,27 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
         }
     }
 	
+	private Adapter adapter;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		turnOnDatabaseUse();
-		refreshProgressDialog = new GenericProgressDialogWrapper(this,
+		/*refreshProgressDialog = new GenericProgressDialogWrapper(this,
 				Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
 
 		refreshAccount = RefreshAccount.getFromHandler(application
-				.getForegroundTaskHandler());
+				.getForegroundTaskHandler());*/
 
-		StateHolder holder = ((GeoKretyApplication) getApplication())
-				.getStateHolder();
 		setContentView(R.layout.activity_last_ocs);
 		Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
 		spin.setOnItemSelectedListener(this);
 		ArrayAdapter<User> aa = new ArrayAdapter<User>(this,
-				android.R.layout.simple_spinner_item, holder.getAccountList());
+				android.R.layout.simple_spinner_item, stateHolder.getAccountList());
 
 		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spin.setAdapter(aa);
-		spin.setSelection(holder.getDefaultAccountNr());
+		spin.setSelection(stateHolder.getDefaultAccountNr());
 
 	}
 	
@@ -102,14 +102,18 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
         super.openCursor();
         if (account != null) {
             cursor = GeocacheLogDataSource.createLoadByUserIDCurosr(database, account.getID());
-            final Adapter adapter = new Adapter(this, cursor, true);
-            final ListView listView = (ListView) findViewById(R.id.ocsListView);
-            listView.setAdapter(adapter);
+            if (adapter == null) {
+                adapter = new Adapter(this, cursor, true);
+                final ListView listView = (ListView) findViewById(R.id.ocsListView);
+                listView.setAdapter(adapter);
+            } else {
+                adapter.changeCursor(cursor);
+            }
         }
         return cursor;
     }
 
-	@Override
+	/*@Override
 	protected void onStart() {
 		super.onStart();
 		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
@@ -121,7 +125,7 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 				refreshListView();
 			}
 		});
-	}
+	}*/
 
 	@Override
 	protected void onResume() {
@@ -132,16 +136,17 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
         }
 	}
 	
-	private void refreshListView() {
-	    // FIXME: reload after refresh
+	@Override
+	protected void onRefreshDatabase() {
+	    super.onRefreshDatabase();
         openCursor();
 	}
 
-	@Override
+	/*@Override
 	protected void onStop() {
 		refreshAccount.detach();
 		super.onStop();
-	}
+	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -164,24 +169,24 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 	}
 
 	private void refreshAccout() {
-		account.loadData(application, true);
+		//account.loadData(application, true);
+	    application.runRefreshService(true);
 	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
-		ListView listView = (ListView) findViewById(R.id.ocsListView);
-		listView.setAdapter(null);
-		StateHolder holder = ((GeoKretyApplication) getApplication())
-				.getStateHolder();
-		account = holder.getAccountList().get(arg2);
+		//ListView listView = (ListView) findViewById(R.id.ocsListView);
+		//listView.setAdapter(null);
+		account = stateHolder.getAccountList().get(arg2);
 		updateListView();
 	}
 
 	private void updateListView() {
-		if (!account.loadIfExpired(application, false)) {
-			refreshListView();
-		}
+		//if (!account.loadIfExpired(application, false)) {
+			//refreshListView();
+		//}
+	    onRefreshDatabase();
 	}
 
 	@Override

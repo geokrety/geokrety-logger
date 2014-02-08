@@ -68,7 +68,7 @@ import android.widget.Toast;
 
 public class LogActivity extends AbstractGeoKretyActivity implements LocationListener {
 
-    private GenericProgressDialogWrapper refreshProgressDialog;
+    //private GenericProgressDialogWrapper refreshProgressDialog;
     // private GenericProgressDialogWrapper logProgressDialog;
     private RemoveLogDialog removeLogDialog;
     private TimePickerDialogWrapper timePickerDialog;
@@ -77,7 +77,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private AlertDialogWrapper ocsSpinnerDialog;
     private AlertDialogWrapper logTypeSpinnerDialog;
 
-    private RefreshAccount refreshAccount;
+    //private RefreshAccount refreshAccount;
 
     private GeoKretLog currentLog;
     private User currentAccount;
@@ -213,9 +213,10 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     public void refreshButtonClick(final View view) {
-        if (currentAccount != null) {
+        application.runRefreshService(true);
+        /*if (currentAccount != null) {
             currentAccount.loadData(application, true);
-        }
+        }*/
     }
 
     public void showAccountsActivity(final View view) {
@@ -280,6 +281,12 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             return -1;
         }
     }
+    
+    @Override
+    protected void onRefreshDatabase() {
+        super.onRefreshDatabase();
+        configAdapters();
+    }
 
     private void configAdapters() {
         inventoryAdapter = new InventoryAdapter();
@@ -336,9 +343,9 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             return false;
         }
 
-        if (currentAccount.loadIfExpired(application, false)) {
+        /*if (currentAccount.loadIfExpired(application, false)) {
             return false;
-        }
+        }*/
 
         configAdapters();
         return true;
@@ -368,8 +375,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         final Intent intent = getIntent();
 
-        refreshProgressDialog = new GenericProgressDialogWrapper(this,
-                Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
+        //refreshProgressDialog = new GenericProgressDialogWrapper(this,
+        //        Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
         // logProgressDialog = new GenericProgressDialogWrapper(this,
         // Dialogs.LOG_PROGRESSDIALOG);
         removeLogDialog = new RemoveLogDialog(this);
@@ -386,7 +393,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         // logProgressDialog.setTitle(R.string.submit_title);
 
-        refreshAccount = RefreshAccount.getFromHandler(application.getForegroundTaskHandler());
+        //refreshAccount = RefreshAccount.getFromHandler(application.getForegroundTaskHandler());
 
         final long logID = intent.getLongExtra(GeoKretLogDataSource.COLUMN_ID,
                 AdapterView.INVALID_ROW_ID);
@@ -497,14 +504,14 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             return;
         }
 
-        refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
+        /*refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
             @Override
             public void onFinish(final AbstractForegroundTaskWrapper<User, String, String> sender,
                     final User param, final String result) {
                 super.onFinish(sender, param, result);
                 configAdapters();
             }
-        });
+        });*/
 
         // updateCurrentAccount(false, false);
         if (currentAccount == null) {
@@ -525,9 +532,9 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         gpsAcquirer.start();
     }
 
-    @Override
+    /*@Override
     protected void onStop() {
         refreshAccount.detach();
         super.onStop();
-    }
+    }*/
 }

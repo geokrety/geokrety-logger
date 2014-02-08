@@ -47,6 +47,7 @@ import pl.nkg.lib.threads.ForegroundTaskHandler;
 
 import android.app.Application;
 import android.content.Intent;
+import android.widget.Toast;
 
 public class GeoKretyApplication extends Application {
 	private HttpClient httpClient;
@@ -140,6 +141,7 @@ public class GeoKretyApplication extends Application {
             lastRefresh = new Date().getTime();
 	        Intent intent = new Intent(this, RefreshService.class);
             startService(intent);
+            Toast.makeText(this, R.string.toast_notify_refresh_start, Toast.LENGTH_LONG).show();
 	    }
 	}
 }
