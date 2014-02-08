@@ -229,6 +229,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     private Spinner accountsSpinner;
 
     private AlertDialogWrapper removeLogDialog;
+    private Adapter adapter;
 
     @Override
     public void dialogFinished(final AbstractDialogWrapper<?> dialog, final int buttonId,
@@ -264,7 +265,6 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     @Override
     public void onItemSelected(final AdapterView<?> arg0, final View arg1, final int arg2,
             final long arg3) {
-        listView.setAdapter(null);
         final StateHolder holder = ((GeoKretyApplication) getApplication()).getStateHolder();
         account = holder.getAccountList().get(arg2);
         updateListView();
@@ -286,9 +286,13 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         geoKretLogsCursor = GeoKretLogDataSource
                 .createLoadByUserIDCurosr(database, account.getID());
 
-        final Adapter adapter = new Adapter(this, geoKretLogsCursor, true);
-        final ListView listView = (ListView) findViewById(R.id.gklListView);
-        listView.setAdapter(adapter);
+        if (adapter == null) {
+            adapter = new Adapter(this, geoKretLogsCursor, true);
+            final ListView listView = (ListView) findViewById(R.id.gklListView);
+            listView.setAdapter(adapter);
+        } else {
+            adapter.changeCursor(geoKretLogsCursor);
+        }        
     }
 
     private void updateListView() {
@@ -298,6 +302,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //adapter = null; FIXME: test
         application = (GeoKretyApplication) getApplication();
         removeLogDialog = new AlertDialogWrapper(this, Dialogs.REMOVE_ALL_LOGS_ALERTDIALOG);
         removeLogDialog.setMessage(R.string.form_confirm_delete_all_msg);

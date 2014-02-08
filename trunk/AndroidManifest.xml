@@ -119,6 +119,7 @@
 		<activity android:name=".activities.GeoKretActivity" android:label="@string/title_activity_geo_kret" />
 
 		<service android:name=".services.LogSubmitterService" />
+		<service android:name=".services.RefreshService" />
 
 		<receiver android:name=".receivers.BootCompleteReceiver" android:enabled="false">
 			<intent-filter>

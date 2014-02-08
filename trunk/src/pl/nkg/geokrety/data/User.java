@@ -216,7 +216,7 @@ public class User {
 
         final Map<String, GeoKret> gkMap = GeoKretyProvider.loadInventory(geoKretySecredID);
 
-        if (cancelable.isCancelled()) {
+        if (cancelable != null && cancelable.isCancelled()) {
             return;
         }
         
@@ -242,7 +242,7 @@ public class User {
             return;
         }
 
-        if (cancelable.isCancelled()) {
+        if (cancelable != null && cancelable.isCancelled()) {
             return;
         }
         

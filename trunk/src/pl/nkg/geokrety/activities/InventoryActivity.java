@@ -36,12 +36,15 @@ import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.RefreshProgressDialog;
+import pl.nkg.geokrety.services.LogSubmitterService;
+import pl.nkg.geokrety.services.RefreshService;
 import pl.nkg.geokrety.threads.RefreshAccount;
 import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -60,8 +63,8 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
     public final static int EDIT_GEOKRET = 2;
 
     private User account;
-    private RefreshProgressDialog refreshProgressDialog;
-    private RefreshAccount refreshAccount;
+    //private RefreshProgressDialog refreshProgressDialog;
+    //private RefreshAccount refreshAccount;
 
     private class Adapter extends ExtendedCursorAdapter {
 
@@ -91,10 +94,10 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         turnOnDatabaseUse();
-        refreshProgressDialog = new RefreshProgressDialog(this);
+        //refreshProgressDialog = new RefreshProgressDialog(this);
 
-        refreshAccount = RefreshAccount.getFromHandler(application
-                .getForegroundTaskHandler());
+        /*refreshAccount = RefreshAccount.getFromHandler(application
+                .getForegroundTaskHandler());*/
 
         setContentView(R.layout.activity_inventory);
         Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
@@ -109,6 +112,7 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
         ((ListView) findViewById(R.id.inventoryListView)).setOnItemClickListener(this);
     }
 
+    /*
     @Override
     protected void onStart() {
         super.onStart();
@@ -121,28 +125,34 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
                 refreshListView();
             }
         });
-    }
+    }*/
 
-    private void refreshListView() {
-        // FIXME: reload after refresh
+    @Override
+    protected void onRefreshDatabase() {
+        super.onRefreshDatabase();
         openCursor();
     }
     
+    private Adapter adapter;
     @Override
     protected Cursor openCursor() {
         super.openCursor();
-        if (account != null) {
+        if (account != null && database != null) {
             cursor = InventoryDataSource.createLoadByUserIDCurosr(database, account.getID());
-            final Adapter adapter = new Adapter(this, cursor, true);
-            final ListView listView = (ListView) findViewById(R.id.inventoryListView);
-            listView.setAdapter(adapter);
+            if (adapter == null) {
+                adapter = new Adapter(this, cursor, true);
+                final ListView listView = (ListView) findViewById(R.id.inventoryListView);
+                listView.setAdapter(adapter);
+            } else {
+                adapter.changeCursor(cursor);
+            }
         }
         return cursor;
     }
 
     @Override
     protected void onStop() {
-        refreshAccount.detach();
+        //refreshAccount.detach();
         super.onStop();
     }
 
@@ -178,7 +188,10 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
     }
 
     private void refreshAccout() {
-        account.loadData((GeoKretyApplication) getApplication(), true);
+        //account.loadData((GeoKretyApplication) getApplication(), true);
+        //Intent intent = new Intent(this, RefreshService.class);
+        //startService(intent);
+        application.runRefreshService(true);
     }
 
     @Override
@@ -194,7 +207,7 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
 
     private void updateListView() {
         if (!account.loadIfExpired((GeoKretyApplication) getApplication(), false)) {
-            refreshListView();
+            onRefreshDatabase();
         }
     }
 

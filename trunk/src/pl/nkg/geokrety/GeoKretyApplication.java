@@ -21,6 +21,8 @@
  */
 package pl.nkg.geokrety;
 
+import java.util.Date;
+
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
@@ -37,6 +39,7 @@ import org.apache.http.protocol.HTTP;
 
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.services.LogSubmitterService;
+import pl.nkg.geokrety.services.RefreshService;
 import pl.nkg.geokrety.threads.GettingSecidThread;
 import pl.nkg.geokrety.threads.GettingUuidThread;
 import pl.nkg.geokrety.threads.RefreshAccount;
@@ -128,5 +131,15 @@ public class GeoKretyApplication extends Application {
 		if (httpClient != null && httpClient.getConnectionManager() != null) {
 			httpClient.getConnectionManager().shutdown();
 		}
+	}
+	
+	private final static long REFRESH_PERIOD = 5 * 60 * 1000;
+	private long lastRefresh = 0;
+	public void runRefreshService(boolean force) {
+	    if (force || lastRefresh + REFRESH_PERIOD < new Date().getTime()) {
+            lastRefresh = new Date().getTime();
+	        Intent intent = new Intent(this, RefreshService.class);
+            startService(intent);
+	    }
 	}
 }

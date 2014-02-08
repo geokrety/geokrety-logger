@@ -21,12 +21,18 @@
  */
 package pl.nkg.geokrety.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.data.StateHolder;
+import pl.nkg.geokrety.services.LogSubmitterService;
+import pl.nkg.geokrety.services.RefreshService;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 
 public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
@@ -36,6 +42,17 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
     protected SQLiteDatabase database;
     protected Cursor cursor;
     private boolean useDataBase = false;
+    
+    private final BroadcastReceiver refreshFinishBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            onRefreshDatabase();
+        }
+    };
+    
+    protected void onRefreshDatabase() {
+        
+    }
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +64,7 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        unregisterReceiver(refreshFinishBroadcastReceiver);
         if (useDataBase) {
             database = null;
             closeCursorIfOpened();
@@ -61,6 +79,9 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
             database = stateHolder.getDbHelper().openDatabase();
             openCursor();
         }
+        application.runRefreshService(false);
+        registerReceiver(refreshFinishBroadcastReceiver, new IntentFilter(
+                RefreshService.BROADCAST_FINISH));
     }
     
     protected Cursor openCursor() {

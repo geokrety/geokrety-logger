@@ -46,6 +46,9 @@ public class GeoKretyProvider {
 	private static final String	URL_LOGIN			= "http://geokrety.org/api-login2secid.php";
 	private static final String	URL_EXPORT2			= "http://geokrety.org/export2.php";
 	private static final String	URL_RUCHY			= "http://geokrety.org/ruchy.php";
+	
+	private static final String URL_SZUKAJ_GK       = "http://geokrety.org/szukaj-ajax.php?skad=ajax&nr=";
+	private static final String URL_SZUKAJ_GC       = "http://geokrety.org/szukaj-ajax.php?skad=ajax&wpt=";
 
 	public static boolean checkIgnoreLocation(final int logtype_mapped) {
 		return logtype_mapped == 1 || logtype_mapped == 4;
