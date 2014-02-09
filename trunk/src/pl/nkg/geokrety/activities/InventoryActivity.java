@@ -210,8 +210,9 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
         List<GeoKret> gkl = new ArrayList<GeoKret>(1);
         gkl.add(gk);
         String oldTrackingCode = ib.getString(GeoKretActivity.TRACKING_CODE_OLD);
-        application.getStateHolder().getInventoryDataSource()
+        stateHolder.getInventoryDataSource()
                 .storeInventory(gkl, userId, false, oldTrackingCode);
+        application.runRefreshService(true);
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
