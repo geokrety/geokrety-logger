@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="37.361389"
+   id="svg1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="1194994529475707481delete_user.svg"
+   sodipodi:version="0.32"
+   version="1.0"
+   width="37.364964"
+   x="0"
+   y="0">
+  <metadata
+     id="metadata3">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title></dc:title>
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>hash</rdf:li>
+            <rdf:li />
+            <rdf:li>action</rdf:li>
+            <rdf:li>computer</rdf:li>
+            <rdf:li>icons</rdf:li>
+            <rdf:li>theme</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org">
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     bordercolor="#666666"
+     borderopacity="1.0"
+     id="base"
+     inkscape:cx="21.505342"
+     inkscape:cy="7.5540314"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:window-height="693"
+     inkscape:window-width="1016"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:zoom="6.9465339"
+     pagecolor="#ffffff"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="1.67"
+     fit-margin-right="1.67"
+     fit-margin-bottom="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg1" />
+  <defs
+     id="defs3" />
+  <g
+     id="g844"
+     transform="translate(-11.473616,-2.4756678)">
+    <path
+       d="M 24.589804,27.926459 C 20.688963,29.986773 18.51862,34.09953 16.94597,38.358318 l 27.728613,0.08845 c -1.416579,-4.165255 -3.347012,-8.247674 -6.915345,-10.478302 -3.783514,-0.176594 -8.56277,-0.02731 -13.169434,-0.04201 z"
+       id="path848"
+       style="font-size:12px;fill:#7f7f7f;fill-rule:evenodd;stroke:#333333;stroke-width:2.80427241;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       transform="matrix(1.114371,0,0,1.114371,-4.177982,-4.569406)"
+       inkscape:connector-curvature="0" />
+    <path
+       d="m 31.850417,22.301342 c 0,6.807623 -5.518668,12.326291 -12.326291,12.326291 -6.807623,0 -12.326291,-5.518668 -12.326291,-12.326291 0,-6.807623 5.518668,-12.3262911 12.326291,-12.3262911 6.807623,0 12.326291,5.5186681 12.326291,12.3262911 z"
+       id="path849"
+       sodipodi:cx="19.524126"
+       sodipodi:cy="22.301342"
+       sodipodi:rx="12.326291"
+       sodipodi:ry="12.326291"
+       sodipodi:stroke-cmyk="(0 0 0 0.8)"
+       sodipodi:type="arc"
+       style="font-size:12px;fill:#bfbfbf;fill-rule:evenodd;stroke:#333333;stroke-width:2.95906353;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none"
+       transform="matrix(1.056072,0.00336878,-0.00336878,1.056072,9.255344,-6.561909)" />
+  </g>
+</svg>
