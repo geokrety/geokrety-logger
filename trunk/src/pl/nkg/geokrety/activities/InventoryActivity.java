@@ -61,8 +61,6 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
     public final static int EDIT_GEOKRET = 2;
 
     private User account;
-    //private RefreshProgressDialog refreshProgressDialog;
-    //private RefreshAccount refreshAccount;
 
     private class Adapter extends ExtendedCursorAdapter {
 
@@ -92,10 +90,6 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         turnOnDatabaseUse();
-        //refreshProgressDialog = new RefreshProgressDialog(this);
-
-        /*refreshAccount = RefreshAccount.getFromHandler(application
-                .getForegroundTaskHandler());*/
 
         setContentView(R.layout.activity_inventory);
         Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
@@ -109,21 +103,6 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
 
         ((ListView) findViewById(R.id.inventoryListView)).setOnItemClickListener(this);
     }
-
-    /*
-    @Override
-    protected void onStart() {
-        super.onStart();
-        refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
-            @Override
-            public void onFinish(
-                    AbstractForegroundTaskWrapper<User, String, String> sender,
-                    User param, String result) {
-                super.onFinish(sender, param, result);
-                refreshListView();
-            }
-        });
-    }*/
 
     @Override
     protected void onRefreshDatabase() {
@@ -186,27 +165,18 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
     }
 
     private void refreshAccout() {
-        //account.loadData((GeoKretyApplication) getApplication(), true);
-        //Intent intent = new Intent(this, RefreshService.class);
-        //startService(intent);
         application.runRefreshService(true);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
             long arg3) {
-        //ListView listView = (ListView) findViewById(R.id.inventoryListView);
-        //listView.setAdapter(null);
-        //StateHolder holder = ((GeoKretyApplication) getApplication())
-                //.getStateHolder();
         account = stateHolder.getAccountList().get(arg2);
         updateListView();
     }
 
     private void updateListView() {
-        //if (!account.loadIfExpired((GeoKretyApplication) getApplication(), false)) {
-            onRefreshDatabase();
-        //}
+        onRefreshDatabase();
     }
 
     @Override

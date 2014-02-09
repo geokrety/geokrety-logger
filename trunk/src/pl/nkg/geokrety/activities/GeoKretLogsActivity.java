@@ -30,6 +30,7 @@ import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
+import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.dialogs.Dialogs;
@@ -37,7 +38,6 @@ import pl.nkg.geokrety.services.LogSubmitterService;
 import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
-import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -47,19 +47,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.CursorAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class GeoKretLogsActivity extends ManagedDialogsActivity implements
+public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         AdapterView.OnItemSelectedListener, OnItemClickListener {
 
     private class Adapter extends ExtendedCursorAdapter {
@@ -164,7 +161,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
 
         private CharSequence formatProfileName(final GeoKretLog log) {
             // TODO Auto-generated method stub
-            return holder.getAccountByID(log.getAccoundID()).getName();
+            return stateHolder.getAccountByID(log.getAccoundID()).getName();
         }
 
         private CharSequence formatStatus(final GeoKretLog log) {
@@ -196,7 +193,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     private final BroadcastReceiver submitDoneBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            refreshListView();
+            onRefreshDatabase();
         }
     };
 
@@ -218,13 +215,13 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     };
 
     private User account;
-    private SQLiteDatabase database;
+    //private SQLiteDatabase database;
 
-    private Cursor geoKretLogsCursor;
+    //private Cursor geoKretLogsCursor;
     private ListView listView;
 
-    private GeoKretyApplication application;
-    private StateHolder holder;
+    //private GeoKretyApplication application;
+    //private StateHolder holder;
 
     private Spinner accountsSpinner;
 
@@ -274,14 +271,7 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     public void onNothingSelected(final AdapterView<?> arg0) {
     }
 
-    private void closeCursorIfOpened() {
-        if (geoKretLogsCursor != null) {
-            geoKretLogsCursor.close();
-            geoKretLogsCursor = null;
-        }
-    }
-
-    private void refreshListView() {
+    /*private void refreshListView() {
         closeCursorIfOpened();
         geoKretLogsCursor = GeoKretLogDataSource
                 .createLoadByUserIDCurosr(database, account.getID());
@@ -293,48 +283,69 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
         } else {
             adapter.changeCursor(geoKretLogsCursor);
         }        
-    }
+    }*/
 
     private void updateListView() {
-        refreshListView();
+        onRefreshDatabase();
     }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        application = (GeoKretyApplication) getApplication();
+        turnOnDatabaseUse();
         removeLogDialog = new AlertDialogWrapper(this, Dialogs.REMOVE_ALL_LOGS_ALERTDIALOG);
         removeLogDialog.setMessage(R.string.form_confirm_delete_all_msg);
         removeLogDialog.setOkCancelButtons();
 
-        holder = application.getStateHolder();
         setContentView(R.layout.activity_geokretlogs);
         accountsSpinner = (Spinner) findViewById(R.id.accountsSpiner);
         accountsSpinner.setOnItemSelectedListener(this);
         final ArrayAdapter<User> usersAdapter = new ArrayAdapter<User>(this,
-                android.R.layout.simple_spinner_item, holder.getAccountList());
+                android.R.layout.simple_spinner_item, stateHolder.getAccountList());
 
         usersAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         accountsSpinner.setAdapter(usersAdapter);
-        accountsSpinner.setSelection(holder.getDefaultAccountNr());
+        accountsSpinner.setSelection(stateHolder.getDefaultAccountNr());
 
         listView = (ListView) findViewById(R.id.gklListView);
         listView.setOnItemClickListener(this);
+    }
+    
+    @Override
+    protected Cursor openCursor() {
+        super.openCursor();
+        if (account != null && database != null) {
+            cursor = GeoKretLogDataSource.createLoadByUserIDCurosr(database, account.getID());
+            if (adapter == null) {
+                adapter = new Adapter(this, cursor, true);
+                final ListView listView = (ListView) findViewById(R.id.gklListView);
+                listView.setAdapter(adapter);
+            } else {
+                adapter.changeCursor(cursor);
+            } 
+        }
+        return cursor;
+    }
+    
+    @Override
+    protected void onRefreshDatabase() {
+        super.onRefreshDatabase();
+        openCursor();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(submitDoneBroadcastReceiver);
-        closeCursorIfOpened();
-        ((GeoKretyApplication) getApplication()).getStateHolder().getDbHelper().closeDatabase();
+       // closeCursorIfOpened();
+       // ((GeoKretyApplication) getApplication()).getStateHolder().getDbHelper().closeDatabase();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         final StateHolder holder = ((GeoKretyApplication) getApplication()).getStateHolder();
-        database = holder.getDbHelper().openDatabase();
+        //database = holder.getDbHelper().openDatabase();
         final int nr = accountsSpinner.getSelectedItemPosition();
         if (nr != AdapterView.INVALID_POSITION) {
             account = holder.getAccountList().get(nr);
