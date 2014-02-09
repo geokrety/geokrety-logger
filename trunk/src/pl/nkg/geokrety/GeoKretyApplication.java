@@ -57,7 +57,7 @@ import org.acra.*;
 import com.github.anrwatchdog.ANRWatchDog;
 
 @ReportsCrashes(formKey = "",
-    mailTo = "nkg753@gmail.com",
+    formUri = "http://geokretylog.sourceforge.net/reportbug.php",
     mode = ReportingInteractionMode.TOAST,
     resToastText = R.string.crash_toast_text)
 public class GeoKretyApplication extends Application {

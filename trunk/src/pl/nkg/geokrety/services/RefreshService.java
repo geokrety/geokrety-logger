@@ -26,6 +26,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
+import org.acra.ACRA;
+
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
@@ -113,6 +115,11 @@ public class RefreshService extends IntentService {
                 error = null;
             }
         } catch (Throwable e) {
+            ACRA.getErrorReporter().handleSilentException(e);
+            error = e.getLocalizedMessage();
+        }
+        
+        if (!Utils.isEmpty(error)) {
             showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_error, getText(R.string.message_submit_problem), error);
             Intent broadcast = new Intent(BROADCAST_ERROR);
             broadcast.putExtra(INTENT_ERROR_MESSAGE, error);
@@ -133,67 +140,6 @@ public class RefreshService extends IntentService {
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(id, notification);
     }
-
-    /*protected String runInBackground(CancelHolder cancelHolder)
-            throws Throwable {
-        StringBuilder report = new StringBuilder();
-        StateHolder holder = application.getStateHolder();
-        //User account = param;
-        // TODO: refactor in 0.6.0
-        for (User user : holder.getAccountList()) {
-            ref
-            if (!refreshProfile(cancelHolder, report, user)) {
-                return "";
-            }
-        }
-        return report.toString();
-    }*/
-
-    /*private boolean refreshProfile(CancelHolder cancelHolder, StringBuilder report, User account)
-            throws MessagedException {
-        StateHolder holder = ((GeoKretyApplication) getApplication())
-                .getStateHolder();
-
-        try {
-            publishProgress(getProgressMessage(0));
-            account.loadInventoryAndStore(cancelHolder, holder.getInventoryDataSource(), holder.getGeoKretDataSource());
-
-        } catch (MessagedException e) {
-            report.append("\n");
-            report.append(e.getFormatedMessage(getApplication()
-                    .getApplicationContext()));
-        }
-
-        ArrayList<GeocacheLog> openCachingLogs = new ArrayList<GeocacheLog>();
-        for (int i = 0; i < SupportedOKAPI.SUPPORTED.length; i++) {
-            if (account.hasOpenCachingUUID(i) && !cancelHolder.isCancelled()) {
-                publishProgress(getProgressMessage(1) + " "
-                        + SupportedOKAPI.SUPPORTED[i].host + dots);
-                try {
-                    account.loadOpenCachingLogs(i, holder.getGeocacheLogDataSource(), holder.getGeocacheDataSource());
-                } catch (MessagedException e) {
-                    report.append("\n");
-                    report.append(e.getFormatedMessage(getApplication()
-                            .getApplicationContext()));
-                }
-
-                if (cancelHolder.isCancelled()) {
-                    return false;
-                }
-
-                publishProgress(getProgressMessage(2) + " "
-                        + SupportedOKAPI.SUPPORTED[i].host + dots);
-                account.loadOCnamesToBuffer(cancelHolder, openCachingLogs, i, holder.getGeocacheLogDataSource(), holder.getGeocacheDataSource());
-            }
-        }
-
-        if (cancelHolder.isCancelled()) {
-            return false;
-        }
-
-        account.touchLastLoadedDate(holder.getUserDataSource());
-        return true;
-    }*/
     
     private String refreshBatch(CancelHolder cancelHolder) {
         List<User> users = stateHolder.getUserDataSource().getAll();

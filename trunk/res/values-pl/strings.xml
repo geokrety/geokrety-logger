@@ -23,7 +23,6 @@
 <resources>
     <!-- Main -->
 	<string name="app_name">GeoKrety Logger</string>
-	<string name="crash_toast_text">Nastąpił błąd działania aplikacji GeoKrety Logger. Raport o błędzie został wysłany do autora programu.</string>
     
     <!-- Main Activity -->
 	<string name="welcome">GeoKrety Logger to program, który służy do rejestracji przeniesienia przedmiotów 
@@ -338,4 +337,7 @@
 	<string name="release_plans">Jeżeli chcesz dowiedzieć się o planowanych nowościach, wejdź na stronę:\n
 		<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a>
 	</string>
+	
+	<!-- Crash report -->
+	<string name="crash_toast_text">Nastąpił błąd działania aplikacji GeoKrety Logger. Raport o błędzie został wysłany do autora programu.</string>
 </resources>
