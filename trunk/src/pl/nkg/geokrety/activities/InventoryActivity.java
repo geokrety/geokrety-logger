@@ -26,23 +26,16 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
-import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.GeoKretDataSource;
 import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKret;
-import pl.nkg.geokrety.data.StateHolder;
-import pl.nkg.geokrety.services.LogSubmitterService;
-import pl.nkg.geokrety.services.RefreshService;
 import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
-import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
@@ -129,7 +122,6 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
 
     @Override
     protected void onStop() {
-        //refreshAccount.detach();
         super.onStop();
     }
 

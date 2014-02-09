@@ -23,11 +23,13 @@
 package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKret;
+import pl.nkg.geokrety.data.GeoKretDataSource;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.InventoryDataSource;
@@ -47,6 +49,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -87,7 +90,6 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         }
 
         private int adjustCacheDrawable(final GeoKretLog log) {
-            // TODO Auto-generated method stub
             if (log.getGeoCache() != null && log.getGeoCache().getType() != null) {
                 final String type = log.getGeoCache().getType();
 
@@ -156,7 +158,13 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         }
 
         private CharSequence formatGeoKretName(final GeoKretLog log) {
-            return Utils.defaultIfNull(log.getGeoKret().getName(), "...");
+            if (log.getGeoKret() == null || log.getGeoKret().getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED) {
+                return "...";
+            }
+            if (log.getGeoKret().getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_ERROR) {
+                return log.getGeoKret().getSynchroError();
+            }
+            return log.getGeoKret().getName();
         }
 
         private CharSequence formatProfileName(final GeoKretLog log) {
@@ -205,7 +213,6 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
             R.drawable.ic_log_gk_comment_gk
     };
 
-    // TODO: in future
     private static final int[] LOG_TYPE_ICON_MAP_HUMAN = {
             R.drawable.ic_log_gk_drop_human,
             R.drawable.ic_log_gk_grab_human,
@@ -215,13 +222,7 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
     };
 
     private User account;
-    //private SQLiteDatabase database;
-
-    //private Cursor geoKretLogsCursor;
     private ListView listView;
-
-    //private GeoKretyApplication application;
-    //private StateHolder holder;
 
     private Spinner accountsSpinner;
 
@@ -270,20 +271,6 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
     @Override
     public void onNothingSelected(final AdapterView<?> arg0) {
     }
-
-    /*private void refreshListView() {
-        closeCursorIfOpened();
-        geoKretLogsCursor = GeoKretLogDataSource
-                .createLoadByUserIDCurosr(database, account.getID());
-
-        if (adapter == null) {
-            adapter = new Adapter(this, geoKretLogsCursor, true);
-            final ListView listView = (ListView) findViewById(R.id.gklListView);
-            listView.setAdapter(adapter);
-        } else {
-            adapter.changeCursor(geoKretLogsCursor);
-        }        
-    }*/
 
     private void updateListView() {
         onRefreshDatabase();
@@ -337,15 +324,12 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
     protected void onPause() {
         super.onPause();
         unregisterReceiver(submitDoneBroadcastReceiver);
-       // closeCursorIfOpened();
-       // ((GeoKretyApplication) getApplication()).getStateHolder().getDbHelper().closeDatabase();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         final StateHolder holder = ((GeoKretyApplication) getApplication()).getStateHolder();
-        //database = holder.getDbHelper().openDatabase();
         final int nr = accountsSpinner.getSelectedItemPosition();
         if (nr != AdapterView.INVALID_POSITION) {
             account = holder.getAccountList().get(nr);

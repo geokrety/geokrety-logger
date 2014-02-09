@@ -177,8 +177,10 @@ public class GeoKret {
 
     @Override
     public String toString() {
-        if (mGeoKretId == null) {
+        if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED) {
             return mTrackingCode;
+        } if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_ERROR) {
+            return mTrackingCode + " (" + mSynchroError + ")";
         } else {
             return getFormatedCode() + " (" + mTrackingCode + "): " + mName;
         }
