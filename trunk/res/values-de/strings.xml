@@ -159,7 +159,7 @@
 	</string-array>
 	<string name="form_identify">2. GeoKret identifizieren</string>
 	<string name="form_code">Trackingcode</string>
-	<string name="form_Profilee">Wer? &#8230;</string>
+	<string name="form_profile">Wer? &#8230;</string>
 	<string name="form_inventory">Inventar</string>
 	<string name="form_location">3. Neuer Ort</string>
 	<string name="form_waypoint">Wegpunkt</string>
@@ -192,7 +192,7 @@
 	<string name="title_activity_geokretlogs">GeoKret Logs</string>
 	<string name="row_log_icon_contentDescription">Logtyp</string>
 	<string name="row_log_statusLabel">Status:</string>
-	<string name="row_log_ProfileeLabel">Benutzer:</string>
+	<string name="row_log_profileLabel">Benutzer:</string>
 	<string name="log_status_draft">Entwurf</string>
 	<string name="log_status_new">Neu</string>
 	<string name="log_status_double">Duplikat</string>
