@@ -23,6 +23,7 @@ package pl.nkg.geokrety;
 
 import java.util.Date;
 
+import org.acra.annotation.ReportsCrashes;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
@@ -51,6 +52,12 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
+import org.acra.*;
+
+@ReportsCrashes(formKey = "",
+    mailTo = "nkg753@gmail.com",
+    mode = ReportingInteractionMode.TOAST,
+    resToastText = R.string.crash_toast_text)
 public class GeoKretyApplication extends Application {
 	private HttpClient httpClient;
 	private ForegroundTaskHandler foregroundTaskHandler;
@@ -60,6 +67,7 @@ public class GeoKretyApplication extends Application {
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		ACRA.init(this);
 		Utils.application = this;
 		stateHolder = new StateHolder(getApplicationContext());
 		httpClient = createHttpClient();
