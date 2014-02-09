@@ -249,10 +249,12 @@
 	<string name="notify_refresh_inventory">Odświeżanie inwentarza</string>
 	<string name="notify_refresh_last_logs">Odświeżanie listy ostatnich logów</string>
 	<string name="notify_refresh_oc_names">Odświeżanie nazw geokeszy</string>
+	<string name="notify_refresh_own_gk">Odświeżanie moich geokretów</string>
 	<string name="notify_refresh_error_inventory">Inwentarz:</string>
 	<string name="notify_refresh_error_last_logs">Ostatnie logi:</string>
 	<string name="notify_refresh_error_broken">Odświeżanie zostało przerwane</string>
 	<string name="notify_refresh_error_lost_connection">Utracono połączenie z Internetem</string>
+	<string name="error_description_no_such_geokret">Nieprawidłowy tracking code</string>
 	
 	<!-- About Activity -->
 	<string name="title_activity_about">Informacje o GeoKrety Logger</string>

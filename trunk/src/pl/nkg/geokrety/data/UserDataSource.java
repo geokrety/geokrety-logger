@@ -19,11 +19,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.data;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 
 import pl.nkg.geokrety.Utils;
@@ -33,194 +32,155 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
-import android.util.Pair;
 
 public class UserDataSource {
 
-	public static final String			TABLE				= "users";
-	public static final String			COLUMN_ID			= GeoKretySQLiteHelper.COLUMNT_ID;
-	public static final String			COLUMN_USER_NAME	= "name";
-	public static final String			COLUMN_SECID		= "secid";
-	public static final String			COLUMN_UUIDS		= "uuids";
-    public static final String          COLUMN_OCLOGINS        = "oc_logins";
-	public static final String			COLUMN_REFRESH		= "refresh";
-	public static final String			COLUMN_HOME_LON		= "home_lon";
-	public static final String			COLUMN_HOME_LAT		= "home_lat";
+    public static final String TABLE = "users";
+    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
+    public static final String COLUMN_USER_NAME = "name";
+    public static final String COLUMN_SECID = "secid";
+    public static final String COLUMN_UUIDS = "uuids";
+    public static final String COLUMN_OCLOGINS = "oc_logins";
+    // TODO: COLUMN_REFRESH is not used since 0.6.0
+    public static final String COLUMN_REFRESH = "refresh";
+    public static final String COLUMN_HOME_LON = "home_lon";
+    public static final String COLUMN_HOME_LAT = "home_lat";
 
-	public static final String			TABLE_CREATE;
+    public static final String TABLE_CREATE;
 
-	private final GeoKretySQLiteHelper	dbHelper;
-	private final static String			DELIMITER			= ";";
+    private final GeoKretySQLiteHelper dbHelper;
+    private final static String DELIMITER = ";";
 
-	private static final String			FETCH_ALL;
+    private static final String FETCH_ALL;
 
-	static {
-		TABLE_CREATE = "CREATE TABLE " //
-				+ TABLE + "(" //
-				+ COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
-				+ COLUMN_USER_NAME + " TEXT NOT NULL, " //
-				+ COLUMN_SECID + " TEXT NOT NULL, " //
-				+ COLUMN_UUIDS + " TEXT NOT NULL, " //
+    static {
+        TABLE_CREATE = "CREATE TABLE " //
+                + TABLE + "(" //
+                + COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
+                + COLUMN_USER_NAME + " TEXT NOT NULL, " //
+                + COLUMN_SECID + " TEXT NOT NULL, " //
+                + COLUMN_UUIDS + " TEXT NOT NULL, " //
                 + COLUMN_OCLOGINS + " TEXT NOT NULL DEFAULT '', " //
-				+ COLUMN_REFRESH + " INTEGER NOT NULL DEFAULT 0," //
-				+ COLUMN_HOME_LAT + " TEXT NOT NULL DEFAULT ''," //
-				+ COLUMN_HOME_LON + " TEXT NOT NULL DEFAULT ''" //
-				+ "); ";
+                + COLUMN_REFRESH + " INTEGER NOT NULL DEFAULT 0," //
+                + COLUMN_HOME_LAT + " TEXT NOT NULL DEFAULT ''," //
+                + COLUMN_HOME_LON + " TEXT NOT NULL DEFAULT ''" //
+                + "); ";
 
-		FETCH_ALL = "SELECT " //
-				+ COLUMN_ID + ", " //
-				+ COLUMN_USER_NAME + ", " //
-				+ COLUMN_SECID + ", " //
-				+ COLUMN_UUIDS + ", "//
+        FETCH_ALL = "SELECT " //
+                + COLUMN_ID + ", " //
+                + COLUMN_USER_NAME + ", " //
+                + COLUMN_SECID + ", " //
+                + COLUMN_UUIDS + ", "//
                 + COLUMN_OCLOGINS + ", "//
-				+ COLUMN_REFRESH + ", " //
-				+ COLUMN_HOME_LAT + ", " //
-				+ COLUMN_HOME_LON //
-				+ " FROM " //
-				+ TABLE //
-				+ " ORDER BY " + COLUMN_USER_NAME;
-	}
+                + COLUMN_REFRESH + ", " //
+                + COLUMN_HOME_LAT + ", " //
+                + COLUMN_HOME_LON //
+                + " FROM " //
+                + TABLE //
+                + " ORDER BY " + COLUMN_USER_NAME;
+    }
 
-	public UserDataSource(final GeoKretySQLiteHelper dbHelper) {
-		this.dbHelper = dbHelper;
-	}
+    public UserDataSource(final GeoKretySQLiteHelper dbHelper) {
+        this.dbHelper = dbHelper;
+    }
 
-	public List<User> getAll() {
-		final ArrayList<User> accounts = new ArrayList<User>();
-		dbHelper.runOnReadableDatabase(new DBOperation() {
-
-			@Override
-			public boolean inTransaction(final SQLiteDatabase db) {
-				final Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
-				while (cursor.moveToNext()) {
-					final User account = new User(//
-							cursor.getInt(0), //
-							cursor.getString(1), //
-							cursor.getString(2), //
-							extractUUIDs(cursor.getString(3)),
-							extractUUIDs(cursor.getString(4)));
-
-					account.setHomeCordLat(cursor.getString(6));
-					account.setHomeCordLon(cursor.getString(7));
-
-					final long time = cursor.getLong(5);
-					if (time > 0) {
-						account.setLastDataLoaded(new Date(time));
-					}
-
-					accounts.add(account);
-				}
-				cursor.close();
-				return true;
-			}
-		});
-		return accounts;
-	}
-	/*
-	public List<Pair<Long, String>> loadSecIds() {
-        final List<Pair<Long, String>> secIds = new LinkedList<Pair<Long, String>>();
+    public List<User> getAll() {
+        final ArrayList<User> accounts = new ArrayList<User>();
         dbHelper.runOnReadableDatabase(new DBOperation() {
 
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
-                final Cursor cursor = db.query(TABLE, new String[] {COLUMN_ID, COLUMN_SECID}, null , null, null, null, null);
+                final Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
                 while (cursor.moveToNext()) {
-                    secIds.add(new Pair<Long, String>(cursor.getLong(0), cursor.getString(1)));
+                    final User account = new User(//
+                            cursor.getInt(0), //
+                            cursor.getString(1), //
+                            cursor.getString(2), //
+                            extractUUIDs(cursor.getString(3)),
+                            extractUUIDs(cursor.getString(4)));
+
+                    account.setHomeCordLat(cursor.getString(6));
+                    account.setHomeCordLon(cursor.getString(7));
+
+                    accounts.add(account);
                 }
                 cursor.close();
                 return true;
             }
         });
-        return secIds;
-    }*/
+        return accounts;
+    }
 
-	public void merge(final User account) {
-		dbHelper.runOnWritableDatabase(new DBOperation() {
+    public void merge(final User account) {
+        dbHelper.runOnWritableDatabase(new DBOperation() {
 
-			@Override
-			public boolean inTransaction(final SQLiteDatabase db) {
-				mergeSimple(db, TABLE, getValues(account), account.getID());
-				return true;
-			}
-		});
-	}
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                mergeSimple(db, TABLE, getValues(account), account.getID());
+                return true;
+            }
+        });
+    }
 
-	public void persist(final User account) {
-		dbHelper.runOnWritableDatabase(new DBOperation() {
+    public void persist(final User account) {
+        dbHelper.runOnWritableDatabase(new DBOperation() {
 
-			@Override
-			public boolean inTransaction(final SQLiteDatabase db) {
-				final int id = (int) persist(db, TABLE, getValues(account));
-				account.setID(id);
-				return true;
-			}
-		});
-	}
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                final int id = (int) persist(db, TABLE, getValues(account));
+                account.setID(id);
+                return true;
+            }
+        });
+    }
 
-	public void remove(final long id) {
-		dbHelper.runOnWritableDatabase(new DBOperation() {
+    public void remove(final long id) {
+        dbHelper.runOnWritableDatabase(new DBOperation() {
 
-			@Override
-			public boolean inTransaction(final SQLiteDatabase db) {
-				removeSimple(db, TABLE, id);
-				return true;
-			}
-		});
-	}
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                removeSimple(db, TABLE, id);
+                return true;
+            }
+        });
+    }
 
-	public void storeLastLoadedDate(final User account) {
-		dbHelper.runOnWritableDatabase(new DBOperation() {
+    private String[] extractUUIDs(final String uuids) {
+        final String[] ret = new String[SupportedOKAPI.SUPPORTED.length];
+        if (Utils.isEmpty(uuids)) {
+            return ret;
+        }
+        final String[] parsed = TextUtils.split(uuids, DELIMITER);
+        for (int i = 0; i < Math.min(parsed.length, ret.length); i++) {
+            ret[i] = parsed[i];
+        }
+        return ret;
+    }
 
-			@Override
-			public boolean inTransaction(final SQLiteDatabase db) {
-				final ContentValues values = new ContentValues();
-				values.put(COLUMN_REFRESH, account.getLastDataLoaded().getTime());
-				mergeSimple(db, TABLE, values, account.getID());
-				return true;
-			}
-		});
-	}
-
-	private String[] extractUUIDs(final String uuids) {
-		final String[] ret = new String[SupportedOKAPI.SUPPORTED.length];
-		if (Utils.isEmpty(uuids)) {
-			return ret;
-		}
-		final String[] parsed = TextUtils.split(uuids, DELIMITER);
-		for (int i = 0; i < Math.min(parsed.length, ret.length); i++) {
-			ret[i] = parsed[i];
-		}
-		return ret;
-	}
-
-	private ContentValues getValues(final User account) {
-		final Date lastLoadedDate = account.getLastDataLoaded();
-		final long storedLastLoadedDate = lastLoadedDate == null ? 0 : lastLoadedDate.getTime();
-
-		final ContentValues values = new ContentValues();
-		values.put(COLUMN_USER_NAME, account.getName());
-		values.put(COLUMN_SECID, account.getGeoKreySecredID());
-		values.put(COLUMN_UUIDS, joinUUIDs(account.getOpenCachingUUIDs()));
+    private ContentValues getValues(final User account) {
+        final ContentValues values = new ContentValues();
+        values.put(COLUMN_USER_NAME, account.getName());
+        values.put(COLUMN_SECID, account.getGeoKreySecredID());
+        values.put(COLUMN_UUIDS, joinUUIDs(account.getOpenCachingUUIDs()));
         values.put(COLUMN_OCLOGINS, joinUUIDs(account.getOpenCachingLogins()));
-		values.put(COLUMN_REFRESH, storedLastLoadedDate);
-		values.put(COLUMN_HOME_LAT, account.getHomeCordLat());
-		values.put(COLUMN_HOME_LON, account.getHomeCordLon());
-		return values;
-	}
+        values.put(COLUMN_HOME_LAT, account.getHomeCordLat());
+        values.put(COLUMN_HOME_LON, account.getHomeCordLon());
+        return values;
+    }
 
-	private String joinUUIDs(final String[] uuids) {
-		if (uuids == null) {
-			return "";
-		}
+    private String joinUUIDs(final String[] uuids) {
+        if (uuids == null) {
+            return "";
+        }
 
-		final StringBuilder sb = new StringBuilder();
-		for (final String s : uuids) {
-			if (!Utils.isEmpty(s)) {
-				sb.append(s);
-			}
-			sb.append(DELIMITER);
-		}
+        final StringBuilder sb = new StringBuilder();
+        for (final String s : uuids) {
+            if (!Utils.isEmpty(s)) {
+                sb.append(s);
+            }
+            sb.append(DELIMITER);
+        }
 
-		return sb.toString();
-	}
+        return sb.toString();
+    }
 }

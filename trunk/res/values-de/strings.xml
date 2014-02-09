@@ -247,10 +247,12 @@
 <!-- NEED TRANSLATE --><string name="notify_refresh_inventory">Refreshing inventory</string>
 <!-- NEED TRANSLATE --><string name="notify_refresh_last_logs">Refreshing list of last logs</string>
 <!-- NEED TRANSLATE --><string name="notify_refresh_oc_names">Refreshing data of geocaches</string>
+<!-- NEED TRANSLATE --><string name="notify_refresh_own_gk">Refreshing own geokrets</string>
 <!-- NEED TRANSLATE --><string name="notify_refresh_error_inventory">Inventory:</string>
 <!-- NEED TRANSLATE --><string name="notify_refresh_error_last_logs">Last logs:</string>
 <!-- NEED TRANSLATE --><string name="notify_refresh_error_broken">Refreshing has been broken</string>
 <!-- NEED TRANSLATE --><string name="notify_refresh_error_lost_connection">Internet connection lost</string>
+	<string name="error_description_no_such_geokret">Falscher Tracking Code</string>
 	
 	<!-- About Activity -->
 	<string name="title_activity_about">Über</string>

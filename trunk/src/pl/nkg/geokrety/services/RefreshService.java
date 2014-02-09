@@ -228,6 +228,7 @@ public class RefreshService extends IntentService {
             }
             
             try {
+                publishProgress(R.string.notify_refresh_own_gk, "TrackingCode: " + tc);
                 int id = GeoKretyProvider.loadIDByTranckingCode(tc);
                 
                 if (!canContinue(cancelHolder, sb)) {
@@ -240,12 +241,14 @@ public class RefreshService extends IntentService {
                     gk.setTrackingCode(tc);
                     
                 } else {
-                    gk = new GeoKret(tc, GeoKretDataSource.SYNCHRO_STATE_ERROR, "no such geokret"); // FIXME: translate!
+                    gk = new GeoKret(tc, GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(R.string.error_description_no_such_geokret).toString());
                 }
                 gks.add(gk);
             } catch (MessagedException e) {
                 appendToStringBuilderWithNewLineIfNeed(sb, getText(R.string.notify_refresh_error_lost_connection));
-                sb.append(" - ");// TODO: format
+                sb.append(": ");
+                sb.append(tc);
+                sb.append(" - ");
                 sb.append(e.getFormatedMessage(this));
             }
         }

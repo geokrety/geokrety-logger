@@ -186,8 +186,10 @@ public class GeoKret {
 
     @SuppressLint("DefaultLocale")
     public String getFormatedCode() {
-        if (mGeoKretId == null) {
+        if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED) {
             return "...";
+        } if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_ERROR) {
+            return "error";
         } else {
             return "GK" + Integer.toHexString(mGeoKretId).toUpperCase(Locale.ENGLISH);
         }

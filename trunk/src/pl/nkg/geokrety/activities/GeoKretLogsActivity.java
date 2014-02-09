@@ -302,7 +302,6 @@ public class GeoKretLogsActivity extends ManagedDialogsActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //adapter = null; FIXME: test
         application = (GeoKretyApplication) getApplication();
         removeLogDialog = new AlertDialogWrapper(this, Dialogs.REMOVE_ALL_LOGS_ALERTDIALOG);
         removeLogDialog.setMessage(R.string.form_confirm_delete_all_msg);

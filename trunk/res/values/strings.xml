@@ -257,10 +257,12 @@
 	<string name="notify_refresh_inventory">Refreshing inventory</string>
 	<string name="notify_refresh_last_logs">Refreshing list of last logs</string>
 	<string name="notify_refresh_oc_names">Refreshing data of geocaches</string>
+	<string name="notify_refresh_own_gk">Refreshing own geokrets</string>
 	<string name="notify_refresh_error_inventory">Inventory:</string>
 	<string name="notify_refresh_error_last_logs">Last logs:</string>
 	<string name="notify_refresh_error_broken">Refreshing has been broken</string>
 	<string name="notify_refresh_error_lost_connection">Internet connection lost</string>
+	<string name="error_description_no_such_geokret">Invalid tracking code</string>
 	
     <!-- About Activity -->
 	<string name="title_activity_about">About</string>
@@ -342,19 +344,5 @@
 
 	<!-- Crash report -->
 	<string name="crash_toast_text">Ooooops! I crashed, but a report has been sent to my developer to help fix the issue!</string>
-    <string name="pref_enable_acra">Enable ACRA?</string>
-    <string name="pref_acra_enabled">ACRA enabled</string>
-    <string name="pref_acra_disabled">ACRA disabled</string>
-    <string name="pref_acra_syslog_enabled">Sending system logs is enabled</string>
-    <string name="pref_acra_syslog_disabled">Seinding system logs is disabled</string>
-    <string name="pref_acra_syslog">Send system logs (may contain private data) ?</string>
-    <string name="pref_acra_deviceid_enabled">Send device id is enabled</string>
-    <string name="pref_acra_deviceid_disabled">Do not send device id</string>
-    <string name="pref_acra_user_email">Add your email address</string>
-    <string name="pref_acra_deviceid">Send device unique id ?</string>
-    <string name="pref_acra_user_email_summary">Developers may contact you to solve issues.</string>
-    <string name="pref_acra_alwaysaccept">Always send crash reports?</string>
-    <string name="pref_acra_alwaysaccept_enabled">Reports are sent without asking.</string>
-    <string name="pref_acra_alwaysaccept_disabled">Each report needs acknowledgement.</string>    
 	
 </resources>
