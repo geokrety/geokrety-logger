@@ -54,6 +54,8 @@ import android.widget.Toast;
 
 import org.acra.*;
 
+import com.github.anrwatchdog.ANRWatchDog;
+
 @ReportsCrashes(formKey = "",
     mailTo = "nkg753@gmail.com",
     mode = ReportingInteractionMode.TOAST,
@@ -63,11 +65,17 @@ public class GeoKretyApplication extends Application {
 	private ForegroundTaskHandler foregroundTaskHandler;
 	private StateHolder stateHolder;
 	private boolean noAccountHinted = false;
+	public ANRWatchDog watchDog = new ANRWatchDog();
 
-	@Override
+	@SuppressWarnings("unused")
+    @Override
 	public void onCreate() {
 		super.onCreate();
+		
 		ACRA.init(this);
+		if (BuildConfig.DEBUG == false)
+		    watchDog.start();
+		
 		Utils.application = this;
 		stateHolder = new StateHolder(getApplicationContext());
 		httpClient = createHttpClient();
