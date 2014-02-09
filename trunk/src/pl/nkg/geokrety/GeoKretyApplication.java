@@ -34,6 +34,7 @@ import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager;
 import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
@@ -66,6 +67,9 @@ public class GeoKretyApplication extends Application {
 	private StateHolder stateHolder;
 	private boolean noAccountHinted = false;
 	public ANRWatchDog watchDog = new ANRWatchDog();
+	
+	private static final int CONNECTION_TIMEOUT = 10000;
+	private static final int SOCKET_TIMEOUT = 10000;
 
 	@SuppressWarnings("unused")
     @Override
@@ -114,6 +118,8 @@ public class GeoKretyApplication extends Application {
 		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 		HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 		HttpProtocolParams.setUseExpectContinue(params, true);
+		HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
+		HttpConnectionParams.setSoTimeout(params, SOCKET_TIMEOUT);
 
 		SchemeRegistry schReg = new SchemeRegistry();
 		schReg.register(new Scheme("http", PlainSocketFactory

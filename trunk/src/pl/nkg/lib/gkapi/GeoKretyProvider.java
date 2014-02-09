@@ -46,7 +46,10 @@ public class GeoKretyProvider {
 	private static final String	URL_LOGIN			= "http://geokrety.org/api-login2secid.php";
 	private static final String	URL_EXPORT2			= "http://geokrety.org/export2.php";
 	private static final String	URL_RUCHY			= "http://geokrety.org/ruchy.php";
+	private static final String URL_AJAX            = "http://geokrety.org/szukaj-ajax.php";
 	
+	
+	private static final String URL_EXPORT_GLID     = "http://geokrety.org/export2.php?gkid=";
 	private static final String URL_SZUKAJ_GK       = "http://geokrety.org/szukaj-ajax.php?skad=ajax&nr=";
 	private static final String URL_SZUKAJ_GC       = "http://geokrety.org/szukaj-ajax.php?skad=ajax&wpt=";
 
@@ -75,6 +78,49 @@ public class GeoKretyProvider {
 		} catch (final Exception e) {
 			throw new MessagedException(R.string.inventory_error_message);
 		}
+	}
+	
+	public static GeoKret loadSingleGeoKretByID(int id) throws MessagedException {
+        final String[][] getData = new String[][] { new String[] { "gkid", Integer.toString(id) } };
+        try {
+            final String xml = Utils.httpGet(URL_EXPORT2, getData);
+            final Document doc = Utils.getDomElement(xml);
+
+            final NodeList nl = doc.getElementsByTagName("geokret");
+
+            if (nl.getLength() > 0) {
+                return new GeoKret(nl.item(0));
+            } else {
+                return null;
+            }
+        } catch (final Exception e) {
+            throw new MessagedException(R.string.inventory_error_message); // TODO: need refactor before 0.6.0
+        }	    
+	}
+	
+	private final static String KONKRET = "konkret.php?id=";
+	public static int loadIDByTranckingCode(String trackingCode) throws MessagedException {
+	    final String[][] getData = new String[][] { //
+                new String[] { "skad", "ajax" }, //
+                new String[] { "nr", trackingCode } };
+        try {
+            final String xml = Utils.httpGet(URL_AJAX, getData);
+            
+            int pos = xml.indexOf(KONKRET);
+            if (pos == -1) {
+                return -1;
+            }
+            
+            int pos2 = xml.indexOf("\'", pos + KONKRET.length());
+            if (pos2 == -1) {
+                return -1;
+            }
+            
+            String id = xml.substring(pos + KONKRET.length(), pos2);
+            return Integer.parseInt(id);
+        } catch (final Exception e) {
+            throw new MessagedException(R.string.inventory_error_message); // TODO: need refactor before 0.6.0
+        }
 	}
 
 	public static String loadSecureID(final String geoKretyLogin, final String geoKretyPassword) throws MessagedException {

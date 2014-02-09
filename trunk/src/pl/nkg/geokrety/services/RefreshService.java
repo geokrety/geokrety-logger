@@ -23,6 +23,7 @@
 package pl.nkg.geokrety.services;
 
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,7 @@ import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKret;
+import pl.nkg.geokrety.data.GeoKretDataSource;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.StateHolder;
@@ -57,7 +59,7 @@ public class RefreshService extends IntentService {
     public static final String BROADCAST_FINISH = "pl.nkg.geokrety.services.RefreshService.Submits.Finish";
     public static final String INTENT_ERROR_MESSAGE = "error";
 
-    private static final String TAG = RefreshService.class.getName();
+    private static final String TAG = RefreshService.class.getCanonicalName();
     //private static final int RETRY_DELAY = 1000 * 60 * 5;
 
     private GeoKretyApplication application;
@@ -115,8 +117,10 @@ public class RefreshService extends IntentService {
                 error = null;
             }
         } catch (Throwable e) {
+            Log.println(Log.ERROR, TAG, e.getLocalizedMessage());
             ACRA.getErrorReporter().handleSilentException(e);
             error = e.getLocalizedMessage();
+            e.printStackTrace();
         }
         
         if (!Utils.isEmpty(error)) {
@@ -205,9 +209,54 @@ public class RefreshService extends IntentService {
             }
         }
         
+        if (!canContinue(cancelHolder, sb)) {
+            return sb.toString();
+        }
+        
+        refreshGeoKrets(cancelHolder, sb);
+        
         return sb.toString();
     }
     
+    private void refreshGeoKrets(CancelHolder cancelHolder, StringBuilder sb) {
+        List<String> list = stateHolder.getInventoryDataSource().loadNeedUpdateList();
+        
+        List<GeoKret> gks = new LinkedList<GeoKret>();
+        for (String tc : list) {
+            if (!canContinue(cancelHolder, sb)) {
+                return;
+            }
+            
+            try {
+                int id = GeoKretyProvider.loadIDByTranckingCode(tc);
+                
+                if (!canContinue(cancelHolder, sb)) {
+                    return;
+                }
+                
+                GeoKret gk;
+                if (id != -1) {
+                    gk = GeoKretyProvider.loadSingleGeoKretByID(id);
+                    gk.setTrackingCode(tc);
+                    
+                } else {
+                    gk = new GeoKret(tc, GeoKretDataSource.SYNCHRO_STATE_ERROR, "no such geokret"); // FIXME: translate!
+                }
+                gks.add(gk);
+            } catch (MessagedException e) {
+                appendToStringBuilderWithNewLineIfNeed(sb, getText(R.string.notify_refresh_error_lost_connection));
+                sb.append(" - ");// TODO: format
+                sb.append(e.getFormatedMessage(this));
+            }
+        }
+        
+        if (!canContinue(cancelHolder, sb)) {
+            return;
+        }
+        
+        stateHolder.getGeoKretDataSource().update(gks);
+    }
+
     private static void appendToStringBuilderWithNewLineIfNeed(StringBuilder sb, CharSequence text) {
         if (sb.length() > 0 ) {
             sb.append("\n");

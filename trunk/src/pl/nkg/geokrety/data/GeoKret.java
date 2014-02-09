@@ -59,7 +59,12 @@ public class GeoKret {
                 .getNamedItem("owner_id").getNodeValue());
         mType = Integer.parseInt(node.getAttributes().getNamedItem("type")
                 .getNodeValue());
-        mTrackingCode = node.getAttributes().getNamedItem("nr").getNodeValue();
+        
+        Node trackingCodeNode = node.getAttributes().getNamedItem("nr");
+        if (trackingCodeNode != null) {
+            mTrackingCode = trackingCodeNode.getNodeValue();
+        }
+        
         mName = node.getChildNodes().item(0).getNodeValue();
 
         final Node stateNode = node.getAttributes().getNamedItem("state");
@@ -90,11 +95,11 @@ public class GeoKret {
         mSynchroError = cursor.isNull(i + 9) ? null : cursor.getString(i + 9);
     }
 
-    public int getDist() {
+    public Integer getDist() {
         return mDist;
     }
 
-    public int getGeoKretId() {
+    public Integer getGeoKretId() {
         return mGeoKretId;
     }
 
@@ -102,7 +107,7 @@ public class GeoKret {
         return mName;
     }
 
-    public int getOwnerId() {
+    public Integer getOwnerId() {
         return mOwnerId;
     }
 
