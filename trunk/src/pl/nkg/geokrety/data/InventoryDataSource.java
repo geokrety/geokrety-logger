@@ -35,7 +35,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class InventoryDataSource {
 
     public static final String TABLE = "inventory";
-    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
+    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMN_ID;
     public static final String COLUMN_TRACKING_CODE = "tracking_code"; // nr
     public static final String COLUMN_USER_ID = "user_id";
     public static final String COLUMN_STICKY = "sticky";

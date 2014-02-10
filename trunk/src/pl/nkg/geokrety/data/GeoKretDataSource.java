@@ -34,7 +34,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class GeoKretDataSource {
 
     public static final String TABLE = "geokrets";
-    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
+    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMN_ID;
     public static final String COLUMN_GK_CODE = "geokret_code"; // id
     public static final String COLUMN_DISTANCE = "dist";
     public static final String COLUMN_OWNER_ID = "owner_id";

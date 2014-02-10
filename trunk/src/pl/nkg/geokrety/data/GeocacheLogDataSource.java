@@ -36,7 +36,7 @@ import android.util.SparseArray;
 public class GeocacheLogDataSource {
 
 	public static final String TABLE = "logs";
-	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
+	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMN_ID;
 	public static final String COLUMN_LOG_UUID = "log_uuid";
 	public static final String COLUMN_USER_ID = "user_id";
 	public static final String COLUMN_WAYPOINT = "cache_code";

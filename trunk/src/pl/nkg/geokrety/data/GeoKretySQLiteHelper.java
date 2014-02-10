@@ -65,7 +65,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
         public static void mergeSimple(final SQLiteDatabase db, final String table,
                 final ContentValues values, final long id) {
-            merge(db, table, COLUMNT_ID + " = ?", values, String.valueOf(id));
+            merge(db, table, COLUMN_ID + " = ?", values, String.valueOf(id));
         }
 
         public static long persist(final SQLiteDatabase db, final String table,
@@ -88,7 +88,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
         }
 
         public static void removeSimple(final SQLiteDatabase db, final String table, final long id) {
-            remove(db, table, COLUMNT_ID + " = ?", String.valueOf(id));
+            remove(db, table, COLUMN_ID + " = ?", String.valueOf(id));
         }
 
         public abstract boolean inTransaction(SQLiteDatabase db);
@@ -106,7 +106,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    public static final String COLUMNT_ID = "_id";
+    public static final String COLUMN_ID = "_id";
     private static final String DATABASE_NAME = "geokrety.db";
 
     private static final int DATABASE_VERSION = 7;
@@ -253,7 +253,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
                 + ";");
         db.execSQL(InventoryDataSource.TABLE_CREATE);
 
-        final List<String> oldColumns = new LinkedList<String>(Arrays.asList("user_id", //
+        final List<String> oldColumns = new LinkedList<String>(Arrays.asList(COLUMN_ID, //
                 InventoryDataSource.COLUMN_USER_ID, //
                 InventoryDataSource.COLUMN_STICKY, //
                 InventoryDataSource.COLUMN_TRACKING_CODE));

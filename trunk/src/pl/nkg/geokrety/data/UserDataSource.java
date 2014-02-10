@@ -36,7 +36,7 @@ import android.text.TextUtils;
 public class UserDataSource {
 
     public static final String TABLE = "users";
-    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
+    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMN_ID;
     public static final String COLUMN_USER_NAME = "name";
     public static final String COLUMN_SECID = "secid";
     public static final String COLUMN_UUIDS = "uuids";

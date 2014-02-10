@@ -33,7 +33,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 public class GeocacheDataSource {
 	public static final String TABLE = "geocaches";
-	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
+	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMN_ID;
 	public static final String COLUMN_WAYPOINT = "waypoint";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_LOCATION = "location";

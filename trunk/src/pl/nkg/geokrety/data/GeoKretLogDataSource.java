@@ -25,6 +25,7 @@ package pl.nkg.geokrety.data;
 import java.util.LinkedList;
 import java.util.List;
 
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -33,7 +34,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class GeoKretLogDataSource {
 
     public static final String TABLE = "geokrety_logs";
-    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMNT_ID;
+    public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMN_ID;
     public static final String COLUMN_USER_ID = "user_id";
     public static final String COLUMN_STATE = "state";
     public static final String COLUMN_PROBLEM = "problem_id";
@@ -134,7 +135,7 @@ public class GeoKretLogDataSource {
         values.put(COLUMN_USER_ID, log.getAccoundID());
         values.put(COLUMN_STATE, log.getState());
         values.put(COLUMN_PROBLEM, log.getProblem());
-        values.put(COLUMN_PROBLEM_ARG, log.getProblemArg());
+        values.put(COLUMN_PROBLEM_ARG, Utils.defaultIfNull(log.getProblemArg(), "")); // FIXME: ACRA report geokrety_logs.problem_arg may not be NULL
         values.put(COLUMN_TRACKING_CODE, log.getNr());
         values.put(COLUMN_WAYPOINT, log.getWpt());
         values.put(COLUMN_FORMNAME, log.getFormname());
