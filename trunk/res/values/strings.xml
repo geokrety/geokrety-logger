@@ -283,6 +283,12 @@
 	<string name="verify_tc_message_warning_no_connection">Tracking Code can not be verified in this time</string>
 	<string name="verify_tc_message_good_verified">GeoKret found:</string>
 	
+	<!-- Waypoint Resolver service -->
+	<string name="resolve_wpt_message_info_waiting">Resloving coordinates of waypoint&#8230; (you can continue)</string>
+	<string name="resolve_wpt_message_error_waypont_not_found">Please provide the coordinates (lat/lon) of the cache in the input box below</string>
+	<string name="resolve_wpt_message_warning_no_connection">Coordinates of waypoint can not be resolved in this time. Provide the coordinates in the input box below is good idea because your waypoint may be incorrect.</string>
+	<string name="resolve_wpt_message_good_verified"></string>
+	
     <!-- About Activity -->
 	<string name="title_activity_about">About</string>
 	<string name="foot">License: GPL 3.0,

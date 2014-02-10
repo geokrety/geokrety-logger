@@ -262,6 +262,12 @@
 	<string name="verify_tc_message_error_geokret_not_found">GeoKret nie znaleziony</string>
 	<string name="verify_tc_message_warning_no_connection">Nie można teraz zweryfikować Tracking Code bo jest problem z połączeniem</string>
 	<string name="verify_tc_message_good_verified">GeoKret znaleziony:</string>
+
+	<!-- Waypoint Resolver service -->
+	<string name="resolve_wpt_message_info_waiting">Próba ściągnięcia współrzędnych wprowadzonego waypoint&#8230; (możesz kontynuować)</string>
+	<string name="resolve_wpt_message_error_waypont_not_found">Proszę podaj współrzędne (lat/lon) kesza w okienku poniżej</string>
+	<string name="resolve_wpt_message_warning_no_connection">Nie można teraz ściągnąć współrzędnych do waypoint bo jest problem z połączeniem. Lepiej będzie jak podasz współrzędne (lat/lon) kesza w okienku poniżej na wypadek jak by waypoint okazał się błędny.</string>
+	<string name="resolve_wpt_message_good_verified"></string>
 	
 	<!-- About Activity -->
 	<string name="title_activity_about">Informacje o GeoKrety Logger</string>

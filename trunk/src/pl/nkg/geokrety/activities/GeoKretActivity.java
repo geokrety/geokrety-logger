@@ -32,6 +32,7 @@ import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.services.VerifyGeoKretService;
+import pl.nkg.geokrety.services.WaypointResolverService;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
@@ -76,7 +77,10 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     private TextView notfyTextView;
 
     public static final Pattern CAPS_LETTERS_AND_DIGITS_PATTERN = Pattern.compile("[A-Z0-9]*");
+    public static final Pattern LETTERS_AND_DIGITS_PATTERN = Pattern.compile("[a-zA-Z0-9]*");
     public static final Pattern TRACKING_CODE_PATTERN = Pattern.compile("^[A-Z0-9]{6}$");
+    
+    // TODO: refactor to new class
     public static final InputFilter TRACKING_CODE_FILTER = new InputFilter() {
 
         @Override
@@ -84,6 +88,20 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
                 int dstart,
                 int dend) {
             if (CAPS_LETTERS_AND_DIGITS_PATTERN.matcher(source).matches()) {
+                return null;
+            }
+            return "";
+        }
+    };
+    
+    // TODO: refactor to new class
+    public static final InputFilter WAYPOINT_FILTER = new InputFilter() {
+
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
+                int dstart,
+                int dend) {
+            if (LETTERS_AND_DIGITS_PATTERN.matcher(source).matches()) {
                 return null;
             }
             return "";
@@ -213,13 +231,25 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
  // TODO: make a my NotifyTextView control
     public static void validate(EditText trackingCodeEditText, TextView notfyTextView) {
         if (TRACKING_CODE_PATTERN.matcher(trackingCodeEditText.getText().toString()).matches()) {
-            notfyTextView.setText("");
             setLabel(notfyTextView, trackingCodeEditText.getContext().getText(R.string.verify_tc_message_info_waiting), INFO);
             runVerifyService(trackingCodeEditText.getContext(), trackingCodeEditText.getText().toString());
         } else {
             //saveButton.setEnabled(false);  // TODO: is need?
             setLabel(notfyTextView, trackingCodeEditText.getContext().getText(R.string.geokret_message_error_invalid_trackingcode),
                     ERROR);
+        }
+    }
+    
+    // TODO: make a my NotifyTextView control
+    public static void resolve(EditText waypointEditText, TextView notfyTextView) {
+        String wpt = waypointEditText.getText().toString();
+        Context context = waypointEditText.getContext();
+        if (wpt.length() >= 3 && LETTERS_AND_DIGITS_PATTERN.matcher(wpt).matches()) {
+            setLabel(notfyTextView, context.getText(R.string.resolve_wpt_message_info_waiting), INFO);
+            runResolveService(context, wpt);
+        } else {
+            // TODO: type message about waypoint to short?
+            setLabel(notfyTextView, "", ERROR);
         }
     }
 
@@ -258,6 +288,13 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     public static void runVerifyService(Context context, CharSequence tc) {
         Intent intent = new Intent(context, VerifyGeoKretService.class);
         intent.putExtra(VerifyGeoKretService.INTENT_TRACKING_CODE, tc);
+        context.startService(intent);
+    }
+    
+    // TODO: make a my NotifyTextView control
+    public static void runResolveService(Context context, CharSequence wpt) {
+        Intent intent = new Intent(context, WaypointResolverService.class);
+        intent.putExtra(WaypointResolverService.INTENT_WAYPOINT, wpt);
         context.startService(intent);
     }
 
