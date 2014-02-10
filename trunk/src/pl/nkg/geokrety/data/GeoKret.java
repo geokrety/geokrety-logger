@@ -46,8 +46,6 @@ public class GeoKret {
     private boolean mSticky = false;
     private int mSynchroState;
     private String mSynchroError;
-    //<geokrety><geokret id="15498" dist="2222" lat="50.04632" lon="19.94505" waypoint="OP2329" owner_id="1954" state="0" type="0"><![CDATA[KGK-3 Mały Kociaczek]]></geokret>
-    //</geokrety>
 
     public GeoKret(final Node node) {
         mGeoKretId = Integer.parseInt(node.getAttributes().getNamedItem("id")
@@ -61,7 +59,7 @@ public class GeoKret {
         
         Node trackingCodeNode = node.getAttributes().getNamedItem("nr");
         if (trackingCodeNode != null) {
-            mTrackingCode = trackingCodeNode.getNodeValue();
+            mTrackingCode = trackingCodeNode.getNodeValue().toUpperCase(Locale.ENGLISH);
         }
         
         mName = node.getChildNodes().item(0).getNodeValue();
@@ -76,13 +74,13 @@ public class GeoKret {
     }
 
     public GeoKret(final String trackingCode, final int synchroState, final String synchroError) {
-        mTrackingCode = trackingCode;
+        mTrackingCode = trackingCode.toUpperCase(Locale.ENGLISH);
         mSynchroState = synchroState;
         mSynchroError = synchroError;
     }
 
     public GeoKret(Cursor cursor, int i) {
-        mTrackingCode = cursor.getString(i + 0);
+        mTrackingCode = cursor.getString(i + 0).toUpperCase(Locale.ENGLISH);
         mSticky = cursor.getInt(i + 1) != 0;
         mGeoKretId = cursor.isNull(i + 2) ? null : cursor.getInt(i + 2);
         mDist = cursor.isNull(i + 3) ? null : cursor.getInt(i + 3);
@@ -167,7 +165,7 @@ public class GeoKret {
     }
 
     public void setTrackingCode(final String nr) {
-        mTrackingCode = nr;
+        mTrackingCode = nr.toUpperCase(Locale.ENGLISH);
     }
 
     public void setType(final Integer type) {
