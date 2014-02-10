@@ -22,93 +22,58 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"    
+    android:layout_height="fill_parent"
     android:descendantFocusability="beforeDescendants"
-	android:focusableInTouchMode="true" >
+    android:focusableInTouchMode="true"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <LinearLayout
-        android:id="@+id/buttons"
-        android:layout_width="fill_parent"
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/activity_horizontal_margin"
-        android:paddingRight="@dimen/activity_horizontal_margin" >
+        android:layout_centerHorizontal="true"
+        android:onClick="saveClick"
+        android:text="@string/geokret_save" />
 
-        <Button
-            android:id="@+id/saveButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="saveClick"
-            android:text="@string/geokret_save" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/geokret_nr_title"
+        android:textStyle="bold" />
 
-    <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@id/buttons" >
+    <EditText
+        android:id="@+id/trackingCodeEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView"
+        android:ems="10"
+        android:hint="@string/geokret_nr_hint"
+        android:inputType="textCapCharacters"
+        android:textAllCaps="true" />
 
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin" >
+    <TextView
+        android:id="@+id/notfyTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/trackingCodeEditText"
+        android:textColor="@color/error_color"
+        android:textStyle="bold" />
 
-            <TableLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:shrinkColumns="1"
-                android:stretchColumns="1" >
-
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/geokret_nr_title" />
-
-                    <EditText
-                        android:id="@+id/trackingCodeEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:textAllCaps="true"
-                        android:inputType="textCapCharacters"
-                        android:hint="@string/geokret_nr_hint" />
-                </TableRow>
-                <!-- 
-                <TableRow
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/geokret_name_title" />
-
-                    <EditText
-                        android:id="@+id/nameEditText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:hint="@string/geokret_name_hint" />
-                </TableRow>
- -->
-            </TableLayout>
-
-            <CheckBox
-                android:id="@+id/stickyCheckBox"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/geokret_sticki_title" />
-            
-        </LinearLayout>
-    </ScrollView>
+    <CheckBox
+        android:id="@+id/stickyCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/notfyTextView"
+        android:text="@string/geokret_sticki_title" />
 
 </RelativeLayout>

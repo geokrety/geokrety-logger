@@ -146,6 +146,7 @@
 	<string name="geokret_save">Save</string>
 	<string name="geokret_save_title">Save GeoKret settings?</string>
 	<string name="geokret_save_message">GeoKret settings changed. Save changes?</string>
+	<string name="geokret_invalid_trackingcode_message">Please enter a valid Tracking Code: 6 characters from GeoKret label, eg. XF3ACS</string>
     
     <!-- OpenCaching last logs Activity -->
 	<string name="title_activity_last_ocs">Last log from OpenCaching portals</string>

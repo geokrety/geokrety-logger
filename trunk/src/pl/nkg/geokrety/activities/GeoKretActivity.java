@@ -23,6 +23,7 @@
 package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
+import java.util.regex.Pattern;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 //import pl.nkg.geokrety.GeoKretyApplication;
@@ -37,12 +38,16 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
+import android.text.Spanned;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class GeoKretActivity extends ManagedDialogsActivity implements TextWatcher,
         OnCheckedChangeListener {
@@ -61,11 +66,23 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     private String oldTrackingCode = "";
 
     private EditText trackingCodeEditText;
-    //@Deprecated
-    //private EditText nameEditText;
     private CheckBox stickyCheckBox;
+    private Button saveButton;
+    private TextView notfyTextView;
 
-    // private GeoKret geoKret;
+    private static final Pattern CAPS_LETTERS_AND_DIGITS_PATTERN = Pattern.compile("[A-Z0-9]*");
+    private static final Pattern TRACKING_CODE_PATTERN = Pattern.compile("^[A-Z0-9]{6}$");
+    private static final InputFilter TRACKING_CODE_FILTER = new InputFilter() {
+        
+        @Override
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
+                int dend) {
+            if (CAPS_LETTERS_AND_DIGITS_PATTERN.matcher(source).matches()) {
+                return null;
+            }
+            return "";
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +100,11 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
         saveModifiedsDialog.setNeutralButton(getText(android.R.string.cancel));
 
         trackingCodeEditText = (EditText) findViewById(R.id.trackingCodeEditText);
-        //nameEditText = (EditText) findViewById(R.id.nameEditText);
+        saveButton = (Button) findViewById(R.id.saveButton);
+        trackingCodeEditText.setFilters(new InputFilter[] {TRACKING_CODE_FILTER, new InputFilter.LengthFilter(6)});
+        // nameEditText = (EditText) findViewById(R.id.nameEditText);
         stickyCheckBox = (CheckBox) findViewById(R.id.stickyCheckBox);
+        notfyTextView = (TextView) findViewById(R.id.notfyTextView);
 
         Bundle ib = getIntent().getExtras();
         userId = ib.getLong(USER_ID);
@@ -96,9 +116,12 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
             trackingCodeEditText.setText(geoKret.getTrackingCode());
             // nameEditText.setText(ib.getString(NAME));
             stickyCheckBox.setChecked(geoKret.isSticky());
+        } else {
+            stickyCheckBox.setChecked(true);
+            saveButton.setEnabled(false);
         }
 
-        //nameEditText.addTextChangedListener(this);
+        // nameEditText.addTextChangedListener(this);
         trackingCodeEditText.addTextChangedListener(this);
         stickyCheckBox.setOnCheckedChangeListener(this);
         modified = false;
@@ -175,6 +198,13 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
 
     @Override
     public void afterTextChanged(Editable s) {
-        modified = true;
+        if (TRACKING_CODE_PATTERN.matcher(s.toString()).matches()) {
+            modified = true;
+            saveButton.setEnabled(true);
+            notfyTextView.setText("");
+        } else {
+            saveButton.setEnabled(false);
+            notfyTextView.setText(R.string.geokret_invalid_trackingcode_message);
+        }
     }
 }
