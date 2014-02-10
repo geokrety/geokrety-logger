@@ -22,7 +22,7 @@
 -->
 <resources>
     <color name="error_color">#ffcc0000</color>
-    <color name="warning_color">#ccff0000</color>
-    <color name="valid_color">#ccffcc00</color>
-    <color name="info_color">#ccccff00</color>
+    <color name="warning_color">#ffaaaa00</color>
+    <color name="valid_color">#ff00cc00</color>
+    <color name="info_color">#ff0000ff</color>
 </resources>

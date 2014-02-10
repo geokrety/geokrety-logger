@@ -21,10 +21,14 @@
  */
 package pl.nkg.lib.gkapi;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import org.acra.ACRA;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -34,6 +38,7 @@ import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.exceptions.MessagedException;
+import pl.nkg.geokrety.exceptions.NoConnectionException;
 import android.text.TextUtils;
 
 public class GeoKretyProvider {
@@ -93,8 +98,11 @@ public class GeoKretyProvider {
             } else {
                 return null;
             }
-        } catch (final Exception e) {
-            throw new MessagedException(R.string.inventory_error_message); // TODO: need refactor before 0.6.0
+        } catch (IOException e) {
+            throw new NoConnectionException();
+        } catch (final Throwable e) {
+            ACRA.getErrorReporter().handleSilentException(e);
+            throw new MessagedException(R.string.global_message_error_system, e.getLocalizedMessage());
         }	    
 	}
 	
@@ -118,9 +126,12 @@ public class GeoKretyProvider {
             
             String id = xml.substring(pos + KONKRET.length(), pos2);
             return Integer.parseInt(id);
-        } catch (final Exception e) {
-            throw new MessagedException(R.string.inventory_error_message); // TODO: need refactor before 0.6.0
-        }
+        } catch (IOException e) {
+            throw new NoConnectionException();
+        } catch (final Throwable e) {
+            ACRA.getErrorReporter().handleSilentException(e);
+            throw new MessagedException(R.string.global_message_error_system, e.getLocalizedMessage());
+        }       
 	}
 
 	public static String loadSecureID(final String geoKretyLogin, final String geoKretyPassword) throws MessagedException {

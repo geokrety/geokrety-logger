@@ -71,6 +71,8 @@ public class GeoKretDataSource {
             + "g." + COLUMN_SYNCHRO_STATE + ", " //
             + "g." + COLUMN_SYNCHRO_ERROR;
 
+    public static final String FETCH_BY_ID = "SELECT g." + COLUMN_TRACKING_CODE + ", 0 AS sticky, " + FETCH_COLUMNS + " FROM " + TABLE + " AS g WHERE g." + COLUMN_TRACKING_CODE + " = ?";
+    
 
     private static ContentValues getValues(final GeoKret geokret) {
         final ContentValues values = new ContentValues();
@@ -130,5 +132,23 @@ public class GeoKretDataSource {
                 return true;
             }
         });
+    }
+    
+    public GeoKret loadByTrackingCode(final String tc) {
+        final LinkedList<GeoKret> geoKretLogs = new LinkedList<GeoKret>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[]{tc});
+                while (cursor.moveToNext()) {
+                    geoKretLogs.add(new GeoKret(cursor, 0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return geoKretLogs.isEmpty() ? null : geoKretLogs.getFirst();
     }
 }

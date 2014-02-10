@@ -44,7 +44,7 @@ public class LogSubmitterService extends IntentService {
     public static final String BROADCAST_SUBMIT_DONE = "pl.nkg.geokrety.services.LogSubmitterService.Submit.Done";
     public static final String BROADCAST_SUBMITS_FINISH = "pl.nkg.geokrety.services.LogSubmitterService.Submits.Finish";
 
-    private static final String TAG = LogSubmitterService.class.getName();
+    private static final String TAG = LogSubmitterService.class.getSimpleName();
     private static final int RETRY_DELAY = 1000 * 60 * 5;
 
     private GeoKretyApplication application;

@@ -184,4 +184,9 @@ public class GeoKretyApplication extends Application {
 	    }
 	    return false;
 	}
+
+    public int getRetryCount() {
+        // TODO use as app settings
+        return 3;
+    }
 }

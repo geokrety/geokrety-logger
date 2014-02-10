@@ -159,10 +159,6 @@
 	<string name="geokret_save_title">Save GeoKret settings?</string>
 	<string name="geokret_save_message">GeoKret settings changed. Save changes?</string>
 	<string name="geokret_message_error_invalid_trackingcode">Please enter a valid Tracking Code: 6 characters from GeoKret label, eg. XF3ACS</string>
-	<string name="geokret_message_info_waiting_trackingcode_verify">Tracking Code verification&#8230; (you can continue)</string>
-	<string name="geokret_message_error_geokret_not_found">GeoKret not found</string>
-	<string name="geokret_message_warning_no_connection">Tracking Code can not be verified in this time</string>
-	<string name="geokret_message_good_geokret_verified">GeoKret found:</string>
     
     <!-- OpenCaching last logs Activity -->
 	<string name="title_activity_last_ocs">Last log from OpenCaching portals</string>
@@ -281,6 +277,12 @@
 	<string name="notify_refresh_error_lost_connection">Internet connection lost</string>
 	<string name="error_description_no_such_geokret">Invalid tracking code</string>
 	
+	<!-- GeoKret verification service -->
+	<string name="verify_tc_message_info_waiting">Tracking Code verification&#8230; (you can continue)</string>
+	<string name="verify_tc_message_error_geokret_not_found">GeoKret not found</string>
+	<string name="verify_tc_message_warning_no_connection">Tracking Code can not be verified in this time</string>
+	<string name="verify_tc_message_good_verified">GeoKret found:</string>
+	
     <!-- About Activity -->
 	<string name="title_activity_about">About</string>
 	<string name="foot">License: GPL 3.0,
@@ -362,4 +364,7 @@
 	<!-- Crash report -->
 	<string name="crash_toast_text">Ooooops! I crashed, but a report has been sent to my developer to help fix the issue!</string>
 	
+	<!-- Others -->
+	<string name="global_message_error_connection">Connection error</string>
+	<string name="global_message_error_system">System error</string>
 </resources>

@@ -26,8 +26,6 @@ import java.util.Locale;
 
 import org.w3c.dom.Node;
 
-import pl.nkg.geokrety.Utils;
-
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 
@@ -195,5 +193,9 @@ public class GeoKret {
         } else {
             return "GK" + Integer.toHexString(mGeoKretId).toUpperCase(Locale.ENGLISH);
         }
+    }
+
+    public CharSequence getFormatedCodeAndName() {
+        return getFormatedCode() + " - " + mName; 
     }
 }

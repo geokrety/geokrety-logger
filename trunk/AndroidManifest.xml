@@ -120,7 +120,8 @@
 
 		<service android:name=".services.LogSubmitterService" />
 		<service android:name=".services.RefreshService" />
-
+		<service android:name=".services.VerifyGeoKretService" />
+		
 		<receiver android:name=".receivers.BootCompleteReceiver" android:enabled="false">
 			<intent-filter>
 				<action android:name="android.intent.action.BOOT_COMPLETED" />

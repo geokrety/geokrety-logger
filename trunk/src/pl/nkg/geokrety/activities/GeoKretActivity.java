@@ -31,11 +31,15 @@ import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.dialogs.Dialogs;
+import pl.nkg.geokrety.services.VerifyGeoKretService;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputFilter;
@@ -45,6 +49,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -73,9 +78,10 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     private static final Pattern CAPS_LETTERS_AND_DIGITS_PATTERN = Pattern.compile("[A-Z0-9]*");
     private static final Pattern TRACKING_CODE_PATTERN = Pattern.compile("^[A-Z0-9]{6}$");
     private static final InputFilter TRACKING_CODE_FILTER = new InputFilter() {
-        
+
         @Override
-        public CharSequence filter(CharSequence source, int start, int end, Spanned dest, int dstart,
+        public CharSequence filter(CharSequence source, int start, int end, Spanned dest,
+                int dstart,
                 int dend) {
             if (CAPS_LETTERS_AND_DIGITS_PATTERN.matcher(source).matches()) {
                 return null;
@@ -101,7 +107,9 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
 
         trackingCodeEditText = (EditText) findViewById(R.id.trackingCodeEditText);
         saveButton = (Button) findViewById(R.id.saveButton);
-        trackingCodeEditText.setFilters(new InputFilter[] {TRACKING_CODE_FILTER, new InputFilter.LengthFilter(6)});
+        trackingCodeEditText.setFilters(new InputFilter[] {
+                TRACKING_CODE_FILTER, new InputFilter.LengthFilter(6)
+        });
         // nameEditText = (EditText) findViewById(R.id.nameEditText);
         stickyCheckBox = (CheckBox) findViewById(R.id.stickyCheckBox);
         notfyTextView = (TextView) findViewById(R.id.notfyTextView);
@@ -198,24 +206,68 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
 
     @Override
     public void afterTextChanged(Editable s) {
-        if (TRACKING_CODE_PATTERN.matcher(s.toString()).matches()) {
-            modified = true;
-            saveButton.setEnabled(true);
+        modified = true;
+        validate();
+    }
+
+    private void validate() {
+        if (TRACKING_CODE_PATTERN.matcher(trackingCodeEditText.getText().toString()).matches()) {
             notfyTextView.setText("");
-            setLabel(notfyTextView, "", VALID);
+            setLabel(notfyTextView, getText(R.string.verify_tc_message_info_waiting), INFO);
+            runVerifyService();
         } else {
             saveButton.setEnabled(false);
-            setLabel(notfyTextView, getText(R.string.geokret_message_error_invalid_trackingcode), ERROR);
+            setLabel(notfyTextView, getText(R.string.geokret_message_error_invalid_trackingcode),
+                    ERROR);
         }
     }
-    
-    //TODO: make a my NotifyTextView control
-    private static final int VALID = 0;
-    private static final int INFO = 1;
-    private static final int WARNING = 2;
-    private static final int ERROR = 3;
-    private static final int[] COLORS = new int[] {R.color.valid_color, R.color.info_color, R.color.warning_color, R.color.error_color};
-    
+
+    private final BroadcastReceiver verifierBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            if (trackingCodeEditText
+                    .getText()
+                    .toString()
+                    .equals(intent.getExtras().getString(VerifyGeoKretService.INTENT_TRACKING_CODE))) {
+                int type = intent
+                        .getExtras().getInt(VerifyGeoKretService.INTENT_MESSAGE_TYPE);
+                setLabel(notfyTextView,
+                        intent.getExtras().getString(VerifyGeoKretService.INTENT_MESSAGE), type);
+                saveButton.setEnabled(type != ERROR);
+            }
+        }
+    };
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(verifierBroadcastReceiver,
+                new IntentFilter(VerifyGeoKretService.BROADCAST));
+        validate();
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(verifierBroadcastReceiver);
+        super.onPause();
+    }
+
+    private void runVerifyService() {
+        Intent intent = new Intent(this, VerifyGeoKretService.class);
+        intent.putExtra(VerifyGeoKretService.INTENT_TRACKING_CODE, trackingCodeEditText.getText()
+                .toString());
+        startService(intent);
+    }
+
+    // TODO: make a my NotifyTextView control
+    public static final int GOOD = 0;
+    public static final int INFO = 1;
+    public static final int WARNING = 2;
+    public static final int ERROR = 3;
+    private static final int[] COLORS = new int[] {
+            R.color.valid_color, R.color.info_color, R.color.warning_color, R.color.error_color
+    };
+
     private static void setLabel(TextView textView, CharSequence content, int color) {
         textView.setTextColor(textView.getResources().getColor(COLORS[color]));
         textView.setText(content);

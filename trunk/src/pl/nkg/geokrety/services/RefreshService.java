@@ -59,7 +59,7 @@ public class RefreshService extends IntentService {
     public static final String BROADCAST_FINISH = "pl.nkg.geokrety.services.RefreshService.Submits.Finish";
     public static final String INTENT_ERROR_MESSAGE = "error";
 
-    private static final String TAG = RefreshService.class.getCanonicalName();
+    private static final String TAG = RefreshService.class.getSimpleName();
     //private static final int RETRY_DELAY = 1000 * 60 * 5;
 
     private GeoKretyApplication application;
