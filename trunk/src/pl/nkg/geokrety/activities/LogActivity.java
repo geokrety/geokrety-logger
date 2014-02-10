@@ -41,6 +41,7 @@ import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.RemoveLogDialog;
 import pl.nkg.geokrety.services.LogSubmitterService;
+import pl.nkg.geokrety.services.VerifyGeoKretService;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
@@ -49,13 +50,18 @@ import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
 import pl.nkg.lib.location.GPSAcquirer;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -65,7 +71,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LogActivity extends AbstractGeoKretyActivity implements LocationListener {
+public class LogActivity extends AbstractGeoKretyActivity implements LocationListener, TextWatcher {
 
     //private GenericProgressDialogWrapper refreshProgressDialog;
     // private GenericProgressDialogWrapper logProgressDialog;
@@ -92,6 +98,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private EditText waypointEditText;
     private EditText coordinatesEditText;
     private EditText commentEditText;
+    
+    private TextView tcNotfyTextView;
 
     private GPSAcquirer gpsAcquirer;
 
@@ -389,6 +397,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         ocsSpinnerDialog.setTitle(R.string.title_dialog_ocs);
 
         logTypeSpinnerDialog = new AlertDialogWrapper(this, Dialogs.TYPE_SPINNERDIALOG);
+        
+        tcNotfyTextView = (TextView) findViewById(R.id.tcNotfyTextView);
 
         // logProgressDialog.setTitle(R.string.submit_title);
 
@@ -425,6 +435,11 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         commentEditText = (EditText) findViewById(R.id.commentEditText);
 
         gpsAcquirer = new GPSAcquirer(this, "gpsAcquirer", this);
+        
+        trackingCodeEditText.addTextChangedListener(this);
+        trackingCodeEditText.setFilters(new InputFilter[] {
+                GeoKretActivity.TRACKING_CODE_FILTER, new InputFilter.LengthFilter(6)
+        });
 
         final String action = intent.getAction();
 
@@ -473,6 +488,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     @Override
     protected void onPause() {
+        unregisterReceiver(verifierBroadcastReceiver);
         storeToGeoKretLog(currentLog);
         super.onPause();
     }
@@ -531,9 +547,45 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         gpsAcquirer.start();
     }
 
-    /*@Override
-    protected void onStop() {
-        refreshAccount.detach();
-        super.onStop();
-    }*/
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+        GeoKretActivity.validate(trackingCodeEditText, tcNotfyTextView);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(verifierBroadcastReceiver,
+                new IntentFilter(VerifyGeoKretService.BROADCAST));
+        GeoKretActivity.validate(trackingCodeEditText, tcNotfyTextView);
+    }
+    
+ // TODO: make a my NotifyTextView control
+    private final BroadcastReceiver verifierBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            if (trackingCodeEditText
+                    .getText()
+                    .toString()
+                    .equals(intent.getExtras().getString(VerifyGeoKretService.INTENT_TRACKING_CODE))) {
+                int type = intent
+                        .getExtras().getInt(VerifyGeoKretService.INTENT_MESSAGE_TYPE);
+                GeoKretActivity.setLabel(tcNotfyTextView,
+                        intent.getExtras().getString(VerifyGeoKretService.INTENT_MESSAGE), type);
+                //saveButton.setEnabled(type != ERROR);  // TODO: is need?
+            }
+        }
+    };
 }
