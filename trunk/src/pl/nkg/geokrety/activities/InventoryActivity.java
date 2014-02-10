@@ -74,7 +74,7 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
                         gk.getSynchroState() == 0 ? "..." : Utils.defaultIfNull(
                                 gk.getSynchroError(), "..."));
             } else {
-                bindTextView(view, android.R.id.text2, gk.getName() + " (" + gk.getType() + ")");
+                bindTextView(view, android.R.id.text2, gk.getName() + " (" + gk.getDist() + "km)");
             }
         }
     }
@@ -212,7 +212,7 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
         String oldTrackingCode = ib.getString(GeoKretActivity.TRACKING_CODE_OLD);
         stateHolder.getInventoryDataSource()
                 .storeInventory(gkl, userId, false, oldTrackingCode);
-        application.runRefreshService(true);
+        //application.runRefreshService(true);
         super.onActivityResult(requestCode, resultCode, data);
     }
 }

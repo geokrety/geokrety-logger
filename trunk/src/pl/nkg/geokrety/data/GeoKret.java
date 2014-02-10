@@ -46,7 +46,8 @@ public class GeoKret {
     private boolean mSticky = false;
     private int mSynchroState;
     private String mSynchroError;
-
+    //<geokrety><geokret id="15498" dist="2222" lat="50.04632" lon="19.94505" waypoint="OP2329" owner_id="1954" state="0" type="0"><![CDATA[KGK-3 Mały Kociaczek]]></geokret>
+    //</geokrety>
 
     public GeoKret(final Node node) {
         mGeoKretId = Integer.parseInt(node.getAttributes().getNamedItem("id")
