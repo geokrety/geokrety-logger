@@ -255,6 +255,13 @@
 <!-- NEED TRANSLATE --><string name="notify_refresh_error_lost_connection">Internet connection lost</string>
 	<string name="error_description_no_such_geokret">Falscher Tracking Code</string>
 	
+	<!-- GeoKret verification service -->
+<!-- NEED TRANSLATE --><string name="verify_tc_message_info_waiting">Tracking Code verification&#8230; (you can continue)</string>
+	<string name="verify_tc_message_error_geokret_not_found"> GeoKret nicht gefunden</string>
+<!-- NEED TRANSLATE --><string name="verify_tc_message_warning_no_connection">Tracking Code can not be verified in this time</string>
+<!-- NEED TRANSLATE --><string name="verify_tc_message_good_verified">GeoKret found:</string>
+	
+		
 	<!-- About Activity -->
 	<string name="title_activity_about">Über</string>
 	<string name="foot">License: GPL 3.0,

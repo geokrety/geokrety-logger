@@ -257,6 +257,12 @@
 	<string name="notify_refresh_error_lost_connection">Utracono połączenie z Internetem</string>
 	<string name="error_description_no_such_geokret">Nieprawidłowy tracking code</string>
 	
+	<!-- GeoKret verification service -->
+	<string name="verify_tc_message_info_waiting">Trwa weryfikacja Tracking Code&#8230; (możesz kontynuować)</string>
+	<string name="verify_tc_message_error_geokret_not_found">GeoKret nie znaleziony</string>
+	<string name="verify_tc_message_warning_no_connection">Nie można teraz zweryfikować Tracking Code bo jest problem z połączeniem</string>
+	<string name="verify_tc_message_good_verified">GeoKret znaleziony:</string>
+	
 	<!-- About Activity -->
 	<string name="title_activity_about">Informacje o GeoKrety Logger</string>
 	<string name="foot">Dokładam wszelkich starań aby logowanie GeoKreta było dzięki temu programu szybkie i wygodne.

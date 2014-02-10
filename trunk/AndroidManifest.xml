@@ -116,7 +116,7 @@
 		</activity>
 		<activity android:name=".activities.AboutActivity" android:label="@string/title_activity_about" />
 		<activity android:name=".activities.AccountActivity" android:label="@string/title_activity_account" />
-		<activity android:name=".activities.GeoKretActivity" android:label="@string/title_activity_geo_kret" />
+		<activity android:name=".activities.GeoKretActivity" android:label="@string/title_activity_geo_kret" android:windowSoftInputMode="adjustResize" />
 
 		<service android:name=".services.LogSubmitterService" />
 		<service android:name=".services.RefreshService" />

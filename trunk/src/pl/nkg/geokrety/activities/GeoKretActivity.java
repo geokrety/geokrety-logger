@@ -126,7 +126,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
             stickyCheckBox.setChecked(geoKret.isSticky());
         } else {
             stickyCheckBox.setChecked(true);
-            saveButton.setEnabled(false);
+            //saveButton.setEnabled(false); // TODO: is need?
         }
 
         // nameEditText.addTextChangedListener(this);
@@ -216,7 +216,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
             setLabel(notfyTextView, getText(R.string.verify_tc_message_info_waiting), INFO);
             runVerifyService();
         } else {
-            saveButton.setEnabled(false);
+            //saveButton.setEnabled(false);  // TODO: is need?
             setLabel(notfyTextView, getText(R.string.geokret_message_error_invalid_trackingcode),
                     ERROR);
         }
@@ -233,7 +233,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
                         .getExtras().getInt(VerifyGeoKretService.INTENT_MESSAGE_TYPE);
                 setLabel(notfyTextView,
                         intent.getExtras().getString(VerifyGeoKretService.INTENT_MESSAGE), type);
-                saveButton.setEnabled(type != ERROR);
+                //saveButton.setEnabled(type != ERROR);  // TODO: is need?
             }
         }
     };
