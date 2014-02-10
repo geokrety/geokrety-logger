@@ -25,32 +25,32 @@
 	<string name="app_name">GeoKrety Logger</string>
     
     <!-- Main Activity -->
-	<string name="welcome">GeoKrety Logger to program, który służy do rejestracji przeniesienia przedmiotów 
+	<string name="main_label_welcome">GeoKrety Logger to program, który służy do rejestracji przeniesienia przedmiotów 
 		(<a href="http://pl.m.wikipedia.org/wiki/Geokrety">GeoKretów</a>)
 		pozostawionych w
 		<a href="http://pl.m.wikipedia.org/wiki/Geocaching">pojemnikach geocache</a>.
 	</string>
-	<string name="accounts_button">Profile (konta)</string>
-	<string name="button_inventory">Krety, które masz u siebie</string>
-	<string name="button_ocs">Twoje ostatnie logi z OpenCaching</string>
-	<string name="button_log">Zaloguj GeoKreta</string>
-	<string name="button_gkl">Zapisane logi</string>
-	<string name="button_about">Informacje</string>
-	<string name="version">GeoKrety Logger v</string>
-	<string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
-	<string name="about">WWW:
+	<string name="main_button_accounts">Profile (konta)</string>
+	<string name="main_button_inventory">Krety, które masz u siebie</string>
+	<string name="main_button_ocs">Twoje ostatnie logi z OpenCaching</string>
+	<string name="main_button_log">Zaloguj GeoKreta</string>
+	<string name="main_button_gkl">Zapisane logi</string>
+	<string name="main_button_about">Informacje</string>
+	<string name="main_label_version_prefix">GeoKrety Logger v</string>
+	<string name="main_label_copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
+	<string name="main_label_about">WWW:
 		<a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a>
 	</string>
-	<string name="emergency">Jeżeli z powodu błędu w programie nie możesz zalogować GeoKreta, zrób to przez serwis WWW
+	<string name="main_label_emergency">Jeżeli z powodu błędu w programie nie możesz zalogować GeoKreta, zrób to przez serwis WWW
 		przechodząc bezpośrednio na stronę
 		<a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>.
 		Jeżeli logowanie GeoKreta na stronie WWW się powiodło, proszę poinformuj mnie o problemie.
 	</string>
-	<string name="help_in_translation">Zaproponuj lepsze tłumaczenie | Suggest a better translation:\n
+	<string name="main_label_help_in_translation">Zaproponuj lepsze tłumaczenie | Suggest a better translation:\n
 		<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a>
 	</string>
     <!-- Error messages -->
-	<string name="no_account_configured">Najpierw dodaj co najmniej jeden profil i ustaw w nim swoje konto!</string>
+	<string name="main_message_error_no_account_configured">Najpierw dodaj co najmniej jeden profil i ustaw w nim swoje konto!</string>
     
     <!-- Accounts Activity -->
 	<string name="title_activity_accounts">Profile</string>
@@ -136,7 +136,7 @@
 	<string name="geokret_save">Zachowaj</string>
 	<string name="geokret_save_title">Zachować ustawienia GeoKreta?</string>
 	<string name="geokret_save_message">Dokonano zmian w ustawieniach GeoKreta. Czy zapisać zmiany?</string>
-	<string name="geokret_invalid_trackingcode_message">Wpisz poprawnie Tracking Code czyli 6 znaków z etykietki GeoKreta, np. XF3ACS</string>
+	<string name="geokret_message_error_invalid_trackingcode">Wpisz poprawnie Tracking Code czyli 6 znaków z etykietki GeoKreta, np. XF3ACS</string>
     
     <!-- OpenCaching last logs Activity -->
 	<string name="title_activity_last_ocs">Twoje ostatnie logi z portali OpenCaching</string>

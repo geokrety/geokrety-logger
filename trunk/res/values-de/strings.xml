@@ -27,32 +27,32 @@
 	<string name="app_name">GeoKrety Logger</string>
     
     <!-- Main Activity -->
-	<string name="welcome">GeoKrety Logger ist eine App zum Loggen von Geokrety. GeoKrety 
+	<string name="main_label_welcome">GeoKrety Logger ist eine App zum Loggen von Geokrety. GeoKrety 
 		(<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>)
 		sind ähnliche wie TravelBug(TM) oder GeoLutins, verfolgbare Objekte die in Geocaches abgelegt
 		werden (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).
 	</string>
-	<string name="accounts_button">Profile (Konten)</string>
-	<string name="button_inventory">Inventar</string>
-	<string name="button_ocs">Letzte Opencaching Logs</string>
-	<string name="button_log">Log GeoKret</string>
-	<string name="button_gkl">Gespeicherte Logs</string>
-	<string name="button_about">Über</string>
-	<string name="version">GeoKrety Logger v</string>
-	<string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
-	<string name="about">WWW:
+	<string name="main_button_accounts">Profile (Konten)</string>
+	<string name="main_button_inventory">Inventar</string>
+	<string name="main_button_ocs">Letzte Opencaching Logs</string>
+	<string name="main_button_log">Log GeoKret</string>
+	<string name="main_button_gkl">Gespeicherte Logs</string>
+	<string name="main_button_about">Über</string>
+	<string name="main_label_version_prefix">GeoKrety Logger v</string>
+	<string name="main_label_copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
+	<string name="main_label_about">WWW:
 		<a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a>
 	</string>
-	<string name="emergency">Sollte die App nicht funktionieren, logge den GeoKret bitte
+	<string name="main_label_emergency">Sollte die App nicht funktionieren, logge den GeoKret bitte
 		<a href="http://geokrety.org/ruchy.php">direkt auf der Webseite</a>.
 		Anschließend kontaktiere mich bitte über:
 		<a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.
 	</string>
-	<string name="help_in_translation">Eine bessere Übersetzung vorschlagen | Suggest a better translation:\n
+	<string name="main_label_help_in_translation">Eine bessere Übersetzung vorschlagen | Suggest a better translation:\n
 		<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a>
 	</string>
     <!-- Error messages -->
-	<string name="no_account_configured">Du musst ein Profil einrichten!</string>
+	<string name="main_message_error_no_account_configured">Du musst ein Profil einrichten!</string>
     
     <!-- Accounts Activity -->
 	<string name="title_activity_accounts">Profilmanager</string>
@@ -136,7 +136,7 @@
 	<string name="geokret_save">Speichern</string>
 	<string name="geokret_save_title">Einstellungen speichern?</string>
 	<string name="geokret_save_message">Einstellungen wurden geändert. Speichern?</string>
-<!-- NEED TRANSLATE --><string name="geokret_invalid_trackingcode_message">Please enter a valid Tracking Code: 6 Zeichen der GeoKret-Kennzeichnung, z.B. XF3ACS</string>
+<!-- NEED TRANSLATE --><string name="geokret_message_error_invalid_trackingcode">Please enter a valid Tracking Code: 6 Zeichen der GeoKret-Kennzeichnung, z.B. XF3ACS</string>
     
     <!-- OpenCaching last logs Activity -->
 	<string name="title_activity_last_ocs">Letzte Logs aus den Opencaching Portalen</string>

@@ -31,38 +31,50 @@
     
      -->
     
+    <!-- 
+    TODO: refactor to pattern:
+    {module}_{thing}_{subthing}_{title}
+    
+    module: activity (i.e. 'geokret') or service (i.e. 'refresh') or 'global'
+    thing: 'notify', 'toast', 'message', 'button', 'hint', 'label' etc.
+    subthing: 'title', 'description' (is optional)
+    title: short description of value content i.e. 'trackingcode'
+    
+     -->
     
 	<!-- Main -->
 	<string name="app_name">GeoKrety Logger</string>
     
     <!-- Main Activity -->
-	<string name="welcome">GeoKrety Logger is a program to assist in the logging or moving of GeoKrets. GeoKrety\'s 
+	<string name="main_label_welcome">GeoKrety Logger is a program to assist in the logging or moving of GeoKrets. GeoKrety\'s 
 		(<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>)
 		are similar to a TravelBug(TM) or GeoLutins, their purpose being to track objects you leave in
 		geocache containers
 		(<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).
 	</string>
-	<string name="accounts_button">Profiles (accounts)</string>
-	<string name="button_inventory">Inventory</string>
-	<string name="button_ocs">OpenCaching last logs</string>
-	<string name="button_log">Log GeoKret</string>
-	<string name="button_gkl">Saved logs</string>
-	<string name="button_about">About</string>
-	<string name="version">GeoKrety Logger v</string>
-	<string name="copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
-	<string name="about">WWW:
+	<string name="main_button_accounts">Profiles (accounts)</string>
+	<string name="main_button_inventory">Inventory</string>
+	<string name="main_button_ocs">OpenCaching last logs</string>
+	<string name="main_button_log">Log GeoKret</string>
+	<string name="main_button_gkl">Saved logs</string>
+	<string name="main_button_about">About</string>
+	<string name="main_label_version_prefix">GeoKrety Logger v</string>
+	<string name="main_label_copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
+	<string name="main_label_about">WWW:
 		<a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a>
 	</string>
-	<string name="emergency">If this program is not working, please visit: 
+	<string name="main_label_emergency">If this program is not working, please visit: 
 		<a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>
 		Afterwards please contact with me on the web site:
 		<a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.
 	</string>
-	<string name="help_in_translation">Suggest a better translation:\n
+	<string name="main_label_help_in_translation">Suggest a better translation:\n
 		<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a>
 	</string>
     <!-- Error messages -->
-	<string name="no_account_configured">You must configure your account!</string>
+	<string name="main_message_error_no_account_configured">You must configure your account!</string>
+	
+	<!-- TODO: continue refactor of names -->
     
     <!-- Accounts Activity -->
 	<string name="title_activity_accounts">GeoKrety profile manager</string>
@@ -146,7 +158,11 @@
 	<string name="geokret_save">Save</string>
 	<string name="geokret_save_title">Save GeoKret settings?</string>
 	<string name="geokret_save_message">GeoKret settings changed. Save changes?</string>
-	<string name="geokret_invalid_trackingcode_message">Please enter a valid Tracking Code: 6 characters from GeoKret label, eg. XF3ACS</string>
+	<string name="geokret_message_error_invalid_trackingcode">Please enter a valid Tracking Code: 6 characters from GeoKret label, eg. XF3ACS</string>
+	<string name="geokret_message_info_waiting_trackingcode_verify">Tracking Code verification&#8230; (you can continue)</string>
+	<string name="geokret_message_error_geokret_not_found">GeoKret not found</string>
+	<string name="geokret_message_warning_no_connection">Tracking Code can not be verified in this time</string>
+	<string name="geokret_message_good_geokret_verified">GeoKret found:</string>
     
     <!-- OpenCaching last logs Activity -->
 	<string name="title_activity_last_ocs">Last log from OpenCaching portals</string>

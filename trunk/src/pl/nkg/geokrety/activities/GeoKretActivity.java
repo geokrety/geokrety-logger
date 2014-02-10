@@ -202,9 +202,22 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
             modified = true;
             saveButton.setEnabled(true);
             notfyTextView.setText("");
+            setLabel(notfyTextView, "", VALID);
         } else {
             saveButton.setEnabled(false);
-            notfyTextView.setText(R.string.geokret_invalid_trackingcode_message);
+            setLabel(notfyTextView, getText(R.string.geokret_message_error_invalid_trackingcode), ERROR);
         }
+    }
+    
+    //TODO: make a my NotifyTextView control
+    private static final int VALID = 0;
+    private static final int INFO = 1;
+    private static final int WARNING = 2;
+    private static final int ERROR = 3;
+    private static final int[] COLORS = new int[] {R.color.valid_color, R.color.info_color, R.color.warning_color, R.color.error_color};
+    
+    private static void setLabel(TextView textView, CharSequence content, int color) {
+        textView.setTextColor(textView.getResources().getColor(COLORS[color]));
+        textView.setText(content);
     }
 }

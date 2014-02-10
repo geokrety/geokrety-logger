@@ -40,7 +40,7 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		TextView appName = (TextView) findViewById(R.id.appNameTextView);
-		appName.setText(getResources().getString(R.string.version)
+		appName.setText(getResources().getString(R.string.main_label_version_prefix)
 				+ Utils.getAppVer());
 		application = (GeoKretyApplication) getApplication();
 	}
@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 
 	private boolean accountExistAndToast() {
 		if (accountExist()) {
-			Toast.makeText(this, R.string.no_account_configured,
+			Toast.makeText(this, R.string.main_message_error_no_account_configured,
 					Toast.LENGTH_LONG).show();
 			return false;
 		}

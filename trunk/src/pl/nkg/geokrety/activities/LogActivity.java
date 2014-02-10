@@ -498,7 +498,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         super.onStart();
 
         if (stateHolder.getAccountList().size() == 0) {
-            Toast.makeText(this, R.string.no_account_configured, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.main_message_error_no_account_configured, Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, MainActivity.class));
             return;
         }

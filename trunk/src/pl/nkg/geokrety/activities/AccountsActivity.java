@@ -92,7 +92,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		if (application.getStateHolder().getAccountList().size() == 0
 				&& !application.isNoAccountHinted()) {
 			application.setNoAccountHinted(true);
-			Toast.makeText(this, R.string.no_account_configured,
+			Toast.makeText(this, R.string.main_message_error_no_account_configured,
 					Toast.LENGTH_LONG).show();
 			showNewAccountDialog();
 		}

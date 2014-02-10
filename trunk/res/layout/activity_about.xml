@@ -40,12 +40,12 @@
             android:id="@+id/appNameTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/version" />
+            android:text="@string/main_label_version_prefix" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/copyright" />
+            android:text="@string/main_label_copyright" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +78,7 @@
             android:layout_marginBottom="10dip"
             android:autoLink="web"
             android:linksClickable="true"
-            android:text="@string/help_in_translation" />
+            android:text="@string/main_label_help_in_translation" />
     </LinearLayout>
 
 </ScrollView>
