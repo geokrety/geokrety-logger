@@ -615,6 +615,10 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
                 coordinatesEditText.setEnabled(type != GeoKretActivity.GOOD);
                 // TODO: gps and home buttons too
+                
+                if (type == GeoKretActivity.GOOD) {
+                    coordinatesEditText.setText(bundle.getString(WaypointResolverService.INTENT_LATLON));
+                }
             }
         }
     };

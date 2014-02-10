@@ -24,7 +24,10 @@ package pl.nkg.geokrety.data;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pl.nkg.geokrety.Utils;
+
 import android.database.Cursor;
+import android.text.Html;
 
 public class Geocache {
 
@@ -59,6 +62,23 @@ public class Geocache {
         this.location =  cursor.getString(i + 2);
         this.type =  cursor.getString(i + 3);
         this.status =  cursor.getString(i + 4);
+    }
+
+    public Geocache(String content, String lat, String lon) {
+        if (Utils.isEmpty(lat) || Utils.isEmpty(lon)) {
+            location = "";
+        } else {
+            location = lat + " " + lon;
+        }
+        
+        if (content.contains("Please provide the coordinates")) {
+            name = null;
+        } else {
+            name = android.text.Html.fromHtml(content.replace("</a>", " -")).toString().replace('￼', ' ').replace('\n', ':').trim().replace("- :  ", "");
+        }
+        code = null;
+        status = null;
+        type = null;
     }
 
     public String getName() {

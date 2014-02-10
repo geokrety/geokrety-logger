@@ -288,6 +288,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     public static void runVerifyService(Context context, CharSequence tc) {
         Intent intent = new Intent(context, VerifyGeoKretService.class);
         intent.putExtra(VerifyGeoKretService.INTENT_TRACKING_CODE, tc);
+        context.stopService(intent);
         context.startService(intent);
     }
     
@@ -295,6 +296,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     public static void runResolveService(Context context, CharSequence wpt) {
         Intent intent = new Intent(context, WaypointResolverService.class);
         intent.putExtra(WaypointResolverService.INTENT_WAYPOINT, wpt);
+        context.stopService(intent);
         context.startService(intent);
     }
 

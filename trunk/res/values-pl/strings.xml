@@ -264,10 +264,9 @@
 	<string name="verify_tc_message_good_verified">GeoKret znaleziony:</string>
 
 	<!-- Waypoint Resolver service -->
-	<string name="resolve_wpt_message_info_waiting">Próba ściągnięcia współrzędnych wprowadzonego waypoint&#8230; (możesz kontynuować)</string>
-	<string name="resolve_wpt_message_error_waypont_not_found">Proszę podaj współrzędne (lat/lon) kesza w okienku poniżej</string>
-	<string name="resolve_wpt_message_warning_no_connection">Nie można teraz ściągnąć współrzędnych do waypoint bo jest problem z połączeniem. Lepiej będzie jak podasz współrzędne (lat/lon) kesza w okienku poniżej na wypadek jak by waypoint okazał się błędny.</string>
-	<string name="resolve_wpt_message_good_verified"></string>
+	<string name="resolve_wpt_message_info_waiting">Próba ściągnięcia współrzędnych %1$s&#8230; (możesz kontynuować)</string>
+	<string name="resolve_wpt_message_error_waypont_not_found">Nie można teraz ściągnąć współrzędnych do %1$s. Proszę podaj współrzędne (lat/lon) kesza %1$s w okienku poniżej</string>
+	<string name="resolve_wpt_message_warning_no_connection">Nie można teraz ściągnąć współrzędnych do %1$s bo jest problem z połączeniem. Lepiej będzie jak podasz współrzędne (lat/lon) kesza %1$s w okienku poniżej na wypadek jak by waypoint okazał się błędny.</string>
 	
 	<!-- About Activity -->
 	<string name="title_activity_about">Informacje o GeoKrety Logger</string>
@@ -283,7 +282,8 @@
 	<string name="changelog">Historia zmian:\n
 		0.6.0 beta - 2014-02-11\n
 		- odświeżanie w tle,\n
-		- weryfikacja tracking code w tle\n
+		- weryfikacja tracking code w tle,\n
+		- pobieranie współRzędnych waypoint w tle\n
 		\n
 		0.5.5 beta - 2014-02-06\n
 		- naprawiony błąd z ręcznym dodawaniem geokreta do inwentarza,\n

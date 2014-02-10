@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import org.acra.ACRA;
+import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -37,6 +38,7 @@ import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKret;
+import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
 import android.text.TextUtils;
@@ -133,6 +135,24 @@ public class GeoKretyProvider {
             throw new MessagedException(R.string.global_message_error_system, e.getLocalizedMessage());
         }       
 	}
+	
+	public static Geocache loadCoordinatesByWaypoint(String waypoint) throws MessagedException {
+        final String[][] getData = new String[][] { //
+                new String[] { "skad", "ajax" }, //
+                new String[] { "wpt", waypoint } };
+        try {
+            final String str = Utils.httpGet(URL_AJAX, getData);
+            JSONObject json = new JSONObject(str); 
+            
+            return new Geocache(json.getString("tresc"), json.getString("lat"), json.getString("lon"));
+            
+        } catch (IOException e) {
+            throw new NoConnectionException();
+        } catch (final Throwable e) {
+            ACRA.getErrorReporter().handleSilentException(e);
+            throw new MessagedException(R.string.global_message_error_system, e.getLocalizedMessage());
+        }       
+    }
 
 	public static String loadSecureID(final String geoKretyLogin, final String geoKretyPassword) throws MessagedException {
 		final String[][] postData = new String[][] { //

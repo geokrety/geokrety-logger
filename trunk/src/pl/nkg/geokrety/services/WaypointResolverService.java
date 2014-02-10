@@ -22,18 +22,13 @@
 
 package pl.nkg.geokrety.services;
 
-import java.util.LinkedList;
-import java.util.List;
-
 import org.acra.ACRA;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.activities.GeoKretActivity;
-import pl.nkg.geokrety.data.GeoKret;
-import pl.nkg.geokrety.data.GeoKretDataSource;
+import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.StateHolder;
-import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 import android.app.IntentService;
@@ -46,8 +41,7 @@ public class WaypointResolverService extends IntentService {
     public static final String INTENT_MESSAGE = "message";
     public static final String INTENT_MESSAGE_TYPE = "message_type";
     public static final String INTENT_WAYPOINT = "waypoint";
-    public static final String INTENT_LATITUDE = "lat";
-    public static final String INTENT_LONGNITUDE = "lon";
+    public static final String INTENT_LATLON = "latlon";
 
     private static final String TAG = WaypointResolverService.class.getSimpleName();
 
@@ -73,72 +67,52 @@ public class WaypointResolverService extends IntentService {
         try {
             
             sendBroadcast(GeoKretActivity.INFO, wpt,
-                    getText(R.string.resolve_wpt_message_info_waiting), "", "");
+                    String.format(getText(R.string.resolve_wpt_message_info_waiting).toString(), wpt), "");
 
-            sendBroadcast(GeoKretActivity.WARNING, wpt,
-                    getText(R.string.verify_tc_message_warning_no_connection), "", ""); // TODO: it is a mock service
-            
-            /*GeoKret gk = stateHolder.getGeoKretDataSource().loadByTrackingCode(tc);
+            Geocache gc = stateHolder.getGeocacheDataSource().loadByWaypoint(wpt);
 
-            TryDownload<GeoKret> td = new TryDownload<GeoKret>() {
+            TryDownload<Geocache> td = new TryDownload<Geocache>() {
 
                 @Override
-                protected GeoKret run() throws NoConnectionException, Exception {
-                    return retriveGeoKret(tc);
+                protected Geocache run() throws NoConnectionException, Exception {
+                    return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
                 }
             };
 
-            if (gk == null) {
-                gk = td.tryRun(application.getRetryCount());
+            if (gc == null) {
+                gc = td.tryRun(application.getRetryCount());
             }
 
-            if (gk == null) {
-                sendBroadcast(GeoKretActivity.WARNING, tc,
-                        getText(R.string.verify_tc_message_warning_no_connection));
-            } else if (gk.getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_SYNCHRONIZED) {
+            if (gc == null) {
+                sendBroadcast(GeoKretActivity.WARNING, wpt,
+                        String.format(getText(R.string.resolve_wpt_message_warning_no_connection).toString(), wpt), "");
+            } else if (gc.getName() != null) {
                 sendBroadcast(
                         GeoKretActivity.GOOD,
-                        tc,
-                        getText(R.string.verify_tc_message_good_verified) + " "
-                                + gk.getFormatedCodeAndName());
+                        wpt,
+                        wpt + ": " + gc.getName(), gc.getLocation());
             } else {
-                sendBroadcast(GeoKretActivity.ERROR, tc,
-                        getText(R.string.verify_tc_message_error_geokret_not_found));
-            }*/
+                sendBroadcast(GeoKretActivity.ERROR, wpt,
+                        String.format(getText(R.string.resolve_wpt_message_error_waypont_not_found).toString(), wpt), "");
+            }
 
         } catch (Throwable e) {
             Log.println(Log.ERROR, TAG, e.getLocalizedMessage());
             ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
-            sendBroadcast(GeoKretActivity.ERROR, wpt, e.getLocalizedMessage(), "", "");
+            sendBroadcast(GeoKretActivity.ERROR, wpt, e.getLocalizedMessage(), "");
         }
 
         Log.println(Log.INFO, TAG, "Finish refresh service for " + wpt);
     }
 
-    /*private GeoKret retriveGeoKret(String tc) throws MessagedException {
-        int id = GeoKretyProvider.loadIDByTranckingCode(tc);
-        if (id == -1) {
-            return new GeoKret(tc, GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(
-                    R.string.error_description_no_such_geokret).toString());
-        } else {
-            GeoKret gk = GeoKretyProvider.loadSingleGeoKretByID(id);
-            gk.setTrackingCode(tc);
-            List<GeoKret> gks = new LinkedList<GeoKret>();
-            gks.add(gk);
-            stateHolder.getGeoKretDataSource().update(gks);
-            return gk;
-        }
-    }*/
-
     private void sendBroadcast(int type, CharSequence trackingCode,
-            CharSequence message, CharSequence lat, CharSequence lon) {
+            CharSequence message, CharSequence latlon) {
         Intent broadcast = new Intent(BROADCAST);
         broadcast.putExtra(INTENT_MESSAGE_TYPE, type);
         broadcast.putExtra(INTENT_WAYPOINT, trackingCode);
         broadcast.putExtra(INTENT_MESSAGE, message);
-        broadcast.putExtra(INTENT_LATITUDE, lat);
-        broadcast.putExtra(INTENT_LONGNITUDE, lon);
+        broadcast.putExtra(INTENT_LATLON, latlon);
         sendBroadcast(broadcast);
     }
 }

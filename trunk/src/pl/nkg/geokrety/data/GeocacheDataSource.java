@@ -65,6 +65,8 @@ public class GeocacheDataSource {
 			+ COLUMN_STATUS //
 			+ " FROM " //
 			+ TABLE;
+	
+	private static final String FETCH_BY_WAYPOINT = "SELECT c." + COLUMN_WAYPOINT + ", " + FETCH_COLUMNS + " FROM " + TABLE + " AS c WHERE c." + COLUMN_WAYPOINT + " = ?";
 
 	public GeocacheDataSource(GeoKretySQLiteHelper dbHelper) {
 		this.dbHelper = dbHelper;
@@ -139,5 +141,23 @@ public class GeocacheDataSource {
                 return true;
             }
         });
+    }
+	
+	public Geocache loadByWaypoint(final String wpt) {
+        final LinkedList<Geocache> gcs = new LinkedList<Geocache>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final Cursor cursor = db.rawQuery(FETCH_BY_WAYPOINT, new String[]{wpt});
+                while (cursor.moveToNext()) {
+                    gcs.add(new Geocache(cursor, 0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return gcs.isEmpty() ? null : gcs.getFirst();
     }
 }
