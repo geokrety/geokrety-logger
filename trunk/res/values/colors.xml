@@ -25,4 +25,5 @@
     <color name="warning_color">#ffaaaa00</color>
     <color name="valid_color">#ff00cc00</color>
     <color name="info_color">#ff0000ff</color>
+    <color name="disabled_color">#ff888888</color>
 </resources>

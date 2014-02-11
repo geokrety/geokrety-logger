@@ -23,6 +23,7 @@
 package pl.nkg.geokrety.activities.controls;
 
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.filters.WaypointInputFilter;
 import pl.nkg.geokrety.services.WaypointResolverService;
 import android.content.Context;
@@ -70,5 +71,16 @@ public class WaypointEditText extends AbstractNotifiedEditText {
     @Override
     protected CharSequence getWaitMessage() {
         return getContext().getText(R.string.resolve_wpt_message_info_waiting);
+    }
+
+    @Override
+    protected CharSequence getNotEnabledMessage() {
+        // TODO use strings.xml
+        return "this feature is off";
+    }
+
+    @Override
+    protected boolean isVerifierEnabled() {
+        return Utils.application.isWaypointResolverEnabled();
     }
 }

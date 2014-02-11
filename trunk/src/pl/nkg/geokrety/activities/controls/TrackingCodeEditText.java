@@ -23,6 +23,7 @@
 package pl.nkg.geokrety.activities.controls;
 
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.filters.TrackingCodeInputFilter;
 import pl.nkg.geokrety.services.VerifyGeoKretService;
 import android.content.Context;
@@ -70,5 +71,16 @@ public class TrackingCodeEditText extends AbstractNotifiedEditText {
     @Override
     protected CharSequence getWaitMessage() {
         return getContext().getText(R.string.verify_tc_message_info_waiting);
+    }
+
+    @Override
+    protected CharSequence getNotEnabledMessage() {
+        // TODO use strings.xml
+        return "this feature is off";
+    }
+
+    @Override
+    protected boolean isVerifierEnabled() {
+        return Utils.application.isTrackingCodeVerifierEnabled();
     }
 }

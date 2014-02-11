@@ -60,13 +60,10 @@ public class RefreshService extends IntentService {
     public static final String INTENT_ERROR_MESSAGE = "error";
 
     private static final String TAG = RefreshService.class.getSimpleName();
-    //private static final int RETRY_DELAY = 1000 * 60 * 5;
 
     private GeoKretyApplication application;
     private StateHolder stateHolder;
-    //private Handler handler;
     private NotificationManager notificationManager;
-    //private CharSequence dots;
     
     private static final int NOTIFY_ID = 2000000000;
     
@@ -88,10 +85,8 @@ public class RefreshService extends IntentService {
     @Override
     public void onCreate() {
         super.onCreate();
-        //dots = getText(R.string.dots).toString();
         application = (GeoKretyApplication) getApplication();
         stateHolder = application.getStateHolder();
-        //handler = new Handler();
         notificationManager = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
         Log.println(Log.INFO, TAG, "Create");
     }

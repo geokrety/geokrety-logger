@@ -68,17 +68,16 @@ public class GeoKretyApplication extends Application {
 	private boolean noAccountHinted = false;
 	public ANRWatchDog watchDog = new ANRWatchDog();
 	
-	private static final int CONNECTION_TIMEOUT = 10000;
-	private static final int SOCKET_TIMEOUT = 10000;
-
 	@SuppressWarnings("unused")
     @Override
 	public void onCreate() {
 		super.onCreate();
 		
-		ACRA.init(this);
-		if (BuildConfig.DEBUG == false)
-		    watchDog.start();
+		if (isAcraEnabled()) {
+    		ACRA.init(this);
+    		if (BuildConfig.DEBUG == false)
+    		    watchDog.start();
+		}
 		
 		Utils.application = this;
 		stateHolder = new StateHolder(getApplicationContext());
@@ -118,8 +117,8 @@ public class GeoKretyApplication extends Application {
 		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
 		HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
 		HttpProtocolParams.setUseExpectContinue(params, true);
-		HttpConnectionParams.setConnectionTimeout(params, CONNECTION_TIMEOUT);
-		HttpConnectionParams.setSoTimeout(params, SOCKET_TIMEOUT);
+		HttpConnectionParams.setConnectionTimeout(params, getTimeOut());
+		HttpConnectionParams.setSoTimeout(params, getTimeOut());
 
 		SchemeRegistry schReg = new SchemeRegistry();
 		schReg.register(new Scheme("http", PlainSocketFactory
@@ -157,10 +156,13 @@ public class GeoKretyApplication extends Application {
 		}
 	}
 	
-	private final static long REFRESH_PERIOD = 5 * 60 * 1000;
 	private long lastRefresh = 0;
 	public void runRefreshService(boolean force) {
-	    if (force || lastRefresh + REFRESH_PERIOD < new Date().getTime()) {
+	    if (!force && !isAutoRefreshEnabled()) {
+	        return;
+	    }
+	    
+	    if (force || lastRefresh + getRefreshExpire() < new Date().getTime()) {
             Intent intent = new Intent(this, RefreshService.class);
             stopService(intent);
             if (isOnline()) {
@@ -186,7 +188,47 @@ public class GeoKretyApplication extends Application {
 	}
 
     public int getRetryCount() {
-        // TODO use as app settings
+        // TODO: use as app settings
         return 3;
+    }
+    
+    public int getTimeOut() {
+        // TODO: use as app settings
+        return 10000;
+    }
+    
+    public int getRefreshExpire() {
+        // TODO: use as app settings
+        return 5 * 60 * 1000;
+    }
+    
+    public boolean isWaypointResolverEnabled() {
+        // TODO: use as app settings
+        return true;
+    }
+
+    public boolean isTrackingCodeVerifierEnabled() {
+        // TODO: use as app settings
+        return true;
+    }
+    
+    public boolean isAutoRefreshEnabled() {
+        // TODO: use as app settings
+        return true;
+    }
+
+    public boolean isRetrySubmitEnabled() {
+        // TODO: use as app settings
+        return true;
+    }
+
+    public long getRetrySubmitDelay() {
+        // TODO: use as app settings
+        return 1000 * 60 * 5;
+    }
+    
+    public boolean isAcraEnabled() {
+        // TODO: use as app settings
+        return true;
     }
 }

@@ -33,9 +33,10 @@ public class NotifyTextView extends TextView {
     public static final int INFO = 1;
     public static final int WARNING = 2;
     public static final int ERROR = 3;
+    public static final int OFF = 3;
 
     private static final int[] COLORS = new int[] {
-            R.color.valid_color, R.color.info_color, R.color.warning_color, R.color.error_color
+            R.color.valid_color, R.color.info_color, R.color.warning_color, R.color.error_color, R.color.disabled_color
     };
 
     public NotifyTextView(final Context context) {

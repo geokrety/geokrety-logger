@@ -115,15 +115,20 @@ abstract public class AbstractNotifiedEditText extends EditText {
     }
 
     public void validate() {
-        if (regExInputFilter.validate(getText().toString())) {
-            setLabel(getWaitMessage(), NotifyTextView.INFO);
-            runVerifyService();
+        if (isVerifierEnabled()) {
+            if (regExInputFilter.validate(getText().toString())) {
+                setLabel(getWaitMessage(), NotifyTextView.INFO);
+                runVerifyService();
+            } else {
+                setLabel(getInvalidateMessage(), NotifyTextView.ERROR);
+            }
         } else {
-            setLabel(getInvalidateMessage(), NotifyTextView.ERROR);
+            setLabel(getNotEnabledMessage(), NotifyTextView.OFF);
         }
     }
 
     abstract protected CharSequence getInvalidateMessage();
+    abstract protected CharSequence getNotEnabledMessage();
 
     abstract protected String getServiceBroadcast();
 
@@ -143,4 +148,6 @@ abstract public class AbstractNotifiedEditText extends EditText {
             mNotifyTextView.setLabel(content, color);
         }
     }
+    
+    abstract protected boolean isVerifierEnabled();
 }

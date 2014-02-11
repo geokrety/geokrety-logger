@@ -45,7 +45,6 @@ public class LogSubmitterService extends IntentService {
     public static final String BROADCAST_SUBMITS_FINISH = "pl.nkg.geokrety.services.LogSubmitterService.Submits.Finish";
 
     private static final String TAG = LogSubmitterService.class.getSimpleName();
-    private static final int RETRY_DELAY = 1000 * 60 * 5;
 
     private GeoKretyApplication application;
     private Handler handler;
@@ -135,7 +134,7 @@ public class LogSubmitterService extends IntentService {
             sendBroadcast(broadcastDone);
         }
 
-        if (connectionProblems) {
+        if (connectionProblems && application.isRetrySubmitEnabled()) {
 
             // Retry after 5 minutes
             handler.postDelayed(new Runnable() {
@@ -143,7 +142,7 @@ public class LogSubmitterService extends IntentService {
                 public void run() {
                     startService(new Intent(LogSubmitterService.this, LogSubmitterService.class));
                 }
-            }, RETRY_DELAY);
+            }, application.getRetrySubmitDelay());
         }
 
         if (outbox.size() > 0) {
