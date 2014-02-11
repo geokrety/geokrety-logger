@@ -84,6 +84,7 @@ public class LogSubmitterService extends IntentService {
             broadcastDone.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
             sendBroadcast(broadcastStart);
 
+            
             String title = log.getNr();
             int notifyId = (int) log.getId();
             showNotify(intent, notifyId, R.drawable.ic_stat_notify_log_submitting, title,
@@ -92,6 +93,14 @@ public class LogSubmitterService extends IntentService {
             int icon = 0;
             String message = "";
 
+            try {
+                Thread.sleep(10000);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+            
             int ret = GeoKretyProvider.submitLog(log);
             switch (ret) {
                 case GeoKretyProvider.LOG_NO_CONNECTION:

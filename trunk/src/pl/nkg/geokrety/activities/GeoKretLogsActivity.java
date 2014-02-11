@@ -189,7 +189,11 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
                     return getText(R.string.log_status_success);
 
                 case GeoKretLog.STATE_OUTBOX:
-                    return getText(R.string.log_status_queue);
+                    if (stateHolder.isLocked(log.getId())) {
+                        return getText(R.string.dots); // TODO: label
+                    } else {
+                        return getText(R.string.log_status_queue);
+                    }
 
                 default:
                     return getText(R.string.log_status_unidentified);
@@ -235,7 +239,7 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         if (dialog.getDialogId() == removeLogDialog.getDialogId()) {
             if (buttonId == DialogInterface.BUTTON_POSITIVE) {
                 application.getStateHolder().getGeoKretLogDataSource()
-                        .removeAllLogs(account.getID());
+                        .removeAllLogs(account.getID(), stateHolder.getLocked());
                 updateListView();
             }
         }
@@ -255,9 +259,11 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
     @Override
     public void onItemClick(final AdapterView<?> parent, final View view, final int position,
             final long id) {
-        final Intent intent = new Intent(this, LogActivity.class);
-        intent.putExtra(GeoKretLogDataSource.COLUMN_ID, id);
-        startActivity(intent);
+        if (!stateHolder.isLocked(id)) {
+            final Intent intent = new Intent(this, LogActivity.class);
+            intent.putExtra(GeoKretLogDataSource.COLUMN_ID, id);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -335,6 +341,8 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
             account = holder.getAccountList().get(nr);
             updateListView();
         }
+        registerReceiver(submitDoneBroadcastReceiver, new IntentFilter(
+                LogSubmitterService.BROADCAST_SUBMIT_START));
         registerReceiver(submitDoneBroadcastReceiver, new IntentFilter(
                 LogSubmitterService.BROADCAST_SUBMIT_DONE));
     }

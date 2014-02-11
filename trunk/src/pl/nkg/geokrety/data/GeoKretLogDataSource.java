@@ -30,6 +30,7 @@ import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class GeoKretLogDataSource {
 
@@ -259,14 +260,15 @@ public class GeoKretLogDataSource {
         });
     }
 
-    public void removeAllLogs(final long userId) {
+    public void removeAllLogs(final long userId, final long except) {
         dbHelper.runOnWritableDatabase(new DBOperation() {
 
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
-                db.delete(TABLE, COLUMN_USER_ID + " = ?", new String[] {
-                        Long.toString(userId)
+                db.delete(TABLE, COLUMN_USER_ID + " = ? AND " + COLUMN_ID + " != ?", new String[] {
+                        Long.toString(userId), Long.toString(except)
                 });
+                Log.println(Log.ERROR, "ble", Long.toString(except));
                 return true;
             }
 

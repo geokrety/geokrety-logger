@@ -182,4 +182,12 @@ public class StateHolder {
         }
         return null;
     }
+
+    public boolean isLocked(long id) {
+        return reservedLog != null && reservedLog == id;
+    }
+
+    public long getLocked() {
+        return reservedLog == null ? 0 : reservedLog;
+    }
 }
