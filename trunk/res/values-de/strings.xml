@@ -136,7 +136,7 @@
 	<string name="geokret_save">Speichern</string>
 	<string name="geokret_save_title">Einstellungen speichern?</string>
 	<string name="geokret_save_message">Einstellungen wurden geändert. Speichern?</string>
-<!-- NEED TRANSLATE --><string name="geokret_message_error_invalid_trackingcode">Please enter a valid Tracking Code: 6 Zeichen der GeoKret-Kennzeichnung, z.B. XF3ACS</string>
+	<string name="geokret_message_error_invalid_trackingcode">Bitte einen gültigen Trackingcode eingeben: 6 Zeichen, z.B. XF3ACS</string>
     
     <!-- OpenCaching last logs Activity -->
 	<string name="title_activity_last_ocs">Letzte Logs aus den Opencaching Portalen</string>
@@ -201,9 +201,9 @@
 	<string name="log_status_success">Erledigt</string>
 	<string name="log_status_queue">Queue</string>
 	<string name="log_status_unidentified">Unbekannt</string>
-    <string name="button_submit_all_drafts">Alle senden</string>
-    <string name="button_remove_all_saved_logs">Alle löschen</string>
-    <string name="form_confirm_delete_all_msg">Wirklich alle Logeinträge löschen?</string>
+   	<string name="button_submit_all_drafts">Alle senden</string>
+    	<string name="button_remove_all_saved_logs">Alle löschen</string>
+    	<string name="form_confirm_delete_all_msg">Wirklich alle Logeinträge löschen?</string>
     
     <!-- Refresing progress bar -->
 	<string name="download_title">Aktualisieren</string>
@@ -241,31 +241,30 @@
 	<string name="message_submit_no_connection">Verbindungsfehler, noch einmal versuchen&#8230;</string>
 	
 	<!-- Refresh service -->
-<!-- NEED TRANSLATE --><string name="toast_notify_refresh_start">Inventory and last Opencaching logs is refreshing in background&#8230;</string>
-<!-- NEED TRANSLATE --><string name="toast_notify_refresh_finish">Refresh done</string>
-<!-- NEED TRANSLATE --><string name="toast_notify_refresh_error">Connection error:</string>
-<!-- NEED TRANSLATE --><string name="toast_notify_refresh_no_connection">No Internet connection</string>
-<!-- NEED TRANSLATE --><string name="notify_refresh_inventory">Refreshing inventory</string>
-<!-- NEED TRANSLATE --><string name="notify_refresh_last_logs">Refreshing list of last logs</string>
-<!-- NEED TRANSLATE --><string name="notify_refresh_oc_names">Refreshing data of geocaches</string>
-<!-- NEED TRANSLATE --><string name="notify_refresh_own_gk">Refreshing own geokrets</string>
-<!-- NEED TRANSLATE --><string name="notify_refresh_error_inventory">Inventory:</string>
-<!-- NEED TRANSLATE --><string name="notify_refresh_error_last_logs">Last logs:</string>
-<!-- NEED TRANSLATE --><string name="notify_refresh_error_broken">Refreshing has been broken</string>
-<!-- NEED TRANSLATE --><string name="notify_refresh_error_lost_connection">Internet connection lost</string>
+	<string name="toast_notify_refresh_start">Inventar und letzte Opencaching-Logs werden im Hintergrund aktualisiert&#8230;</string>
+	<string name="toast_notify_refresh_finish">Aktualisierung erfolgreich</string>
+	<string name="toast_notify_refresh_error">Verbindungsfehler:</string>
+	<string name="toast_notify_refresh_no_connection">Keine Internetverbindung</string>
+	<string name="notify_refresh_inventory">Aktualisiere Inventar</string>
+	<string name="notify_refresh_last_logs">Aktualisiere Liste der letzten Logs</string>
+	<string name="notify_refresh_oc_names">Refreshing data of geocaches</string>
+	<string name="notify_refresh_own_gk">Aktualisiere eigene Geokrety</string>
+	<string name="notify_refresh_error_inventory">Inventar:</string>
+	<string name="notify_refresh_error_last_logs">Letzte Logs:</string>
+	<string name="notify_refresh_error_broken">Aktualisierung fehlerhaft</string>
+	<string name="notify_refresh_error_lost_connection">Internetverbindung unterbrochen</string>
 	<string name="error_description_no_such_geokret">Falscher Tracking Code</string>
 	
 	<!-- GeoKret verification service -->
-<!-- NEED TRANSLATE --><string name="verify_tc_message_info_waiting">Tracking Code verification&#8230; (you can continue)</string>
+	<string name="verify_tc_message_info_waiting">Trackingcode wird geprüft&#8230; (Du kannst fortfahren)</string>
 	<string name="verify_tc_message_error_geokret_not_found"> GeoKret nicht gefunden</string>
-<!-- NEED TRANSLATE --><string name="verify_tc_message_warning_no_connection">Tracking Code can not be verified in this time</string>
-<!-- NEED TRANSLATE --><string name="verify_tc_message_good_verified">GeoKret found:</string>
+	<string name="verify_tc_message_warning_no_connection">Trackingcode kann zur Zeit nicht verifiziert werden</string>
+	<string name="verify_tc_message_good_verified">GeoKrety gefunden:</string>
 	
 	<!-- Waypoint Resolver service -->
-<!-- NEED TRANSLATE --><string name="resolve_wpt_message_info_waiting">Resloving coordinates of %1$s waypoint&#8230; (you can continue)</string>
-<!-- english version: <string name="resolve_wpt_message_error_waypont_not_found">Coordinates of %1$s waypoint can not be resolved. Please provide the coordinates (lat/lon) of the %1$s cache in the input box below</string> -->
-<!-- NEED VERIFY   --><string name="resolve_wpt_message_error_waypont_not_found">Bitte trage auch noch die Koordinaten des Caches im entsprechenden Eingabefeld (lat/lon) ein. Mehr zum Thema GeoKrets in GC-Caches ablegen.</string>
-<!-- NEED TRANSLATE --><string name="resolve_wpt_message_warning_no_connection">Coordinates of %1$s waypoint can not be resolved in this time. Provide the coordinates in the input box below is good idea because your waypoint may be incorrect.</string>
+	<string name="resolve_wpt_message_info_waiting">Ermittle Koordinaten von %1$s Wegpunkten&#8230; (Du kannst fortfahren)</string>
+	<string name="resolve_wpt_message_error_waypont_not_found">Bitte trage auch noch die Koordinaten des Caches im entsprechenden Eingabefeld (lat/lon) ein. Mehr zum Thema GeoKrets in GC-Caches ablegen.</string>
+	<string name="resolve_wpt_message_warning_no_connection">Dir Koordinaten von %1$s Wegpunkten konnten derzeit nicht ermittelt werden. Bitte gib Koordinaten im Eingabefeld unter dem Wegpunkt an.</string>
 
 		
 	<!-- About Activity -->
@@ -278,5 +277,5 @@
 	</string>
 	
 	<!-- Crash report -->
-<!-- NEED TRANSLATE --><string name="crash_toast_text">Ooooops! I crashed, but a report has been sent to my developer to help fix the issue!</string>
+	<string name="crash_toast_text">Ooooops! Abgestürzt! Aber keine Panik, ein kurzer Report wurde an den Entwickler geschickt, damit dieser den Fehler so schnell wie möglich beseitigt.</string>
 </resources>
