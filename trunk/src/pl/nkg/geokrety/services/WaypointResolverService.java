@@ -26,7 +26,7 @@ import org.acra.ACRA;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
-import pl.nkg.geokrety.activities.GeoKretActivity;
+import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
@@ -66,7 +66,7 @@ public class WaypointResolverService extends IntentService {
         Log.println(Log.INFO, TAG, "Run refresh service for " + wpt + "...");
         try {
             
-            sendBroadcast(GeoKretActivity.INFO, wpt,
+            sendBroadcast(NotifyTextView.INFO, wpt,
                     String.format(getText(R.string.resolve_wpt_message_info_waiting).toString(), wpt), "");
 
             Geocache gc = stateHolder.getGeocacheDataSource().loadByWaypoint(wpt);
@@ -84,15 +84,15 @@ public class WaypointResolverService extends IntentService {
             }
 
             if (gc == null) {
-                sendBroadcast(GeoKretActivity.WARNING, wpt,
+                sendBroadcast(NotifyTextView.WARNING, wpt,
                         String.format(getText(R.string.resolve_wpt_message_warning_no_connection).toString(), wpt), "");
             } else if (gc.getName() != null) {
                 sendBroadcast(
-                        GeoKretActivity.GOOD,
+                        NotifyTextView.GOOD,
                         wpt,
                         wpt + ": " + gc.getName(), gc.getLocation());
             } else {
-                sendBroadcast(GeoKretActivity.ERROR, wpt,
+                sendBroadcast(NotifyTextView.ERROR, wpt,
                         String.format(getText(R.string.resolve_wpt_message_error_waypont_not_found).toString(), wpt), "");
             }
 
@@ -100,7 +100,7 @@ public class WaypointResolverService extends IntentService {
             Log.println(Log.ERROR, TAG, e.getLocalizedMessage());
             ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
-            sendBroadcast(GeoKretActivity.ERROR, wpt, e.getLocalizedMessage(), "");
+            sendBroadcast(NotifyTextView.ERROR, wpt, e.getLocalizedMessage(), "");
         }
 
         Log.println(Log.INFO, TAG, "Finish refresh service for " + wpt);

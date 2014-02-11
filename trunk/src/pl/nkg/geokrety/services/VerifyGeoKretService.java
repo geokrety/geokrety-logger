@@ -29,7 +29,7 @@ import org.acra.ACRA;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
-import pl.nkg.geokrety.activities.GeoKretActivity;
+import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeoKretDataSource;
 import pl.nkg.geokrety.data.StateHolder;
@@ -69,7 +69,7 @@ public class VerifyGeoKretService extends IntentService {
         final String tc = intent.getExtras().getString(INTENT_TRACKING_CODE);
         Log.println(Log.INFO, TAG, "Run refresh service for " + tc + "...");
         try {
-            sendBroadcast(GeoKretActivity.INFO, tc,
+            sendBroadcast(NotifyTextView.INFO, tc,
                     getText(R.string.verify_tc_message_info_waiting));
 
             GeoKret gk = stateHolder.getGeoKretDataSource().loadByTrackingCode(tc);
@@ -87,16 +87,16 @@ public class VerifyGeoKretService extends IntentService {
             }
 
             if (gk == null) {
-                sendBroadcast(GeoKretActivity.WARNING, tc,
+                sendBroadcast(NotifyTextView.WARNING, tc,
                         getText(R.string.verify_tc_message_warning_no_connection));
             } else if (gk.getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_SYNCHRONIZED) {
                 sendBroadcast(
-                        GeoKretActivity.GOOD,
+                        NotifyTextView.GOOD,
                         tc,
                         getText(R.string.verify_tc_message_good_verified) + " "
                                 + gk.getFormatedCodeAndName());
             } else {
-                sendBroadcast(GeoKretActivity.ERROR, tc,
+                sendBroadcast(NotifyTextView.ERROR, tc,
                         getText(R.string.verify_tc_message_error_geokret_not_found));
             }
 
@@ -104,7 +104,7 @@ public class VerifyGeoKretService extends IntentService {
             Log.println(Log.ERROR, TAG, e.getLocalizedMessage());
             ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
-            sendBroadcast(GeoKretActivity.ERROR, tc, e.getLocalizedMessage());
+            sendBroadcast(NotifyTextView.ERROR, tc, e.getLocalizedMessage());
         }
 
         Log.println(Log.INFO, TAG, "Finish refresh service for " + tc);

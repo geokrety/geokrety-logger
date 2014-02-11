@@ -60,13 +60,12 @@
         android:inputType="textCapCharacters"
         android:textAllCaps="true" />
 
-    <TextView
-        android:id="@+id/notfyTextView"
+    <pl.nkg.geokrety.activities.controls.NotifyTextView
+        android:id="@+id/notifyTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/trackingCodeEditText"
-        android:textColor="@color/error_color"
         android:textStyle="bold" />
 
     <CheckBox
@@ -74,7 +73,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/notfyTextView"
+        android:layout_below="@+id/notifyTextView"
         android:text="@string/geokret_sticki_title" />
 
 </RelativeLayout>

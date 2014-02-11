@@ -28,6 +28,7 @@ import java.util.regex.Pattern;
 import pl.nkg.geokrety.GeoKretyApplication;
 //import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.dialogs.Dialogs;
@@ -74,7 +75,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     private EditText trackingCodeEditText;
     private CheckBox stickyCheckBox;
     //private Button saveButton;
-    private TextView notfyTextView;
+    private NotifyTextView notifyTextView;
 
     public static final Pattern CAPS_LETTERS_AND_DIGITS_PATTERN = Pattern.compile("[A-Z0-9]*");
     public static final Pattern LETTERS_AND_DIGITS_PATTERN = Pattern.compile("[a-zA-Z0-9]*");
@@ -130,7 +131,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
         });
         // nameEditText = (EditText) findViewById(R.id.nameEditText);
         stickyCheckBox = (CheckBox) findViewById(R.id.stickyCheckBox);
-        notfyTextView = (TextView) findViewById(R.id.notfyTextView);
+        notifyTextView = (NotifyTextView) findViewById(R.id.notifyTextView);
 
         Bundle ib = getIntent().getExtras();
         userId = ib.getLong(USER_ID);
@@ -225,31 +226,31 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
     @Override
     public void afterTextChanged(Editable s) {
         modified = true;
-        validate(trackingCodeEditText, notfyTextView);
+        validate(trackingCodeEditText, notifyTextView);
     }
 
  // TODO: make a my NotifyTextView control
-    public static void validate(EditText trackingCodeEditText, TextView notfyTextView) {
+    public static void validate(EditText trackingCodeEditText, NotifyTextView notfyTextView) {
         if (TRACKING_CODE_PATTERN.matcher(trackingCodeEditText.getText().toString()).matches()) {
-            setLabel(notfyTextView, trackingCodeEditText.getContext().getText(R.string.verify_tc_message_info_waiting), INFO);
+            notfyTextView.setLabel(trackingCodeEditText.getContext().getText(R.string.verify_tc_message_info_waiting), NotifyTextView.INFO);
             runVerifyService(trackingCodeEditText.getContext(), trackingCodeEditText.getText().toString());
         } else {
             //saveButton.setEnabled(false);  // TODO: is need?
-            setLabel(notfyTextView, trackingCodeEditText.getContext().getText(R.string.geokret_message_error_invalid_trackingcode),
-                    ERROR);
+            notfyTextView.setLabel(trackingCodeEditText.getContext().getText(R.string.geokret_message_error_invalid_trackingcode),
+                    NotifyTextView.ERROR);
         }
     }
     
     // TODO: make a my NotifyTextView control
-    public static void resolve(EditText waypointEditText, TextView notfyTextView) {
+    public static void resolve(EditText waypointEditText, NotifyTextView notfyTextView) {
         String wpt = waypointEditText.getText().toString();
         Context context = waypointEditText.getContext();
         if (wpt.length() >= 3 && LETTERS_AND_DIGITS_PATTERN.matcher(wpt).matches()) {
-            setLabel(notfyTextView, context.getText(R.string.resolve_wpt_message_info_waiting), INFO);
+            notfyTextView.setLabel(context.getText(R.string.resolve_wpt_message_info_waiting), NotifyTextView.INFO);
             runResolveService(context, wpt);
         } else {
             // TODO: type message about waypoint to short?
-            setLabel(notfyTextView, "", ERROR);
+            notfyTextView.setLabel("", NotifyTextView.ERROR);
         }
     }
 
@@ -263,7 +264,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
                     .equals(intent.getExtras().getString(VerifyGeoKretService.INTENT_TRACKING_CODE))) {
                 int type = intent
                         .getExtras().getInt(VerifyGeoKretService.INTENT_MESSAGE_TYPE);
-                setLabel(notfyTextView,
+                notifyTextView.setLabel(
                         intent.getExtras().getString(VerifyGeoKretService.INTENT_MESSAGE), type);
                 //saveButton.setEnabled(type != ERROR);  // TODO: is need?
             }
@@ -275,7 +276,7 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
         super.onResume();
         registerReceiver(verifierBroadcastReceiver,
                 new IntentFilter(VerifyGeoKretService.BROADCAST));
-        validate(trackingCodeEditText, notfyTextView);
+        validate(trackingCodeEditText, notifyTextView);
     }
 
     @Override
@@ -298,20 +299,5 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
         intent.putExtra(WaypointResolverService.INTENT_WAYPOINT, wpt);
         context.stopService(intent);
         context.startService(intent);
-    }
-
-    // TODO: make a my NotifyTextView control
-    public static final int GOOD = 0;
-    public static final int INFO = 1;
-    public static final int WARNING = 2;
-    public static final int ERROR = 3;
-    private static final int[] COLORS = new int[] {
-            R.color.valid_color, R.color.info_color, R.color.warning_color, R.color.error_color
-    };
-
- // TODO: make a my NotifyTextView control
-    public static void setLabel(TextView textView, CharSequence content, int color) {
-        textView.setTextColor(textView.getResources().getColor(COLORS[color]));
-        textView.setText(content);
     }
 }

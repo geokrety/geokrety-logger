@@ -165,11 +165,10 @@
                     android:text="@string/form_inventory" />
             </LinearLayout>
 
-            <TextView
-			        android:id="@+id/tcNotfyTextView"
+            <pl.nkg.geokrety.activities.controls.NotifyTextView
+			        android:id="@+id/tcNotfiyTextView"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:textColor="@color/error_color"
 			        android:textStyle="bold" />
 
             <TextView
@@ -201,11 +200,10 @@
                     android:text="@string/form_oclogs" />
             </LinearLayout>
             
-            <TextView
-			        android:id="@+id/wptNotfyTextView"
+            <pl.nkg.geokrety.activities.controls.NotifyTextView
+			        android:id="@+id/wptNotifyTextView"
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
-			        android:textColor="@color/error_color"
 			        android:textStyle="bold" />
 
             <LinearLayout

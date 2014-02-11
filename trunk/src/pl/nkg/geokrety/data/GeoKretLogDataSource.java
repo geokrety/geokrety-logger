@@ -135,7 +135,7 @@ public class GeoKretLogDataSource {
         values.put(COLUMN_USER_ID, log.getAccoundID());
         values.put(COLUMN_STATE, log.getState());
         values.put(COLUMN_PROBLEM, log.getProblem());
-        values.put(COLUMN_PROBLEM_ARG, Utils.defaultIfNull(log.getProblemArg(), "")); // FIXME: ACRA report geokrety_logs.problem_arg may not be NULL
+        values.put(COLUMN_PROBLEM_ARG, Utils.defaultIfNull(log.getProblemArg(), ""));
         values.put(COLUMN_TRACKING_CODE, log.getNr());
         values.put(COLUMN_WAYPOINT, log.getWpt());
         values.put(COLUMN_FORMNAME, log.getFormname());

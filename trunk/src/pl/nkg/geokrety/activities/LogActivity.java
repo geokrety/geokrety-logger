@@ -30,6 +30,7 @@ import java.util.Locale;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.activities.listeners.RefreshListener;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKretLog;
@@ -100,8 +101,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private EditText coordinatesEditText;
     private EditText commentEditText;
     
-    private TextView tcNotfyTextView;
-    private TextView wptNotfyTextView;
+    private NotifyTextView tcNotifyTextView;
+    private NotifyTextView wptNotifyTextView;
 
     private GPSAcquirer gpsAcquirer;
 
@@ -400,8 +401,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         logTypeSpinnerDialog = new AlertDialogWrapper(this, Dialogs.TYPE_SPINNERDIALOG);
         
-        tcNotfyTextView = (TextView) findViewById(R.id.tcNotfyTextView);
-        wptNotfyTextView = (TextView) findViewById(R.id.wptNotfyTextView);
+        tcNotifyTextView = (NotifyTextView) findViewById(R.id.tcNotfiyTextView);
+        wptNotifyTextView = (NotifyTextView) findViewById(R.id.wptNotifyTextView);
 
         // logProgressDialog.setTitle(R.string.submit_title);
 
@@ -570,8 +571,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     @Override
     public void afterTextChanged(Editable s) {
-        GeoKretActivity.validate(trackingCodeEditText, tcNotfyTextView);
-        GeoKretActivity.resolve(waypointEditText, wptNotfyTextView);
+        GeoKretActivity.validate(trackingCodeEditText, tcNotifyTextView);
+        GeoKretActivity.resolve(waypointEditText, wptNotifyTextView);
     }
 
     @Override
@@ -581,8 +582,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 new IntentFilter(VerifyGeoKretService.BROADCAST));
         registerReceiver(resolverBroadcastReceiver,
                 new IntentFilter(WaypointResolverService.BROADCAST));
-        GeoKretActivity.validate(trackingCodeEditText, tcNotfyTextView);
-        GeoKretActivity.resolve(waypointEditText, wptNotfyTextView);
+        GeoKretActivity.validate(trackingCodeEditText, tcNotifyTextView);
+        GeoKretActivity.resolve(waypointEditText, wptNotifyTextView);
     }
     
  // TODO: make a my NotifyTextView control
@@ -595,7 +596,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                     .equals(intent.getExtras().getString(VerifyGeoKretService.INTENT_TRACKING_CODE))) {
                 int type = intent
                         .getExtras().getInt(VerifyGeoKretService.INTENT_MESSAGE_TYPE);
-                GeoKretActivity.setLabel(tcNotfyTextView,
+                tcNotifyTextView.setLabel(
                         intent.getExtras().getString(VerifyGeoKretService.INTENT_MESSAGE), type);
                 //saveButton.setEnabled(type != ERROR);  // TODO: is need?
             }
@@ -611,12 +612,12 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                     .equals(intent.getExtras().getString(WaypointResolverService.INTENT_WAYPOINT))) {
                 Bundle bundle = intent.getExtras();
                 int type = bundle.getInt(WaypointResolverService.INTENT_MESSAGE_TYPE);
-                GeoKretActivity.setLabel(wptNotfyTextView, bundle.getString(WaypointResolverService.INTENT_MESSAGE), type);
+                wptNotifyTextView.setLabel(bundle.getString(WaypointResolverService.INTENT_MESSAGE), type);
 
-                coordinatesEditText.setEnabled(type != GeoKretActivity.GOOD);
+                coordinatesEditText.setEnabled(type != NotifyTextView.GOOD);
                 // TODO: gps and home buttons too
                 
-                if (type == GeoKretActivity.GOOD) {
+                if (type == NotifyTextView.GOOD) {
                     coordinatesEditText.setText(bundle.getString(WaypointResolverService.INTENT_LATLON));
                 }
             }
