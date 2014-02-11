@@ -73,11 +73,12 @@ public class LogSubmitterService extends IntentService {
             sendBroadcast(new Intent(BROADCAST_SUBMITS_START));
         }
 
-        for (final GeoKretLog log : outbox) {
-            if (!application.getStateHolder().lockForLog(log.getId())) {
+        for (final GeoKretLog oldlog : outbox) {
+            final GeoKretLog log = application.getStateHolder().lockForLog(oldlog.getId());
+            if (log == null) {
                 continue;
             }
-
+            
             Intent broadcastStart = new Intent(BROADCAST_SUBMIT_START);
             Intent broadcastDone = new Intent(BROADCAST_SUBMIT_DONE);
             broadcastStart.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
@@ -156,7 +157,7 @@ public class LogSubmitterService extends IntentService {
             CharSequence contentTitle, CharSequence contentMessage) {
         Notification notification = new Notification(icon, contentTitle + ": " + contentMessage,
                 System.currentTimeMillis());
-        ;
+        
         notification.setLatestEventInfo(this, contentTitle, contentMessage,
                 PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT));
         notification.flags |= Notification.FLAG_AUTO_CANCEL;

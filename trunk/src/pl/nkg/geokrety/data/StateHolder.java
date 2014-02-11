@@ -129,17 +129,17 @@ public class StateHolder {
 		getPreferences(context).edit().putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
 	}
 
-	public boolean lockForLog(long logID) {
+	public GeoKretLog lockForLog(long logID) {
 		synchronized(this) {
 			if (editLog != null && editLog == logID) {
-			    return false;
+			    return null;
 			} else {
 	            GeoKretLog log = getGeoKretLogDataSource().loadByID(logID);
 	            if (log != null && log.getState() == GeoKretLog.STATE_OUTBOX) {
 	                reservedLog = logID;
-	                return true;	                
+	                return log;	                
 	            } else {
-	                return false;
+	                return null;
 	            }
 			}
 		}
