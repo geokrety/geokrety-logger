@@ -46,6 +46,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.AdapterView;
+import android.widget.TextView;
 
 public class InventoryActivity extends AbstractGeoKretyActivity implements
         AdapterView.OnItemSelectedListener, OnItemClickListener {
@@ -64,7 +65,7 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
         @Override
         public void bindView(final View view, final Context context, final Cursor cursor) {
             final GeoKret gk = new GeoKret(cursor, 1);
-            // bindIcon(view, log);
+            bindIcon(view, gk);
             bindTextView(view, android.R.id.text1,
                     gk.getFormatedCode() + " (" + gk.getTrackingCode() + ")");
             if (gk.getName() == null) {
@@ -75,6 +76,13 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
                                 gk.getSynchroError(), "..."));
             } else {
                 bindTextView(view, android.R.id.text2, gk.getName() + " (" + gk.getDist() + "km)");
+            }
+        }
+
+        private void bindIcon(View view, GeoKret gk) {
+            if (gk.isSticky()) {
+                TextView tv = (TextView)view.findViewById(android.R.id.text1);
+                tv.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_pine,0);
             }
         }
     }
