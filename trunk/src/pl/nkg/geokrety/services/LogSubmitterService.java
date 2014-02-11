@@ -92,14 +92,6 @@ public class LogSubmitterService extends IntentService {
 
             int icon = 0;
             String message = "";
-
-            try {
-                Thread.sleep(10000);
-            } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
             
             int ret = GeoKretyProvider.submitLog(log);
             switch (ret) {
