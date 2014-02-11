@@ -32,15 +32,6 @@ public class StateHolder {
 	private static final String				DEFAULT_ACCOUNT			= "current_accounts";
 	private static final int				DEFAULT_ACCOUNT_VALUE	= ListView.INVALID_POSITION;
 
-	//private static Map<String, Geocache>	geoCachesMap;
-
-	/*public static Map<String, Geocache> getGeoacheMap() {
-		if (geoCachesMap == null) {
-			geoCachesMap = Collections.synchronizedMap(new HashMap<String, Geocache>());
-		}
-		return geoCachesMap;
-	}*/
-
 	private static SharedPreferences getPreferences(final Context context) {
 		return context.getSharedPreferences("pl.nkg.geokrety", Context.MODE_PRIVATE);
 	}
@@ -71,21 +62,6 @@ public class StateHolder {
 		geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
 
 		accountList = Collections.synchronizedList(userDataSource.getAll());
-
-		/*geoCachesMap = new HashMap<String, Geocache>();
-		for (final Geocache gc : geocacheDataSource.load()) {
-			geoCachesMap.put(gc.getCode(), gc);
-		}*/
-
-		//final SparseArray<LinkedList<GeoKret>> gks = inventoryDataSource.load();
-		//final SparseArray<LinkedList<GeocacheLog>> logs = geocacheLogDataSource.load();
-		//final SparseArray<LinkedList<GeoKretLog>> geoKretLogs = geoKretLogDataSource.load();
-
-		/*for (final User account : accountList) {
-			account.setOpenCachingLogs(logs.get((int)account.getID()));
-			//account.setInventory(gks.get((int)account.getID()));
-			//account.setGeoKretyLogs(geoKretLogs.get(account.getID()));
-		}*/
 	}
 
 	public GeoKretySQLiteHelper getDbHelper() {
@@ -153,17 +129,18 @@ public class StateHolder {
 		getPreferences(context).edit().putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
 	}
 
-	/*public void storeGeoCachingNames() {
-		getGeocacheDataSource().store(geoCachesMap.values());
-	}*/
-	
 	public boolean lockForLog(long logID) {
 		synchronized(this) {
 			if (editLog != null && editLog == logID) {
-				return false;
+			    return false;
 			} else {
-				reservedLog = logID;
-				return true;
+	            GeoKretLog log = getGeoKretLogDataSource().loadByID(logID);
+	            if (log != null && log.getState() == GeoKretLog.STATE_OUTBOX) {
+	                reservedLog = logID;
+	                return true;	                
+	            } else {
+	                return false;
+	            }
 			}
 		}
 	}

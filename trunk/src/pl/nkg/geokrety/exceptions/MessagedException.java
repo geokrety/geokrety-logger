@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -21,6 +21,7 @@
  */
 package pl.nkg.geokrety.exceptions;
 
+import pl.nkg.geokrety.Utils;
 import android.content.Context;
 
 public class MessagedException extends Exception {
@@ -29,11 +30,13 @@ public class MessagedException extends Exception {
 	private final String arg;
 	
 	public MessagedException(int messageID) {
+	    super(getFormatedMessage(messageID, ""));
 		this.messageID = messageID;
 		arg = "";
 	}
 
 	public MessagedException(int message, String arg) {
+	    super(getFormatedMessage(message, arg));
 		this.messageID = message;
 		this.arg = arg;
 	}
@@ -45,5 +48,13 @@ public class MessagedException extends Exception {
 	public String getFormatedMessage(Context context) {
 		String message = context.getResources().getString(messageID) + " " + arg;
 		return message;
+	}
+	
+	private static String getFormatedMessage(int messageID, String arg) {
+	    try {
+	        return Utils.application.getApplicationContext().getResources().getString(messageID) + " " + arg;
+	    } catch (Throwable e) {
+	        return "MessagedException: " + messageID;
+	    }
 	}
 }

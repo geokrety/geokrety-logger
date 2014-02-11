@@ -24,6 +24,7 @@ package pl.nkg.lib.threads;
 import java.io.Serializable;
 
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.exceptions.MessagedException;
 
 import android.content.Context;
@@ -76,7 +77,7 @@ public class GenericTaskListener<Param, Progress extends Serializable, Result>
 					Toast.LENGTH_LONG).show();
 		} else if (errorMessage != null) {
 			Toast.makeText(context,
-					errorMessage + " " + exception.getLocalizedMessage(),
+					errorMessage + " " + Utils.defaultIfNull(exception.getLocalizedMessage(), exception.getMessage()),
 					Toast.LENGTH_LONG).show();
 		}
 	}

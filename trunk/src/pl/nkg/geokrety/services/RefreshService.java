@@ -112,9 +112,9 @@ public class RefreshService extends IntentService {
                 error = null;
             }
         } catch (Throwable e) {
-            Log.println(Log.ERROR, TAG, e.getLocalizedMessage());
+            error = Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage());
+            Log.println(Log.ERROR, TAG, error);
             ACRA.getErrorReporter().handleSilentException(e);
-            error = e.getLocalizedMessage();
             e.printStackTrace();
         }
         

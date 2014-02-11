@@ -104,7 +104,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, e.getLocalizedMessage());
+            throw new MessagedException(R.string.global_message_error_system, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
         }	    
 	}
 	
@@ -132,7 +132,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, e.getLocalizedMessage());
+            throw new MessagedException(R.string.global_message_error_system, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
         }       
 	}
 	
@@ -150,7 +150,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, e.getLocalizedMessage());
+            throw new MessagedException(R.string.global_message_error_system, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
         }       
     }
 
@@ -163,7 +163,7 @@ public class GeoKretyProvider {
 		try {
 			value = Utils.httpPost(URL_LOGIN, postData);
 		} catch (final Exception e) {
-			throw new MessagedException(R.string.login_error_message, e.getLocalizedMessage());
+			throw new MessagedException(R.string.login_error_message, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
 		}
 
 		if (value != null && !value.startsWith("error")) {
@@ -224,7 +224,7 @@ public class GeoKretyProvider {
 				return LOG_SUCCESS;
 			}
 		} catch (final Exception e) {
-			log.setProblemArg(e.getLocalizedMessage());
+			log.setProblemArg(Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
 			return LOG_NO_CONNECTION;
 		}
 	}
@@ -271,7 +271,7 @@ public class GeoKretyProvider {
 		} catch (final MessagedException e) {
 			throw e;
 		} catch (final Exception e) {
-			throw new MessagedException(R.string.submit_fail, e.getLocalizedMessage());
+			throw new MessagedException(R.string.submit_fail, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
 		}
 	}
 }

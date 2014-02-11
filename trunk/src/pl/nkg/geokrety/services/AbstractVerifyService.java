@@ -25,6 +25,7 @@ package pl.nkg.geokrety.services;
 import org.acra.ACRA;
 
 import pl.nkg.geokrety.GeoKretyApplication;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.StateHolder;
 import android.app.IntentService;
@@ -67,8 +68,8 @@ abstract public class AbstractVerifyService extends IntentService {
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
-            Log.println(Log.ERROR, logTag, e.getLocalizedMessage());
-            sendBroadcast(value, "", NotifyTextView.ERROR, e.getLocalizedMessage());
+            Log.println(Log.ERROR, logTag, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
+            sendBroadcast(value, "", NotifyTextView.ERROR, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
         }
 
         Log.println(Log.INFO, logTag, "Finish verify service for " + value);
