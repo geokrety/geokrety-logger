@@ -24,46 +24,34 @@ package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
-import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
-import pl.nkg.geokrety.activities.listeners.RefreshListener;
+import pl.nkg.geokrety.activities.controls.TrackingCodeEditText;
+import pl.nkg.geokrety.activities.controls.WaypointEditText;
+import pl.nkg.geokrety.activities.listeners.VerifyResponseListener;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.GeoKret;
-import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.RemoveLogDialog;
 import pl.nkg.geokrety.services.LogSubmitterService;
-import pl.nkg.geokrety.services.VerifyGeoKretService;
-import pl.nkg.geokrety.services.WaypointResolverService;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
-import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
-import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
 import pl.nkg.lib.location.GPSAcquirer;
-import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -73,10 +61,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LogActivity extends AbstractGeoKretyActivity implements LocationListener, TextWatcher {
+public class LogActivity extends AbstractGeoKretyActivity implements LocationListener, VerifyResponseListener {
 
-    //private GenericProgressDialogWrapper refreshProgressDialog;
-    // private GenericProgressDialogWrapper logProgressDialog;
     private RemoveLogDialog removeLogDialog;
     private TimePickerDialogWrapper timePickerDialog;
     private DatePickerDialogWrapper datePickerDialog;
@@ -84,20 +70,18 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private AlertDialogWrapper ocsSpinnerDialog;
     private AlertDialogWrapper logTypeSpinnerDialog;
 
-    //private RefreshAccount refreshAccount;
-
     private GeoKretLog currentLog;
     private User currentAccount;
     private int currentLogType = 0;
 
     private Button logTypeButton;
     private Button accountsButton;
-    private EditText trackingCodeEditText;
+    private TrackingCodeEditText trackingCodeEditText;
     private Button ocsButton;
     private ImageButton gpsButton;
     private Button datePicker;
     private Button timePicker;
-    private EditText waypointEditText;
+    private WaypointEditText waypointEditText;
     private EditText coordinatesEditText;
     private EditText commentEditText;
     
@@ -224,9 +208,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     public void refreshButtonClick(final View view) {
         application.runRefreshService(true);
-        /*if (currentAccount != null) {
-            currentAccount.loadData(application, true);
-        }*/
     }
 
     public void showAccountsActivity(final View view) {
@@ -309,7 +290,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private void loadFromGeoKretLog(final GeoKretLog log) {
         currentAccount = stateHolder.getAccountByID(log.getAccoundID());
         currentLogType = log.getLogTypeMapped();
-        // accountsButton.setText(application.getStateHolder().getAccountByID(log.getAccoundID()).getName());
         accountsButton.setText(currentAccount == null ? getText(R.string.form_profile)
                 : currentAccount.getName());
         trackingCodeEditText.setText(log.getNr());
@@ -353,10 +333,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             return false;
         }
 
-        /*if (currentAccount.loadIfExpired(application, false)) {
-            return false;
-        }*/
-
         configAdapters();
         return true;
     }
@@ -385,10 +361,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         final Intent intent = getIntent();
 
-        //refreshProgressDialog = new GenericProgressDialogWrapper(this,
-        //        Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
-        // logProgressDialog = new GenericProgressDialogWrapper(this,
-        // Dialogs.LOG_PROGRESSDIALOG);
         removeLogDialog = new RemoveLogDialog(this);
         timePickerDialog = new TimePickerDialogWrapper(this, Dialogs.TIME_PICKERDIALOG);
         datePickerDialog = new DatePickerDialogWrapper(this, Dialogs.DATE_PICKERDIALOG);
@@ -403,10 +375,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         
         tcNotifyTextView = (NotifyTextView) findViewById(R.id.tcNotfiyTextView);
         wptNotifyTextView = (NotifyTextView) findViewById(R.id.wptNotifyTextView);
-
-        // logProgressDialog.setTitle(R.string.submit_title);
-
-        //refreshAccount = RefreshAccount.getFromHandler(application.getForegroundTaskHandler());
 
         final long logID = intent.getLongExtra(GeoKretLogDataSource.COLUMN_ID,
                 AdapterView.INVALID_ROW_ID);
@@ -429,26 +397,21 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         logTypeButton = (Button) findViewById(R.id.logTypeButton);
         accountsButton = (Button) findViewById(R.id.accountsButton);
-        trackingCodeEditText = (EditText) findViewById(R.id.trackingCodeEditText);
+        trackingCodeEditText = (TrackingCodeEditText) findViewById(R.id.trackingCodeEditText);
         ocsButton = (Button) findViewById(R.id.ocsButton);
         gpsButton = (ImageButton) findViewById(R.id.gpsButton);
         datePicker = (Button) findViewById(R.id.datePicker);
         timePicker = (Button) findViewById(R.id.timePicker);
-        waypointEditText = (EditText) findViewById(R.id.waypointEditText);
+        waypointEditText = (WaypointEditText) findViewById(R.id.waypointEditText);
         coordinatesEditText = (EditText) findViewById(R.id.coordinatesEditText);
         commentEditText = (EditText) findViewById(R.id.commentEditText);
 
         gpsAcquirer = new GPSAcquirer(this, "gpsAcquirer", this);
         
-        trackingCodeEditText.addTextChangedListener(this);
-        trackingCodeEditText.setFilters(new InputFilter[] {
-                GeoKretActivity.TRACKING_CODE_FILTER, new InputFilter.LengthFilter(6)
-        });
+        trackingCodeEditText.bindWithNotifyTextView(tcNotifyTextView);
         
-        waypointEditText.addTextChangedListener(this);
-        trackingCodeEditText.setFilters(new InputFilter[] {
-                GeoKretActivity.WAYPOINT_FILTER
-        });
+        waypointEditText.bindWithNotifyTextView(wptNotifyTextView);
+        waypointEditText.setVerifyResponseListener(this);
 
         final String action = intent.getAction();
 
@@ -497,8 +460,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     @Override
     protected void onPause() {
-        unregisterReceiver(verifierBroadcastReceiver);
-        unregisterReceiver(resolverBroadcastReceiver);
+        trackingCodeEditText.unregisterReceiver();
+        waypointEditText.unregisterReceiver();
         storeToGeoKretLog(currentLog);
         super.onPause();
     }
@@ -529,16 +492,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             return;
         }
 
-        /*refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
-            @Override
-            public void onFinish(final AbstractForegroundTaskWrapper<User, String, String> sender,
-                    final User param, final String result) {
-                super.onFinish(sender, param, result);
-                configAdapters();
-            }
-        });*/
-
-        // updateCurrentAccount(false, false);
         if (currentAccount == null) {
             currentAccount = stateHolder.getDefaultAccount();
         }
@@ -558,69 +511,22 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     @Override
-    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void onTextChanged(CharSequence s, int start, int before, int count) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    @Override
-    public void afterTextChanged(Editable s) {
-        GeoKretActivity.validate(trackingCodeEditText, tcNotifyTextView);
-        GeoKretActivity.resolve(waypointEditText, wptNotifyTextView);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(verifierBroadcastReceiver,
-                new IntentFilter(VerifyGeoKretService.BROADCAST));
-        registerReceiver(resolverBroadcastReceiver,
-                new IntentFilter(WaypointResolverService.BROADCAST));
-        GeoKretActivity.validate(trackingCodeEditText, tcNotifyTextView);
-        GeoKretActivity.resolve(waypointEditText, wptNotifyTextView);
+        trackingCodeEditText.registerReceiver();
+        waypointEditText.registerReceiver();
     }
     
- // TODO: make a my NotifyTextView control
-    private final BroadcastReceiver verifierBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            if (trackingCodeEditText
-                    .getText()
-                    .toString()
-                    .equals(intent.getExtras().getString(VerifyGeoKretService.INTENT_TRACKING_CODE))) {
-                int type = intent
-                        .getExtras().getInt(VerifyGeoKretService.INTENT_MESSAGE_TYPE);
-                tcNotifyTextView.setLabel(
-                        intent.getExtras().getString(VerifyGeoKretService.INTENT_MESSAGE), type);
-                //saveButton.setEnabled(type != ERROR);  // TODO: is need?
-            }
-        }
-    };
-    
-    private final BroadcastReceiver resolverBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            if (waypointEditText
-                    .getText()
-                    .toString()
-                    .equals(intent.getExtras().getString(WaypointResolverService.INTENT_WAYPOINT))) {
-                Bundle bundle = intent.getExtras();
-                int type = bundle.getInt(WaypointResolverService.INTENT_MESSAGE_TYPE);
-                wptNotifyTextView.setLabel(bundle.getString(WaypointResolverService.INTENT_MESSAGE), type);
+    @Override
+    public void onChangeValue() {
+        coordinatesEditText.setEnabled(true);
+    }
 
-                coordinatesEditText.setEnabled(type != NotifyTextView.GOOD);
-                // TODO: gps and home buttons too
-                
-                if (type == NotifyTextView.GOOD) {
-                    coordinatesEditText.setText(bundle.getString(WaypointResolverService.INTENT_LATLON));
-                }
-            }
+    @Override
+    public void onVerifyResponse(CharSequence response, boolean valid) {
+        coordinatesEditText.setEnabled(!valid);
+        if (valid) {
+            coordinatesEditText.setText(response);
         }
-    };
+    }
 }

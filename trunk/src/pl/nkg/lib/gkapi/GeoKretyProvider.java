@@ -109,10 +109,10 @@ public class GeoKretyProvider {
 	}
 	
 	private final static String KONKRET = "konkret.php?id=";
-	public static int loadIDByTranckingCode(String trackingCode) throws MessagedException {
+	public static int loadIDByTranckingCode(CharSequence trackingCode) throws MessagedException {
 	    final String[][] getData = new String[][] { //
                 new String[] { "skad", "ajax" }, //
-                new String[] { "nr", trackingCode } };
+                new String[] { "nr", trackingCode.toString() } };
         try {
             final String xml = Utils.httpGet(URL_AJAX, getData);
             

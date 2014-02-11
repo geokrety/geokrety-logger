@@ -22,97 +22,55 @@
 
 package pl.nkg.geokrety.services;
 
-import org.acra.ACRA;
-
-import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.Geocache;
-import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
-import android.app.IntentService;
-import android.content.Intent;
-import android.util.Log;
 
-public class WaypointResolverService extends IntentService {
+public class WaypointResolverService extends AbstractVerifyService {
 
     public static final String BROADCAST = "pl.nkg.geokrety.services.WaypointResolverService";
-    public static final String INTENT_MESSAGE = "message";
-    public static final String INTENT_MESSAGE_TYPE = "message_type";
-    public static final String INTENT_WAYPOINT = "waypoint";
-    public static final String INTENT_LATLON = "latlon";
 
     private static final String TAG = WaypointResolverService.class.getSimpleName();
 
-    private GeoKretyApplication application;
-    private StateHolder stateHolder;
-
     public WaypointResolverService() {
-        super(TAG);
+        super(TAG, BROADCAST);
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        application = (GeoKretyApplication) getApplication();
-        stateHolder = application.getStateHolder();
-        Log.println(Log.INFO, TAG, "Create");
-    }
+    protected void onHandleValue(final CharSequence value) throws Exception {
+        final String wpt = value.toString();
+        sendBroadcast(value, "", NotifyTextView.INFO,
+                String.format(getText(R.string.resolve_wpt_message_info_waiting).toString(), wpt));
 
-    @Override
-    protected void onHandleIntent(final Intent intent) {
-        final String wpt = intent.getExtras().getString(INTENT_WAYPOINT);
-        Log.println(Log.INFO, TAG, "Run refresh service for " + wpt + "...");
-        try {
-            
-            sendBroadcast(NotifyTextView.INFO, wpt,
-                    String.format(getText(R.string.resolve_wpt_message_info_waiting).toString(), wpt), "");
+        Geocache gc = stateHolder.getGeocacheDataSource().loadByWaypoint(wpt);
 
-            Geocache gc = stateHolder.getGeocacheDataSource().loadByWaypoint(wpt);
+        final TryDownload<Geocache> td = new TryDownload<Geocache>() {
 
-            TryDownload<Geocache> td = new TryDownload<Geocache>() {
-
-                @Override
-                protected Geocache run() throws NoConnectionException, Exception {
-                    return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
-                }
-            };
-
-            if (gc == null) {
-                gc = td.tryRun(application.getRetryCount());
+            @Override
+            protected Geocache run() throws NoConnectionException, Exception {
+                return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
             }
+        };
 
-            if (gc == null) {
-                sendBroadcast(NotifyTextView.WARNING, wpt,
-                        String.format(getText(R.string.resolve_wpt_message_warning_no_connection).toString(), wpt), "");
-            } else if (gc.getName() != null) {
-                sendBroadcast(
-                        NotifyTextView.GOOD,
-                        wpt,
-                        wpt + ": " + gc.getName(), gc.getLocation());
-            } else {
-                sendBroadcast(NotifyTextView.ERROR, wpt,
-                        String.format(getText(R.string.resolve_wpt_message_error_waypont_not_found).toString(), wpt), "");
-            }
-
-        } catch (Throwable e) {
-            Log.println(Log.ERROR, TAG, e.getLocalizedMessage());
-            ACRA.getErrorReporter().handleSilentException(e);
-            e.printStackTrace();
-            sendBroadcast(NotifyTextView.ERROR, wpt, e.getLocalizedMessage(), "");
+        if (gc == null) {
+            gc = td.tryRun(application.getRetryCount());
         }
 
-        Log.println(Log.INFO, TAG, "Finish refresh service for " + wpt);
-    }
+        if (gc == null) {
+            sendBroadcast(value, "", NotifyTextView.WARNING,
+                    String.format(getText(R.string.resolve_wpt_message_warning_no_connection)
+                            .toString(), wpt));
+        } else if (gc.getName() != null) {
+            sendBroadcast(value, gc.getLocation(),
+                    NotifyTextView.GOOD,
 
-    private void sendBroadcast(int type, CharSequence trackingCode,
-            CharSequence message, CharSequence latlon) {
-        Intent broadcast = new Intent(BROADCAST);
-        broadcast.putExtra(INTENT_MESSAGE_TYPE, type);
-        broadcast.putExtra(INTENT_WAYPOINT, trackingCode);
-        broadcast.putExtra(INTENT_MESSAGE, message);
-        broadcast.putExtra(INTENT_LATLON, latlon);
-        sendBroadcast(broadcast);
+                    wpt + ": " + gc.getName());
+        } else {
+            sendBroadcast(value, "", NotifyTextView.ERROR,
+                    String.format(getText(R.string.resolve_wpt_message_error_waypont_not_found)
+                            .toString(), wpt));
+        }
     }
 }

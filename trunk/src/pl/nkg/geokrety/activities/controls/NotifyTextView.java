@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.activities.controls;
 
 import pl.nkg.geokrety.R;
@@ -28,29 +29,28 @@ import android.widget.TextView;
 
 public class NotifyTextView extends TextView {
 
-    // TODO: make a my NotifyTextView control
     public static final int GOOD = 0;
     public static final int INFO = 1;
     public static final int WARNING = 2;
     public static final int ERROR = 3;
-    
-    private static final int[] COLORS = new int[] {
-        R.color.valid_color, R.color.info_color, R.color.warning_color, R.color.error_color
-};
 
-    public NotifyTextView(Context context) {
+    private static final int[] COLORS = new int[] {
+            R.color.valid_color, R.color.info_color, R.color.warning_color, R.color.error_color
+    };
+
+    public NotifyTextView(final Context context) {
         super(context);
     }
 
-    public NotifyTextView(Context context, AttributeSet attrs) {
+    public NotifyTextView(final Context context, final AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public NotifyTextView(Context context, AttributeSet attrs, int defStyle) {
+    public NotifyTextView(final Context context, final AttributeSet attrs, final int defStyle) {
         super(context, attrs, defStyle);
     }
 
-    public void setLabel(CharSequence content, int color) {
+    public void setLabel(final CharSequence content, final int color) {
         setTextColor(getResources().getColor(COLORS[color]));
         setText(content);
     }

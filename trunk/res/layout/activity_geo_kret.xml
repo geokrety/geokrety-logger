@@ -49,7 +49,7 @@
         android:text="@string/geokret_nr_title"
         android:textStyle="bold" />
 
-    <EditText
+    <pl.nkg.geokrety.activities.controls.TrackingCodeEditText
         android:id="@+id/trackingCodeEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

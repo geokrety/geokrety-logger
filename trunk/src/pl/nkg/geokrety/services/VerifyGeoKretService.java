@@ -25,112 +25,68 @@ package pl.nkg.geokrety.services;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.acra.ACRA;
-
-import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeoKretDataSource;
-import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
-import android.app.IntentService;
-import android.content.Intent;
-import android.util.Log;
 
-public class VerifyGeoKretService extends IntentService {
+public class VerifyGeoKretService extends AbstractVerifyService {
 
     public static final String BROADCAST = "pl.nkg.geokrety.services.VerifyGeoKretService";
-    public static final String INTENT_MESSAGE = "message";
-    public static final String INTENT_TRACKING_CODE = "tracking_code";
-    public static final String INTENT_MESSAGE_TYPE = "message_type";
-
     private static final String TAG = VerifyGeoKretService.class.getSimpleName();
 
-    private GeoKretyApplication application;
-    private StateHolder stateHolder;
-
     public VerifyGeoKretService() {
-        super(TAG);
+        super(TAG, BROADCAST);
     }
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        application = (GeoKretyApplication) getApplication();
-        stateHolder = application.getStateHolder();
-        Log.println(Log.INFO, TAG, "Create");
-    }
-
-    @Override
-    protected void onHandleIntent(final Intent intent) {
-        final String tc = intent.getExtras().getString(INTENT_TRACKING_CODE);
-        Log.println(Log.INFO, TAG, "Run refresh service for " + tc + "...");
-        try {
-            sendBroadcast(NotifyTextView.INFO, tc,
-                    getText(R.string.verify_tc_message_info_waiting));
-
-            GeoKret gk = stateHolder.getGeoKretDataSource().loadByTrackingCode(tc);
-
-            TryDownload<GeoKret> td = new TryDownload<GeoKret>() {
-
-                @Override
-                protected GeoKret run() throws NoConnectionException, Exception {
-                    return retriveGeoKret(tc);
-                }
-            };
-
-            if (gk == null) {
-                gk = td.tryRun(application.getRetryCount());
-            }
-
-            if (gk == null) {
-                sendBroadcast(NotifyTextView.WARNING, tc,
-                        getText(R.string.verify_tc_message_warning_no_connection));
-            } else if (gk.getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_SYNCHRONIZED) {
-                sendBroadcast(
-                        NotifyTextView.GOOD,
-                        tc,
-                        getText(R.string.verify_tc_message_good_verified) + " "
-                                + gk.getFormatedCodeAndName());
-            } else {
-                sendBroadcast(NotifyTextView.ERROR, tc,
-                        getText(R.string.verify_tc_message_error_geokret_not_found));
-            }
-
-        } catch (Throwable e) {
-            Log.println(Log.ERROR, TAG, e.getLocalizedMessage());
-            ACRA.getErrorReporter().handleSilentException(e);
-            e.printStackTrace();
-            sendBroadcast(NotifyTextView.ERROR, tc, e.getLocalizedMessage());
-        }
-
-        Log.println(Log.INFO, TAG, "Finish refresh service for " + tc);
-    }
-
-    private GeoKret retriveGeoKret(String tc) throws MessagedException {
-        int id = GeoKretyProvider.loadIDByTranckingCode(tc);
+    private GeoKret retriveGeoKret(final CharSequence tc) throws MessagedException {
+        final int id = GeoKretyProvider.loadIDByTranckingCode(tc);
         if (id == -1) {
-            return new GeoKret(tc, GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(
+            return new GeoKret(tc.toString(), GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(
                     R.string.error_description_no_such_geokret).toString());
         } else {
-            GeoKret gk = GeoKretyProvider.loadSingleGeoKretByID(id);
-            gk.setTrackingCode(tc);
-            List<GeoKret> gks = new LinkedList<GeoKret>();
+            final GeoKret gk = GeoKretyProvider.loadSingleGeoKretByID(id);
+            gk.setTrackingCode(tc.toString());
+            final List<GeoKret> gks = new LinkedList<GeoKret>();
             gks.add(gk);
             stateHolder.getGeoKretDataSource().update(gks);
             return gk;
         }
     }
 
-    private void sendBroadcast(int type, CharSequence trackingCode,
-            CharSequence error) {
-        Intent broadcast = new Intent(BROADCAST);
-        broadcast.putExtra(INTENT_MESSAGE_TYPE, type);
-        broadcast.putExtra(INTENT_TRACKING_CODE, trackingCode);
-        broadcast.putExtra(INTENT_MESSAGE, error);
-        sendBroadcast(broadcast);
+    @Override
+    protected void onHandleValue(final CharSequence value) throws Exception {
+        sendBroadcast(value, "", NotifyTextView.INFO,
+                getText(R.string.verify_tc_message_info_waiting));
+
+        GeoKret gk = stateHolder.getGeoKretDataSource().loadByTrackingCode(value);
+
+        final TryDownload<GeoKret> td = new TryDownload<GeoKret>() {
+
+            @Override
+            protected GeoKret run() throws NoConnectionException, Exception {
+                return retriveGeoKret(value);
+            }
+        };
+
+        if (gk == null) {
+            gk = td.tryRun(application.getRetryCount());
+        }
+
+        if (gk == null) {
+            sendBroadcast(value, "", NotifyTextView.WARNING,
+                    getText(R.string.verify_tc_message_warning_no_connection));
+        } else if (gk.getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_SYNCHRONIZED) {
+            sendBroadcast(value, "",
+                    NotifyTextView.GOOD,
+                    getText(R.string.verify_tc_message_good_verified) + " "
+                            + gk.getFormatedCodeAndName());
+        } else {
+            sendBroadcast(value, "", NotifyTextView.ERROR,
+                    getText(R.string.verify_tc_message_error_geokret_not_found));
+        }
     }
 }

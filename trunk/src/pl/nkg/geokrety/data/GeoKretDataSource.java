@@ -134,14 +134,14 @@ public class GeoKretDataSource {
         });
     }
     
-    public GeoKret loadByTrackingCode(final String tc) {
+    public GeoKret loadByTrackingCode(final CharSequence tc) {
         final LinkedList<GeoKret> geoKretLogs = new LinkedList<GeoKret>();
         dbHelper.runOnReadableDatabase(new DBOperation() {
 
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
 
-                final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[]{tc});
+                final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[]{tc.toString()});
                 while (cursor.moveToNext()) {
                     geoKretLogs.add(new GeoKret(cursor, 0));
                 }

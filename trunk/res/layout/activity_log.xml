@@ -146,7 +146,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <EditText
+                <pl.nkg.geokrety.activities.controls.TrackingCodeEditText
                     android:id="@+id/trackingCodeEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -154,8 +154,7 @@
                     android:ems="6"
                     android:textAllCaps="true"
                     android:inputType="textCapCharacters"
-                    android:hint="@string/form_code" >
-                </EditText>
+                    android:hint="@string/form_code" />
 
                 <Button
                     android:id="@+id/inventoryButton"
@@ -181,7 +180,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
 
-                <EditText
+                <pl.nkg.geokrety.activities.controls.WaypointEditText
                     android:id="@+id/waypointEditText"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -189,8 +188,7 @@
                     android:ems="6"
                     android:textAllCaps="true"
                     android:inputType="textCapCharacters"
-                    android:hint="@string/form_waypoint" >
-                </EditText>
+                    android:hint="@string/form_waypoint" />
 
                 <Button
                     android:id="@+id/ocsButton"
