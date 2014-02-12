@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
  * 
  * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -194,7 +194,7 @@ public class GeoKretyApplication extends Application {
     
     public int getTimeOut() {
         // TODO: use as app settings
-        return 10000;
+        return 60 * 1000;
     }
     
     public int getRefreshExpire() {

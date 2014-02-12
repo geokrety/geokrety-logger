@@ -280,10 +280,10 @@
 		niezgodnie z przeznaczeniem.
 	</string>
 	<string name="changelog">Historia zmian:\n
-		0.6.0 beta - 2014-02-11\n
+		0.6.0 beta - 2014-02-12\n
 		- odświeżanie w tle,\n
 		- weryfikacja tracking code w tle,\n
-		- pobieranie współRzędnych waypoint w tle\n
+		- pobieranie współrzędnych waypoint w tle\n
 		\n
 		0.5.5 beta - 2014-02-06\n
 		- naprawiony błąd z ręcznym dodawaniem geokreta do inwentarza,\n
