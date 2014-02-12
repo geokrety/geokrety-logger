@@ -26,6 +26,7 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Locale;
 import java.util.Map;
 
 import org.acra.ACRA;
@@ -104,7 +105,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
+            throw new MessagedException(R.string.global_message_error_system, Utils.formatException(e));
         }	    
 	}
 	
@@ -132,7 +133,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
+            throw new MessagedException(R.string.global_message_error_system, Utils.formatException(e));
         }       
 	}
 	
@@ -150,7 +151,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
+            throw new MessagedException(R.string.global_message_error_system, Utils.formatException(e));
         }       
     }
 
@@ -163,7 +164,7 @@ public class GeoKretyProvider {
 		try {
 			value = Utils.httpPost(URL_LOGIN, postData);
 		} catch (final Exception e) {
-			throw new MessagedException(R.string.login_error_message, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
+			throw new MessagedException(R.string.login_error_message, Utils.formatException(e));
 		}
 
 		if (value != null && !value.startsWith("error")) {
@@ -178,7 +179,7 @@ public class GeoKretyProvider {
 
 		final String[][] postData = new String[][] { //
 				new String[] { "secid", log.getSecid() }, //
-				new String[] { "nr", log.getNr().toUpperCase() }, //
+				new String[] { "nr", log.getNr().toUpperCase(Locale.ENGLISH) }, //
 				new String[] { "formname", log.getFormname() }, //
 				new String[] { "logtype", log.getLogType() }, //
 				new String[] { "data", log.getData() }, //
@@ -224,7 +225,7 @@ public class GeoKretyProvider {
 				return LOG_SUCCESS;
 			}
 		} catch (final Exception e) {
-			log.setProblemArg(Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
+			log.setProblemArg(Utils.formatException(e));
 			return LOG_NO_CONNECTION;
 		}
 	}
@@ -271,7 +272,7 @@ public class GeoKretyProvider {
 		} catch (final MessagedException e) {
 			throw e;
 		} catch (final Exception e) {
-			throw new MessagedException(R.string.submit_fail, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
+			throw new MessagedException(R.string.submit_fail, Utils.formatException(e));
 		}
 	}
 }

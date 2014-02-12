@@ -162,8 +162,13 @@ public class GeoKretLog {
 		);
 		
 		if (joinsInQuery) {
-		    geocache = new Geocache(cursor, i + 14);
-		    geoKret = new GeoKret(cursor, i + 19);
+		    if (!cursor.isNull(i + 14)) {
+		        geocache = new Geocache(cursor, i + 14);
+		    }
+		    
+		    if (!cursor.isNull(i + 19)) {
+		        geoKret = new GeoKret(cursor, i + 19);
+		    }   
 		}
 	}
 

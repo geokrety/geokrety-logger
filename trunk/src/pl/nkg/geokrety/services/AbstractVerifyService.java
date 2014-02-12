@@ -68,8 +68,9 @@ abstract public class AbstractVerifyService extends IntentService {
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
-            Log.println(Log.ERROR, logTag, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
-            sendBroadcast(value, "", NotifyTextView.ERROR, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()));
+            String msg = Utils.formatException(e);
+            Log.println(Log.ERROR, logTag, msg);
+            sendBroadcast(value, "", NotifyTextView.ERROR, msg);
         }
 
         Log.println(Log.INFO, logTag, "Finish verify service for " + value);

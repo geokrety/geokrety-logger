@@ -77,7 +77,7 @@ public class GenericTaskListener<Param, Progress extends Serializable, Result>
 					Toast.LENGTH_LONG).show();
 		} else if (errorMessage != null) {
 			Toast.makeText(context,
-					errorMessage + " " + Utils.defaultIfNull(exception.getLocalizedMessage(), exception.getMessage()),
+					errorMessage + " " + Utils.formatException(exception),
 					Toast.LENGTH_LONG).show();
 		}
 	}

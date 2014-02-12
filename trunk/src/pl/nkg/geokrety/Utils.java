@@ -167,4 +167,18 @@ public class Utils {
 		toast.setGravity(Gravity.CENTER, 0, 0);
 		return toast;
 	}
+	
+	public static String formatException(Throwable e) {
+	    String msg = e.getLocalizedMessage();
+	    
+	    if (msg == null) {
+	        msg = e.getMessage();
+	    }
+	    
+	    if (msg == null) {
+	        msg = e.toString();
+	    }
+	    
+	    return msg;
+	}
 }

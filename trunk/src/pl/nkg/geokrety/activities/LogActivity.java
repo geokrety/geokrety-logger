@@ -452,7 +452,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                     currentLog.setWpt(data.getQueryParameter("wp"));
                 }
             } catch (final Throwable e) {
-                Toast.makeText(this, Utils.defaultIfNull(e.getLocalizedMessage(), e.getMessage()), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, Utils.formatException(e), Toast.LENGTH_LONG).show();
                 finish();
             }
         }
