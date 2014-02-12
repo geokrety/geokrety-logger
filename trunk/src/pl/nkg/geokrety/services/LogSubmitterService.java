@@ -78,6 +78,7 @@ public class LogSubmitterService extends IntentService {
             if (log == null) {
                 continue;
             }
+            log.setSecid(oldlog.getSecid());
             
             Intent broadcastStart = new Intent(BROADCAST_SUBMIT_START);
             Intent broadcastDone = new Intent(BROADCAST_SUBMIT_DONE);
