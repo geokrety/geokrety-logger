@@ -33,6 +33,8 @@ public class User {
     public static final String OCLOGINS = "ocLogins";
     public static final String HOME_LON = "homeCordLon";
     public static final String HOME_LAT = "homeCordLat";
+    public static final String GC_LOGIN = "gcLogin";
+    public static final String GC_PASSWORD = "gcPassword";
 
     private long id;
     private String name;
@@ -43,6 +45,9 @@ public class User {
 
     private String homeCordLon;
     private String homeCordLat;
+    
+    private String gcLogin;
+    private String gcPassword;
 
     public User(final Bundle bundle) {
         unpack(bundle);
@@ -101,6 +106,8 @@ public class User {
         bundle.putString(User.ACCOUNT_NAME, name);
         bundle.putString(User.HOME_LAT, homeCordLat);
         bundle.putString(User.HOME_LON, homeCordLon);
+        bundle.putString(User.GC_LOGIN, gcLogin);
+        bundle.putString(User.GC_PASSWORD, gcPassword);
         return bundle;
     }
 
@@ -133,6 +140,24 @@ public class User {
         name = bundle.getString(User.ACCOUNT_NAME);
         homeCordLat = bundle.getString(User.HOME_LAT);
         homeCordLon = bundle.getString(User.HOME_LON);
+        gcLogin = bundle.getString(User.GC_LOGIN);
+        gcPassword = bundle.getString(User.GC_PASSWORD);
         return bundle;
+    }
+
+    public String getGeocachingLogin() {
+        return gcLogin;
+    }
+
+    public String getGeocachingPassword() {
+        return gcPassword;
+    }
+
+    public void setGeocachingLogin(String gcLogin) {
+        this.gcLogin = gcLogin;
+    }
+
+    public void setGeocachingPassword(String gcPassword) {
+        this.gcPassword = gcPassword;
     }
 }

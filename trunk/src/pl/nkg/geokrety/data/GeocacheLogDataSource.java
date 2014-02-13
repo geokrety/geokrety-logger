@@ -78,6 +78,7 @@ public class GeocacheLogDataSource {
 			+ "l." + COLUMN_COMMENT + ", " //
 			+ "l." + COLUMN_PORTAL + "," //
             + "l." + COLUMN_WAYPOINT + ", " //
+            + "c." + GeocacheDataSource.COLUMN_WAYPOINT + ", " //
             + GeocacheDataSource.FETCH_COLUMNS			
             + " FROM " //
 			+ TABLE + " AS l"

@@ -31,6 +31,8 @@ import java.util.TimeZone;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pl.nkg.lib.gcapi.GeocachingProvider;
+
 import android.database.Cursor;
 
 public class GeocacheLog {
@@ -75,7 +77,9 @@ public class GeocacheLog {
         this.comment = cursor.getString(i + 3);
         this.portal = cursor.getInt(i + 4);
         this.cache_code = cursor.getString(i + 5);
-        this.geocache = new Geocache(cursor, i + 5);
+        if (!cursor.isNull(i + 6)) {
+            this.geocache = new Geocache(cursor, i + 6);
+        }
     }
 
     public String getUUID() {
@@ -108,6 +112,11 @@ public class GeocacheLog {
 
 	@Override
 	public String toString() {
+	    // FIXME: comment = name of cache
+	    if (portal == GeocachingProvider.PORTAL) {
+	        return comment + " (" + cache_code + ")";
+	    }
+	    
 		if (getGeoCache() != null && getGeoCache().getName() != null) {
 			return getGeoCache().getName() + " (" + cache_code + ")";
 		} else {

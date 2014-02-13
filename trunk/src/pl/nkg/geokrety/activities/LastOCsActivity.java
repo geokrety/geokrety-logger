@@ -34,6 +34,7 @@ import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
+import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import android.content.Context;
 import android.database.Cursor;
@@ -50,8 +51,6 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 		AdapterView.OnItemSelectedListener {
 
 	private User account;
-	//private GenericProgressDialogWrapper refreshProgressDialog;
-	//private RefreshAccount refreshAccount;
 
 	private class Adapter extends ExtendedCursorAdapter {
 
@@ -63,7 +62,9 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
         public void bindView(final View view, final Context context, final Cursor cursor) {
             final GeocacheLog gk = new GeocacheLog(cursor, 1);
             // bindIcon(view, log);
-            if (gk.getGeoCache() == null || gk.getGeoCache().getName() == null) {
+            if (gk.getPortal() == GeocachingProvider.PORTAL) { // FIXME: refactor
+                bindTextView(view, android.R.id.text1, gk.toString());
+            } else if (gk.getGeoCache() == null || gk.getGeoCache().getName() == null) {
                 bindTextView(view, android.R.id.text1, gk.getCacheCode());
             } else {
                 bindTextView(view, android.R.id.text1, gk.getGeoCache().getName() + " (" + gk.getCacheCode() + ")");
@@ -78,11 +79,6 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		turnOnDatabaseUse();
-		/*refreshProgressDialog = new GenericProgressDialogWrapper(this,
-				Dialogs.REFRESH_ACCOUNT_PROGRESSDIALOG);
-
-		refreshAccount = RefreshAccount.getFromHandler(application
-				.getForegroundTaskHandler());*/
 
 		setContentView(R.layout.activity_last_ocs);
 		Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);

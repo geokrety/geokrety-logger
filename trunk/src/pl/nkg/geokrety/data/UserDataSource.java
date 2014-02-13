@@ -45,6 +45,8 @@ public class UserDataSource {
     public static final String COLUMN_REFRESH = "refresh";
     public static final String COLUMN_HOME_LON = "home_lon";
     public static final String COLUMN_HOME_LAT = "home_lat";
+    public static final String COLUMN_GC_LOGIN = "gc_login";
+    public static final String COLUMN_GC_PASSWORD = "gc_password";
 
     public static final String TABLE_CREATE;
 
@@ -63,7 +65,9 @@ public class UserDataSource {
                 + COLUMN_OCLOGINS + " TEXT NOT NULL DEFAULT '', " //
                 + COLUMN_REFRESH + " INTEGER NOT NULL DEFAULT 0," //
                 + COLUMN_HOME_LAT + " TEXT NOT NULL DEFAULT ''," //
-                + COLUMN_HOME_LON + " TEXT NOT NULL DEFAULT ''" //
+                + COLUMN_HOME_LON + " TEXT NOT NULL DEFAULT ''," //
+                + COLUMN_GC_LOGIN + " TEXT," //
+                + COLUMN_GC_PASSWORD + " TEXT" //
                 + "); ";
 
         FETCH_ALL = "SELECT " //
@@ -74,7 +78,9 @@ public class UserDataSource {
                 + COLUMN_OCLOGINS + ", "//
                 + COLUMN_REFRESH + ", " //
                 + COLUMN_HOME_LAT + ", " //
-                + COLUMN_HOME_LON //
+                + COLUMN_HOME_LON + ", " //
+                + COLUMN_GC_LOGIN + ", " //
+                + COLUMN_GC_PASSWORD //
                 + " FROM " //
                 + TABLE //
                 + " ORDER BY " + COLUMN_USER_NAME;
@@ -92,6 +98,7 @@ public class UserDataSource {
             public boolean inTransaction(final SQLiteDatabase db) {
                 final Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
                 while (cursor.moveToNext()) {
+                    // TODO: refactor to new user(cursor)
                     final User account = new User(//
                             cursor.getInt(0), //
                             cursor.getString(1), //
@@ -101,6 +108,8 @@ public class UserDataSource {
 
                     account.setHomeCordLat(cursor.getString(6));
                     account.setHomeCordLon(cursor.getString(7));
+                    account.setGeocachingLogin(cursor.getString(8));
+                    account.setGeocachingPassword(cursor.getString(9));
 
                     accounts.add(account);
                 }
@@ -165,6 +174,8 @@ public class UserDataSource {
         values.put(COLUMN_OCLOGINS, joinUUIDs(account.getOpenCachingLogins()));
         values.put(COLUMN_HOME_LAT, account.getHomeCordLat());
         values.put(COLUMN_HOME_LON, account.getHomeCordLon());
+        values.put(COLUMN_GC_LOGIN, account.getGeocachingLogin());
+        values.put(COLUMN_GC_PASSWORD, account.getGeocachingPassword());
         return values;
     }
 

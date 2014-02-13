@@ -24,11 +24,14 @@ package pl.nkg.geokrety.services;
 
 import java.util.List;
 
+import pl.nkg.geokrety.BuildConfig;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.activities.LogActivity;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
+import pl.nkg.geokrety.exceptions.MessagedException;
+import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 import android.app.IntentService;
 import android.app.Notification;
@@ -63,8 +66,12 @@ public class LogSubmitterService extends IntentService {
         notificationManager = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
     }
 
+
+
+
     @Override
     protected void onHandleIntent(final Intent intent) {
+        
         final List<GeoKretLog> outbox = application.getStateHolder().getGeoKretLogDataSource()
                 .loadOutbox();
 

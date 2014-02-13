@@ -134,7 +134,9 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
                 final Geocache gc = log.getGeoCache();
                 if (gc != null) {
-                    coordinatesEditText.setText(gc.getLocation().replace("|", " "));
+                    if (!Utils.isEmpty(gc.getLocation())) {
+                        coordinatesEditText.setText(gc.getLocation().replace("|", " "));
+                    }
                 }
 
                 storeToGeoKretLog(currentLog);

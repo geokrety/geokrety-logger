@@ -41,6 +41,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -98,10 +99,14 @@ public class Utils {
 		return "";
 	}
 
-	public static String httpPost(String url, String[][] data)
+	public static String httpPost(String url, String[][] data) throws ClientProtocolException, IOException {
+	    return httpPost(url, data, null);
+	}
+	
+	public static String httpPost(String url, String[][] data, HttpContext httpContext)
 			throws ClientProtocolException, IOException {
-		HttpClient httpclient = application.getHttpClient();// new
-															// DefaultHttpClient();
+		HttpClient httpclient = application.getHttpClient();
+															
 		HttpPost httppost = new HttpPost(url);
 
 		// Add your data
@@ -113,11 +118,16 @@ public class Utils {
 		httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
 
 		// Execute HTTP Post Request
-		return EntityUtils.toString(httpclient.execute(httppost).getEntity(),
+		return EntityUtils.toString(httpclient.execute(httppost, httpContext).getEntity(),
 				HTTP.UTF_8);
 	}
 
 	public static String httpGet(String url, String[][] data)
+            throws ClientProtocolException, IOException {
+	    return httpGet(url, data, null);
+	}
+	
+	public static String httpGet(String url, String[][] data, HttpContext httpContext)
 			throws ClientProtocolException, IOException {
 		HttpClient httpclient = application.getHttpClient();
 
@@ -132,7 +142,7 @@ public class Utils {
 		HttpGet httppost = new HttpGet(url2);
 
 		// Execute HTTP Post Request
-		return EntityUtils.toString(httpclient.execute(httppost).getEntity(),
+		return EntityUtils.toString(httpclient.execute(httppost, httpContext).getEntity(),
 				HTTP.UTF_8);
 	}
 

@@ -103,7 +103,31 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/account_portal_oc4" />
+            
+            <CheckBox
+                android:id="@+id/gcCheckBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/account_portal_gc"
+                android:visibility="gone" />
+            
+            <EditText
+                    android:id="@+id/gcLoginEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dip"
+                    android:layout_weight="1"
+                    android:hint="@string/gclogin_hint"
+                    android:visibility="gone" />
 
+            <EditText
+                    android:id="@+id/gcPasswordEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dip"
+                    android:layout_weight="1"
+                    android:inputType="textPassword"
+                    android:hint="@string/gcpassword_hint"
+                    android:visibility="gone" />
+            
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

@@ -109,7 +109,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     private static final String DATABASE_NAME = "geokrety.db";
 
-    private static final int DATABASE_VERSION = 7;
+    private static final int DATABASE_VERSION = 8;
 
     private final AtomicInteger openCounter;
     private SQLiteDatabase dataBase;
@@ -151,6 +151,11 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
         if (oldVersion <= 6) {
             importInventoryFromOlderThan7(db, oldVersion);
             db.execSQL(GeoKretDataSource.TABLE_CREATE);
+        }
+        
+        if (oldVersion <= 7) {
+            db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " ADD COLUMN " + UserDataSource.COLUMN_GC_LOGIN + " TEXT");
+            db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " ADD COLUMN " + UserDataSource.COLUMN_GC_PASSWORD + " TEXT");
         }
     }
 

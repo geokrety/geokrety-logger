@@ -74,6 +74,9 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
     private Button saveButton;
     private EditText latEditText;
     private EditText lonEditText;
+    private CheckBox gcCheckBox;
+    private EditText gcLoginEditText;
+    private EditText gcPasswordEditText;
 
     private AlertDialogWrapper saveModifiedsDialog;
 
@@ -193,6 +196,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         returnIntent.putExtra(User.ACCOUNT_NAME, accountName);
         returnIntent.putExtra(User.HOME_LAT, latEditText.getText().toString());
         returnIntent.putExtra(User.HOME_LON, lonEditText.getText().toString());
+        returnIntent.putExtra(User.GC_LOGIN, gcLoginEditText.getText().toString());
+        returnIntent.putExtra(User.GC_PASSWORD, gcPasswordEditText.getText().toString());
         setResult(RESULT_OK, returnIntent);
         finish();
     }
@@ -218,6 +223,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                 + ": "
                 + (Utils.isEmpty(accountName) ? getText(R.string.account_account_name_hint)
                         : accountName));
+        gcCheckBox.setChecked(!Utils.isEmpty(gcLoginEditText.getText().toString()));
         saveButton.setEnabled(gkCheckBox.isChecked());
     }
 
@@ -251,6 +257,10 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         setContentView(R.layout.activity_account);
         latEditText = (EditText) findViewById(R.id.latEditText);
         lonEditText = (EditText) findViewById(R.id.lonEditText);
+        
+        gcCheckBox = (CheckBox) findViewById(R.id.gcCheckBox);
+        gcLoginEditText = (EditText) findViewById(R.id.gcLoginEditText);
+        gcPasswordEditText = (EditText) findViewById(R.id.gcPasswordEditText);
 
         accountID = getIntent().getLongExtra(User.ACCOUNT_ID, AdapterView.INVALID_POSITION);
         secid = getIntent().getStringExtra(User.SECID);
@@ -259,6 +269,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         accountName = getIntent().getStringExtra(User.ACCOUNT_NAME);
         lonEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.HOME_LON), ""));
         latEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.HOME_LAT), ""));
+        gcLoginEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.GC_LOGIN), ""));
+        gcPasswordEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.GC_PASSWORD), ""));
 
         if (ocUUIDs == null) {
             ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -319,6 +331,14 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 
         lonEditText.addTextChangedListener(this);
         latEditText.addTextChangedListener(this);
+        gcLoginEditText.addTextChangedListener(this);
+        gcPasswordEditText.addTextChangedListener(this);
+        
+        if (application.isExperimentalEnabled()) {
+            gcCheckBox.setVisibility(View.VISIBLE);
+            gcLoginEditText.setVisibility(View.VISIBLE);
+            gcPasswordEditText.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

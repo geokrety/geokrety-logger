@@ -29,6 +29,7 @@ import java.util.Map;
 
 import org.acra.ACRA;
 
+import pl.nkg.geokrety.BuildConfig;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
@@ -39,6 +40,7 @@ import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.exceptions.MessagedException;
+import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 import pl.nkg.lib.okapi.OKAPIProvider;
 import pl.nkg.lib.okapi.SupportedOKAPI;
@@ -64,18 +66,19 @@ public class RefreshService extends IntentService {
     private GeoKretyApplication application;
     private StateHolder stateHolder;
     private NotificationManager notificationManager;
-    
+
     private static final int NOTIFY_ID = 2000000000;
-    
+
     private class CancelHolder implements ICancelable {
-        
+
         public boolean cancel;
-        
+
         @Override
         public boolean isCancelled() {
             return cancel;
         }
     }
+
     private CancelHolder currentCancelHolder;
 
     public RefreshService() {
@@ -97,10 +100,10 @@ public class RefreshService extends IntentService {
             currentCancelHolder.cancel = true;
             currentCancelHolder = null;
         }
-        
+
         CancelHolder cancelHolder = new CancelHolder();
         currentCancelHolder = cancelHolder;
-        
+
         String error = null;
         Log.println(Log.INFO, TAG, "Run refresh service...");
         try {
@@ -108,7 +111,8 @@ public class RefreshService extends IntentService {
             error = refreshBatch(cancelHolder);
             if (Utils.isEmpty(error)) {
                 notificationManager.cancel(NOTIFY_ID);
-                sendBroadcast(new Intent(cancelHolder.isCancelled() ? BROADCAST_CANCELED : BROADCAST_FINISH));
+                sendBroadcast(new Intent(cancelHolder.isCancelled() ? BROADCAST_CANCELED
+                        : BROADCAST_FINISH));
                 error = null;
             }
         } catch (Throwable e) {
@@ -117,68 +121,74 @@ public class RefreshService extends IntentService {
             ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
         }
-        
+
         if (!Utils.isEmpty(error)) {
-            showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_error, getText(R.string.message_submit_problem), error);
+            showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_error,
+                    getText(R.string.message_submit_problem), error);
             Intent broadcast = new Intent(BROADCAST_ERROR);
             broadcast.putExtra(INTENT_ERROR_MESSAGE, error);
             sendBroadcast(broadcast);
         }
-        
+
         Log.println(Log.INFO, TAG, "Finish refresh service");
     }
-    
+
     @SuppressWarnings("deprecation")
     private void showNotify(final Intent intent, int id, final int icon,
             CharSequence contentTitle, CharSequence contentMessage) {
         Notification notification = new Notification(icon, contentTitle + ": " + contentMessage,
                 System.currentTimeMillis());
-        
+
         notification.setLatestEventInfo(this, contentTitle, contentMessage,
                 PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT));
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         notificationManager.notify(id, notification);
     }
-    
+
     private String refreshBatch(CancelHolder cancelHolder) {
         List<User> users = stateHolder.getUserDataSource().getAll();
         StringBuilder sb = new StringBuilder();
-        
+
         for (User user : users) {
             if (!canContinue(cancelHolder, sb)) {
                 return sb.toString();
             }
-            
+
             try {
-                publishProgress(R.string.notify_refresh_inventory, user.getName() + getText(R.string.dots));
+                publishProgress(R.string.notify_refresh_inventory, user.getName()
+                        + getText(R.string.dots));
                 refreshInventory(cancelHolder, user.getID(), user.getGeoKreySecredID());
             } catch (MessagedException e) {
-                appendToStringBuilderWithNewLineIfNeed(sb, getText(R.string.notify_refresh_inventory));
+                appendToStringBuilderWithNewLineIfNeed(sb,
+                        getText(R.string.notify_refresh_inventory));
                 sb.append(": ");
                 sb.append(user.getName());
                 sb.append(" - ");
                 sb.append(e.getFormatedMessage(this));
             }
         }
-        
+
         for (int portal = 0; portal < SupportedOKAPI.SUPPORTED.length; portal++) {
             final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
-            
+
             for (User user : users) {
                 if (!canContinue(cancelHolder, sb)) {
                     return sb.toString();
                 }
-                
+
                 String uuid = user.getOpenCachingUUIDs()[portal];
                 if (Utils.isEmpty(uuid)) {
                     continue;
                 }
-                
+
                 try {
-                    publishProgress(R.string.notify_refresh_last_logs, okapi.host + " " + user.getOpenCachingLogins()[portal] + getText(R.string.dots));
+                    publishProgress(R.string.notify_refresh_last_logs,
+                            okapi.host + " " + user.getOpenCachingLogins()[portal]
+                                    + getText(R.string.dots));
                     refreshLastLogs(cancelHolder, user.getID(), uuid, portal);
                 } catch (MessagedException e) {
-                    appendToStringBuilderWithNewLineIfNeed(sb, getText(R.string.notify_refresh_error_lost_connection));
+                    appendToStringBuilderWithNewLineIfNeed(sb,
+                            getText(R.string.notify_refresh_error_lost_connection));
                     sb.append(": ");
                     sb.append(okapi.host);
                     sb.append(" ");
@@ -187,103 +197,133 @@ public class RefreshService extends IntentService {
                     sb.append(e.getFormatedMessage(this));
                 }
             }
-            
+
             if (!canContinue(cancelHolder, sb)) {
                 return sb.toString();
             }
-            
+
             try {
-                publishProgress(R.string.notify_refresh_oc_names, okapi.host + getText(R.string.dots));
+                publishProgress(R.string.notify_refresh_oc_names, okapi.host
+                        + getText(R.string.dots));
                 refreshGeocaches(cancelHolder, portal);
             } catch (MessagedException e) {
-                appendToStringBuilderWithNewLineIfNeed(sb, getText(R.string.notify_refresh_error_lost_connection));
+                appendToStringBuilderWithNewLineIfNeed(sb,
+                        getText(R.string.notify_refresh_error_lost_connection));
                 sb.append(": ");
                 sb.append(okapi.host);
                 sb.append(" - ");
                 sb.append(e.getFormatedMessage(this));
             }
         }
-        
+
+        for (User user : users) { // FIXME: notify
+            if (!Utils.isEmpty(user.getGeocachingLogin())) {
+                stateHolder.getGeocacheLogDataSource().store(
+                        gcTest(user.getGeocachingLogin(), user.getGeocachingPassword()),
+                        user.getID(), GeocachingProvider.PORTAL);
+            }
+        }
+
         if (!canContinue(cancelHolder, sb)) {
             return sb.toString();
         }
-        
-        refreshGeoKrets(cancelHolder, sb);
-        
+
+        if (application.isExperimentalEnabled()) {
+            refreshGeoKrets(cancelHolder, sb);
+        }
+
         return sb.toString();
     }
-    
+
+    private List<GeocacheLog> gcTest(String login, String password) {
+
+        // FIXME gc test
+        try {
+            return GeocachingProvider.loadOpenCachingLogs(login, password);
+        } catch (MessagedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return new LinkedList<GeocacheLog>();
+        }
+    }
+
     private void refreshGeoKrets(CancelHolder cancelHolder, StringBuilder sb) {
         List<String> list = stateHolder.getInventoryDataSource().loadNeedUpdateList();
-        
+
         List<GeoKret> gks = new LinkedList<GeoKret>();
         for (String tc : list) {
             if (!canContinue(cancelHolder, sb)) {
                 return;
             }
-            
+
             try {
                 publishProgress(R.string.notify_refresh_own_gk, "TrackingCode: " + tc);
                 int id = GeoKretyProvider.loadIDByTranckingCode(tc);
-                
+
                 if (!canContinue(cancelHolder, sb)) {
                     return;
                 }
-                
+
                 GeoKret gk;
                 if (id != -1) {
                     gk = GeoKretyProvider.loadSingleGeoKretByID(id);
                     gk.setTrackingCode(tc);
-                    
+
                 } else {
-                    gk = new GeoKret(tc, GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(R.string.error_description_no_such_geokret).toString());
+                    gk = new GeoKret(tc, GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(
+                            R.string.error_description_no_such_geokret).toString());
                 }
                 gks.add(gk);
             } catch (MessagedException e) {
-                appendToStringBuilderWithNewLineIfNeed(sb, getText(R.string.notify_refresh_error_lost_connection));
+                appendToStringBuilderWithNewLineIfNeed(sb,
+                        getText(R.string.notify_refresh_error_lost_connection));
                 sb.append(": ");
                 sb.append(tc);
                 sb.append(" - ");
                 sb.append(e.getFormatedMessage(this));
             }
         }
-        
+
         if (!canContinue(cancelHolder, sb)) {
             return;
         }
-        
+
         stateHolder.getGeoKretDataSource().update(gks);
     }
 
     private static void appendToStringBuilderWithNewLineIfNeed(StringBuilder sb, CharSequence text) {
-        if (sb.length() > 0 ) {
+        if (sb.length() > 0) {
             sb.append("\n");
         }
         sb.append(text);
     }
-    
+
     private boolean canContinue(CancelHolder cancelHolder, StringBuilder sb) {
         if (cancelHolder.cancel) {
-            appendToStringBuilderWithNewLineIfNeed(sb, getText(R.string.notify_refresh_error_broken));
+            appendToStringBuilderWithNewLineIfNeed(sb,
+                    getText(R.string.notify_refresh_error_broken));
             return false;
         }
-        
+
         if (!application.isOnline()) {
-            appendToStringBuilderWithNewLineIfNeed(sb, getText(R.string.notify_refresh_error_lost_connection));
+            appendToStringBuilderWithNewLineIfNeed(sb,
+                    getText(R.string.notify_refresh_error_lost_connection));
             return false;
         }
-        
+
         return true;
     }
-    
-    private void refreshInventory(CancelHolder cancelHolder, long userId, String secId) throws MessagedException {
+
+    private void refreshInventory(CancelHolder cancelHolder, long userId, String secId)
+            throws MessagedException {
         final Map<String, GeoKret> gkMap = GeoKretyProvider.loadInventory(secId);
 
         if (cancelHolder.isCancelled()) {
             return;
         }
-        
-        HashSet<String> sticky = new HashSet<String>(stateHolder.getInventoryDataSource().loadStickyList(userId));
+
+        HashSet<String> sticky = new HashSet<String>(stateHolder.getInventoryDataSource()
+                .loadStickyList(userId));
         for (GeoKret gk : gkMap.values()) {
             if (sticky.contains(gk.getTrackingCode())) {
                 gk.setSticky(true);
@@ -293,39 +333,42 @@ public class RefreshService extends IntentService {
         stateHolder.getInventoryDataSource().storeInventory(gkMap.values(), userId, true);
         stateHolder.getGeoKretDataSource().update(gkMap.values());
     }
-    
-    private void refreshLastLogs(CancelHolder cancelHolder, long userId, String uuid, int portal) throws MessagedException {
+
+    private void refreshLastLogs(CancelHolder cancelHolder, long userId, String uuid, int portal)
+            throws MessagedException {
         SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
         List<GeocacheLog> logs = OKAPIProvider.loadOpenCachingLogs(okapi, uuid);
-        
+
         if (cancelHolder.isCancelled()) {
             return;
         }
-        
+
         stateHolder.getGeocacheLogDataSource().store(logs, userId, portal);
     }
-    
+
     private void refreshGeocaches(CancelHolder cancelHolder, int portal) throws MessagedException {
         final SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
-        final HashSet<String> codes = new HashSet<String>(stateHolder.getGeocacheLogDataSource().loadNeedUpdateList(portal));
+        final HashSet<String> codes = new HashSet<String>(stateHolder.getGeocacheLogDataSource()
+                .loadNeedUpdateList(portal));
 
         if (codes.size() == 0) {
             return;
         }
-        
+
         List<Geocache> gcs = OKAPIProvider.loadOCnames(codes, okapi);
 
         if (cancelHolder.isCancelled()) {
             return;
         }
-        
+
         stateHolder.getGeocacheDataSource().update(gcs);
     }
-    
+
     private void publishProgress(int title, CharSequence progress) {
-        showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_sync, getText(title), progress);
+        showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_sync, getText(title),
+                progress);
     }
-    
+
     @Override
     public void onDestroy() {
         super.onDestroy();

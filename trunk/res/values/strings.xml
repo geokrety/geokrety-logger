@@ -97,6 +97,9 @@
 	<string name="account_portal_oc2">opencaching.us</string>
 	<string name="account_portal_oc3">opencaching.nl</string>
 	<string name="account_portal_oc4">opencaching.org.uk</string>
+	<string name="account_portal_gc">geocaching.com (own your risk!)</string>
+	<string name="gclogin_hint">geocaching.com login</string>
+	<string name="gcpassword_hint">geocaching.com password</string>
 	<string name="account_introduction">Introduction: after being directed to geokrety.org you will need to enter your login and
 		password. After  &quot;secid&quot; your username is acquired. &quot;secid&quot; it is stored in
 		the application\'s data and will be used for logging geokrety moves (password is not stored).\n\nAfter checking

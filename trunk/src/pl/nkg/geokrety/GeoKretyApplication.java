@@ -89,7 +89,7 @@ public class GeoKretyApplication extends Application {
 		startService(new Intent(this, LogSubmitterService.class));
 	}
 
-	@Override
+    @Override
 	public void onLowMemory() {
 		super.onLowMemory();
 		Utils.application = null;
@@ -229,6 +229,11 @@ public class GeoKretyApplication extends Application {
     
     public boolean isAcraEnabled() {
         // TODO: use as app settings
+        return true;
+    }
+    
+    public boolean isExperimentalEnabled() {
+     // TODO: use as app settings
         return true;
     }
 }
