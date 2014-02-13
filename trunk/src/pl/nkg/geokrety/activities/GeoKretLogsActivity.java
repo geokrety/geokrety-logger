@@ -45,10 +45,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.print.PrintAttributes.Resolution;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -145,7 +147,11 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
             if (log.getProblem() == R.string.warning_already_logged) {
                 return getText(R.string.warning_already_logged);
             } else {
-                return getText(log.getProblem()) + " " + log.getProblemArg();
+                try {
+                    return getText(log.getProblem()) + " " + log.getProblemArg();
+                } catch (NotFoundException e) {
+                    return log.getProblemArg();
+                }
             }
         }
 

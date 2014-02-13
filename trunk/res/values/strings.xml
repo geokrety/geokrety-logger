@@ -294,6 +294,9 @@
 		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.
 	</string>
 	<string name="changelog">Change log:\n\n
+		0.6.1 beta - 2014-02-13\n
+		- fix crash on drafts screen\n
+		\n
 		0.6.0 beta - 2014-02-12\n
 		- refreshing in background,\n
 		- live tracking code verification,\n
