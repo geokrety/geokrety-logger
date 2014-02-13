@@ -35,6 +35,7 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.os.Handler;
 
 public class LogSubmitterService extends IntentService {
@@ -79,14 +80,13 @@ public class LogSubmitterService extends IntentService {
                 continue;
             }
             log.setSecid(oldlog.getSecid());
-            
+
             Intent broadcastStart = new Intent(BROADCAST_SUBMIT_START);
             Intent broadcastDone = new Intent(BROADCAST_SUBMIT_DONE);
             broadcastStart.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
             broadcastDone.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
             sendBroadcast(broadcastStart);
 
-            
             String title = log.getNr();
             int notifyId = (int) log.getId();
             showNotify(intent, notifyId, R.drawable.ic_stat_notify_log_submitting, title,
@@ -94,7 +94,7 @@ public class LogSubmitterService extends IntentService {
 
             int icon = 0;
             String message = "";
-            
+
             int ret = GeoKretyProvider.submitLog(log);
             switch (ret) {
                 case GeoKretyProvider.LOG_NO_CONNECTION:
@@ -105,8 +105,13 @@ public class LogSubmitterService extends IntentService {
                     break;
 
                 case GeoKretyProvider.LOG_PROBLEM:
-                    message = getText(R.string.message_submit_problem) + ": "
-                            + getText(log.getProblem()) + " " + log.getProblemArg();
+                    try {
+                        message = getText(R.string.message_submit_problem) + ": "
+                                + getText(log.getProblem()) + " " + log.getProblemArg();
+                    } catch (NotFoundException e) {
+                        message = getText(R.string.message_submit_problem) + ": "
+                                + log.getProblemArg();
+                    }
                     icon = R.drawable.ic_stat_notify_log_problem;
                     break;
 
@@ -158,7 +163,7 @@ public class LogSubmitterService extends IntentService {
             CharSequence contentTitle, CharSequence contentMessage) {
         Notification notification = new Notification(icon, contentTitle + ": " + contentMessage,
                 System.currentTimeMillis());
-        
+
         notification.setLatestEventInfo(this, contentTitle, contentMessage,
                 PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT));
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
