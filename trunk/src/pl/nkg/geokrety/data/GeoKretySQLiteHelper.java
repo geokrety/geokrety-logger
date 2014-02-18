@@ -145,7 +145,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
             db.execSQL(GeocacheDataSource.TABLE_CREATE);
             db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
             db.execSQL(InventoryDataSource.TABLE_CREATE);
-            importUsersFromOlderThan6(db, oldVersion);
+            importUsersFromOlderThan6(db, oldVersion);      // includes GC_LOGIN and GC_PASSWORD added in v8
         }
 
         if (oldVersion <= 6) {
@@ -153,7 +153,7 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
             db.execSQL(GeoKretDataSource.TABLE_CREATE);
         }
         
-        if (oldVersion <= 7) {
+        if (oldVersion <= 7 && oldVersion >= 6) {
             db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " ADD COLUMN " + UserDataSource.COLUMN_GC_LOGIN + " TEXT");
             db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " ADD COLUMN " + UserDataSource.COLUMN_GC_PASSWORD + " TEXT");
         }
