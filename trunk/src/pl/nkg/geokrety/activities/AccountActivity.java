@@ -345,7 +345,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         secid = savedInstanceState.getString(User.SECID);
-        accountID = savedInstanceState.getInt(User.ACCOUNT_ID);
+        accountID = savedInstanceState.getLong(User.ACCOUNT_ID);
         ocUUIDs = savedInstanceState.getStringArray(User.OCUUIDS);
         ocLogins = savedInstanceState.getStringArray(User.OCLOGINS);
         accountName = savedInstanceState.getString(User.ACCOUNT_NAME);
