@@ -37,6 +37,7 @@ import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeoKretDataSource;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
+import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.exceptions.MessagedException;
@@ -54,12 +55,13 @@ import android.util.Log;
 
 public class RefreshService extends IntentService {
 
-    public static final String BROADCAST_START = "pl.nkg.geokrety.services.RefreshService.Submits.Start";
+    public static final String BROADCAST_START = "pl.nkg.geokrety.services.RefreshService.Start";
     public static final String BROADCAST_PROGRESS = "pl.nkg.geokrety.services.RefreshService.Progress";
     public static final String BROADCAST_ERROR = "pl.nkg.geokrety.services.RefreshService.Error";
     public static final String BROADCAST_CANCELED = "pl.nkg.geokrety.services.RefreshService.Canceled";
-    public static final String BROADCAST_FINISH = "pl.nkg.geokrety.services.RefreshService.Submits.Finish";
+    public static final String BROADCAST_FINISH = "pl.nkg.geokrety.services.RefreshService.Finish";
     public static final String INTENT_ERROR_MESSAGE = "error";
+    public static final String BROADCAST_REFRESH_INVENTORY = "pl.nkg.geokrety.services.RefreshService.Inventory";
 
     private static final String TAG = RefreshService.class.getSimpleName();
 
@@ -332,6 +334,9 @@ public class RefreshService extends IntentService {
 
         stateHolder.getInventoryDataSource().storeInventory(gkMap.values(), userId, true);
         stateHolder.getGeoKretDataSource().update(gkMap.values());
+        Intent refreshIntent = new Intent(BROADCAST_REFRESH_INVENTORY);
+        refreshIntent.putExtra(InventoryDataSource.COLUMN_USER_ID, userId);
+        sendBroadcast(refreshIntent);
     }
 
     private void refreshLastLogs(CancelHolder cancelHolder, long userId, String uuid, int portal)

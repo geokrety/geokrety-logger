@@ -106,9 +106,13 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
 
         if (id > 0) {
             GeoKret geoKret = application.getStateHolder().getInventoryDataSource().loadByID(id);
-            oldTrackingCode = geoKret.getTrackingCode();
-            trackingCodeEditText.setText(geoKret.getTrackingCode());
-            stickyCheckBox.setChecked(geoKret.isSticky());
+            if (geoKret == null) {
+                stickyCheckBox.setChecked(true);
+            } else {
+                oldTrackingCode = geoKret.getTrackingCode();
+                trackingCodeEditText.setText(geoKret.getTrackingCode());
+                stickyCheckBox.setChecked(geoKret.isSticky());
+            }
         } else {
             stickyCheckBox.setChecked(true);
             //saveButton.setEnabled(false); // TODO: is need?

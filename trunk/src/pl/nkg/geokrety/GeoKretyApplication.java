@@ -66,7 +66,7 @@ public class GeoKretyApplication extends Application {
 	private ForegroundTaskHandler foregroundTaskHandler;
 	private StateHolder stateHolder;
 	private boolean noAccountHinted = false;
-	public ANRWatchDog watchDog = new ANRWatchDog();
+	public ANRWatchDog watchDog = new ANRWatchDog(30000);
 	
 	@SuppressWarnings("unused")
     @Override
@@ -75,8 +75,9 @@ public class GeoKretyApplication extends Application {
 		
 		if (isAcraEnabled()) {
     		ACRA.init(this);
-    		if (BuildConfig.DEBUG == false)
+    		if (BuildConfig.DEBUG == false) {
     		    watchDog.start();
+    		}
 		}
 		
 		Utils.application = this;

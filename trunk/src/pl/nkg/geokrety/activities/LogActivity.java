@@ -32,6 +32,7 @@ import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.activities.controls.TrackingCodeEditText;
 import pl.nkg.geokrety.activities.controls.WaypointEditText;
 import pl.nkg.geokrety.activities.listeners.VerifyResponseListener;
+import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
@@ -41,13 +42,17 @@ import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.RemoveLogDialog;
 import pl.nkg.geokrety.services.LogSubmitterService;
+import pl.nkg.geokrety.services.RefreshService;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
 import pl.nkg.lib.location.GPSAcquirer;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
@@ -462,6 +467,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     @Override
     protected void onPause() {
+        unregisterReceiver(refreshBroadcastReceiver);
         trackingCodeEditText.unregisterReceiver();
         waypointEditText.unregisterReceiver();
         storeToGeoKretLog(currentLog);
@@ -517,6 +523,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         super.onResume();
         trackingCodeEditText.registerReceiver();
         waypointEditText.registerReceiver();
+        registerReceiver(refreshBroadcastReceiver, new IntentFilter(
+                RefreshService.BROADCAST_REFRESH_INVENTORY));
     }
     
     @Override
@@ -531,4 +539,14 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             coordinatesEditText.setText(response);
         }
     }
+    
+    private final BroadcastReceiver refreshBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final long userId = intent.getLongExtra(InventoryDataSource.COLUMN_USER_ID, -1);
+            if (userId == currentAccount.getID()) {
+                configAdapters();
+            }
+        }
+    };
 }

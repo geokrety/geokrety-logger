@@ -28,33 +28,31 @@ import java.util.List;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeoKretDataSource;
 import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.User;
-import pl.nkg.geokrety.data.GeoKret;
+import pl.nkg.geokrety.services.RefreshService;
 import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.AdapterView;
 import android.widget.TextView;
 
 public class InventoryActivity extends AbstractGeoKretyActivity implements
         AdapterView.OnItemSelectedListener, OnItemClickListener {
-
-    public final static int ADD_GEOKRET = 1;
-    public final static int EDIT_GEOKRET = 2;
-
-    private User account;
 
     private class Adapter extends ExtendedCursorAdapter {
 
@@ -79,80 +77,72 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
             }
         }
 
-        private void bindIcon(View view, GeoKret gk) {
+        private void bindIcon(final View view, final GeoKret gk) {
             if (gk.isSticky()) {
-                TextView tv = (TextView)view.findViewById(android.R.id.text1);
-                tv.setCompoundDrawablesWithIntrinsicBounds(0,0,R.drawable.ic_pine,0);
+                final TextView tv = (TextView) view.findViewById(android.R.id.text1);
+                tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_pine, 0);
             }
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        turnOnDatabaseUse();
+    public final static int ADD_GEOKRET = 1;
 
-        setContentView(R.layout.activity_inventory);
-        Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
-        spin.setOnItemSelectedListener(this);
-        ArrayAdapter<User> aa = new ArrayAdapter<User>(this,
-                android.R.layout.simple_spinner_item, stateHolder.getAccountList());
+    public final static int EDIT_GEOKRET = 2;
 
-        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spin.setAdapter(aa);
-        spin.setSelection(stateHolder.getDefaultAccountNr());
+    private User account;
 
-        ((ListView) findViewById(R.id.inventoryListView)).setOnItemClickListener(this);
-    }
-
-    @Override
-    protected void onRefreshDatabase() {
-        super.onRefreshDatabase();
-        openCursor();
-    }
-    
     private Adapter adapter;
-    @Override
-    protected Cursor openCursor() {
-        super.openCursor();
-        if (account != null && database != null) {
-            cursor = InventoryDataSource.createLoadByUserIDCurosr(database, account.getID());
-            if (adapter == null) {
-                adapter = new Adapter(this, cursor, true);
-                final ListView listView = (ListView) findViewById(R.id.inventoryListView);
-                listView.setAdapter(adapter);
-            } else {
-                adapter.changeCursor(cursor);
+
+    private final BroadcastReceiver refreshBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final long userId = intent.getLongExtra(InventoryDataSource.COLUMN_USER_ID, -1);
+            if (userId == account.getID()) {
+                updateListView();
             }
         }
-        return cursor;
+    };
+
+    @Override
+    public void dialogFinished(final AbstractDialogWrapper<?> dialog, final int buttonId,
+            final Serializable arg) {
+    }
+
+    public void onAddButtonClicks(final View view) {
+        final Intent intent = new Intent(this, GeoKretActivity.class);
+        intent.putExtra(GeoKretActivity.USER_ID, account.getID());
+        startActivityForResult(intent, ADD_GEOKRET);
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(final Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.inventory, menu);
         return true;
     }
 
-
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (stateHolder.getDefaultAccountNr() != ListView.INVALID_POSITION) {
-            account = stateHolder.getAccountList().get(stateHolder.getDefaultAccountNr());
-            updateListView();
-        }
-
+    public void onItemClick(final AdapterView<?> parent, final View view, final int position,
+            final long id) {
+        final Intent intent = new Intent(this, GeoKretActivity.class);
+        intent.putExtra(GeoKretActivity.USER_ID, account.getID());
+        intent.putExtra(InventoryDataSource.COLUMN_ID, id);
+        startActivityForResult(intent, EDIT_GEOKRET);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public void onItemSelected(final AdapterView<?> arg0, final View arg1, final int arg2,
+            final long arg3) {
+        account = stateHolder.getAccountList().get(arg2);
+        updateListView();
+    }
+
+    @Override
+    public void onNothingSelected(final AdapterView<?> arg0) {
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
 
         switch (item.getItemId()) {
             case R.id.menu_inventory_refresh:
@@ -168,59 +158,91 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
         application.runRefreshService(true);
     }
 
-    @Override
-    public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-            long arg3) {
-        account = stateHolder.getAccountList().get(arg2);
-        updateListView();
-    }
-
     private void updateListView() {
         onRefreshDatabase();
     }
 
     @Override
-    public void onNothingSelected(AdapterView<?> arg0) {
-    }
-
-    @Override
-    public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
-            Serializable arg) {
-    }
-
-    public void onAddButtonClicks(View view) {
-        Intent intent = new Intent(this, GeoKretActivity.class);
-        intent.putExtra(GeoKretActivity.USER_ID, account.getID());
-        startActivityForResult(intent, ADD_GEOKRET);
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position,
-            long id) {
-        Intent intent = new Intent(this, GeoKretActivity.class);
-        intent.putExtra(GeoKretActivity.USER_ID, account.getID());
-        intent.putExtra(InventoryDataSource.COLUMN_ID, id);
-        startActivityForResult(intent, EDIT_GEOKRET);
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
         if (resultCode != RESULT_OK) {
             return;
         }
 
-        Bundle ib = data.getExtras();
-        long userId = ib.getLong(GeoKretActivity.USER_ID);
-        String trackingCode = ib.getString(GeoKretActivity.TRACKING_CODE);
-        boolean sticky = ib.getBoolean(GeoKretActivity.STICKY);
-        GeoKret gk = new GeoKret(trackingCode, GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED, null);
+        final Bundle ib = data.getExtras();
+        final long userId = ib.getLong(GeoKretActivity.USER_ID);
+        final String trackingCode = ib.getString(GeoKretActivity.TRACKING_CODE);
+        final boolean sticky = ib.getBoolean(GeoKretActivity.STICKY);
+        final GeoKret gk = new GeoKret(trackingCode,
+                GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED, null);
         gk.setSticky(sticky);
-        List<GeoKret> gkl = new ArrayList<GeoKret>(1);
+        final List<GeoKret> gkl = new ArrayList<GeoKret>(1);
         gkl.add(gk);
-        String oldTrackingCode = ib.getString(GeoKretActivity.TRACKING_CODE_OLD);
+        final String oldTrackingCode = ib.getString(GeoKretActivity.TRACKING_CODE_OLD);
         stateHolder.getInventoryDataSource()
                 .storeInventory(gkl, userId, false, oldTrackingCode);
-        //application.runRefreshService(true);
+        // application.runRefreshService(true);
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        turnOnDatabaseUse();
+
+        setContentView(R.layout.activity_inventory);
+        final Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
+        spin.setOnItemSelectedListener(this);
+        final ArrayAdapter<User> aa = new ArrayAdapter<User>(this,
+                android.R.layout.simple_spinner_item, stateHolder.getAccountList());
+
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(aa);
+        spin.setSelection(stateHolder.getDefaultAccountNr());
+
+        ((ListView) findViewById(R.id.inventoryListView)).setOnItemClickListener(this);
+    }
+
+    @Override
+    protected void onPause() {
+        unregisterReceiver(refreshBroadcastReceiver);
+        super.onPause();
+    }
+
+    @Override
+    protected void onRefreshDatabase() {
+        super.onRefreshDatabase();
+        openCursor();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (stateHolder.getDefaultAccountNr() != AdapterView.INVALID_POSITION) {
+            account = stateHolder.getAccountList().get(stateHolder.getDefaultAccountNr());
+            updateListView();
+        }
+        registerReceiver(refreshBroadcastReceiver, new IntentFilter(
+                RefreshService.BROADCAST_REFRESH_INVENTORY));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected Cursor openCursor() {
+        super.openCursor();
+        if (account != null && database != null) {
+            cursor = InventoryDataSource.createLoadByUserIDCurosr(database, account.getID());
+            if (adapter == null) {
+                adapter = new Adapter(this, cursor, true);
+                final ListView listView = (ListView) findViewById(R.id.inventoryListView);
+                listView.setAdapter(adapter);
+            } else {
+                adapter.changeCursor(cursor);
+            }
+        }
+        return cursor;
     }
 }
