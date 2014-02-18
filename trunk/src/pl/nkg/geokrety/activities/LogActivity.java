@@ -47,6 +47,7 @@ import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.DatePickerDialogWrapper;
 import pl.nkg.lib.dialogs.TimePickerDialogWrapper;
+import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.location.GPSAcquirer;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -145,7 +146,11 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 }
 
                 storeToGeoKretLog(currentLog);
-                currentLog.setDateAndTime(log.getDate());
+                if (log.getPortal() == GeocachingProvider.PORTAL) {
+                    currentLog.setDate(log.getDate());
+                } else {
+                    currentLog.setDateAndTime(log.getDate());
+                }
                 loadFromGeoKretLog(currentLog);
                 break;
 

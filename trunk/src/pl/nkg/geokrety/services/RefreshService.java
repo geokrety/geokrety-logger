@@ -28,8 +28,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.acra.ACRA;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 
-import pl.nkg.geokrety.BuildConfig;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
@@ -220,9 +221,22 @@ public class RefreshService extends IntentService {
 
         for (User user : users) { // FIXME: notify
             if (!Utils.isEmpty(user.getGeocachingLogin())) {
-                stateHolder.getGeocacheLogDataSource().store(
-                        gcTest(user.getGeocachingLogin(), user.getGeocachingPassword()),
-                        user.getID(), GeocachingProvider.PORTAL);
+                try {
+                    BasicHttpContext httpContext = new BasicHttpContext();
+                    stateHolder.getGeocacheLogDataSource().store(
+                            GeocachingProvider.loadGeocachingComLogs(user.getGeocachingLogin(),
+                                    user.getGeocachingPassword(), httpContext),
+                            user.getID(), GeocachingProvider.PORTAL);
+
+                    for (String guid : stateHolder.getGeocacheLogDataSource()
+                            .loadNeedUpdateGeocachingComList(user.getID())) {
+                        // FIXME: notify
+                        refreshGeocachingCom(guid, httpContext);
+                    }
+                } catch (MessagedException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
             }
         }
 
@@ -237,15 +251,16 @@ public class RefreshService extends IntentService {
         return sb.toString();
     }
 
-    private List<GeocacheLog> gcTest(String login, String password) {
+    private void refreshGeocachingCom(String guid, HttpContext httpContext) {
 
-        // FIXME gc test
         try {
-            return GeocachingProvider.loadOpenCachingLogs(login, password);
+            Geocache gc = GeocachingProvider.loadGeocachingComWaypoint(guid, httpContext);
+            if (gc != null) {
+                stateHolder.getGeocacheDataSource().updateGeocachingCom(guid, gc);
+            }
         } catch (MessagedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-            return new LinkedList<GeocacheLog>();
         }
     }
 

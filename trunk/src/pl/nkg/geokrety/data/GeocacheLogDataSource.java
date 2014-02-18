@@ -27,6 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
+import pl.nkg.lib.gcapi.GeocachingProvider;
 
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -223,5 +224,29 @@ public class GeocacheLogDataSource {
             }
         });
         return gks;
+    }
+
+    public List<String> loadNeedUpdateGeocachingComList(final long id) {
+        final LinkedList<String> gks = new LinkedList<String>();
+        dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
+            //  FIXME: guid == waypoint must be stored or differentiable
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                final Cursor cursor = db.query(TABLE, new String[] {COLUMN_LOG_UUID}, COLUMN_USER_ID + " = ? AND " + COLUMN_PORTAL + " = ? AND " + COLUMN_WAYPOINT + " = ?", new String[] {Long.toString(id), Integer.toString(GeocachingProvider.PORTAL), ""},  null, null, null);
+
+                while (cursor.moveToNext()) {
+                    gks.add(cursor.getString(0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return gks;
+    }
+
+    public static void updateGeocachingComWaypoint(SQLiteDatabase db, String guid, String code) {
+        ContentValues cv = new ContentValues();
+        cv.put(COLUMN_WAYPOINT, code);
+        db.update(TABLE, cv, COLUMN_LOG_UUID + " = ?", new String[]{guid});
     }
 }

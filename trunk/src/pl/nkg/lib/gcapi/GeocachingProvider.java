@@ -23,23 +23,20 @@ package pl.nkg.lib.gcapi;
 
 import java.io.IOException;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.exceptions.MessagedException;
-import android.text.Html;
 
 public class GeocachingProvider {
 
@@ -54,7 +51,7 @@ public class GeocachingProvider {
         dateFormat.setTimeZone(TimeZone.getDefault());
     }
     
-    public static List<GeocacheLog> loadOpenCachingLogs(String login, String password) throws MessagedException {
+    public static List<GeocacheLog> loadGeocachingComLogs(String login, String password, HttpContext httpContext) throws MessagedException {
 
         String[][] postData = new String[][] {
                 new String[] { "ctl00$tbUsername", login },
@@ -62,7 +59,7 @@ public class GeocachingProvider {
         try {
             List<GeocacheLog> openCachingLogs = new LinkedList<GeocacheLog>();
 
-            HttpContext httpContext = new BasicHttpContext();
+            //HttpContext httpContext = new BasicHttpContext();
             Utils.httpPost("https://www.geocaching.com/login/default.aspx", postData, httpContext);
             String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", new String[][] {new String[] {"s","1"}}); 
             String table = extractTable(html);
@@ -71,7 +68,7 @@ public class GeocachingProvider {
                 String[] rows = table.split("</tr>");
                 int i = 0;
                 for (String row : rows) {
-                    GeocacheLog log = extractGeocache(row);
+                    GeocacheLog log = extractGeocacheLog(row);
                     if (log != null) {
                         i++;
                         openCachingLogs.add(log);
@@ -89,58 +86,30 @@ public class GeocachingProvider {
         }
     }
     
-    private static GeocacheLog extractGeocache(String row) throws ClientProtocolException, IOException {
-        try {
-            String[] cells = row.split("</td>");
-            
-            String logType = extractLogType(cells[0]);
-            Date date = extractDate(cells[2]);
-            
-            date = new Date(date.getTime() + 12 * 60 * 60 * 1000);
-            
-            String name = extractName(cells[3]);
-            String guid = extractGUID(cells[3]);
-            
-            // FIXME: extract to separated query
-            String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", new String[][] {new String[] {"guid", guid}});
-            String waypoint = extractWaypoint(htmlCache);
+    public static Geocache loadGeocachingComWaypoint(String guid, HttpContext httpContext) throws MessagedException {
 
-            // FIXME: name as comment? must be changed
-            return new GeocacheLog(guid, waypoint, logType, date, name, PORTAL);
+        String[][] postData = new String[][] {new String[] {"guid", guid}};
+        try {
+            String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
+            return Geocache.parseGeocachingCom(htmlCache);
+        } catch (Throwable e) {
+            e.printStackTrace();
+            throw new MessagedException(R.string.oclogs_error_message);
+        }
+    }
+    
+    private static GeocacheLog extractGeocacheLog(String row) throws ClientProtocolException, IOException {
+        try {
+            return GeocacheLog.fromGeocachingCom(row);//;/guid, logType, date);
         } catch (NullPointerException e) {
             return null;
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }
     }
-
+    
     private static String extractTable(String src) {
         return extractBetween(src, "<table class=\"Table\">", "</table>");
-    }
-    
-    private static String extractLogType(String src) {
-        return extractBetween(src, "title=\"", "\"");
-    }
-    
-    private static Date extractDate(String src) {
-        try {
-            return dateFormat.parse(Html.fromHtml(src).toString().trim());
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-    
-    private static String extractWaypoint(String str) {
-        String title = extractBetween(str, "<title>", "</title>").trim();
-        return title.substring(0, 7);
-    }
-    
-    private static String extractGUID(String src) {
-        return extractBetween(src, "guid=", "\"");
-    }
-    
-    private static String extractName(String src) {
-        return Html.fromHtml("<a" + extractBetween(src, "</a> <a", "</a>")).toString().trim();
     }
     
     private static String extractBetween(String src, String startMarker, String stopMarker) {

@@ -261,13 +261,18 @@ public class GeoKretLog {
 	}
 
 	public void setDateAndTime(final Date date) {
-		// data = DateFormat.format("yyyy-MM-dd", date).toString();
 		final Time today = new Time(Time.getCurrentTimezone());
 		today.set(date.getTime());
 		data = today.format("%Y-%m-%d");
 		godzina = today.hour;
 		minuta = today.minute;
 	}
+	
+	public void setDate(final Date date) {
+        final Time today = new Time(Time.getCurrentTimezone());
+        today.set(date.getTime());
+        data = today.format("%Y-%m-%d");
+    }
 
 	public void setFormname(final String formname) {
 		this.formname = formname;

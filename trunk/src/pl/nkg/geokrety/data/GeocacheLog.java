@@ -31,9 +31,11 @@ import java.util.TimeZone;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import pl.nkg.geokrety.Utils;
 import pl.nkg.lib.gcapi.GeocachingProvider;
 
 import android.database.Cursor;
+import android.text.Html;
 
 public class GeocacheLog {
 
@@ -112,10 +114,10 @@ public class GeocacheLog {
 
 	@Override
 	public String toString() {
-	    // FIXME: comment = name of cache
-	    if (portal == GeocachingProvider.PORTAL) {
+	    // FIXME: comment = name of cache - fixed?
+	    /*if (portal == GeocachingProvider.PORTAL) {
 	        return comment + " (" + cache_code + ")";
-	    }
+	    }*/
 	    
 		if (getGeoCache() != null && getGeoCache().getName() != null) {
 			return getGeoCache().getName() + " (" + cache_code + ")";
@@ -126,12 +128,15 @@ public class GeocacheLog {
 
 	private static DateFormat dateFormat;
 	private static DateFormat readableDateFormat;
+	private static final DateFormat geocachingComDateFormat;
 
 	static {
 		dateFormat = new SimpleDateFormat(FORMAT_DATE_ISO, Locale.getDefault());
 		dateFormat.setTimeZone(TimeZone.getDefault());
 		readableDateFormat = new SimpleDateFormat(FORMAT_DATE_READABLE, Locale.getDefault());
 		readableDateFormat.setTimeZone(TimeZone.getDefault());
+		geocachingComDateFormat = new SimpleDateFormat(GeocachingProvider.FORMAT_DATE_GEOCACHING, Locale.getDefault());
+		geocachingComDateFormat.setTimeZone(TimeZone.getDefault());
 	}
 
 	public static Date fromISODateString(String isoDateString)
@@ -142,4 +147,33 @@ public class GeocacheLog {
 	public static String toReadableDateString(Date date) {
 	    return readableDateFormat.format(date);
 	}
+
+    public static GeocacheLog fromGeocachingCom(String row) {
+        String[] cells = row.split("</td>");
+        
+        String logType = extractLogType(cells[0]);
+        Date date = extractDate(cells[2]);
+        
+        date = new Date(date.getTime() + 12 * 60 * 60 * 1000);
+        
+        String guid = extractGUID(cells[3]);
+        return new GeocacheLog(guid, "", logType, date, "", GeocachingProvider.PORTAL);
+    }
+    
+
+    private static String extractLogType(String src) {
+        return Utils.extractBetween(src, "title=\"", "\"");
+    }
+    
+    private static Date extractDate(String src) {
+        try {
+            return geocachingComDateFormat.parse(Html.fromHtml(src).toString().trim());
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+    
+    private static String extractGUID(String src) {
+        return Utils.extractBetween(src, "guid=", "\"");
+    }
 }

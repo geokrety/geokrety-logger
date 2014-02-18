@@ -23,7 +23,6 @@ package pl.nkg.geokrety.data;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.List;
 
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 
@@ -55,16 +54,6 @@ public class GeocacheDataSource {
             + "c." + COLUMN_LOCATION + ", " //
             + "c." + COLUMN_TYPE + ", " //
             + "c." + COLUMN_STATUS;            
-
-
-	private static final String FETCH_ALL = "SELECT " //
-			+ COLUMN_WAYPOINT + ", " //
-			+ COLUMN_NAME + ", " //
-			+ COLUMN_LOCATION + ", " //
-			+ COLUMN_TYPE + ", " //
-			+ COLUMN_STATUS //
-			+ " FROM " //
-			+ TABLE;
 	
 	private static final String FETCH_BY_WAYPOINT = "SELECT c." + COLUMN_WAYPOINT + ", " + FETCH_COLUMNS + " FROM " + TABLE + " AS c WHERE c." + COLUMN_WAYPOINT + " = ?";
 
@@ -80,30 +69,6 @@ public class GeocacheDataSource {
 		values.put(COLUMN_TYPE, geocache.getType());
 		values.put(COLUMN_STATUS, geocache.getStatus());
 		return values;
-	}
-
-	@Deprecated
-	public List<Geocache> load() {
-		final LinkedList<Geocache> gcs = new LinkedList<Geocache>();
-		dbHelper.runOnReadableDatabase(new DBOperation() {
-
-			@Override
-			public boolean inTransaction(SQLiteDatabase db) {
-				Cursor cursor = db.rawQuery(FETCH_ALL, new String[] {});
-				while (cursor.moveToNext()) {
-					Geocache gc = new Geocache(//
-							cursor.getString(0), //
-							cursor.getString(1), //
-							cursor.getString(2), //
-							cursor.getString(3), //
-							cursor.getString(4));
-					gcs.add(gc);
-				}
-				cursor.close();
-				return true;
-			}
-		});
-		return gcs;
 	}
 
 	@Deprecated
@@ -159,5 +124,24 @@ public class GeocacheDataSource {
             }
         });
         return gcs.isEmpty() ? null : gcs.getFirst();
+    }
+
+    public void updateGeocachingCom(final String guid, final Geocache gc) {
+        dbHelper.runOnWritableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
+                    cv.add(getValues(gc));
+                    remove(db,
+                            TABLE,
+                            COLUMN_WAYPOINT + " = ?",
+                            gc.getCode());
+                persistAll(db, TABLE, cv);
+                GeocacheLogDataSource.updateGeocachingComWaypoint(db, guid, gc.getCode());
+                return true;
+            }
+        });
     }
 }

@@ -27,7 +27,6 @@ import org.json.JSONObject;
 import pl.nkg.geokrety.Utils;
 
 import android.database.Cursor;
-import android.text.Html;
 
 public class Geocache {
 
@@ -37,6 +36,18 @@ public class Geocache {
 	private final String type;
 	private final String status;
 
+	
+	public static Geocache parseGeocachingCom(final String html) throws JSONException {
+        String title = Utils.extractBetween(html, "<title>", "</title>").trim();
+	    String waypoint =  title.substring(0, 7);
+        String type = Utils.extractBetween(title, "(", ")"); 
+        String jsonStr = "{" + Utils.extractBetween(html, "mapLatLng = {", ";");
+        JSONObject json = new JSONObject(jsonStr);
+        String name = json.getString("name");
+        String location = json.getString("lat") + " " + json.getString("lng");
+        return new Geocache(waypoint, name, location, type, "");
+	}
+		
 	public Geocache(JSONObject jsonObject) throws JSONException {
 		name = jsonObject.getString("name");
 		code = jsonObject.getString("code");
@@ -45,8 +56,7 @@ public class Geocache {
 		status = jsonObject.getString("status");
 	}
 
-	@Deprecated
-	public Geocache(String code, String name, String location, String type,
+	private Geocache(String code, String name, String location, String type,
 			String status) {
 		super();
 		this.name = name;
@@ -64,6 +74,7 @@ public class Geocache {
         this.status =  cursor.getString(i + 4);
     }
 
+	@Deprecated
     public Geocache(String content, String lat, String lon) {
         if (Utils.isEmpty(lat) || Utils.isEmpty(lon)) {
             location = "";

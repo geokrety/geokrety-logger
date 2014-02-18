@@ -191,4 +191,21 @@ public class Utils {
 	    
 	    return msg;
 	}
+	
+	public static String extractBetween(String src, String startMarker, String stopMarker) {
+        int start = src.indexOf(startMarker);
+        
+        if (start == -1) {
+            return null;
+        }
+        
+        start += startMarker.length();
+        int stop = src.indexOf(stopMarker, start);
+        
+        if (stop == -1) {
+            return null;
+        }
+        
+        return src.substring(start, stop);
+    }
 }
