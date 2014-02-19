@@ -303,6 +303,7 @@
 	</string>
 	<string name="changelog">Change log:\n\n
 		0.6.2 beta - 2014-02-20\n
+		- log GeoKret validation,\n
 		- some fixes\n
 		\n
 		0.6.1 beta - 2014-02-13\n

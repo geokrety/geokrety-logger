@@ -235,6 +235,6 @@ public class GeoKretyApplication extends Application {
     
     public boolean isExperimentalEnabled() {
      // TODO: use as app settings
-        return true;
+        return false;
     }
 }
