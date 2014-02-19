@@ -109,6 +109,16 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     private static final String DATABASE_NAME = "geokrety.db";
 
+    /**
+     * 1 - 0.1.0
+     * 2 - 0.3.0
+     * 3 - 0.4.0
+     * 4 - 0.4.1
+     * 6 - 0.5.0
+     * 7 - 0.6.0
+     * 8 - 0.6.1
+     * 9 - 0.6.2
+     */
     private static final int DATABASE_VERSION = 9;
 
     private final AtomicInteger openCounter;
