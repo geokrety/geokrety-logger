@@ -78,7 +78,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     private GeoKretLog currentLog;
     private User currentAccount;
-    private int currentLogType = 0;
+    private int currentLogType = -1;
 
     private Button logTypeButton;
     private Button accountsButton;
@@ -155,7 +155,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 break;
 
             case Dialogs.TYPE_SPINNERDIALOG:
-                currentLogType = buttonId;
+                currentLogType = buttonId - 1;
                 updateVisibles();
                 break;
 
@@ -233,7 +233,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     public void showLogType(final View view) {
-        logTypeSpinnerDialog.show(null, currentLogType);
+        logTypeSpinnerDialog.show(null, currentLogType + 1);
     }
 
     public void showOcs(final View view) {
@@ -350,7 +350,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     private void updateVisibles() {
-        logTypeButton.setText(getResources().getStringArray(R.array.log_array)[currentLogType]);
+        logTypeButton.setText(getResources().getStringArray(R.array.log_array)[currentLogType + 1]);
         final boolean locationVisible = !GeoKretLog.checkIgnoreLocation(currentLogType);
         waypointEditText.setEnabled(locationVisible);
         coordinatesEditText.setEnabled(locationVisible);
@@ -519,7 +519,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         updateSpinners();
         loadFromGeoKretLog(currentLog);
-        logTypeSpinnerDialog.setCheckedItem(currentLogType);
+        logTypeSpinnerDialog.setCheckedItem(currentLogType + 1);
         gpsAcquirer.start();
     }
 

@@ -78,7 +78,7 @@ public class GeoKretLog {
 
 	public GeoKretLog() {
 		nr = "";
-		logtype_mapped = 0;
+		logtype_mapped = -1;
 
 		setDateAndTime(new Date());
 		comment = "";
@@ -166,8 +166,8 @@ public class GeoKretLog {
 		        geocache = new Geocache(cursor, i + 14);
 		    }
 		    
-		    if (!cursor.isNull(i + 19)) {
-		        geoKret = new GeoKret(cursor, i + 19);
+		    if (!cursor.isNull(i + 20)) {
+		        geoKret = new GeoKret(cursor, i + 20);
 		    }   
 		}
 	}
@@ -207,7 +207,7 @@ public class GeoKretLog {
 	}
 
 	public String getLogType() {
-		return LOG_TYPE_MAP[logtype_mapped];
+		return logtype_mapped == -1 ? null : LOG_TYPE_MAP[logtype_mapped];
 	}
 
 	public int getLogTypeMapped() {

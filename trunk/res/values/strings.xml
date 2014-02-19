@@ -178,11 +178,13 @@
 	<string name="log_dipped">I\'ve dipped a GeoKret</string>
 	<string name="log_comment">Comment</string>
 	<string-array name="log_array">
-		<item>@string/log_drop</item>
+		<item>Choose a log type&#8230;</item>
+	    <item>@string/log_drop</item>
 		<item>@string/log_grab</item>
 		<item>@string/log_met</item>
 		<item>@string/log_dipped</item>
 		<item>@string/log_comment</item>
+		<item>Choose log type&#8230;</item>
 	</string-array>
 	<string name="form_identify">2. Identify GeoKret</string>
 	<string name="form_code">Tracking code</string>
@@ -297,8 +299,8 @@
 		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.
 	</string>
 	<string name="changelog">Change log:\n\n
-		0.6.2 beta - 2014-02-18\n
-		- \n
+		0.6.2 beta - 2014-02-20\n
+		- some fixes\n
 		\n
 		0.6.1 beta - 2014-02-13\n
 		- fix crash on drafts screen\n

@@ -152,6 +152,7 @@
 	<string name="log_dipped">Zwischenstopp</string>
 	<string name="log_comment">Kommentar</string>
 	<string-array name="log_array">
+<!-- NEED TRANSLATE --><item>Choose a log type&#8230;</item>
 		<item>@string/log_drop</item>
 		<item>@string/log_grab</item>
 		<item>@string/log_met</item>

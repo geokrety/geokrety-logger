@@ -153,6 +153,7 @@
 	<string name="log_dipped">Kret odwiedził</string>
 	<string name="log_comment">Komentarz</string>
 	<string-array name="log_array">
+	    <item>Wybierz typ logu&#8230;</item>
 		<item>@string/log_drop</item>
 		<item>@string/log_grab</item>
 		<item>@string/log_met</item>
