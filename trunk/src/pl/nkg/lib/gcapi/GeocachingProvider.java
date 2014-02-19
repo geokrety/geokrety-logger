@@ -42,6 +42,7 @@ public class GeocachingProvider {
 
     public static final String FORMAT_DATE_GEOCACHING = "MM/dd/yyyy";
     public static final int PORTAL = 100;
+    public static final String HOST = "geocaching.com";
     private static final int LOGS_LIMIT = 20;
     
     private static final DateFormat dateFormat;
@@ -59,7 +60,6 @@ public class GeocachingProvider {
         try {
             List<GeocacheLog> openCachingLogs = new LinkedList<GeocacheLog>();
 
-            //HttpContext httpContext = new BasicHttpContext();
             Utils.httpPost("https://www.geocaching.com/login/default.aspx", postData, httpContext);
             String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", new String[][] {new String[] {"s","1"}}); 
             String table = extractTable(html);
@@ -91,7 +91,7 @@ public class GeocachingProvider {
         String[][] postData = new String[][] {new String[] {"guid", guid}};
         try {
             String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
-            return Geocache.parseGeocachingCom(htmlCache);
+            return Geocache.parseGeocachingCom(htmlCache, guid);
         } catch (Throwable e) {
             e.printStackTrace();
             throw new MessagedException(R.string.oclogs_error_message);

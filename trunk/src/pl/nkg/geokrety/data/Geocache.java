@@ -32,12 +32,13 @@ public class Geocache {
 
 	private final String name;
 	private final String code;
+	private final String guid;
 	private final String location;
 	private final String type;
 	private final String status;
 
 	
-	public static Geocache parseGeocachingCom(final String html) throws JSONException {
+	public static Geocache parseGeocachingCom(final String html, final String guid) throws JSONException {
         String title = Utils.extractBetween(html, "<title>", "</title>").trim();
 	    String waypoint =  title.substring(0, 7);
         String type = Utils.extractBetween(title, "(", ")"); 
@@ -45,7 +46,7 @@ public class Geocache {
         JSONObject json = new JSONObject(jsonStr);
         String name = json.getString("name");
         String location = json.getString("lat") + " " + json.getString("lng");
-        return new Geocache(waypoint, name, location, type, "");
+        return new Geocache(waypoint, name, location, type, "", guid);
 	}
 		
 	public Geocache(JSONObject jsonObject) throws JSONException {
@@ -54,24 +55,27 @@ public class Geocache {
 		location = jsonObject.getString("location");
 		type = jsonObject.getString("type");
 		status = jsonObject.getString("status");
+		guid = null;
 	}
 
 	private Geocache(String code, String name, String location, String type,
-			String status) {
+			String status, String guid) {
 		super();
 		this.name = name;
 		this.code = code;
 		this.location = location;
 		this.type = type;
 		this.status = status;
+		this.guid = guid;
 	}
 
 	public Geocache(Cursor cursor, int i) {
         this.code = cursor.getString(i + 0);
 	    this.name = cursor.getString(i + 1);
-        this.location =  cursor.getString(i + 2);
-        this.type =  cursor.getString(i + 3);
-        this.status =  cursor.getString(i + 4);
+        this.location = cursor.getString(i + 2);
+        this.type = cursor.getString(i + 3);
+        this.status = cursor.getString(i + 4);
+        this.guid = cursor.getString(i + 5);
     }
 
 	@Deprecated
@@ -90,6 +94,7 @@ public class Geocache {
         code = null;
         status = null;
         type = null;
+        guid = null;
     }
 
     public String getName() {
@@ -111,4 +116,8 @@ public class Geocache {
 	public String getStatus() {
 		return status;
 	}
+
+    public String getGUID() {
+        return guid;
+    }
 }

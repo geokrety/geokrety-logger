@@ -219,39 +219,62 @@ public class RefreshService extends IntentService {
             }
         }
 
-        for (User user : users) { // FIXME: notify
-            if (!Utils.isEmpty(user.getGeocachingLogin())) {
-                try {
-                    BasicHttpContext httpContext = new BasicHttpContext();
-                    stateHolder.getGeocacheLogDataSource().store(
-                            GeocachingProvider.loadGeocachingComLogs(user.getGeocachingLogin(),
-                                    user.getGeocachingPassword(), httpContext),
-                            user.getID(), GeocachingProvider.PORTAL);
+        if (application.isExperimentalEnabled()) {
 
-                    for (String guid : stateHolder.getGeocacheLogDataSource()
-                            .loadNeedUpdateGeocachingComList(user.getID())) {
-                        // FIXME: notify
-                        refreshGeocachingCom(guid, httpContext);
+            for (User user : users) {
+
+                if (!canContinue(cancelHolder, sb)) {
+                    return sb.toString();
+                }
+
+                if (!Utils.isEmpty(user.getGeocachingLogin())) {
+                    try {
+                        publishProgress(R.string.notify_refresh_last_logs,
+                                GeocachingProvider.HOST + " " + user.getGeocachingLogin()
+                                        + getText(R.string.dots));
+                        BasicHttpContext httpContext = new BasicHttpContext();
+                        stateHolder.getGeocacheLogDataSource().store(
+                                GeocachingProvider.loadGeocachingComLogs(user.getGeocachingLogin(),
+                                        user.getGeocachingPassword(), httpContext),
+                                user.getID(), GeocachingProvider.PORTAL);
+
+                        for (String guid : stateHolder.getGeocacheLogDataSource()
+                                .loadNeedUpdateGeocachingComList(user.getID())) {
+
+                            if (!canContinue(cancelHolder, sb)) {
+                                return sb.toString();
+                            }
+
+                            publishProgress(R.string.notify_refresh_oc_names,
+                                    GeocachingProvider.HOST + ": " + guid
+                                            + getText(R.string.dots));
+
+                            refreshGeocachingCom(sb, guid, httpContext);
+                        }
+                    } catch (MessagedException e) {
+                        appendToStringBuilderWithNewLineIfNeed(sb,
+                                getText(R.string.notify_refresh_error_lost_connection));
+                        sb.append(": ");
+                        sb.append(GeocachingProvider.HOST);
+                        sb.append(" ");
+                        sb.append(user.getGeocachingLogin());
+                        sb.append(" - ");
+                        sb.append(e.getFormatedMessage(this));
                     }
-                } catch (MessagedException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
                 }
             }
-        }
 
+        }
         if (!canContinue(cancelHolder, sb)) {
             return sb.toString();
         }
 
-        if (application.isExperimentalEnabled()) {
-            refreshGeoKrets(cancelHolder, sb);
-        }
+        refreshGeoKrets(cancelHolder, sb);
 
         return sb.toString();
     }
 
-    private void refreshGeocachingCom(String guid, HttpContext httpContext) {
+    private void refreshGeocachingCom(StringBuilder sb, String guid, HttpContext httpContext) {
 
         try {
             Geocache gc = GeocachingProvider.loadGeocachingComWaypoint(guid, httpContext);
@@ -259,8 +282,12 @@ public class RefreshService extends IntentService {
                 stateHolder.getGeocacheDataSource().updateGeocachingCom(guid, gc);
             }
         } catch (MessagedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            appendToStringBuilderWithNewLineIfNeed(sb,
+                    getText(R.string.notify_refresh_error_lost_connection));
+            sb.append(": ");
+            sb.append(GeocachingProvider.HOST);
+            sb.append(" - ");
+            sb.append(e.getFormatedMessage(this));
         }
     }
 

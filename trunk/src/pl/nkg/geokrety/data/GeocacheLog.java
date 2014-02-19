@@ -114,11 +114,6 @@ public class GeocacheLog {
 
 	@Override
 	public String toString() {
-	    // FIXME: comment = name of cache - fixed?
-	    /*if (portal == GeocachingProvider.PORTAL) {
-	        return comment + " (" + cache_code + ")";
-	    }*/
-	    
 		if (getGeoCache() != null && getGeoCache().getName() != null) {
 			return getGeoCache().getName() + " (" + cache_code + ")";
 		} else {

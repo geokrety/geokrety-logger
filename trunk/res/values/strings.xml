@@ -54,7 +54,7 @@
 	</string>
 	<string name="main_button_accounts">Profiles (accounts)</string>
 	<string name="main_button_inventory">Inventory</string>
-	<string name="main_button_ocs">OpenCaching last logs</string>
+	<string name="main_button_ocs">Geocaching last logs</string>
 	<string name="main_button_log">Log GeoKret</string>
 	<string name="main_button_gkl">Saved logs</string>
 	<string name="main_button_about">About</string>
@@ -164,9 +164,9 @@
 	<string name="geokret_message_error_invalid_trackingcode">Please enter a valid Tracking Code: 6 characters from GeoKret label, eg. XF3ACS</string>
     
     <!-- OpenCaching last logs Activity -->
-	<string name="title_activity_last_ocs">Last log from OpenCaching portals</string>
+	<string name="title_activity_last_ocs">Last log from geocaching portals</string>
 	<string name="menu_ocs_refresh">Refresh</string>
-	<string name="oclogs_error_message">OpenCaching logs retrieval error. Please check your Internet connection.
+	<string name="oclogs_error_message">Geocaching logs retrieval error. Please check your Internet connection.
 	</string>
     
     <!-- Log GeoKret Activity -->
@@ -203,7 +203,7 @@
 	<string name="form_remove_button">Delete</string>
     <!-- Spinners -->
 	<string name="title_dialog_inventory">Your inventory</string>
-	<string name="title_dialog_ocs">Your latest logs in OpenCaching portals</string>
+	<string name="title_dialog_ocs">Your latest logs in geocaching portals</string>
     <!-- Messages -->
 	<string name="form_confirm_delete_msg">Delete this log entry?</string>
 	<string name="warning_already_logged">There is an entry with this date. Correct the date or the hour.</string>
@@ -266,7 +266,7 @@
 	<string name="message_submit_no_connection">Connection error, trying again&#8230;</string>
     
 	<!-- Refresh service -->
-	<string name="toast_notify_refresh_start">Inventory and last Opencaching logs is refreshing in background&#8230;</string>
+	<string name="toast_notify_refresh_start">Inventory and last geocaching logs is refreshing in background&#8230;</string>
 	<string name="toast_notify_refresh_finish">Refresh done</string>
 	<string name="toast_notify_refresh_error">Connection error:</string>
 	<string name="toast_notify_refresh_no_connection">No Internet connection</string>

@@ -23,7 +23,6 @@
 package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
@@ -32,7 +31,6 @@ import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeoKretDataSource;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
-import pl.nkg.geokrety.data.InventoryDataSource;
 import pl.nkg.geokrety.data.StateHolder;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.dialogs.Dialogs;
@@ -47,11 +45,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.print.PrintAttributes.Resolution;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;

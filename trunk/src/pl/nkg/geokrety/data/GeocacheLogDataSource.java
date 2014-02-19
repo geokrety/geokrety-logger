@@ -84,8 +84,7 @@ public class GeocacheLogDataSource {
             + " FROM " //
 			+ TABLE + " AS l"
 			+ " LEFT JOIN " + GeocacheDataSource.TABLE + " AS c ON l." + COLUMN_WAYPOINT + " = c." + GeocacheDataSource.COLUMN_WAYPOINT
-			+ " WHERE l." + COLUMN_USER_ID
-			+ " = ? ORDER BY "
+			+ " WHERE l." + COLUMN_USER_ID + " = ? AND l." + COLUMN_WAYPOINT + " != '' ORDER BY "
 			+ "l." + COLUMN_DATE + " DESC";
 
 	public GeocacheLogDataSource(GeoKretySQLiteHelper dbHelper) {
@@ -128,6 +127,9 @@ public class GeocacheLogDataSource {
 					cv.add(getValues(log, userID));
 				}
 				persistAll(db, TABLE, cv);
+				
+				updateGeocachingComWaypoint(db);
+				
 				return true;
 			}
 		});
@@ -229,10 +231,16 @@ public class GeocacheLogDataSource {
     public List<String> loadNeedUpdateGeocachingComList(final long id) {
         final LinkedList<String> gks = new LinkedList<String>();
         dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
-            //  FIXME: guid == waypoint must be stored or differentiable
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
-                final Cursor cursor = db.query(TABLE, new String[] {COLUMN_LOG_UUID}, COLUMN_USER_ID + " = ? AND " + COLUMN_PORTAL + " = ? AND " + COLUMN_WAYPOINT + " = ?", new String[] {Long.toString(id), Integer.toString(GeocachingProvider.PORTAL), ""},  null, null, null);
+                final Cursor cursor = db.rawQuery("SELECT l." + COLUMN_LOG_UUID
+                        + " FROM " + TABLE
+                        + " AS l"
+                        + " LEFT JOIN " + GeocacheDataSource.TABLE + " AS g ON l."
+                        + COLUMN_LOG_UUID
+                        + " = g." + GeocacheDataSource.COLUMN_GUID
+                        + " WHERE (g." + GeocacheDataSource.COLUMN_NAME + " IS NULL OR g."
+                        + GeocacheDataSource.COLUMN_NAME + " = ?) AND l." + COLUMN_PORTAL + " = ?", new String[]{"", Integer.toString(GeocachingProvider.PORTAL)});
 
                 while (cursor.moveToNext()) {
                     gks.add(cursor.getString(0));
@@ -244,9 +252,7 @@ public class GeocacheLogDataSource {
         return gks;
     }
 
-    public static void updateGeocachingComWaypoint(SQLiteDatabase db, String guid, String code) {
-        ContentValues cv = new ContentValues();
-        cv.put(COLUMN_WAYPOINT, code);
-        db.update(TABLE, cv, COLUMN_LOG_UUID + " = ?", new String[]{guid});
+    public static void updateGeocachingComWaypoint(SQLiteDatabase db) {
+        db.execSQL("UPDATE " + TABLE + " SET " + COLUMN_WAYPOINT + " = (SELECT " + GeocacheDataSource.COLUMN_WAYPOINT + " FROM " + GeocacheDataSource.TABLE + " AS g WHERE " + TABLE + "." + COLUMN_LOG_UUID + " = g." + GeocacheDataSource.COLUMN_GUID + " LIMIT 1) WHERE " + COLUMN_PORTAL + " = ?", new Object[] {GeocachingProvider.PORTAL});
     }
 }

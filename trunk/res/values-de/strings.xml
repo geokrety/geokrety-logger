@@ -34,7 +34,7 @@
 	</string>
 	<string name="main_button_accounts">Profile (Konten)</string>
 	<string name="main_button_inventory">Inventar</string>
-	<string name="main_button_ocs">Letzte Opencaching Logs</string>
+	<string name="main_button_ocs">Letzte Geocaching Logs</string>
 	<string name="main_button_log">Log GeoKret</string>
 	<string name="main_button_gkl">Gespeicherte Logs</string>
 	<string name="main_button_about">Über</string>
@@ -139,9 +139,9 @@
 	<string name="geokret_message_error_invalid_trackingcode">Bitte einen gültigen Trackingcode eingeben: 6 Zeichen, z.B. XF3ACS</string>
     
     <!-- OpenCaching last logs Activity -->
-	<string name="title_activity_last_ocs">Letzte Logs aus den Opencaching Portalen</string>
+	<string name="title_activity_last_ocs">Letzte Logs aus den Geocaching Portalen</string>
 	<string name="menu_ocs_refresh">Aktualisieren</string>
-	<string name="oclogs_error_message">Fehler beim Laden der Opencaching Logs. Internetverbindung prüfen.</string>
+	<string name="oclogs_error_message">Fehler beim Laden der Geocaching Logs. Internetverbindung prüfen.</string>
     
     <!-- Log GeoKret Activity -->
 	<string name="title_activity_log">Log GeoKret</string>
@@ -177,7 +177,7 @@
 	<string name="form_remove_button">Löschen</string>
     <!-- Spinners -->
 	<string name="title_dialog_inventory">Dein Inventar</string>
-	<string name="title_dialog_ocs">Deine letzten Logs bei Opencaching</string>
+	<string name="title_dialog_ocs">Deine letzten Logs bei Geocaching</string>
     <!-- Messages -->
 	<string name="form_confirm_delete_msg">Diesen Logeintrag löschen?</string>
 	<string name="warning_already_logged">Es existiert bereits ein Eintrag mit diesem Zeitstempel. Bitte korrigiere Datum
@@ -241,7 +241,7 @@
 	<string name="message_submit_no_connection">Verbindungsfehler, noch einmal versuchen&#8230;</string>
 	
 	<!-- Refresh service -->
-	<string name="toast_notify_refresh_start">Inventar und letzte Opencaching-Logs werden im Hintergrund aktualisiert&#8230;</string>
+	<string name="toast_notify_refresh_start">Inventar und letzte Geocaching-Logs werden im Hintergrund aktualisiert&#8230;</string>
 	<string name="toast_notify_refresh_finish">Aktualisierung erfolgreich</string>
 	<string name="toast_notify_refresh_error">Verbindungsfehler:</string>
 	<string name="toast_notify_refresh_no_connection">Keine Internetverbindung</string>

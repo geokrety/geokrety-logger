@@ -34,6 +34,7 @@ public class GeocacheDataSource {
 	public static final String TABLE = "geocaches";
 	public static final String COLUMN_ID = GeoKretySQLiteHelper.COLUMN_ID;
 	public static final String COLUMN_WAYPOINT = "waypoint";
+	public static final String COLUMN_GUID = "guid";
 	public static final String COLUMN_NAME = "name";
 	public static final String COLUMN_LOCATION = "location";
 	public static final String COLUMN_TYPE = "type";
@@ -42,6 +43,7 @@ public class GeocacheDataSource {
 	public static final String TABLE_CREATE = "CREATE TABLE " + TABLE + "(" //
 			+ COLUMN_ID + " INTEGER PRIMARY KEY autoincrement, " //
 			+ COLUMN_WAYPOINT + " TEXT NOT NULL, " //
+            + COLUMN_GUID + " TEXT, " //
 			+ COLUMN_NAME + " TEXT NOT NULL, " //
 			+ COLUMN_LOCATION + " TEXT NOT NULL, " //
 			+ COLUMN_TYPE + " TEXT NOT NULL, " //
@@ -53,7 +55,8 @@ public class GeocacheDataSource {
 	public static final String FETCH_COLUMNS = "c." + COLUMN_NAME + ", " //
             + "c." + COLUMN_LOCATION + ", " //
             + "c." + COLUMN_TYPE + ", " //
-            + "c." + COLUMN_STATUS;            
+            + "c." + COLUMN_STATUS + ", " //
+            + "c." + COLUMN_GUID;            
 	
 	private static final String FETCH_BY_WAYPOINT = "SELECT c." + COLUMN_WAYPOINT + ", " + FETCH_COLUMNS + " FROM " + TABLE + " AS c WHERE c." + COLUMN_WAYPOINT + " = ?";
 
@@ -64,6 +67,7 @@ public class GeocacheDataSource {
 	private static ContentValues getValues(Geocache geocache) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_WAYPOINT, geocache.getCode());
+        values.put(COLUMN_GUID, geocache.getGUID());
 		values.put(COLUMN_NAME, geocache.getName());
 		values.put(COLUMN_LOCATION, geocache.getLocation());
 		values.put(COLUMN_TYPE, geocache.getType());
@@ -139,7 +143,7 @@ public class GeocacheDataSource {
                             COLUMN_WAYPOINT + " = ?",
                             gc.getCode());
                 persistAll(db, TABLE, cv);
-                GeocacheLogDataSource.updateGeocachingComWaypoint(db, guid, gc.getCode());
+                GeocacheLogDataSource.updateGeocachingComWaypoint(db);
                 return true;
             }
         });

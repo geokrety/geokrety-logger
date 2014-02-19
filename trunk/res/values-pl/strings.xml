@@ -32,7 +32,7 @@
 	</string>
 	<string name="main_button_accounts">Profile (konta)</string>
 	<string name="main_button_inventory">Krety, które masz u siebie</string>
-	<string name="main_button_ocs">Twoje ostatnie logi z OpenCaching</string>
+	<string name="main_button_ocs">Geokesze do których się ostatnio logowałeś</string>
 	<string name="main_button_log">Zaloguj GeoKreta</string>
 	<string name="main_button_gkl">Zapisane logi</string>
 	<string name="main_button_about">Informacje</string>
@@ -139,9 +139,9 @@
 	<string name="geokret_message_error_invalid_trackingcode">Wpisz poprawnie Tracking Code czyli 6 znaków z etykietki GeoKreta, np. XF3ACS</string>
     
     <!-- OpenCaching last logs Activity -->
-	<string name="title_activity_last_ocs">Twoje ostatnie logi z portali OpenCaching</string>
+	<string name="title_activity_last_ocs">Twoje ostatnie logi z portali geocaching</string>
 	<string name="menu_ocs_refresh">Odśwież</string>
-	<string name="oclogs_error_message">Problem z pobraniem listy Twoich ostatnich logów z OpenCaching.pl. Czy Internet
+	<string name="oclogs_error_message">Problem z pobraniem listy Twoich ostatnich logów z portalu geocaching. Czy Internet
 		działa?</string>
     
     <!-- Log GeoKret Activity -->
@@ -178,7 +178,7 @@
 	<string name="form_remove_button">Usuń</string>
     <!-- Spinners -->
 	<string name="title_dialog_inventory">Krety, które masz u siebie</string>
-	<string name="title_dialog_ocs">Twoje ostatnie logi z portali OpenCaching</string>
+	<string name="title_dialog_ocs">Twoje ostatnie logi z portali geocaching</string>
     <!-- Messages -->
 	<string name="form_confirm_delete_msg">Usunąć ten wpis?</string>
 	<string name="warning_already_logged">Ten GeoKret został już zalogowany w tym miejscu i o tej porze!</string>
@@ -243,7 +243,7 @@
 	<string name="message_submit_no_connection">Brak połączenia, za chwilę spróbuję ponownie&#8230;</string>
     
 	<!-- Refresh service -->
-	<string name="toast_notify_refresh_start">Rozpoczęto odświeżanie inwentarza i listy ostatnich logów z Opencaching&#8230;</string>
+	<string name="toast_notify_refresh_start">Rozpoczęto odświeżanie inwentarza i listy geokeszy do których się ostatnio logowałeś&#8230;</string>
 	<string name="toast_notify_refresh_finish">Odświeżanie zakończone</string>
 	<string name="toast_notify_refresh_error">Błąd połączenia:</string>
 	<string name="toast_notify_refresh_no_connection">No Internet connection</string>
