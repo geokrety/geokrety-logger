@@ -266,6 +266,9 @@
 	<string name="message_submit_success">Log submitted successfully</string>
 	<string name="message_submit_problem">geokrety.org rejected the submission</string>
 	<string name="message_submit_no_connection">Connection error, trying again&#8230;</string>
+	<string name="message_error_no_log_type">Choose a log type!</string>
+	<string name="message_error_no_traking_code">Enter tracking code!</string>
+	<string name="message_error_no_location">Enter a new location of GeoKret!</string>
     
 	<!-- Refresh service -->
 	<string name="toast_notify_refresh_start">Inventory and last geocaching logs is refreshing in background&#8230;</string>

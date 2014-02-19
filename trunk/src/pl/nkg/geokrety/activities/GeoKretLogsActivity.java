@@ -116,11 +116,13 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         }
 
         private void bindIcon(final View view, final GeoKretLog log) {
-            final int drawable = checkHumanGeokret(log) ? LOG_TYPE_ICON_MAP_HUMAN[log
-                    .getLogTypeMapped()] : LOG_TYPE_ICON_MAP_GK[log.getLogTypeMapped()];
-            ImageView im = ((ImageView) view.findViewById(android.R.id.icon));
-            Drawable image = getResources().getDrawable(drawable);
-            im.setImageDrawable(image);
+            if (log.getLogTypeMapped() > 0) {
+                final int drawable = checkHumanGeokret(log) ? LOG_TYPE_ICON_MAP_HUMAN[log
+                        .getLogTypeMapped()] : LOG_TYPE_ICON_MAP_GK[log.getLogTypeMapped()];
+                ImageView im = ((ImageView) view.findViewById(android.R.id.icon));
+                Drawable image = getResources().getDrawable(drawable);
+                im.setImageDrawable(image);
+            }
         }
 
         private boolean checkHumanGeokret(final GeoKretLog log) {

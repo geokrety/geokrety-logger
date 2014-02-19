@@ -253,6 +253,6 @@ public class GeocacheLogDataSource {
     }
 
     public static void updateGeocachingComWaypoint(SQLiteDatabase db) {
-        db.execSQL("UPDATE " + TABLE + " SET " + COLUMN_WAYPOINT + " = (SELECT " + GeocacheDataSource.COLUMN_WAYPOINT + " FROM " + GeocacheDataSource.TABLE + " AS g WHERE " + TABLE + "." + COLUMN_LOG_UUID + " = g." + GeocacheDataSource.COLUMN_GUID + " LIMIT 1) WHERE " + COLUMN_PORTAL + " = ?", new Object[] {GeocachingProvider.PORTAL});
+        db.execSQL("UPDATE " + TABLE + " SET " + COLUMN_WAYPOINT + " = IFNULL((SELECT " + GeocacheDataSource.COLUMN_WAYPOINT + " FROM " + GeocacheDataSource.TABLE + " AS g WHERE " + TABLE + "." + COLUMN_LOG_UUID + " = g." + GeocacheDataSource.COLUMN_GUID + " LIMIT 1), '') WHERE " + COLUMN_PORTAL + " = ?", new Object[] {GeocachingProvider.PORTAL});
     }
 }

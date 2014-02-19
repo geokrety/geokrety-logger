@@ -120,6 +120,7 @@ public class RefreshService extends IntentService {
             }
         } catch (Throwable e) {
             error = Utils.formatException(e);
+            e.printStackTrace();
             Log.println(Log.ERROR, TAG, error);
             ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();

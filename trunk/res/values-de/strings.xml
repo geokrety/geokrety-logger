@@ -240,7 +240,10 @@
 	<string name="message_submit_success">Logübertragung abgeschlossen</string>
 	<string name="message_submit_problem">geokrety.org hat die Übertragung abgewiesen</string>
 	<string name="message_submit_no_connection">Verbindungsfehler, noch einmal versuchen&#8230;</string>
-	
+<!-- NEED TRANSLATE --><string name="message_error_no_log_type">Choose a log type!</string>
+<!-- NEED TRANSLATE --><string name="message_error_no_traking_code">Enter tracking code!</string>
+<!-- NEED TRANSLATE --><string name="message_error_no_location">Enter a new location of GeoKret!</string>
+		
 	<!-- Refresh service -->
 	<string name="toast_notify_refresh_start">Inventar und letzte Geocaching-Logs werden im Hintergrund aktualisiert&#8230;</string>
 	<string name="toast_notify_refresh_finish">Aktualisierung erfolgreich</string>

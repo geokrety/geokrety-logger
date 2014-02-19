@@ -242,7 +242,10 @@
 	<string name="message_submit_success">Udało się zalogować GeoKreta!</string>
 	<string name="message_submit_problem">Logowanie odrzucone przez geokrety.org</string>
 	<string name="message_submit_no_connection">Brak połączenia, za chwilę spróbuję ponownie&#8230;</string>
-    
+	<string name="message_error_no_log_type">Wybierz typ logu!</string>
+	<string name="message_error_no_traking_code">Wprowadź tracking code!</string>
+	<string name="message_error_no_location">Wprowadź nową lokalizację GeoKreta!</string>
+	
 	<!-- Refresh service -->
 	<string name="toast_notify_refresh_start">Rozpoczęto odświeżanie inwentarza i listy geokeszy do których się ostatnio logowałeś&#8230;</string>
 	<string name="toast_notify_refresh_finish">Odświeżanie zakończone</string>

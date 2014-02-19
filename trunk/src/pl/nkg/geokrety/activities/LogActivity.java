@@ -79,6 +79,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private GeoKretLog currentLog;
     private User currentAccount;
     private int currentLogType = -1;
+    private boolean savedLog = false;
 
     private Button logTypeButton;
     private Button accountsButton;
@@ -192,10 +193,18 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     public void onClickSubmit(final View view) {
-        saveLog(GeoKretLog.STATE_OUTBOX);
-        startService(new Intent(this, LogSubmitterService.class));
-        Toast.makeText(this, R.string.message_do_submitting, Toast.LENGTH_LONG).show();
-        finish();
+        if (currentLogType == -1) {
+            Toast.makeText(this, R.string.message_error_no_log_type, Toast.LENGTH_LONG).show();
+        } else if (Utils.isEmpty(trackingCodeEditText.getText().toString())) {
+            Toast.makeText(this, R.string.message_error_no_traking_code, Toast.LENGTH_LONG).show();
+        } else if (coordinatesEditText.isEnabled() && Utils.isEmpty(coordinatesEditText.getText().toString())) {
+            Toast.makeText(this, R.string.message_error_no_location, Toast.LENGTH_LONG).show();
+        } else {
+            saveLog(GeoKretLog.STATE_OUTBOX);
+            startService(new Intent(this, LogSubmitterService.class));
+            Toast.makeText(this, R.string.message_do_submitting, Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     @Override
@@ -314,6 +323,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     private void saveLog(final int state) {
+        savedLog = true;
         storeToGeoKretLog(currentLog);
         currentLog.setState(state);
         if (currentLog.getId() == 0) {
@@ -368,6 +378,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
+        savedLog = false;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log);
 
@@ -554,4 +565,25 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             }
         }
     };
+    
+    @Override
+    public void onBackPressed() {
+        if (!isEmpty()) {
+            saveLog(GeoKretLog.STATE_DRAFT);
+            Toast.makeText(this, R.string.message_draft_saved, Toast.LENGTH_LONG).show();
+        }
+        super.onBackPressed();
+    };
+    
+    @Override
+    protected void onDestroy() {
+        if (!savedLog && !isEmpty()) {
+            saveLog(GeoKretLog.STATE_DRAFT);
+        }
+        super.onDestroy();
+    }
+    
+    private boolean isEmpty() {
+        return Utils.isEmpty(trackingCodeEditText.getText().toString()) && Utils.isEmpty(coordinatesEditText.getText().toString()) && Utils.isEmpty(waypointEditText.getText().toString()) && Utils.isEmpty(commentEditText.getText().toString());
+    }
 }
