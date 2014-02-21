@@ -60,7 +60,9 @@ public class GeocachingProvider {
         try {
             HttpContext httpContext = new BasicHttpContext();
             String ret = Utils.httpPost("https://www.geocaching.com/login/default.aspx", postData, httpContext);
-            // FIXME: check successfull or fail
+            if (ret.contains("Your username/password combination does not match. Make sure you entered your information correctly.")) {
+                return null;
+            }
             return httpContext;
         } catch (Throwable e) {
             throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
