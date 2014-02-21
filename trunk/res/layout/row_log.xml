@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:contentDescription="@string/row_log_icon_contentDescription" />
+        android:contentDescription="@string/logs_row_label_log_icon_content_description" />
 
     <LinearLayout
         android:layout_width="fill_parent"

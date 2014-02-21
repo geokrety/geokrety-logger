@@ -28,7 +28,7 @@ public class NoConnectionException extends MessagedException {
     private static final long serialVersionUID = -4638504563481794092L;
 
     public NoConnectionException() {
-        super(R.string.global_message_error_connection);
+        super(R.string.global_error_connection);
     }
     
     public NoConnectionException(int messageID) {

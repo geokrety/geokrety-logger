@@ -65,7 +65,7 @@ public class GeocachingProvider {
             }
             return httpContext;
         } catch (Throwable e) {
-            throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
+            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
     }
     
@@ -94,7 +94,7 @@ public class GeocachingProvider {
             
             return openCachingLogs;
         } catch (Throwable e) {
-            throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
+            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
     }
     
@@ -105,7 +105,7 @@ public class GeocachingProvider {
             String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
             return Geocache.parseGeocachingCom(htmlCache);
         } catch (Throwable e) {
-            throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
+            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
     }
     
@@ -116,7 +116,7 @@ public class GeocachingProvider {
             String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
             return Geocache.parseGeocachingCom(htmlCache);
         } catch (Throwable e) {
-            throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
+            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
     }
     

@@ -55,7 +55,7 @@ public class TrackingCodeEditText extends AbstractNotifiedEditText {
 
     @Override
     protected CharSequence getInvalidateMessage() {
-        return getContext().getText(R.string.geokret_message_error_invalid_trackingcode);
+        return getContext().getText(R.string.geokret_error_invalid_trackingcode);
     }
 
     @Override
@@ -70,7 +70,7 @@ public class TrackingCodeEditText extends AbstractNotifiedEditText {
 
     @Override
     protected CharSequence getWaitMessage() {
-        return getContext().getText(R.string.verify_tc_message_info_waiting);
+        return getContext().getText(R.string.verify_tc_message_waiting);
     }
 
     @Override

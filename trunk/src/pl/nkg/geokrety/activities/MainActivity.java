@@ -69,7 +69,7 @@ public class MainActivity extends Activity {
 
 	private boolean accountExistAndToast() {
 		if (accountExist()) {
-			Toast.makeText(this, R.string.main_message_error_no_account_configured,
+			Toast.makeText(this, R.string.main_error_no_account_configured,
 					Toast.LENGTH_LONG).show();
 			return false;
 		}

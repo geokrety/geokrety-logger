@@ -41,7 +41,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClickSubmit"
-            android:text="@string/form_submit_button" />
+            android:text="@string/log_button_submit" />
 
         <Button
             android:id="@+id/draftButton"
@@ -49,7 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClickDraft"
-            android:text="@string/form_save_draft_button" />
+            android:text="@string/log_button_save_draft" />
 
         <Button
             android:id="@+id/deleteButton"
@@ -57,7 +57,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClickDelete"
-            android:text="@string/form_remove_button" />
+            android:text="@string/log_button_discard" />
     </LinearLayout>
 
     <ScrollView
@@ -85,7 +85,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/form_log_type"
+                android:text="@string/log_label_section_log_type"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <!--
@@ -105,8 +105,7 @@
                 style="@style/log_activity_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:onClick="showLogType"
-                android:text="@string/log_drop" />
+                android:onClick="showLogType" />
 
             <TextView
                 android:id="@+id/errorTextView"
@@ -118,7 +117,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/form_identify"
+                android:text="@string/log_label_section_identify"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <LinearLayout
@@ -139,7 +138,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="refreshButtonClick"
-                    android:text="@string/menu_inventory_refresh" />
+                    android:text="@string/inventory_menu_refresh" />
             </LinearLayout>
 
             <LinearLayout
@@ -154,14 +153,14 @@
                     android:ems="6"
                     android:textAllCaps="true"
                     android:inputType="textCapCharacters"
-                    android:hint="@string/form_code" />
+                    android:hint="@string/log_hint_code" />
 
                 <Button
                     android:id="@+id/inventoryButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="showInventory"
-                    android:text="@string/form_inventory" />
+                    android:text="@string/log_button_inventory" />
             </LinearLayout>
 
             <pl.nkg.geokrety.activities.controls.NotifyTextView
@@ -173,7 +172,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/form_location"
+                android:text="@string/log_label_section_location"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <LinearLayout
@@ -188,14 +187,14 @@
                     android:ems="6"
                     android:textAllCaps="true"
                     android:inputType="textCapCharacters"
-                    android:hint="@string/form_waypoint" />
+                    android:hint="@string/log_hint_waypoint" />
 
                 <Button
                     android:id="@+id/ocsButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:onClick="showOcs"
-                    android:text="@string/form_oclogs" />
+                    android:text="@string/log_button_oclogs" />
             </LinearLayout>
             
             <pl.nkg.geokrety.activities.controls.NotifyTextView
@@ -214,14 +213,14 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:ems="10"
-                    android:hint="@string/form_cords" >
+                    android:hint="@string/log_hint_cords" >
                 </EditText>
 
                 <ImageButton
                     android:id="@+id/gpsButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/form_gps"
+                    android:contentDescription="@string/log_button_gps"
                     android:onClick="onClickSetCoordinatesFromGPS"
                     android:src="@drawable/ic_menu_mylocation" />
 
@@ -229,7 +228,7 @@
                     android:id="@+id/homeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/form_home"
+                    android:contentDescription="@string/log_button_home"
                     android:onClick="onClickSetHomeCoordinates"
                     android:src="@drawable/ic_menu_home" />
             </LinearLayout>
@@ -244,12 +243,12 @@
                 android:layout_height="wrap_content"
                 android:autoLink="web"
                 android:linksClickable="true"
-                android:text="@string/supported_formats" />
+                android:text="@string/gps_label_supported_formats" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/form_additional"
+                android:text="@string/log_label_section_additional"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <LinearLayout
@@ -276,7 +275,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="@string/form_comment"
+                android:hint="@string/log_hint_comment"
                 android:inputType="textMultiLine" />
         </LinearLayout>
     </ScrollView>

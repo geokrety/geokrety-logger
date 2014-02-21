@@ -56,9 +56,9 @@ public class OKAPIProvider {
 			JSONObject json = new JSONObject(jsonString);
 			return json.getString("uuid");
 		} catch (JSONException e) {
-			throw new MessagedException(R.string.invalid_oclogin_error_message);
+			throw new MessagedException(R.string.profile_oc_error_login_invalid);
 		} catch (Exception e) {
-			throw new MessagedException(R.string.oclogs_error_message);
+			throw new MessagedException(R.string.lastlogs_error_refresh);
 		}
 	}
 
@@ -86,10 +86,10 @@ public class OKAPIProvider {
 			}
 			return list;
 		} catch (JSONException e) {
-			throw new MessagedException(R.string.invalid_oclogin_error_message,
+			throw new MessagedException(R.string.profile_oc_error_login_invalid,
 					okapi.host);
 		} catch (IOException e) {
-			throw new MessagedException(R.string.oclogs_error_message);
+			throw new MessagedException(R.string.lastlogs_error_refresh);
 		}
 	}
 
@@ -113,12 +113,12 @@ public class OKAPIProvider {
 
 			return openCachingLogs;
 		} catch (JSONException e) {
-			throw new MessagedException(R.string.invalid_oclogin_error_message,
+			throw new MessagedException(R.string.profile_oc_error_login_invalid,
 					okapi.host);
 		} catch (IOException e) {
-			throw new MessagedException(R.string.oclogs_error_message);
+			throw new MessagedException(R.string.lastlogs_error_refresh);
 		} catch (ParseException e) {
-			throw new MessagedException(R.string.oclogs_error_message);
+			throw new MessagedException(R.string.lastlogs_error_refresh);
 		}
 	}
 

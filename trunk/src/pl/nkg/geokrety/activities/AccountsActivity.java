@@ -92,7 +92,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		if (application.getStateHolder().getAccountList().size() == 0
 				&& !application.isNoAccountHinted()) {
 			application.setNoAccountHinted(true);
-			Toast.makeText(this, R.string.main_message_error_no_account_configured,
+			Toast.makeText(this, R.string.main_error_no_account_configured,
 					Toast.LENGTH_LONG).show();
 			showNewAccountDialog();
 		}
@@ -109,7 +109,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
 			menu.setHeaderTitle(holder.getAccountList().get(info.position)
 					.getName());
 			String[] menuItems = getResources().getStringArray(
-					R.array.context_menu_account);
+					R.array.profiles_contextmenu_profile);
 			for (int i = 0; i < menuItems.length; i++) {
 				menu.add(Menu.NONE, i, i, menuItems[i]);
 			}

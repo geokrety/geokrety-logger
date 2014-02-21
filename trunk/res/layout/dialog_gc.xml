@@ -34,14 +34,14 @@
         android:id="@+id/loginTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/gc_login"
+        android:text="@string/profile_gc_label_login"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/loginEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/gc_login_hint" >
+        android:hint="@string/profile_gc_hint_login" >
 
         <requestFocus />
     </EditText>
@@ -50,14 +50,14 @@
         android:id="@+id/passwordTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/gc_password"
+        android:text="@string/profile_gc_label_password"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/gc_password_hint"
+        android:hint="@string/profile_gc_hint_password"
         android:inputType="textPassword" />
 
 </LinearLayout>

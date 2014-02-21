@@ -94,7 +94,7 @@ public class LogSubmitterService extends IntentService {
             String title = log.getNr();
             int notifyId = (int) log.getId();
             showNotify(intent, notifyId, R.drawable.ic_stat_notify_log_submitting, title,
-                    getText(R.string.message_submitting));
+                    getText(R.string.submit_notify_submitting));
 
             int icon = 0;
             String message = "";
@@ -103,24 +103,24 @@ public class LogSubmitterService extends IntentService {
             switch (ret) {
                 case GeoKretyProvider.LOG_NO_CONNECTION:
                     connectionProblems = true;
-                    message = getText(R.string.message_submit_no_connection) + " ("
+                    message = getText(R.string.submit_notify_submit_no_connection) + " ("
                             + log.getProblemArg() + ")";
                     icon = R.drawable.ic_stat_notify_log_no_connection;
                     break;
 
                 case GeoKretyProvider.LOG_PROBLEM:
                     try {
-                        message = getText(R.string.message_submit_problem) + ": "
+                        message = getText(R.string.submit_notify_submit_problem) + ": "
                                 + getText(log.getProblem()) + " " + log.getProblemArg();
                     } catch (NotFoundException e) {
-                        message = getText(R.string.message_submit_problem) + ": "
+                        message = getText(R.string.submit_notify_submit_problem) + ": "
                                 + log.getProblemArg();
                     }
                     icon = R.drawable.ic_stat_notify_log_problem;
                     break;
 
                 case GeoKretyProvider.LOG_SUCCESS:
-                    message = getText(R.string.message_submit_success).toString();
+                    message = getText(R.string.submit_notify_submit_success).toString();
                     icon = R.drawable.ic_stat_notify_log_success;
                     application.getStateHolder().getGeoKretLogDataSource().delete(log.getId());
                     break;

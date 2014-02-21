@@ -84,7 +84,7 @@ public class GeoKretyProvider {
 			}
 			return inventory;
 		} catch (final Exception e) {
-			throw new MessagedException(R.string.inventory_error_message);
+			throw new MessagedException(R.string.inventory_error_refresh);
 		}
 	}
 	
@@ -105,7 +105,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, Utils.formatException(e));
+            throw new MessagedException(R.string.global_error_system, Utils.formatException(e));
         }	    
 	}
 	
@@ -133,7 +133,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, Utils.formatException(e));
+            throw new MessagedException(R.string.global_error_system, Utils.formatException(e));
         }       
 	}
 	
@@ -151,7 +151,7 @@ public class GeoKretyProvider {
             throw new NoConnectionException();
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
-            throw new MessagedException(R.string.global_message_error_system, Utils.formatException(e));
+            throw new MessagedException(R.string.global_error_system, Utils.formatException(e));
         }       
     }
 
@@ -164,13 +164,13 @@ public class GeoKretyProvider {
 		try {
 			value = Utils.httpPost(URL_LOGIN, postData);
 		} catch (final Exception e) {
-			throw new MessagedException(R.string.login_error_message, Utils.formatException(e));
+			throw new MessagedException(R.string.connection_error, Utils.formatException(e));
 		}
 
 		if (value != null && !value.startsWith("error")) {
 			return value.trim();
 		} else {
-			throw new MessagedException(R.string.login_error_password_message, String.valueOf(value));
+			throw new MessagedException(R.string.profile_gk_error_password_invalid, String.valueOf(value));
 		}
 	}
 
@@ -210,13 +210,13 @@ public class GeoKretyProvider {
 
 				log.setState(GeoKretLog.STATE_PROBLEM);
 				if (errors.get(0).equals("There is an entry with this date. Correct the date or the hour.")) {
-					log.setProblem(R.string.warning_already_logged);
+					log.setProblem(R.string.log_warning_already_logged);
 					return LOG_DOUBLE;
 				} else if (errors.get(0).equals("Identical log has been submited.")) {
 				    // login just submitted
 				    return LOG_SUCCESS;
                 } else {
-					log.setProblem(R.string.submit_fail);
+					log.setProblem(R.string.submit_error);
 					log.setProblemArg(TextUtils.join("\n", errors));
 					return LOG_PROBLEM;
 				}
@@ -263,16 +263,16 @@ public class GeoKretyProvider {
 			if (errors.size() > 0) {
 
 				if (errors.get(0).equals("There is an entry with this date. Correct the date or the hour.")) {
-					throw new MessagedException(R.string.warning_already_logged);
+					throw new MessagedException(R.string.log_warning_already_logged);
 				} else {
-					throw new MessagedException(R.string.submit_fail, "\n" + TextUtils.join("\n", errors));
+					throw new MessagedException(R.string.submit_error, "\n" + TextUtils.join("\n", errors));
 				}
 			}
 			return true;
 		} catch (final MessagedException e) {
 			throw e;
 		} catch (final Exception e) {
-			throw new MessagedException(R.string.submit_fail, Utils.formatException(e));
+			throw new MessagedException(R.string.submit_error, Utils.formatException(e));
 		}
 	}
 }

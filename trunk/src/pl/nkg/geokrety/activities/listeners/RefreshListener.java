@@ -41,7 +41,7 @@ public class RefreshListener extends
 			AbstractForegroundTaskWrapper<User, String, String> sender,
 			User param, String result) {
 		if (Utils.isEmpty(result)) {
-			Toast.makeText(context, R.string.download_finish, Toast.LENGTH_LONG)
+			Toast.makeText(context, R.string.refresh_download_finish, Toast.LENGTH_LONG)
 					.show();
 		} else {
 			Toast.makeText(

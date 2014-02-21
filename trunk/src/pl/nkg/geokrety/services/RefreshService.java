@@ -127,7 +127,7 @@ public class RefreshService extends IntentService {
 
         if (!Utils.isEmpty(error)) {
             showNotify(new Intent(), NOTIFY_ID, android.R.drawable.stat_notify_error,
-                    getText(R.string.message_submit_problem), error);
+                    getText(R.string.submit_notify_submit_problem), error);
             Intent broadcast = new Intent(BROADCAST_ERROR);
             broadcast.putExtra(INTENT_ERROR_MESSAGE, error);
             sendBroadcast(broadcast);
@@ -158,12 +158,12 @@ public class RefreshService extends IntentService {
             }
 
             try {
-                publishProgress(R.string.notify_refresh_inventory, user.getName()
+                publishProgress(R.string.refresh_notify_inventory, user.getName()
                         + getText(R.string.dots));
                 refreshInventory(cancelHolder, user.getID(), user.getGeoKreySecredID());
             } catch (MessagedException e) {
                 appendToStringBuilderWithNewLineIfNeed(sb,
-                        getText(R.string.notify_refresh_inventory));
+                        getText(R.string.refresh_notify_inventory));
                 sb.append(": ");
                 sb.append(user.getName());
                 sb.append(" - ");
@@ -185,13 +185,13 @@ public class RefreshService extends IntentService {
                 }
 
                 try {
-                    publishProgress(R.string.notify_refresh_last_logs,
+                    publishProgress(R.string.refresh_notify_last_logs,
                             okapi.host + " " + user.getOpenCachingLogins()[portal]
                                     + getText(R.string.dots));
                     refreshLastLogs(cancelHolder, user.getID(), uuid, portal);
                 } catch (MessagedException e) {
                     appendToStringBuilderWithNewLineIfNeed(sb,
-                            getText(R.string.notify_refresh_error_lost_connection));
+                            getText(R.string.refresh_notify_error_lost_connection));
                     sb.append(": ");
                     sb.append(okapi.host);
                     sb.append(" ");
@@ -206,12 +206,12 @@ public class RefreshService extends IntentService {
             }
 
             try {
-                publishProgress(R.string.notify_refresh_oc_names, okapi.host
+                publishProgress(R.string.refresh_notify_oc_names, okapi.host
                         + getText(R.string.dots));
                 refreshGeocaches(cancelHolder, portal);
             } catch (MessagedException e) {
                 appendToStringBuilderWithNewLineIfNeed(sb,
-                        getText(R.string.notify_refresh_error_lost_connection));
+                        getText(R.string.refresh_notify_error_lost_connection));
                 sb.append(": ");
                 sb.append(okapi.host);
                 sb.append(" - ");
@@ -229,7 +229,7 @@ public class RefreshService extends IntentService {
 
                 if (!Utils.isEmpty(user.getGeocachingLogin())) {
                     try {
-                        publishProgress(R.string.notify_refresh_last_logs,
+                        publishProgress(R.string.refresh_notify_last_logs,
                                 GeocachingProvider.HOST + " " + user.getGeocachingLogin()
                                         + getText(R.string.dots));
                         HttpContext httpContext = GeocachingProvider.login(user.getGeocachingLogin(), user.getGeocachingPassword());
@@ -244,7 +244,7 @@ public class RefreshService extends IntentService {
                                 return sb.toString();
                             }
 
-                            publishProgress(R.string.notify_refresh_oc_names,
+                            publishProgress(R.string.refresh_notify_oc_names,
                                     GeocachingProvider.HOST + ": " + guid
                                             + getText(R.string.dots));
 
@@ -252,7 +252,7 @@ public class RefreshService extends IntentService {
                         }
                     } catch (MessagedException e) {
                         appendToStringBuilderWithNewLineIfNeed(sb,
-                                getText(R.string.notify_refresh_error_lost_connection));
+                                getText(R.string.refresh_notify_error_lost_connection));
                         sb.append(": ");
                         sb.append(GeocachingProvider.HOST);
                         sb.append(" ");
@@ -282,7 +282,7 @@ public class RefreshService extends IntentService {
             }
         } catch (MessagedException e) {
             appendToStringBuilderWithNewLineIfNeed(sb,
-                    getText(R.string.notify_refresh_error_lost_connection));
+                    getText(R.string.refresh_notify_error_lost_connection));
             sb.append(": ");
             sb.append(GeocachingProvider.HOST);
             sb.append(" - ");
@@ -301,7 +301,7 @@ public class RefreshService extends IntentService {
             }
 
             try {
-                publishProgress(R.string.notify_refresh_own_gk, "TrackingCode: " + tc);
+                publishProgress(R.string.refresh_notify_own_gk, "TrackingCode: " + tc);
                 int id = GeoKretyProvider.loadIDByTranckingCode(tc);
 
                 if (!canContinue(cancelHolder, sb)) {
@@ -315,12 +315,12 @@ public class RefreshService extends IntentService {
 
                 } else {
                     gk = new GeoKret(tc, GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(
-                            R.string.error_description_no_such_geokret).toString());
+                            R.string.validation_error_no_such_geokret).toString());
                 }
                 gks.add(gk);
             } catch (MessagedException e) {
                 appendToStringBuilderWithNewLineIfNeed(sb,
-                        getText(R.string.notify_refresh_error_lost_connection));
+                        getText(R.string.refresh_notify_error_lost_connection));
                 sb.append(": ");
                 sb.append(tc);
                 sb.append(" - ");
@@ -345,13 +345,13 @@ public class RefreshService extends IntentService {
     private boolean canContinue(CancelHolder cancelHolder, StringBuilder sb) {
         if (cancelHolder.cancel) {
             appendToStringBuilderWithNewLineIfNeed(sb,
-                    getText(R.string.notify_refresh_error_broken));
+                    getText(R.string.refresh_notify_error_broken));
             return false;
         }
 
         if (!application.isOnline()) {
             appendToStringBuilderWithNewLineIfNeed(sb,
-                    getText(R.string.notify_refresh_error_lost_connection));
+                    getText(R.string.refresh_notify_error_lost_connection));
             return false;
         }
 

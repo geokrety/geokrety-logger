@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onAddButtonClicks"
-            android:text="@string/button_add_geokret" />
+            android:text="@string/inventory_button_add_geokret" />
     </LinearLayout>
 
     <LinearLayout

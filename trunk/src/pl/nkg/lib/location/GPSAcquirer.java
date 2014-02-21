@@ -139,16 +139,16 @@ public class GPSAcquirer implements LocationListener {
 	
 	public static boolean checkAndToast(Context context) {
 		if (!gpsExist(context)) {
-			Utils.makeCenterToast(context,  R.string.gps_not_exist).show();
+			Utils.makeCenterToast(context,  R.string.gps_error_not_exist).show();
 			return false;
 		}
 		
 		if (!gpsEnabled(context)) {
-			Utils.makeCenterToast(context,  R.string.gps_not_enabled).show();
+			Utils.makeCenterToast(context,  R.string.gps_warning_not_enabled).show();
 			return false;
 		}
 		
-		Utils.makeCenterToast(context,  R.string.gps_pleas_wait).show();
+		Utils.makeCenterToast(context,  R.string.gps_message_pleas_wait).show();
 		
 		return true;
 	}

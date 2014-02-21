@@ -88,8 +88,8 @@ public class GeoKretActivity extends ManagedDialogsActivity implements TextWatch
 
         saveModifiedsDialog = new AlertDialogWrapper(this,
                 Dialogs.SAVE_MODIFIEDSDIALOG);
-        saveModifiedsDialog.setTitle(R.string.geokret_save_title);
-        saveModifiedsDialog.setMessage(R.string.geokret_save_message);
+        saveModifiedsDialog.setTitle(R.string.geokret_query_title_save);
+        saveModifiedsDialog.setMessage(R.string.geokret_query_message_save);
         saveModifiedsDialog.setPositiveButton(getText(R.string.yes));
         saveModifiedsDialog.setNegativeButton(getText(R.string.no));
         saveModifiedsDialog.setNeutralButton(getText(android.R.string.cancel));

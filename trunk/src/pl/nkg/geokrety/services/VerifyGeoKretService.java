@@ -46,7 +46,7 @@ public class VerifyGeoKretService extends AbstractVerifyService {
         final int id = GeoKretyProvider.loadIDByTranckingCode(tc);
         if (id == -1) {
             return new GeoKret(tc.toString(), GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(
-                    R.string.error_description_no_such_geokret).toString());
+                    R.string.validation_error_no_such_geokret).toString());
         } else {
             final GeoKret gk = GeoKretyProvider.loadSingleGeoKretByID(id);
             gk.setTrackingCode(tc.toString());
@@ -60,7 +60,7 @@ public class VerifyGeoKretService extends AbstractVerifyService {
     @Override
     protected void onHandleValue(final CharSequence value) throws Exception {
         sendBroadcast(value, "", NotifyTextView.INFO,
-                getText(R.string.verify_tc_message_info_waiting));
+                getText(R.string.verify_tc_message_waiting));
 
         GeoKret gk = stateHolder.getGeoKretDataSource().loadByTrackingCode(value);
 
@@ -78,7 +78,7 @@ public class VerifyGeoKretService extends AbstractVerifyService {
 
         if (gk == null) {
             sendBroadcast(value, "", NotifyTextView.WARNING,
-                    getText(R.string.verify_tc_message_warning_no_connection));
+                    getText(R.string.verify_tc_warning_no_connection));
         } else if (gk.getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_SYNCHRONIZED) {
             sendBroadcast(value, "",
                     NotifyTextView.GOOD,
@@ -86,7 +86,7 @@ public class VerifyGeoKretService extends AbstractVerifyService {
                             + gk.getFormatedCodeAndName());
         } else {
             sendBroadcast(value, "", NotifyTextView.ERROR,
-                    getText(R.string.verify_tc_message_error_geokret_not_found));
+                    getText(R.string.verify_tc_error_geokret_not_found));
         }
     }
 }

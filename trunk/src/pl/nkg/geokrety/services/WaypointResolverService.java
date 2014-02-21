@@ -53,7 +53,7 @@ public class WaypointResolverService extends AbstractVerifyService {
     protected void onHandleValue(final CharSequence value) throws Exception {
         final String wpt = value.toString();
         sendBroadcast(value, "", NotifyTextView.INFO,
-                String.format(getText(R.string.resolve_wpt_message_info_waiting).toString(), wpt));
+                String.format(getText(R.string.resolve_wpt_message_waiting).toString(), wpt));
 
         Geocache gc = stateHolder.getGeocacheDataSource().loadByWaypoint(wpt);
 
@@ -91,7 +91,7 @@ public class WaypointResolverService extends AbstractVerifyService {
 
         if (gc == null) {
             sendBroadcast(value, "", NotifyTextView.WARNING,
-                    String.format(getText(R.string.resolve_wpt_message_warning_no_connection)
+                    String.format(getText(R.string.resolve_wpt_warning_no_connection)
                             .toString(), wpt));
         } else if (gc.getName() != null) {
             sendBroadcast(value, gc.getLocation(),
@@ -100,7 +100,7 @@ public class WaypointResolverService extends AbstractVerifyService {
                     wpt + ": " + gc.getName());
         } else {
             sendBroadcast(value, "", NotifyTextView.ERROR,
-                    String.format(getText(R.string.resolve_wpt_message_error_waypont_not_found)
+                    String.format(getText(R.string.resolve_wpt_error_waypont_not_found)
                             .toString(), wpt));
         }
     }

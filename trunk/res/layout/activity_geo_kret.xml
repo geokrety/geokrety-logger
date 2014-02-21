@@ -38,7 +38,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:onClick="saveClick"
-        android:text="@string/geokret_save" />
+        android:text="@string/geokret_button_save" />
 
     <TextView
         android:id="@+id/textView"
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="@string/geokret_nr_title"
+        android:text="@string/geokret_label_trackingcode"
         android:textStyle="bold" />
 
     <pl.nkg.geokrety.activities.controls.TrackingCodeEditText
@@ -56,7 +56,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/textView"
         android:ems="10"
-        android:hint="@string/geokret_nr_hint"
+        android:hint="@string/geokret_hint_trackingcode"
         android:inputType="textCapCharacters"
         android:textAllCaps="true" />
 
@@ -74,6 +74,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/notifyTextView"
-        android:text="@string/geokret_sticki_title" />
+        android:text="@string/geokret_checkbox_sticky" />
 
 </RelativeLayout>

@@ -177,10 +177,10 @@ public class GeoKretyApplication extends Application {
             if (isOnline()) {
                 lastRefresh = new Date().getTime();
                 startService(intent);
-                Toast.makeText(this, R.string.toast_notify_refresh_start, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.refresh_message_refresh_start, Toast.LENGTH_LONG).show();
             } else {
                 if (force) {
-                    Toast.makeText(this, R.string.toast_notify_refresh_no_connection, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.refresh_message_refresh_no_connection, Toast.LENGTH_LONG).show();
                 }
             }
 	    }

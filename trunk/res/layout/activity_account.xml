@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="saveClick"
-            android:text="@string/account_save" />
+            android:text="@string/profile_button_save" />
     </LinearLayout>
 
     <ScrollView
@@ -64,51 +64,51 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/account_portals" />
+                    android:text="@string/profile_label_portals" />
             </LinearLayout>
 
             <CheckBox
                 android:id="@+id/gkCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_portal_gk" />
+                android:text="@string/profile_checkbox_portal_gk" />
 
             <CheckBox
                 android:id="@+id/ocCheckBox0"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dip"
-                android:text="@string/account_portal_oc0" />
+                android:text="@string/profile_checkbox_portal_oc0" />
 
             <CheckBox
                 android:id="@+id/ocCheckBox1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_portal_oc1" />
+                android:text="@string/profile_checkbox_portal_oc1" />
 
             <CheckBox
                 android:id="@+id/ocCheckBox2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_portal_oc2" />
+                android:text="@string/profile_checkbox_portal_oc2" />
 
             <CheckBox
                 android:id="@+id/ocCheckBox3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_portal_oc3" />
+                android:text="@string/profile_checkbox_portal_oc3" />
 
             <CheckBox
                 android:id="@+id/ocCheckBox4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_portal_oc4" />
+                android:text="@string/profile_checkbox_portal_oc4" />
             
             <CheckBox
                 android:id="@+id/gcCheckBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/account_portal_gc"
+                android:text="@string/profile_checkbox_portal_gc"
                 android:visibility="gone" />
             <!-- 
             <EditText
@@ -136,7 +136,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/account_home_location" />
+                    android:text="@string/profile_label_home_location" />
             </LinearLayout>
             
             <LinearLayout
@@ -148,7 +148,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/account_latitude_hint" >
+                    android:hint="@string/profile_hint_latitude" >
                 </EditText>
 
                 <EditText
@@ -156,7 +156,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:hint="@string/account_longnitude_hint" />
+                    android:hint="@string/profile_hint_longnitude" />
 <!-- 
                 <ProgressBar
                     android:id="@+id/progressBar"
@@ -169,7 +169,7 @@
                     android:id="@+id/gpsButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:contentDescription="@string/account_from_gps"
+                    android:contentDescription="@string/profile_button_from_gps"
                     android:onClick="onClickSetCoordinatesFromGPS"
                     android:src="@drawable/ic_menu_mylocation" />
             </LinearLayout>
@@ -179,13 +179,13 @@
                     android:layout_height="wrap_content"
                     android:autoLink="web"
             		android:linksClickable="true"
-                    android:text="@string/supported_formats" />
+                    android:text="@string/gps_label_supported_formats" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dip"
-                android:text="@string/account_introduction" />
+                android:text="@string/profile_label_private_policy" />
         </LinearLayout>
     </ScrollView>
 

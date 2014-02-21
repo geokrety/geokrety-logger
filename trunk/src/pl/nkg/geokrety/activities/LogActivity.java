@@ -177,7 +177,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     public void onClickDraft(final View view) {
         saveLog(GeoKretLog.STATE_DRAFT);
-        Toast.makeText(this, R.string.message_draft_saved, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, R.string.submit_message_draft_saved, Toast.LENGTH_LONG).show();
         finish();
     }
 
@@ -194,15 +194,15 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     public void onClickSubmit(final View view) {
         if (currentLogType == -1) {
-            Toast.makeText(this, R.string.message_error_no_log_type, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.validation_error_no_log_type, Toast.LENGTH_LONG).show();
         } else if (Utils.isEmpty(trackingCodeEditText.getText().toString())) {
-            Toast.makeText(this, R.string.message_error_no_traking_code, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.validation_error_no_traking_code, Toast.LENGTH_LONG).show();
         } else if (coordinatesEditText.isEnabled() && Utils.isEmpty(coordinatesEditText.getText().toString())) {
-            Toast.makeText(this, R.string.message_error_no_location, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.validation_error_no_location, Toast.LENGTH_LONG).show();
         } else {
             saveLog(GeoKretLog.STATE_OUTBOX);
             startService(new Intent(this, LogSubmitterService.class));
-            Toast.makeText(this, R.string.message_do_submitting, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.submit_message_do_submitting, Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -212,7 +212,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         coordinatesEditText.setText(//
                 Utils.latlonFormat.format(location.getLatitude()) + ' '
                         + Utils.latlonFormat.format(location.getLongitude()));
-        Utils.makeCenterToast(this, R.string.gps_fixed).show();
+        Utils.makeCenterToast(this, R.string.gps_message_fixed).show();
     }
 
     @Override
@@ -254,7 +254,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
     private boolean canShowUserData() {
         if (currentAccount == null) {
-            Toast.makeText(this, R.string.error_current_null, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_no_profile_selected, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -311,7 +311,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private void loadFromGeoKretLog(final GeoKretLog log) {
         currentAccount = stateHolder.getAccountByID(log.getAccoundID());
         currentLogType = log.getLogTypeMapped();
-        accountsButton.setText(currentAccount == null ? getText(R.string.form_profile)
+        accountsButton.setText(currentAccount == null ? getText(R.string.log_button_profile)
                 : currentAccount.getName());
         trackingCodeEditText.setText(log.getNr());
         datePicker.setText(log.getData());
@@ -389,10 +389,10 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         datePickerDialog = new DatePickerDialogWrapper(this, Dialogs.DATE_PICKERDIALOG);
 
         inventorySpinnerDialog = new AlertDialogWrapper(this, Dialogs.INVENTORY_SPINNERDIALOG);
-        inventorySpinnerDialog.setTitle(R.string.title_dialog_inventory);
+        inventorySpinnerDialog.setTitle(R.string.log_inventory_title);
 
         ocsSpinnerDialog = new AlertDialogWrapper(this, Dialogs.OCS_SPINNERDIALOG);
-        ocsSpinnerDialog.setTitle(R.string.title_dialog_ocs);
+        ocsSpinnerDialog.setTitle(R.string.log_lastlogs_title);
 
         logTypeSpinnerDialog = new AlertDialogWrapper(this, Dialogs.TYPE_SPINNERDIALOG);
         
@@ -511,7 +511,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         super.onStart();
 
         if (stateHolder.getAccountList().size() == 0) {
-            Toast.makeText(this, R.string.main_message_error_no_account_configured, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.main_error_no_account_configured, Toast.LENGTH_LONG).show();
             startActivity(new Intent(this, MainActivity.class));
             return;
         }
@@ -570,7 +570,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     public void onBackPressed() {
         if (!isEmpty()) {
             saveLog(GeoKretLog.STATE_DRAFT);
-            Toast.makeText(this, R.string.message_draft_saved, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.submit_message_draft_saved, Toast.LENGTH_LONG).show();
         }
         super.onBackPressed();
     };

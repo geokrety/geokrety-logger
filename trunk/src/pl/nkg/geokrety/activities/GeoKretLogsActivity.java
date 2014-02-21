@@ -141,8 +141,8 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         }
 
         private CharSequence formatErrorMessage(final GeoKretLog log) {
-            if (log.getProblem() == R.string.warning_already_logged) {
-                return getText(R.string.warning_already_logged);
+            if (log.getProblem() == R.string.log_warning_already_logged) {
+                return getText(R.string.log_warning_already_logged);
             } else {
                 try {
                     return getText(log.getProblem()) + " " + log.getProblemArg();
@@ -178,28 +178,28 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         private CharSequence formatStatus(final GeoKretLog log) {
             switch (log.getState()) {
                 case GeoKretLog.STATE_DRAFT:
-                    return getText(R.string.log_status_draft);
+                    return getText(R.string.logs_label_status_draft);
 
                 case GeoKretLog.STATE_NEW:
                     // TODO: probably newer used
-                    return getText(R.string.log_status_new);
+                    return getText(R.string.logs_label_status_new);
 
                 case GeoKretLog.STATE_PROBLEM:
-                    return log.getProblem() == R.string.warning_already_logged ? getText(R.string.log_status_double)
-                            : getText(R.string.log_status_problem);
+                    return log.getProblem() == R.string.log_warning_already_logged ? getText(R.string.logs_label_status_double)
+                            : getText(R.string.logs_label_status_problem);
 
                 case GeoKretLog.STATE_SENT:
-                    return getText(R.string.log_status_success);
+                    return getText(R.string.logs_label_status_success);
 
                 case GeoKretLog.STATE_OUTBOX:
                     if (stateHolder.isLocked(log.getId())) {
                         return getText(R.string.dots); // TODO: label
                     } else {
-                        return getText(R.string.log_status_queue);
+                        return getText(R.string.logs_label_status_queue);
                     }
 
                 default:
-                    return getText(R.string.log_status_unidentified);
+                    return getText(R.string.logs_label_status_unidentified);
             }
         }
 
@@ -290,7 +290,7 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         super.onCreate(savedInstanceState);
         turnOnDatabaseUse();
         removeLogDialog = new AlertDialogWrapper(this, Dialogs.REMOVE_ALL_LOGS_ALERTDIALOG);
-        removeLogDialog.setMessage(R.string.form_confirm_delete_all_msg);
+        removeLogDialog.setMessage(R.string.logs_query_confirm_delete_all_msg);
         removeLogDialog.setOkCancelButtons();
 
         setContentView(R.layout.activity_geokretlogs);

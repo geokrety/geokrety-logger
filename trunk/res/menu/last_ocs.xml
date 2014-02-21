@@ -23,6 +23,6 @@
 
     <item
         android:id="@+id/menu_ocs_refresh"
-        android:title="@string/menu_ocs_refresh"/>
+        android:title="@string/lastlogs_menu_refresh"/>
 
 </menu>

@@ -38,7 +38,7 @@ public class GCDialog extends AlertDialogWrapper {
 
 	public GCDialog(ManagedDialogsActivity a) {
 		super(a, Dialogs.GC_PROMPTDIALOG);
-		setTitle(R.string.title_dialog_gc);
+		setTitle(R.string.profile_gc_title);
 		setLayout(R.layout.dialog_gc);
 		setOkCancelButtons();
 	}
@@ -51,12 +51,12 @@ public class GCDialog extends AlertDialogWrapper {
 				.getText().toString();
 
 		if (mLogin.length() == 0) {
-			showToast(R.string.error_login_null);
+			showToast(R.string.profile_gc_error_login_null);
 			return false;
 		}
 
 		if (mPassword.length() == 0) {
-			showToast(R.string.error_password_null);
+			showToast(R.string.profile_gc_error_password_null);
 			return false;
 		}
 

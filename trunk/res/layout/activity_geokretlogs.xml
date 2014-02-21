@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClickSubmitAll"
-            android:text="@string/button_submit_all_drafts" />
+            android:text="@string/logs_button_submit_all_drafts" />
         
         <Button
             android:id="@+id/removeAllButton"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:onClick="onClickRemoveAll"
-            android:text="@string/button_remove_all_saved_logs" />
+            android:text="@string/logs_button_remove_all_saved_logs" />
     </LinearLayout>
 
     <Spinner

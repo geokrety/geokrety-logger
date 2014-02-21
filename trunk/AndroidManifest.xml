@@ -23,8 +23,8 @@
 <manifest 
     xmlns:android="http://schemas.android.com/apk/res/android" 
     package="pl.nkg.geokrety" 
-    android:versionCode="32"
-	android:versionName="0.6.99.3 beta">
+    android:versionCode="33"
+	android:versionName="0.6.99.4 beta">
 
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -51,11 +51,11 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".activities.AccountsActivity" android:label="@string/title_activity_accounts" />
-		<activity android:name=".activities.InventoryActivity" android:label="@string/title_activity_inventory" />
-		<activity android:name=".activities.LastOCsActivity" android:label="@string/title_activity_last_ocs" />
-		<activity android:name=".activities.GeoKretLogsActivity" android:label="@string/title_activity_geokretlogs" />
-				<activity android:name=".activities.LogActivity" android:label="@string/title_activity_log">
+		<activity android:name=".activities.AccountsActivity" android:label="@string/profiles_title" />
+		<activity android:name=".activities.InventoryActivity" android:label="@string/inventory_title" />
+		<activity android:name=".activities.LastOCsActivity" android:label="@string/lastlogs_title" />
+		<activity android:name=".activities.GeoKretLogsActivity" android:label="@string/logs_title" />
+				<activity android:name=".activities.LogActivity" android:label="@string/log_title">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 
@@ -114,9 +114,9 @@
 				<data android:host="coord.info" android:pathPrefix="/GC" android:scheme="http" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".activities.AboutActivity" android:label="@string/title_activity_about" />
-		<activity android:name=".activities.AccountActivity" android:label="@string/title_activity_account" />
-		<activity android:name=".activities.GeoKretActivity" android:label="@string/title_activity_geo_kret" android:windowSoftInputMode="adjustResize" />
+		<activity android:name=".activities.AboutActivity" android:label="@string/about_title" />
+		<activity android:name=".activities.AccountActivity" android:label="@string/profile_title" />
+		<activity android:name=".activities.GeoKretActivity" android:label="@string/geokret_title" android:windowSoftInputMode="adjustResize" />
 
 		<service android:name=".services.LogSubmitterService" />
 		<service android:name=".services.RefreshService" />

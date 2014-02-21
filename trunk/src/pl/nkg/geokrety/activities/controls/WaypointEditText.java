@@ -70,7 +70,7 @@ public class WaypointEditText extends AbstractNotifiedEditText {
 
     @Override
     protected CharSequence getWaitMessage() {
-        return getContext().getText(R.string.resolve_wpt_message_info_waiting);
+        return getContext().getText(R.string.resolve_wpt_message_waiting);
     }
 
     @Override

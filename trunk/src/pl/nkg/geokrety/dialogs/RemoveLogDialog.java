@@ -30,7 +30,7 @@ public class RemoveLogDialog extends AlertDialogWrapper {
 	public RemoveLogDialog(ManagedDialogsActivity a) {
 		super(a, Dialogs.REMOVE_LOG_ALERTDIALOG);
 		//setTitle(R.string.account_remove);
-		setMessage(R.string.form_confirm_delete_msg);
+		setMessage(R.string.log_query_confirm_delete);
 		setOkCancelButtons();
 	}
 }

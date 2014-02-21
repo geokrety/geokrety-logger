@@ -48,7 +48,7 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
     private final BroadcastReceiver refreshFinishBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            Toast.makeText(AbstractGeoKretyActivity.this, R.string.toast_notify_refresh_finish, Toast.LENGTH_LONG).show();
+            Toast.makeText(AbstractGeoKretyActivity.this, R.string.refresh_message_refresh_finish, Toast.LENGTH_LONG).show();
             onRefreshDatabase();
         }
     };
@@ -57,7 +57,7 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             String error = intent.getExtras().getString(RefreshService.INTENT_ERROR_MESSAGE);
-            Toast.makeText(AbstractGeoKretyActivity.this, getText(R.string.toast_notify_refresh_error) + " " + error, Toast.LENGTH_LONG).show();
+            Toast.makeText(AbstractGeoKretyActivity.this, getText(R.string.refresh_message_refresh_error) + " " + error, Toast.LENGTH_LONG).show();
             onRefreshError();
         }
     };

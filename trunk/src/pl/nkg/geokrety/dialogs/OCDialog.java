@@ -47,7 +47,7 @@ public class OCDialog extends AlertDialogWrapper {
 				.toString();
 
 		if (mOCLogin.length() == 0) {
-			showToast(R.string.error_oc_null);
+			showToast(R.string.profile_oc_error_login_null);
 			return false;
 		}
 
@@ -78,7 +78,7 @@ public class OCDialog extends AlertDialogWrapper {
 	}
 
 	public void show(Serializable arg, String title, String login) {
-		setTitle(getManagedDialogsActivity().getText(R.string.title_dialog_oc)
+		setTitle(getManagedDialogsActivity().getText(R.string.profile_oc_title)
 				+ " " + title);
 		setOCLogin(login);
 		super.show(arg);
