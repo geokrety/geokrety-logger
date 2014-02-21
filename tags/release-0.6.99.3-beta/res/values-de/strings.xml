@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * 
+ * This file is a part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+ *
+ * Thanks for Schrottie!
+ -->
+<resources>
+	<!-- Main -->
+	<string name="app_name">GeoKrety Logger</string>
+    
+    <!-- Main Activity -->
+	<string name="main_label_welcome">GeoKrety Logger ist eine App zum Loggen von Geokrety. GeoKrety 
+		(<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>)
+		sind ähnliche wie TravelBug(TM) oder GeoLutins, verfolgbare Objekte die in Geocaches abgelegt
+		werden (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).
+	</string>
+	<string name="main_button_accounts">Profile (Konten)</string>
+	<string name="main_button_inventory">Inventar</string>
+	<string name="main_button_ocs">Letzte Geocaching Logs</string>
+	<string name="main_button_log">Log GeoKret</string>
+	<string name="main_button_gkl">Gespeicherte Logs</string>
+	<string name="main_button_about">Über</string>
+	<string name="main_label_version_prefix">GeoKrety Logger v</string>
+	<string name="main_label_copyright">Copyright &#169; by Michał Niedźwiecki 2013, 2014</string>
+	<string name="main_label_about">WWW:
+		<a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a>
+	</string>
+	<string name="main_label_emergency">Sollte die App nicht funktionieren, logge den GeoKret bitte
+		<a href="http://geokrety.org/ruchy.php">direkt auf der Webseite</a>.
+		Anschließend kontaktiere mich bitte über:
+		<a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.
+	</string>
+	<string name="main_label_help_in_translation">Eine bessere Übersetzung vorschlagen | Suggest a better translation:\n
+		<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a>
+	</string>
+    <!-- Error messages -->
+	<string name="main_message_error_no_account_configured">Du musst ein Profil einrichten!</string>
+    
+    <!-- Accounts Activity -->
+	<string name="title_activity_accounts">Profilmanager</string>
+	<string name="button_add_account">Profile hinzufügen</string>
+	<string name="account_edit">Bearbeiten</string>
+	<string name="account_remove">Entfernen</string>
+	<string name="accounts_remove_question">Soll das Profil wirklich entfernt werden </string>
+	<string-array name="context_menu_account">
+		<item>@string/account_edit</item>
+		<item>@string/account_remove</item>
+	</string-array>
+    
+    <!-- Account Activity -->
+	<string name="title_activity_account">Profile</string>
+	<string name="account_portals">Wähle die zu nutzenden Portale</string>
+	<string name="account_account_name_hint">Benutzer</string>
+	<string name="account_portal_gk">geokrety.org (erforderlich)</string>
+	<string name="account_portal_oc0">opencaching.pl</string>
+	<string name="account_portal_oc1">opencaching.de (mit .es und .it)</string>
+	<string name="account_portal_oc2">opencaching.us</string>
+	<string name="account_portal_oc3">opencaching.nl</string>
+	<string name="account_portal_oc4">opencaching.org.uk</string>
+<!-- NEED TRANSLATE --><string name="account_portal_gc">geocaching.com (own your risk!)</string>
+<!-- NEED TRANSLATE --><string name="account_introduction">Privacy policy:
+	    \ngeokrety.org - login and password is used for download &quot;secid&quot;. Login and &quot;secid&quot; is stored, but password not.
+	    Login is used as profile name. &quot;Secid&quot; is used for loading your inventory and logging moves of GeoKrets via official GeoKrety API.\n
+	    
+	    \nopencaching.* - login is stored and used for loading your last geocache logs via official OKAPI.\n
+	    
+	    \ngeocaching.com - login and password is stored and used for loading your last geocache logs and geocache coordinates via parsing of geocaching.com website.
+	    Warning! Using of this method probably break geocaching\'s terms of use paragraph 2.D.i and 2.D.ii. Use at your own risk!
+	    However similar method is used in c:geo app and no problems :)
+	</string>
+	<string name="account_home_location">Heimatkoordinaten (optional):</string>
+	<string name="account_latitude_hint">Latitude</string>
+	<string name="account_longnitude_hint">Longnitude</string>
+	<string name="account_from_gps">GPS</string>
+	<string name="account_save">OK</string>
+    <!-- Messages -->
+	<string name="account_save_title">Profileinstellungen speichern?</string>
+	<string name="account_save_message">Einstellungen wurden verändert. Speichern?</string>
+	<string name="download_login_gk">Login bei GeoKrety.org&#8230;</string>
+	<string name="download_getting_uuid">Hole UUID von</string>
+	<string name="download_login_gc">Login bei Geocaching.com&#8230;</string>
+	<string name="dots">&#8230;</string>
+    
+    <!-- GeoKrety.org account dialog -->
+	<string name="title_dialog_gk">Login und Passwort für GeoKrety.org</string>
+	<string name="login">GK Login:</string>
+	<string name="password">GK Passwort:</string>
+	<string name="login_hint">GeoKrety Login</string>
+	<string name="password_hint">GeoKrety Passwort</string>
+	<string name="error_login_null">GeoKrety.org Login darf nicht leer sein</string>
+	<string name="error_password_null">GeoKrety.org Passwort darf nicht leer sein</string>
+	<string name="login_error_password_message">Ungültiger GeoKrety Login oder Passwort.</string>
+    
+    <!-- Opencaching account dialog -->
+	<string name="title_dialog_oc">Login für:</string>
+	<string name="oc">OC Login:</string>
+	<string name="oc_hint">Opencaching Login</string>
+	<string name="error_oc_null">Opencaching Login darf nicht leer sein</string>
+	<string name="invalid_oclogin_error_message">Ungültiger Login bei:</string>
+	
+	<!-- Geocaching.com account dialog -->
+	<string name="title_dialog_gc">Login und Passwort für Geocaching.com</string>
+	<string name="gc_login">Geocaching.com Login:</string>
+	<string name="gc_password">Geocaching.com Passwort:</string>
+	<string name="gc_login_hint">Geocaching.com Login</string>
+	<string name="gc_password_hint">Geocaching.com Passwort</string>
+	<string name="error_gc_login_null">Geocaching.com Login darf nicht leer sein</string>
+	<string name="error_gc_password_null">Geocaching.com Passwort darf nicht leer sein</string>
+	<string name="gc_login_error_password_message">Ungültiger Geocaching.com Login oder Passwort.</string>
+<!-- NEED TRANSLATE --><string name="gc_login_password_message">Login and password to Geocaching.com is valid.</string>
+    
+    <!-- Inventory Activity -->
+	<string name="title_activity_inventory">GeoKrety Inventar</string>
+	<string name="menu_inventory_refresh">Aktualisieren</string>
+	<string name="inventory_error_message">Fehler beim Laden des Inventars. Internetverbindung prüfen.</string>
+	<string name="button_add_geokret">Manuell hinzufügen</string>
+    
+    <!-- GeoKret Activity -->
+	<string name="title_activity_geo_kret">GeoKret</string>
+	<string name="geokret_id_title">Referenznummer:</string>
+	<string name="geokret_id_type">Typ:</string>
+	<string name="geokret_nr_title">Trackingcode:</string>
+	<string name="geokret_nr_hint">z.B.. F65RF3</string>
+	<string name="geokret_name_title">Name:</string>
+	<string name="geokret_name_hint">Name des GeoKret</string>
+	<string-array name="geokret_id_types">
+		<item>Traditionell</item>
+		<item>Ein Buch, eine CD oder DVD&#8230;</item>
+		<item>Eine Person</item>
+		<item>A coin</item>
+		<item>KretyPost</item>
+	</string-array>
+	<string name="geokret_sticki_title">Nach Aktualisieren nicht aus dem Inventar entfernt</string>
+	<string name="geokret_save">Speichern</string>
+	<string name="geokret_save_title">Einstellungen speichern?</string>
+	<string name="geokret_save_message">Einstellungen wurden geändert. Speichern?</string>
+	<string name="geokret_message_error_invalid_trackingcode">Bitte einen gültigen Trackingcode eingeben: 6 Zeichen, z.B. XF3ACS</string>
+    
+    <!-- OpenCaching last logs Activity -->
+	<string name="title_activity_last_ocs">Letzte Logs aus den Geocaching Portalen</string>
+	<string name="menu_ocs_refresh">Aktualisieren</string>
+	<string name="oclogs_error_message">Fehler beim Laden der Geocaching Logs. Internetverbindung prüfen.</string>
+    
+    <!-- Log GeoKret Activity -->
+	<string name="title_activity_log">Log GeoKret</string>
+	<string name="form_log_type">1. Logtyp auswählen</string>
+	<string name="log_drop">GeoKret abgelegt</string>
+	<string name="log_grab">GeoKret mitgenommen</string>
+	<string name="log_met">GeoKret entdeckt</string>
+	<string name="log_dipped">Zwischenstopp</string>
+	<string name="log_comment">Kommentar</string>
+	<string-array name="log_array">
+<!-- NEED TRANSLATE --><item>Choose a log type&#8230;</item>
+		<item>@string/log_drop</item>
+		<item>@string/log_grab</item>
+		<item>@string/log_met</item>
+		<item>@string/log_dipped</item>
+		<item>@string/log_comment</item>
+	</string-array>
+	<string name="form_identify">2. GeoKret identifizieren</string>
+	<string name="form_code">Trackingcode</string>
+	<string name="form_profile">Wer? &#8230;</string>
+	<string name="form_inventory">Inventar</string>
+	<string name="form_location">3. Neuer Ort</string>
+	<string name="form_waypoint">Wegpunkt</string>
+	<string name="form_oclogs">OC Log</string>
+	<string name="form_cords">Koordinaten</string>
+	<string name="form_gps">GPS</string>
+	<string name="form_home">Home</string>
+	<string name="form_location_description">Bei Angabe eines Wegpunktes sind keine Koordinaten erforderlich, da diese dann
+		durch geokrety.org eingetragen werden.</string>
+	<string name="form_additional">4. zusätzliche Daten</string>
+	<string name="form_comment">Kommentar</string>
+	<string name="form_submit_button">Senden</string>
+	<string name="form_save_draft_button">Entwurf</string>
+	<string name="form_remove_button">Löschen</string>
+    <!-- Spinners -->
+	<string name="title_dialog_inventory">Dein Inventar</string>
+	<string name="title_dialog_ocs">Deine letzten Logs bei Geocaching</string>
+    <!-- Messages -->
+	<string name="form_confirm_delete_msg">Diesen Logeintrag löschen?</string>
+	<string name="warning_already_logged">Es existiert bereits ein Eintrag mit diesem Zeitstempel. Bitte korrigiere Datum
+		und Uhrzeit..</string>
+    <!-- Log submitting -->
+	<string name="submit_title">Übertrage Log</string>
+	<string name="submit_message">Log wird übertragen&#8230;</string>
+	<string name="submit_finish">GeoKret erfolgreich geloggt</string>
+	<string name="submit_broken">Übertragung fehlerhaft, aber Geokret wurde möglicherweise geloggt</string>
+	<string name="submit_fail">Übertragungsfehler: </string>
+
+    <!-- GeoKretLogs Activity -->
+	<string name="title_activity_geokretlogs">GeoKret Logs</string>
+	<string name="row_log_icon_contentDescription">Logtyp</string>
+	<string name="row_log_statusLabel">Status:</string>
+	<string name="row_log_profileLabel">Benutzer:</string>
+	<string name="log_status_draft">Entwurf</string>
+	<string name="log_status_new">Neu</string>
+	<string name="log_status_double">Duplikat</string>
+	<string name="log_status_problem">Fehler</string>
+	<string name="log_status_success">Erledigt</string>
+	<string name="log_status_queue">Queue</string>
+	<string name="log_status_unidentified">Unbekannt</string>
+   	<string name="button_submit_all_drafts">Alle senden</string>
+    	<string name="button_remove_all_saved_logs">Alle löschen</string>
+    	<string name="form_confirm_delete_all_msg">Wirklich alle Logeinträge löschen?</string>
+    
+    <!-- Refresing progress bar -->
+	<string name="download_title">Aktualisieren</string>
+	<string name="download_getting_gk">Hole Inventar von GeoKrety.org&#8230;</string>
+	<string name="download_getting_ocs">Hole letzte Logs von</string>
+	<string name="download_getting_names">Hole Cachenamen von</string>
+	<string name="download_finish">Aktualisierung abgeschlossen</string>
+    
+    <!-- Global messages -->
+	<string name="error_current_null">Bitte Profile auswählen.</string>
+	<string name="login_error_message">Verbindungsfehler: </string>
+	<string name="warning">Probleme:</string>
+	<string name="yes">Ja</string>
+	<string name="no">Nein</string>
+	<string name="generic_error">Fehler:</string>
+	<string name="generic_broken">Abgebrochen</string>
+	<string name="generic_finish">Erfolgreich</string>
+	<string name="not_implemented_yet">Noch nicht verfügbar</string>
+    
+    <!-- GPS -->
+	<string name="supported_formats">Unterstützte Formate:
+		http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
+	<string name="gps_not_exist">Kein GPS Modul in diesem Gerät gefunden</string>
+	<string name="gps_not_enabled">GPS ist deaktiviert. Bitte aktiviere das GPS Modul</string>
+	<string name="gps_acquiring">Warte auf Satellitenfix</string>
+	<string name="gps_pleas_wait">Bitte auf Satellitenfix warten</string>
+	<string name="gps_fixed">Position bestimmt, Koordinaten eingefügt</string>
+    
+	<!-- Log submitting service -->
+	<string name="message_do_submitting">Logs werden im Hintergrund übertragen&#8230;</string>
+	<string name="message_draft_saved">Log in Entwürfe gespeichert&#8230;</string>
+	<string name="message_submitting">Übertrage Log&#8230;</string>
+	<string name="message_submit_success">Logübertragung abgeschlossen</string>
+	<string name="message_submit_problem">geokrety.org hat die Übertragung abgewiesen</string>
+	<string name="message_submit_no_connection">Verbindungsfehler, noch einmal versuchen&#8230;</string>
+<!-- NEED TRANSLATE --><string name="message_error_no_log_type">Choose a log type!</string>
+<!-- NEED TRANSLATE --><string name="message_error_no_traking_code">Enter tracking code!</string>
+<!-- NEED TRANSLATE --><string name="message_error_no_location">Enter a new location of GeoKret!</string>
+		
+	<!-- Refresh service -->
+	<string name="toast_notify_refresh_start">Inventar und letzte Geocaching-Logs werden im Hintergrund aktualisiert&#8230;</string>
+	<string name="toast_notify_refresh_finish">Aktualisierung erfolgreich</string>
+	<string name="toast_notify_refresh_error">Verbindungsfehler:</string>
+	<string name="toast_notify_refresh_no_connection">Keine Internetverbindung</string>
+	<string name="notify_refresh_inventory">Aktualisiere Inventar</string>
+	<string name="notify_refresh_last_logs">Aktualisiere Liste der letzten Logs</string>
+	<string name="notify_refresh_oc_names">Refreshing data of geocaches</string>
+	<string name="notify_refresh_own_gk">Aktualisiere eigene Geokrety</string>
+	<string name="notify_refresh_error_inventory">Inventar:</string>
+	<string name="notify_refresh_error_last_logs">Letzte Logs:</string>
+	<string name="notify_refresh_error_broken">Aktualisierung fehlerhaft</string>
+	<string name="notify_refresh_error_lost_connection">Internetverbindung unterbrochen</string>
+	<string name="error_description_no_such_geokret">Falscher Tracking Code</string>
+	
+	<!-- GeoKret verification service -->
+	<string name="verify_tc_message_info_waiting">Trackingcode wird geprüft&#8230; (Du kannst fortfahren)</string>
+	<string name="verify_tc_message_error_geokret_not_found"> GeoKret nicht gefunden</string>
+	<string name="verify_tc_message_warning_no_connection">Trackingcode kann zur Zeit nicht verifiziert werden</string>
+	<string name="verify_tc_message_good_verified">GeoKrety gefunden:</string>
+	
+	<!-- Waypoint Resolver service -->
+	<string name="resolve_wpt_message_info_waiting">Ermittle Koordinaten von %1$s Wegpunkten&#8230; (Du kannst fortfahren)</string>
+	<string name="resolve_wpt_message_error_waypont_not_found">Bitte trage auch noch die Koordinaten des Caches im entsprechenden Eingabefeld (lat/lon) ein. Mehr zum Thema GeoKrets in GC-Caches ablegen.</string>
+	<string name="resolve_wpt_message_warning_no_connection">Dir Koordinaten von %1$s Wegpunkten konnten derzeit nicht ermittelt werden. Bitte gib Koordinaten im Eingabefeld unter dem Wegpunkt an.</string>
+
+		
+	<!-- About Activity -->
+	<string name="title_activity_about">Über</string>
+	<string name="foot">License: GPL 3.0,
+		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.
+	</string>
+	<string name="release_plans">Mehr Infos zu kommenden Versionen:\n
+		<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a>
+	</string>
+	
+	<!-- Crash report -->
+	<string name="crash_toast_text">Ooooops! Abgestürzt! Aber keine Panik, ein kurzer Report wurde an den Entwickler geschickt, damit dieser den Fehler so schnell wie möglich beseitigt.</string>
+</resources>
