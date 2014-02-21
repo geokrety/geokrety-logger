@@ -468,12 +468,18 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                             final AbstractForegroundTaskWrapper<Pair<String, String>, String, Boolean> sender,
                             final Pair<String, String> param,
                             final Boolean result) {
-                        modified = true;
-                        gcLogin = param.first;
-                        gcPassword = param.second;
-                        updateChecks();
-                        Toast.makeText(AccountActivity.this, R.string.gc_login_password_message, Toast.LENGTH_LONG)
-                                .show();
+                        if (result) {
+                            modified = true;
+                            gcLogin = param.first;
+                            gcPassword = param.second;
+                            updateChecks();
+                            Toast.makeText(AccountActivity.this, R.string.gc_login_password_message, Toast.LENGTH_LONG)
+                                    .show();
+                        } else {
+                            Toast.makeText(AccountActivity.this, R.string.gc_login_error_password_message, Toast.LENGTH_LONG)
+                            .show();
+                            gcDialog.show(null);
+                        }
                     }
                 });
 

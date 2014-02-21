@@ -73,14 +73,20 @@
 	<string name="account_portal_oc2">opencaching.us</string>
 	<string name="account_portal_oc3">opencaching.nl</string>
 	<string name="account_portal_oc4">opencaching.org.uk</string>
-	<string name="account_introduction">Instrukcja: po zaznaczeniu geokrety.org użytkownik zostanie poproszony o
-		podanie loginu i hasła, jakich używa do logowania się na tym portalu. Następnie te dane posłużą do
-		ściągnięcia &quot;secid&quot;. Ten &quot;secid&quot; zostanie zapisany w programie i będzie
-		wykorzystywany do logowania kretów, które zostały przeniesione (hasło nie jest zapisywane w
-		pamięci).\n\nPo zaznaczeniu opencaching.pl itd. użytkownik zostanie poproszony o podanie tylko
-		loginu, jakiego używa do logowania się na tym portalu. Ten login wykorzystywany jest tylko po to
-		by ściągnąć listę geokeszy, do których użytkownik się logował ostatnio. Ta lista jest
-		wykorzystywana do podpowiadania numeru waypoint podczas logowania geokreta.</string>
+	<string name="account_portal_gc">geocaching.com (na własne ryzyko!)</string>
+	<string name="account_introduction">Polityka prywatności:
+	    \ngeokrety.org - login i hasło są użyte do pobrania &quot;secid&quot;. Login i &quot;secid&quot; są zapisywane w pamięci telefonu, ale hasło nie.
+	    Login jest użyty jako nazwa profilu natomiast &quot;secid&quot; jest używany do pobrania listy kretów, które masz u siebie i logowania kretów, które przenosisz.
+	    Wszystko to odbywa się za pomocą oficjalnego API geokrety.org.\n
+	    
+	    \nopencaching.* - login jest zapisywany w pamięci telefonu i jest używany do pobrania listy geokeszy, do których ostatnio się logowałeś.
+	    Wszystko to odbywa się za pomocą oficjalnego OKAPI.\n
+	    
+	    \ngeocaching.com - login i hasło są zapisywane w pamięci telefonu i używane do pobrania listy geokeszy, do których ostatnio się logowałeś oraz współrzędnych
+	    geokeszy do których chcesz zalogować geokreta. Odbywa się to przez &quot;udawanie&quot; przez program przeglądarki w celu zalogowania się na geocaching.com i
+	    wyciągnięcia tych danych z kodu HTML. Uwaga! Ta metoda prawdopodobnie łamie regulamin serwisu geocaching.com paragraf 2.D.i i 2.D.ii.
+	    Zatem używaj tej funkcjonalności na własne ryzyko! Jednakże taka sama metoda jest używana w aplikacji c:geo i nie ma problemów :)
+	</string>
 	<string name="account_home_location">Koordynaty domowe (opcjonalne):</string>
 	<string name="account_latitude_hint">szerokość</string>
 	<string name="account_longnitude_hint">długość</string>
@@ -91,6 +97,7 @@
 	<string name="account_save_message">Dokonano zmian w ustawieniach profilu. Czy zapisać zmiany?</string>
 	<string name="download_login_gk">Logowanie do GeoKrety.org&#8230;</string>
 	<string name="download_getting_uuid">Pobieranie Twojego UUID z</string>
+	<string name="download_login_gc">Logowanie do Geocaching.com&#8230;</string>
 	<string name="dots">&#8230;</string>
     
     <!-- GeoKrety.org account dialog -->
@@ -109,6 +116,17 @@
 	<string name="oc_hint">OpenCaching login</string>
 	<string name="error_oc_null">Nie podałeś loginu do OpenCaching</string>
 	<string name="invalid_oclogin_error_message">Błąd pobierania danych z:</string>
+	
+	<!-- Geocaching.com account dialog -->
+	<string name="title_dialog_gc">Login i hasło do Geocaching.com</string>
+	<string name="gc_login">Geocaching.com login:</string>
+	<string name="gc_password">Geocaching.com hasło:</string>
+	<string name="gc_login_hint">Geocaching.com login</string>
+	<string name="gc_password_hint">Geocaching.com hasło</string>
+	<string name="error_gc_login_null">Zostawiłeś puste pole login do Geocaching.com</string>
+	<string name="error_gc_password_null">Zostawiłeś puste pole hasło do Geocaching.com</string>
+	<string name="gc_login_error_password_message">Nieprawidłowy login lub hasło do Geocaching.com</string>
+	<string name="gc_login_password_message">Login i hasło do Geocaching.com zostało zweryfikowane poprawnie</string>
     
     <!-- Inventory Activity -->
 	<string name="title_activity_inventory">Krety, które masz u siebie</string>

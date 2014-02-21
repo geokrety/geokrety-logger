@@ -75,13 +75,17 @@
 	<string name="account_portal_oc2">opencaching.us</string>
 	<string name="account_portal_oc3">opencaching.nl</string>
 	<string name="account_portal_oc4">opencaching.org.uk</string>
-<!-- changed: Login is stored, only password is not stored -->
-	<string name="account_introduction">Anleitung: Wenn die Verbindung zu geokrety.org steht müssen Benutzername und
-		Passwort angegeben werden. Dann wird die &quot;secid&quot; geladen. Die &quot;secid&quot; wird in
-		den App-Daten gespeichert, da sie zum loggen notwendig ist (Login und Passwort werden nicht
-		gespeichert).\n\nSteht die Verbindung zu opencaching.pl etc. muss auch hier der Loginname
-		angegeben werden. Er ist nötig um die letzten Logs zu laden. Die letzten Logs dienen der
-		Wegpunktermittlung zum loggen der Geokrety.</string>
+<!-- NEED TRANSLATE --><string name="account_portal_gc">geocaching.com (own your risk!)</string>
+<!-- NEED TRANSLATE --><string name="account_introduction">Privacy policy:
+	    \ngeokrety.org - login and password is used for download &quot;secid&quot;. Login and &quot;secid&quot; is stored, but password not.
+	    Login is used as profile name. &quot;Secid&quot; is used for loading your inventory and logging moves of GeoKrets via official GeoKrety API.\n
+	    
+	    \nopencaching.* - login is stored and used for loading your last geocache logs via official OKAPI.\n
+	    
+	    \ngeocaching.com - login and password is stored and used for loading your last geocache logs and geocache coordinates via parsing of geocaching.com website.
+	    Warning! Using of this method probably break geocaching\'s terms of use paragraph 2.D.i and 2.D.ii. Use at your own risk!
+	    However similar method is used in c:geo app and no problems :)
+	</string>
 	<string name="account_home_location">Heimatkoordinaten (optional):</string>
 	<string name="account_latitude_hint">Latitude</string>
 	<string name="account_longnitude_hint">Longnitude</string>
@@ -92,6 +96,7 @@
 	<string name="account_save_message">Einstellungen wurden verändert. Speichern?</string>
 	<string name="download_login_gk">Login bei GeoKrety.org&#8230;</string>
 	<string name="download_getting_uuid">Hole UUID von</string>
+	<string name="download_login_gc">Login bei Geocaching.com&#8230;</string>
 	<string name="dots">&#8230;</string>
     
     <!-- GeoKrety.org account dialog -->
@@ -110,6 +115,17 @@
 	<string name="oc_hint">Opencaching Login</string>
 	<string name="error_oc_null">Opencaching Login darf nicht leer sein</string>
 	<string name="invalid_oclogin_error_message">Ungültiger Login bei:</string>
+	
+	<!-- Geocaching.com account dialog -->
+	<string name="title_dialog_gc">Login und Passwort für Geocaching.com</string>
+	<string name="gc_login">Geocaching.com Login:</string>
+	<string name="gc_password">Geocaching.com Passwort:</string>
+	<string name="gc_login_hint">Geocaching.com Login</string>
+	<string name="gc_password_hint">Geocaching.com Passwort</string>
+	<string name="error_gc_login_null">Geocaching.com Login darf nicht leer sein</string>
+	<string name="error_gc_password_null">Geocaching.com Passwort darf nicht leer sein</string>
+	<string name="gc_login_error_password_message">Ungültiger Geocaching.com Login oder Passwort.</string>
+<!-- NEED TRANSLATE --><string name="gc_login_password_message">Login and password to Geocaching.com is valid.</string>
     
     <!-- Inventory Activity -->
 	<string name="title_activity_inventory">GeoKrety Inventar</string>
