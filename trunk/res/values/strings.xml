@@ -115,6 +115,7 @@
 	<string name="account_save_message">Profile settings changed. Save changes?</string>
 	<string name="download_login_gk">Login to GeoKrety.org&#8230;</string>
 	<string name="download_getting_uuid">Getting UUID from</string>
+	<string name="download_login_gc">Login to Geocaching.com&#8230;</string>
 	<string name="dots">&#8230;</string>
     
     <!-- GeoKrety.org account dialog -->
@@ -134,6 +135,18 @@
 	<string name="error_oc_null">OpenCaching login can not be empty</string>
 	<string name="invalid_oclogin_error_message">Invalid login to:</string>
     
+	<!-- Geocaching.com account dialog -->
+	<string name="title_dialog_gc">Login and password for Geocaching.com</string>
+	<string name="gc_login">Geocaching.com login:</string>
+	<string name="gc_password">Geocaching.com password:</string>
+	<string name="gc_login_hint">Geocaching.com login</string>
+	<string name="gc_password_hint">Geocaching.com password</string>
+	<string name="error_gc_login_null">Geocaching.com login can not be empty</string>
+	<string name="error_gc_password_null">Geocaching.com password can not be empty</string>
+	<string name="gc_login_error_password_message">Invalid Geocaching.com login or password.</string>
+	<string name="gc_login_password_message">Login and password to Geocaching.com is valid.</string>
+	
+	
     <!-- Inventory Activity -->
 	<string name="title_activity_inventory">GeoKrety inventory</string>
 	<string name="menu_inventory_refresh">Refresh</string>

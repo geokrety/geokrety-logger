@@ -29,10 +29,12 @@ import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.dialogs.Dialogs;
+import pl.nkg.geokrety.dialogs.GCDialog;
 import pl.nkg.geokrety.dialogs.GKDialog;
 import pl.nkg.geokrety.dialogs.OCDialog;
 import pl.nkg.geokrety.threads.GettingSecidThread;
 import pl.nkg.geokrety.threads.GettingUuidThread;
+import pl.nkg.geokrety.threads.VerifyGeocachingLoginThread;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import pl.nkg.lib.dialogs.AlertDialogWrapper;
 import pl.nkg.lib.dialogs.GenericProgressDialogWrapper;
@@ -66,6 +68,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
     private String secid;
     private String[] ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
     private String[] ocLogins = new String[SupportedOKAPI.SUPPORTED.length];
+    private String gcLogin;
+    private String gcPassword;
     private boolean modified;
 
     // private TextView accountNameEditText;
@@ -75,19 +79,22 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
     private EditText latEditText;
     private EditText lonEditText;
     private CheckBox gcCheckBox;
-    private EditText gcLoginEditText;
-    private EditText gcPasswordEditText;
+    //private EditText gcLoginEditText;
+    //private EditText gcPasswordEditText;
 
     private AlertDialogWrapper saveModifiedsDialog;
 
     private GKDialog gkDialog;
     private OCDialog ocDialog;
+    private GCDialog gcDialog;
 
     private GenericProgressDialogWrapper secidProgressDialog;
     private GenericProgressDialogWrapper uuidProgressDialog;
+    private GenericProgressDialogWrapper gcProgressDialog;
 
     private GettingSecidThread gettingSecidThread;
     private GettingUuidThread gettingUuidThread;
+    private VerifyGeocachingLoginThread verifyGeocachingLoginThread;
 
     private GeoKretyApplication application;
     private GPSAcquirer gpsAcquirer;
@@ -140,6 +147,9 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
             uuidProgressDialog.setProgress(getText(R.string.download_getting_uuid) + " "
                     + SupportedOKAPI.SUPPORTED[nr].host + getText(R.string.dots));
             gettingUuidThread.execute(new Pair<String, Integer>(ocDialog.getOCLogin(), nr));
+        } else if (dialog.getDialogId() == Dialogs.GC_PROMPTDIALOG) {
+            verifyGeocachingLoginThread.execute(new Pair<String, String>(gcDialog.getLogin(), gcDialog
+                    .getPassword()));
         }
     }
 
@@ -196,8 +206,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         returnIntent.putExtra(User.ACCOUNT_NAME, accountName);
         returnIntent.putExtra(User.HOME_LAT, latEditText.getText().toString());
         returnIntent.putExtra(User.HOME_LON, lonEditText.getText().toString());
-        returnIntent.putExtra(User.GC_LOGIN, gcLoginEditText.getText().toString());
-        returnIntent.putExtra(User.GC_PASSWORD, gcPasswordEditText.getText().toString());
+        returnIntent.putExtra(User.GC_LOGIN, gcLogin);
+        returnIntent.putExtra(User.GC_PASSWORD, gcPassword);
         setResult(RESULT_OK, returnIntent);
         finish();
     }
@@ -223,7 +233,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                 + ": "
                 + (Utils.isEmpty(accountName) ? getText(R.string.account_account_name_hint)
                         : accountName));
-        gcCheckBox.setChecked(!Utils.isEmpty(gcLoginEditText.getText().toString()));
+        gcCheckBox.setChecked(!Utils.isEmpty(gcLogin));
         saveButton.setEnabled(gkCheckBox.isChecked());
     }
 
@@ -242,16 +252,21 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 
         gkDialog = new GKDialog(this);
         ocDialog = new OCDialog(this);
+        gcDialog = new GCDialog(this);
 
         secidProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.SECID_PROGRESSDIALOG);
         secidProgressDialog.setProgress(getText(R.string.download_login_gk).toString());
 
         uuidProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.UUID_PROMPTDIALOG);
-        // uuidProgressDialog.setProgress(getText(R.string.download_getting_ocs));
+        
+        gcProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.GC_PROGRESSDIALOG);
+        gcProgressDialog.setProgress(getText(R.string.download_login_gc).toString());
 
         gettingSecidThread = GettingSecidThread.getFromHandler(application
                 .getForegroundTaskHandler());
         gettingUuidThread = GettingUuidThread
+                .getFromHandler(application.getForegroundTaskHandler());
+        verifyGeocachingLoginThread = VerifyGeocachingLoginThread
                 .getFromHandler(application.getForegroundTaskHandler());
 
         setContentView(R.layout.activity_account);
@@ -259,8 +274,6 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         lonEditText = (EditText) findViewById(R.id.lonEditText);
         
         gcCheckBox = (CheckBox) findViewById(R.id.gcCheckBox);
-        gcLoginEditText = (EditText) findViewById(R.id.gcLoginEditText);
-        gcPasswordEditText = (EditText) findViewById(R.id.gcPasswordEditText);
 
         accountID = getIntent().getLongExtra(User.ACCOUNT_ID, AdapterView.INVALID_POSITION);
         secid = getIntent().getStringExtra(User.SECID);
@@ -269,8 +282,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         accountName = getIntent().getStringExtra(User.ACCOUNT_NAME);
         lonEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.HOME_LON), ""));
         latEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.HOME_LAT), ""));
-        gcLoginEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.GC_LOGIN), ""));
-        gcPasswordEditText.setText(Utils.defaultIfNull(getIntent().getStringExtra(User.GC_PASSWORD), ""));
+        gcLogin = getIntent().getStringExtra(User.GC_LOGIN);
+        gcPassword = getIntent().getStringExtra(User.GC_PASSWORD);
 
         if (ocUUIDs == null) {
             ocUUIDs = new String[SupportedOKAPI.SUPPORTED.length];
@@ -328,16 +341,26 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                 }
             });
         }
+        
+        gcCheckBox.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(final View v) {
+                if (gcCheckBox.isChecked()) {
+                    gcDialog.show(null, accountName);
+                } else {
+                    modified = true;
+                    gcLogin = "";
+                    gcPassword = "";
+                }
+            }
+        });
 
         lonEditText.addTextChangedListener(this);
         latEditText.addTextChangedListener(this);
-        gcLoginEditText.addTextChangedListener(this);
-        gcPasswordEditText.addTextChangedListener(this);
         
         if (application.isExperimentalEnabled()) {
             gcCheckBox.setVisibility(View.VISIBLE);
-            gcLoginEditText.setVisibility(View.VISIBLE);
-            gcPasswordEditText.setVisibility(View.VISIBLE);
         }
     }
 
@@ -349,6 +372,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         ocUUIDs = savedInstanceState.getStringArray(User.OCUUIDS);
         ocLogins = savedInstanceState.getStringArray(User.OCLOGINS);
         accountName = savedInstanceState.getString(User.ACCOUNT_NAME);
+        gcLogin = savedInstanceState.getString(User.GC_LOGIN);
+        gcPassword = savedInstanceState.getString(User.GC_PASSWORD);
         gpsAcquirer.restore(savedInstanceState);
     }
 
@@ -361,6 +386,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         outState.putLong(User.ACCOUNT_ID, accountID);
         outState.putString(User.SECID, secid);
         outState.putString(User.ACCOUNT_NAME, accountName);
+        outState.putString(User.GC_LOGIN, gcLogin);
+        outState.putString(User.GC_PASSWORD, gcPassword);
     }
 
     @Override
@@ -422,6 +449,32 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                                 Toast.LENGTH_LONG).show();
                     }
 
+                });
+        
+        verifyGeocachingLoginThread.attach(gcProgressDialog,
+                new GenericTaskListener<Pair<String, String>, String, Boolean>(this) {
+
+                    @Override
+                    public void onError(
+                            final AbstractForegroundTaskWrapper<Pair<String, String>, String, Boolean> sender,
+                            final Pair<String, String> param,
+                            final Throwable exception) {
+                        super.onError(sender, param, exception);
+                        gcDialog.show(null);
+                    }
+
+                    @Override
+                    public void onFinish(
+                            final AbstractForegroundTaskWrapper<Pair<String, String>, String, Boolean> sender,
+                            final Pair<String, String> param,
+                            final Boolean result) {
+                        modified = true;
+                        gcLogin = param.first;
+                        gcPassword = param.second;
+                        updateChecks();
+                        Toast.makeText(AccountActivity.this, R.string.gc_login_password_message, Toast.LENGTH_LONG)
+                                .show();
+                    }
                 });
 
     }
