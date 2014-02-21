@@ -24,6 +24,7 @@ package pl.nkg.geokrety.data;
 import java.util.Collection;
 import java.util.LinkedList;
 
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKretySQLiteHelper.DBOperation;
 
 import android.content.ContentValues;
@@ -130,7 +131,7 @@ public class GeocacheDataSource {
         return gcs.isEmpty() ? null : gcs.getFirst();
     }
 
-    public void updateGeocachingCom(final String guid, final Geocache gc) {
+    public void updateGeocachingCom(final Geocache gc) {
         dbHelper.runOnWritableDatabase(new DBOperation() {
 
             @Override
@@ -142,6 +143,12 @@ public class GeocacheDataSource {
                             TABLE,
                             COLUMN_WAYPOINT + " = ?",
                             gc.getCode());
+                    if (!Utils.isEmpty(gc.getGUID())) {
+                        remove(db,
+                                TABLE,
+                                COLUMN_GUID + " = ?",
+                                gc.getGUID());
+                    }
                 persistAll(db, TABLE, cv);
                 GeocacheLogDataSource.updateGeocachingComWaypoint(db);
                 return true;

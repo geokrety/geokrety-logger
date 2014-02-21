@@ -22,10 +22,17 @@
 
 package pl.nkg.geokrety.services;
 
+import java.util.Date;
+
+import org.apache.http.protocol.HttpContext;
+
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.Geocache;
+import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
+import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 
 public class WaypointResolverService extends AbstractVerifyService {
@@ -33,6 +40,10 @@ public class WaypointResolverService extends AbstractVerifyService {
     public static final String BROADCAST = "pl.nkg.geokrety.services.WaypointResolverService";
 
     private static final String TAG = WaypointResolverService.class.getSimpleName();
+    
+    private long lastLogin = 0;
+    private HttpContext session;
+    private static final long SESSION_EXPIRED = 60*60*1000;
 
     public WaypointResolverService() {
         super(TAG, BROADCAST);
@@ -50,7 +61,27 @@ public class WaypointResolverService extends AbstractVerifyService {
 
             @Override
             protected Geocache run() throws NoConnectionException, Exception {
-                return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
+                Geocache gc =  GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
+                if (Utils.isEmpty(gc.getLocation())) {
+                    if (session == null || new Date().getTime() > lastLogin + SESSION_EXPIRED) {
+                        session = null;
+                        for (User user : stateHolder.getAccountList()) {
+                            if (!Utils.isEmpty(user.getGeocachingLogin())) {
+                                session = GeocachingProvider.login(user.getGeocachingLogin(), user.getGeocachingPassword());
+                                if (session != null) {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    if (session != null) {
+                        gc = GeocachingProvider.loadGeocacheByWaypoint(session, wpt);
+                        if (gc != null) {
+                            stateHolder.getGeocacheDataSource().updateGeocachingCom(gc);
+                        }
+                    }
+                }
+                return gc;
             }
         };
 

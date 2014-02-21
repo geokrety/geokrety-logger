@@ -68,7 +68,14 @@ public class GeoKretyApplication extends Application {
 	private boolean noAccountHinted = false;
 	public ANRWatchDog watchDog = new ANRWatchDog(30000);
 	
-	@SuppressWarnings("unused")
+	
+	
+	public GeoKretyApplication() {
+        super();
+        Utils.application = this;
+    }
+
+    @SuppressWarnings("unused")
     @Override
 	public void onCreate() {
 		super.onCreate();
@@ -80,7 +87,6 @@ public class GeoKretyApplication extends Application {
     		}
 		}
 		
-		Utils.application = this;
 		stateHolder = new StateHolder(getApplicationContext());
 		httpClient = createHttpClient();
 		foregroundTaskHandler = new ForegroundTaskHandler();

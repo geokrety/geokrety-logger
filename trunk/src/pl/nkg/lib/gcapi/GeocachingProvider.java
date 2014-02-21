@@ -30,6 +30,7 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import pl.nkg.geokrety.R;
@@ -52,16 +53,26 @@ public class GeocachingProvider {
         dateFormat.setTimeZone(TimeZone.getDefault());
     }
     
-    public static List<GeocacheLog> loadGeocachingComLogs(String login, String password, HttpContext httpContext) throws MessagedException {
-
+    public static HttpContext login(String login, String password) throws MessagedException {
         String[][] postData = new String[][] {
                 new String[] { "ctl00$tbUsername", login },
                 new String[] { "ctl00$tbPassword", password } };
         try {
+            HttpContext httpContext = new BasicHttpContext();
+            String ret = Utils.httpPost("https://www.geocaching.com/login/default.aspx", postData, httpContext);
+            // FIXME: check successfull or fail
+            return httpContext;
+        } catch (Throwable e) {
+            throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
+        }
+    }
+    
+    public static List<GeocacheLog> loadGeocachingComLogs(HttpContext httpContext) throws MessagedException {
+        String[][] postData = new String[][] {new String[] {"s","1"}};
+        try {
             List<GeocacheLog> openCachingLogs = new LinkedList<GeocacheLog>();
 
-            Utils.httpPost("https://www.geocaching.com/login/default.aspx", postData, httpContext);
-            String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", new String[][] {new String[] {"s","1"}}); 
+            String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", postData); 
             String table = extractTable(html);
             
             if (table != null) {
@@ -81,20 +92,29 @@ public class GeocachingProvider {
             
             return openCachingLogs;
         } catch (Throwable e) {
-            e.printStackTrace();
-            throw new MessagedException(R.string.oclogs_error_message);
+            throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
         }
     }
     
-    public static Geocache loadGeocachingComWaypoint(String guid, HttpContext httpContext) throws MessagedException {
+    public static Geocache loadGeocacheByGUID(HttpContext httpContext, String guid) throws MessagedException {
 
         String[][] postData = new String[][] {new String[] {"guid", guid}};
         try {
             String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
-            return Geocache.parseGeocachingCom(htmlCache, guid);
+            return Geocache.parseGeocachingCom(htmlCache);
         } catch (Throwable e) {
-            e.printStackTrace();
-            throw new MessagedException(R.string.oclogs_error_message);
+            throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
+        }
+    }
+    
+    public static Geocache loadGeocacheByWaypoint(HttpContext httpContext, String waypoint) throws MessagedException {
+
+        String[][] postData = new String[][] {new String[] {"wp", waypoint}};
+        try {
+            String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
+            return Geocache.parseGeocachingCom(htmlCache);
+        } catch (Throwable e) {
+            throw new MessagedException(R.string.oclogs_error_message, e.getLocalizedMessage());
         }
     }
     

@@ -22,7 +22,6 @@
 
 package pl.nkg.geokrety.data;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -141,14 +140,15 @@ public class InventoryDataSource {
 
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
-                final Cursor cursor = db.rawQuery("SELECT i." + COLUMN_TRACKING_CODE
+                /*final Cursor cursor = db.rawQuery("SELECT i." + COLUMN_TRACKING_CODE
                         + " FROM " + TABLE
                         + " AS i"
                         + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i."
                         + COLUMN_TRACKING_CODE
                         + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE
                         + " WHERE g." + GeoKretDataSource.COLUMN_SYNCHRO_ERROR + " IS NULL OR g."
-                        + GeoKretDataSource.COLUMN_SYNCHRO_STATE + " < 1", null);
+                        + GeoKretDataSource.COLUMN_SYNCHRO_STATE + " < 1", null);*/
+                final Cursor cursor = db.query(TABLE, new String[] {COLUMN_TRACKING_CODE}, COLUMN_STICKY + " = 1 AND " + COLUMN_USER_ID, null, null, null, null);
 
                 while (cursor.moveToNext()) {
                     gks.add(cursor.getString(0));

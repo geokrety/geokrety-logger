@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.acra.ACRA;
-import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
 import pl.nkg.geokrety.GeoKretyApplication;
@@ -233,10 +232,9 @@ public class RefreshService extends IntentService {
                         publishProgress(R.string.notify_refresh_last_logs,
                                 GeocachingProvider.HOST + " " + user.getGeocachingLogin()
                                         + getText(R.string.dots));
-                        BasicHttpContext httpContext = new BasicHttpContext();
+                        HttpContext httpContext = GeocachingProvider.login(user.getGeocachingLogin(), user.getGeocachingPassword());
                         stateHolder.getGeocacheLogDataSource().store(
-                                GeocachingProvider.loadGeocachingComLogs(user.getGeocachingLogin(),
-                                        user.getGeocachingPassword(), httpContext),
+                                GeocachingProvider.loadGeocachingComLogs(httpContext),
                                 user.getID(), GeocachingProvider.PORTAL);
 
                         for (String guid : stateHolder.getGeocacheLogDataSource()
@@ -278,9 +276,9 @@ public class RefreshService extends IntentService {
     private void refreshGeocachingCom(StringBuilder sb, String guid, HttpContext httpContext) {
 
         try {
-            Geocache gc = GeocachingProvider.loadGeocachingComWaypoint(guid, httpContext);
+            Geocache gc = GeocachingProvider.loadGeocacheByGUID(httpContext, guid);
             if (gc != null) {
-                stateHolder.getGeocacheDataSource().updateGeocachingCom(guid, gc);
+                stateHolder.getGeocacheDataSource().updateGeocachingCom(gc);
             }
         } catch (MessagedException e) {
             appendToStringBuilderWithNewLineIfNeed(sb,
@@ -295,6 +293,7 @@ public class RefreshService extends IntentService {
     private void refreshGeoKrets(CancelHolder cancelHolder, StringBuilder sb) {
         List<String> list = stateHolder.getInventoryDataSource().loadNeedUpdateList();
 
+        // FIXME: may gets only sticky and not synchronized - do test
         List<GeoKret> gks = new LinkedList<GeoKret>();
         for (String tc : list) {
             if (!canContinue(cancelHolder, sb)) {

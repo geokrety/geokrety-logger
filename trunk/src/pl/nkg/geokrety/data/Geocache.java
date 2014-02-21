@@ -38,7 +38,7 @@ public class Geocache {
 	private final String status;
 
 	
-	public static Geocache parseGeocachingCom(final String html, final String guid) throws JSONException {
+	public static Geocache parseGeocachingCom(final String html) throws JSONException {
         String title = Utils.extractBetween(html, "<title>", "</title>").trim();
 	    String waypoint =  title.substring(0, 7);
         String type = Utils.extractBetween(title, "(", ")"); 
@@ -46,6 +46,7 @@ public class Geocache {
         JSONObject json = new JSONObject(jsonStr);
         String name = json.getString("name");
         String location = json.getString("lat") + " " + json.getString("lng");
+        String guid = Utils.extractBetween(html, ", guid='", "'");
         return new Geocache(waypoint, name, location, type, "", guid);
 	}
 		
