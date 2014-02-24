@@ -412,7 +412,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             currentAccount = stateHolder.getAccountByID(currentLog.getAccoundID());
             if (currentLog.getState() == GeoKretLog.STATE_PROBLEM) {
                 TextView errorTextView = (TextView)findViewById(R.id.errorTextView);
-                errorTextView.setText(getText(currentLog.getProblem()) + " " + currentLog.getProblemArg());
+                errorTextView.setText(currentLog.formatProblem(this));
                 errorTextView.setVisibility(View.VISIBLE);
             }
         }

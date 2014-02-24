@@ -43,7 +43,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -144,11 +143,7 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
             if (log.getProblem() == R.string.log_warning_already_logged) {
                 return getText(R.string.log_warning_already_logged);
             } else {
-                try {
-                    return getText(log.getProblem()) + " " + log.getProblemArg();
-                } catch (NotFoundException e) {
-                    return log.getProblemArg();
-                }
+                return log.formatProblem(GeoKretLogsActivity.this);
             }
         }
 

@@ -35,7 +35,6 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
-import android.content.res.Resources.NotFoundException;
 import android.os.Handler;
 
 public class LogSubmitterService extends IntentService {
@@ -109,13 +108,7 @@ public class LogSubmitterService extends IntentService {
                     break;
 
                 case GeoKretyProvider.LOG_PROBLEM:
-                    try {
-                        message = getText(R.string.submit_notify_submit_problem) + ": "
-                                + getText(log.getProblem()) + " " + log.getProblemArg();
-                    } catch (NotFoundException e) {
-                        message = getText(R.string.submit_notify_submit_problem) + ": "
-                                + log.getProblemArg();
-                    }
+                    message = getText(R.string.submit_notify_submit_problem) + ": " + log.formatProblem(this);
                     icon = R.drawable.ic_stat_notify_log_problem;
                     break;
 
@@ -126,7 +119,7 @@ public class LogSubmitterService extends IntentService {
                     break;
 
                 case GeoKretyProvider.LOG_DOUBLE:
-                    message = getText(log.getProblem()).toString();
+                    message = getText(R.string.log_warning_already_logged).toString();
                     icon = R.drawable.ic_stat_notify_log_double;
                     break;
             }

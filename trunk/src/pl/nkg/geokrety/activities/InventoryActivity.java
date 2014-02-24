@@ -133,8 +133,10 @@ public class InventoryActivity extends AbstractGeoKretyActivity implements
     @Override
     public void onItemSelected(final AdapterView<?> arg0, final View arg1, final int arg2,
             final long arg3) {
-        account = stateHolder.getAccountList().get(arg2);
-        updateListView();
+        if (!isPaused()) {
+            account = stateHolder.getAccountList().get(arg2);
+            updateListView();
+        }
     }
 
     @Override

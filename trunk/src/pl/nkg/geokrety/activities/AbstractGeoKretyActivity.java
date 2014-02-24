@@ -75,8 +75,14 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
         stateHolder = application.getStateHolder();
     }
     
+    private boolean mPaused = true;
+    public boolean isPaused() {
+        return mPaused;
+    }
+    
     @Override
     protected void onPause() {
+        mPaused = true;
         super.onPause();
         unregisterReceiver(refreshErrorBroadcastReceiver);
         unregisterReceiver(refreshFinishBroadcastReceiver);
@@ -99,6 +105,7 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
                 RefreshService.BROADCAST_FINISH));
         registerReceiver(refreshErrorBroadcastReceiver, new IntentFilter(
                 RefreshService.BROADCAST_ERROR));
+        mPaused = false;
     }
     
     protected Cursor openCursor() {

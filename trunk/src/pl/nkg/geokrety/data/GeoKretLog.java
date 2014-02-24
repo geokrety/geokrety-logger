@@ -24,8 +24,11 @@ package pl.nkg.geokrety.data;
 import java.text.NumberFormat;
 import java.util.Date;
 
+import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
+import android.content.Context;
+import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.text.format.Time;
@@ -224,6 +227,14 @@ public class GeoKretLog {
 
 	public int getProblem() {
 		return problem;
+	}
+	
+	public String formatProblem(Context context) {
+	    try {
+	        return context.getText(problem) + " " + problemArg;
+        } catch (NotFoundException e) {
+            return Utils.defaultIfNull(problemArg, "null");
+        }
 	}
 
 	public String getProblemArg() {

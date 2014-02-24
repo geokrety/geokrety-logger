@@ -99,20 +99,6 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
         return cursor;
     }
 
-	/*@Override
-	protected void onStart() {
-		super.onStart();
-		refreshAccount.attach(refreshProgressDialog, new RefreshListener(this) {
-			@Override
-			public void onFinish(
-					AbstractForegroundTaskWrapper<User, String, String> sender,
-					User param, String result) {
-				super.onFinish(sender, param, result);
-				refreshListView();
-			}
-		});
-	}*/
-
 	@Override
 	protected void onResume() {
 	    super.onResume();
@@ -127,12 +113,6 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 	    super.onRefreshDatabase();
         openCursor();
 	}
-
-	/*@Override
-	protected void onStop() {
-		refreshAccount.detach();
-		super.onStop();
-	}*/
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -162,10 +142,11 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
 	@Override
 	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
 			long arg3) {
-		//ListView listView = (ListView) findViewById(R.id.ocsListView);
-		//listView.setAdapter(null);
-		account = stateHolder.getAccountList().get(arg2);
-		updateListView();
+	    
+		if (!isPaused()) {
+    		account = stateHolder.getAccountList().get(arg2);
+    		updateListView();
+		}
 	}
 
 	private void updateListView() {

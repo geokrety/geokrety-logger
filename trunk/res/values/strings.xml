@@ -32,7 +32,7 @@
      -->
     
     <!-- 
-    TODO: refactor to pattern:
+    pattern of naming:
     {module}_{thing}_{subthing}_{title}
     
     module: activity (i.e. 'geokret') or service (i.e. 'refresh') or 'global'
