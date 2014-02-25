@@ -214,7 +214,6 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 
     private void updateChecks() {
         gkCheckBox.setChecked(!Utils.isEmpty(secid));
-
         if (Utils.isEmpty(accountName)) {
             gkCheckBox.setText(R.string.profile_checkbox_portal_gk);
         } else {
@@ -229,11 +228,18 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                 ocCheckBox[i].setText(getText(CHECKBOX_LABELS[i]) + ": " + ocLogins[i]);
             }
         }
+        
+        gcCheckBox.setChecked(!Utils.isEmpty(gcLogin));
+        if (Utils.isEmpty(gcLogin)) {
+            gcCheckBox.setText(R.string.profile_checkbox_portal_gc);
+        } else {
+            gcCheckBox.setText(getText(R.string.profile_checkbox_portal_gc) + ": " + gcLogin);
+        }
+        
         setTitle(getText(R.string.profile_title)
                 + ": "
                 + (Utils.isEmpty(accountName) ? getText(R.string.profile_hint_name)
                         : accountName));
-        gcCheckBox.setChecked(!Utils.isEmpty(gcLogin));
         saveButton.setEnabled(gkCheckBox.isChecked());
     }
 

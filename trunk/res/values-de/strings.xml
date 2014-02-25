@@ -75,16 +75,16 @@
 	<string name="profile_checkbox_portal_oc2">opencaching.us</string>
 	<string name="profile_checkbox_portal_oc3">opencaching.nl</string>
 	<string name="profile_checkbox_portal_oc4">opencaching.org.uk</string>
-<!-- NEED TRANSLATE --><string name="profile_checkbox_portal_gc">geocaching.com (own your risk!)</string>
-<!-- NEED TRANSLATE --><string name="profile_label_private_policy">Privacy policy:
-	    \ngeokrety.org - login and password is used for download &quot;secid&quot;. Login and &quot;secid&quot; is stored, but password not.
-	    Login is used as profile name. &quot;Secid&quot; is used for loading your inventory and logging moves of GeoKrets via official GeoKrety API.\n
+	<string name="profile_checkbox_portal_gc">geocaching.com (eigenes Risiko!)</string>
+	<string name="profile_label_private_policy">Datenschutzrichtlinie:
+	    \ngeokrety.org - Zum Login und Download der &quot;secid&quot; werden Benutzername und Passwort benötigt. Gespeichert werden lediglich Benutzername und &quot;secid&quot;, nicht jedoch das Passwort.
+	    Der Benutzername wird als Profilename verwendet. Die &quot;Secid&quot; wird zum Laden des Geokrety-Inventars und zum Loggen über die offizielle GeoKrety API verwendet.\n
 	    
-	    \nopencaching.* - login is stored and used for loading your last geocache logs via official OKAPI.\n
+	    \nopencaching.* - Der Benutzername wird gespeichert und zum Laden der letzten Logs über die OKAPI (offizielle Opencaching API) verwendet.\n
 	    
-	    \ngeocaching.com - login and password is stored and used for loading your last geocache logs and geocache coordinates via parsing of geocaching.com website.
-	    Warning! Using of this method probably break geocaching\'s terms of use paragraph 2.D.i and 2.D.ii. Use at your own risk!
-	    However similar method is used in c:geo app and no problems :)
+	    \ngeocaching.com - Benutzername und Passwort werden gespeichert und zum Laden der letzten Logs sowie dasie Koordinatenermittlung (durch parsen der Webseite) verwendet.
+	    Warnung! Diese Methode verletzt möglicherweisedie Punkte 2.D.i und 2.D.ii der Nutzungsbedingungen von geocaching.com. Die Benutzung erfolgt auf eigene Gefahr!
+	    Übrigens: In c:geo wird diese Methode seit langem verwendet - bisher ohne Folgen... :)
 	</string>
 	<string name="profile_label_home_location">Heimatkoordinaten (optional):</string>
 	<string name="profile_hint_latitude">Latitude</string>
@@ -125,7 +125,7 @@
 	<string name="profile_gc_error_login_null">Geocaching.com Login darf nicht leer sein</string>
 	<string name="profile_gc_error_password_null">Geocaching.com Passwort darf nicht leer sein</string>
 	<string name="profile_gc_error_password_invalid">Ungültiger Geocaching.com Login oder Passwort.</string>
-<!-- NEED TRANSLATE --><string name="profile_gc_message_login_verified">Login and password to Geocaching.com is valid.</string>
+	<string name="profile_gc_message_login_verified">Login und Passwort für Geocaching.com sind gültig.</string>
     
     <!-- Inventory Activity -->
 	<string name="inventory_title">GeoKrety Inventar</string>
@@ -152,7 +152,7 @@
 	<string name="log_title">Log GeoKret</string>
 	<string name="log_label_section_log_type">1. Logtyp auswählen</string>
 	<string-array name="log_array">
-<!-- NEED TRANSLATE --><item>Choose a log type&#8230;</item>
+	<item>Wähle einen Logtyp&#8230;</item>
 		<item>GeoKret abgelegt</item>
 		<item>GeoKret mitgenommen</item>
 		<item>GeoKret entdeckt</item>
@@ -227,9 +227,9 @@
 	<string name="submit_notify_submit_success">Logübertragung abgeschlossen</string>
 	<string name="submit_notify_submit_problem">geokrety.org hat die Übertragung abgewiesen</string>
 	<string name="submit_notify_submit_no_connection">Verbindungsfehler, noch einmal versuchen&#8230;</string>
-<!-- NEED TRANSLATE --><string name="validation_error_no_log_type">Choose a log type!</string>
-<!-- NEED TRANSLATE --><string name="validation_error_no_traking_code">Enter tracking code!</string>
-<!-- NEED TRANSLATE --><string name="validation_error_no_location">Enter a new location of GeoKret!</string>
+	<string name="validation_error_no_log_type">Wähle einen Logtyp!</string>
+	<string name="validation_error_no_traking_code">Trackingcode eingeben!</string>
+	<string name="validation_error_no_location">Gib einen anderen Ort ein!</string>
 		
 	<!-- Refresh service -->
 	<string name="refresh_message_refresh_start">Inventar und letzte Geocaching-Logs werden im Hintergrund aktualisiert&#8230;</string>
