@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
@@ -113,7 +114,18 @@ public class GeocachingProvider {
 
         String[][] postData = new String[][] {new String[] {"wp", waypoint}};
         try {
-            String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
+            HttpResponse response = Utils.httpGetResponse("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
+            
+            if (response.getStatusLine().getStatusCode() == 404) {
+                return Geocache.notFound(waypoint);
+            }
+            
+            String htmlCache = Utils.responseToString(response);
+            
+            if (htmlCache.contains("<h2>Cache is Unpublished</h2>")) {
+                return Geocache.notFound(waypoint);
+            }
+            
             return Geocache.parseGeocachingCom(htmlCache);
         } catch (Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage() + ": " + waypoint);

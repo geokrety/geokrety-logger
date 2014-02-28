@@ -121,4 +121,8 @@ public class Geocache {
     public String getGUID() {
         return guid;
     }
+
+    public static Geocache notFound(String waypoint) {
+        return new Geocache(waypoint, "", "", "", "", "");
+    }
 }

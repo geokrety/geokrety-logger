@@ -75,8 +75,9 @@ public class WaypointResolverService extends AbstractVerifyService {
                         }
                     }
                     if (session != null) {
+                        // FIXME: test
                         gc = GeocachingProvider.loadGeocacheByWaypoint(session, wpt);
-                        if (gc != null) {
+                        if (gc != null && gc.getLocation() != null) {
                             stateHolder.getGeocacheDataSource().updateGeocachingCom(gc);
                         }
                     }
