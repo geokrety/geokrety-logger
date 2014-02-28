@@ -78,7 +78,9 @@ public class AccountsActivity extends ManagedDialogsActivity {
 
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
-				holder.setDefaultAccount(arg2);
+				//holder.setDefaultAccount(arg2);
+                mainListView.setItemChecked(holder.getDefaultAccountNr(), true);
+			    showEditAccountDialog(arg2);
 			}
 		});
 
@@ -121,10 +123,14 @@ public class AccountsActivity extends ManagedDialogsActivity {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item
 				.getMenuInfo();
 		int menuItemIndex = item.getItemId();
+		StateHolder holder = ((GeoKretyApplication) getApplication())
+                .getStateHolder();
 
 		switch (menuItemIndex) {
 		case 0:
-			showEditAccountDialog(info.position);
+			//FIXME: menu: Edit to Set as default
+		    holder.setDefaultAccount(info.position);
+		    mainListView.setItemChecked(holder.getDefaultAccountNr(), true);
 			return true;
 
 		case 1:
