@@ -116,7 +116,7 @@ public class GeocachingProvider {
             String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
             return Geocache.parseGeocachingCom(htmlCache);
         } catch (Throwable e) {
-            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
+            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage() + ": " + waypoint);
         }
     }
     

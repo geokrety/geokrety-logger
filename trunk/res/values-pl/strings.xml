@@ -269,6 +269,9 @@
 		niezgodnie z przeznaczeniem.
 	</string>
 	<string name="about_label_changelog">Historia zmian:\n
+		0.7.0 beta - 2014-02-25\n
+		- obsługa geocachin.com (na własne ryzyko!)\n
+		\n
 		0.6.2 beta - 2014-02-20\n
 		- walidacja formularza logowania GeoKreta przy wysyłaniu,\n
 		- naprawionych kilka błędów\n

@@ -26,8 +26,8 @@ import java.util.regex.Pattern;
 
 public class TrackingCodeInputFilter extends RegExInputFilter {
 
-    public static final Pattern CAPS_LETTERS_AND_DIGITS_PATTERN = Pattern.compile("[A-Z0-9]*");
-    public static final Pattern TRACKING_CODE_PATTERN = Pattern.compile("^[A-Z0-9]{6}$");
+    public static final Pattern CAPS_LETTERS_AND_DIGITS_PATTERN = Pattern.compile("[a-zA-Z0-9]*");
+    public static final Pattern TRACKING_CODE_PATTERN = Pattern.compile("^[a-zA-Z0-9]{6}$");
 
     public TrackingCodeInputFilter() {
         super(CAPS_LETTERS_AND_DIGITS_PATTERN, TRACKING_CODE_PATTERN);
