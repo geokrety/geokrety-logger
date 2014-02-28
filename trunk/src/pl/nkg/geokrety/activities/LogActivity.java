@@ -525,6 +525,9 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         gpsAcquirer.pause(outState);
         super.onSaveInstanceState(outState);
         storeToGeoKretLog(currentLog);
+        if (!savedLog && !isEmpty()) {
+            saveLog(GeoKretLog.STATE_DRAFT);
+        }
         currentLog.storeToBundle(outState);
     }
 
@@ -596,14 +599,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         }
         super.onBackPressed();
     };
-    
-    @Override
-    protected void onDestroy() {
-        if (!savedLog && !isEmpty()) {
-            saveLog(GeoKretLog.STATE_DRAFT);
-        }
-        super.onDestroy();
-    }
     
     private boolean isEmpty() {
         return Utils.isEmpty(trackingCodeEditText.getText().toString()) && Utils.isEmpty(coordinatesEditText.getText().toString()) && Utils.isEmpty(waypointEditText.getText().toString()) && Utils.isEmpty(commentEditText.getText().toString());

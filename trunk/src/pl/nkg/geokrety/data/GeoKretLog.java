@@ -96,6 +96,7 @@ public class GeoKretLog {
 		this();
 		if (savedInstanceState != null) {
 
+		    id = savedInstanceState.getLong(GeoKretLogDataSource.COLUMN_ID, 0);
 			nr = savedInstanceState.getString(TRACKING_CODE);
 			logtype_mapped = savedInstanceState.getInt(LOG_TYPE);
 			data = savedInstanceState.getString(DATE);
@@ -335,6 +336,7 @@ public class GeoKretLog {
 
 	public void storeToBundle(final Bundle outState) {
 		// outState.putString("secid", secid);
+	    outState.putLong(GeoKretLogDataSource.COLUMN_ID, id);
 		outState.putString(TRACKING_CODE, nr);
 		outState.putInt(LOG_TYPE, logtype_mapped);
 		outState.putString(DATE, data);
