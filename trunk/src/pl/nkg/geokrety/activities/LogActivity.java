@@ -75,6 +75,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private AlertDialogWrapper inventorySpinnerDialog;
     private AlertDialogWrapper ocsSpinnerDialog;
     private AlertDialogWrapper logTypeSpinnerDialog;
+    private AlertDialogWrapper userSpinnerDialog;
 
     private GeoKretLog currentLog;
     private User currentAccount;
@@ -154,6 +155,13 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 }
                 loadFromGeoKretLog(currentLog);
                 break;
+                
+            case Dialogs.USER_SPINNERDIALOG:
+                currentAccount = (User) userSpinnerDialog.getAdapter().getItem(buttonId);
+                storeToGeoKretLog(currentLog);
+                loadFromGeoKretLog(currentLog);
+                configAdapters();
+                break;
 
             case Dialogs.TYPE_SPINNERDIALOG:
                 currentLogType = buttonId - 1;
@@ -232,7 +240,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     public void showAccountsActivity(final View view) {
-        startActivityForResult(new Intent(this, AccountsActivity.class), 0);
+        //startActivityForResult(new Intent(this, AccountsActivity.class), 0);
+        userSpinnerDialog.show(null, currentAccount == null ? -1 : usersAdapter.indexOf(currentAccount.getID()));
     }
 
     public void showInventory(final View view) {
@@ -251,7 +260,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                     lastLogsAdapter.indexOf(waypointEditText.getText().toString()));
         }
     }
-
+    
     private boolean canShowUserData() {
         if (currentAccount == null) {
             Toast.makeText(this, R.string.error_no_profile_selected, Toast.LENGTH_SHORT).show();
@@ -287,6 +296,23 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         public int indexOf(String waypoint) {
             for (int i = 0; i < getCount(); i++) {
                 if (waypoint.toUpperCase(Locale.ENGLISH).contains(getItem(i).getCacheCode().toUpperCase(Locale.ENGLISH))) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
+    
+    private UsersAdapter usersAdapter;
+    private class UsersAdapter extends ArrayAdapter<User> {
+
+        public UsersAdapter() {
+            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder.getUserDataSource().getAll());
+        }
+        
+        public int indexOf(long id) {
+            for (int i = 0; i < getCount(); i++) {
+                if (id == getItem(i).getID()) {
                     return i;
                 }
             }
@@ -369,14 +395,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     @Override
-    protected void onActivityResult(final int requestCode, final int resultCode, final Intent data) {
-        currentAccount = stateHolder.getDefaultAccount();
-        storeToGeoKretLog(currentLog);
-        loadFromGeoKretLog(currentLog);
-        super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
     protected void onCreate(final Bundle savedInstanceState) {
         savedLog = false;
         super.onCreate(savedInstanceState);
@@ -393,6 +411,10 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         ocsSpinnerDialog = new AlertDialogWrapper(this, Dialogs.OCS_SPINNERDIALOG);
         ocsSpinnerDialog.setTitle(R.string.log_lastlogs_title);
+        
+        userSpinnerDialog = new AlertDialogWrapper(this, Dialogs.USER_SPINNERDIALOG);
+        usersAdapter = new UsersAdapter();
+        userSpinnerDialog.setAdapter(usersAdapter);
 
         logTypeSpinnerDialog = new AlertDialogWrapper(this, Dialogs.TYPE_SPINNERDIALOG);
         

@@ -32,6 +32,7 @@ public class Dialogs {
 	public static final int INVENTORY_SPINNERDIALOG = 1012;
 	public static final int OCS_SPINNERDIALOG = 1013;
 	public static final int TYPE_SPINNERDIALOG = 1014;
+	public static final int USER_SPINNERDIALOG = 1015;
 	
 	public static final int GK_PROMPTDIALOG = 1020;
 	public static final int OC_PROMPTDIALOG = 1021;
