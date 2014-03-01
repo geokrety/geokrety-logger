@@ -57,8 +57,8 @@
     <!-- Accounts Activity -->
 	<string name="users_title">Profilmanager</string>
 	<string name="users_button_add_account">Profile hinzufügen</string>
-<!-- NEED TRANSLATE --><string name="users_submenu_set_as_default">Set as default</string>
-<!-- NEED TRANSLATE --><string name="users_submenu_unset_as_default">Unset as default</string>
+	<string name="users_submenu_set_as_default">Als Standard verwenden</string>
+	<string name="users_submenu_unset_as_default">Standard aufheben</string>
 	<string name="users_submenu_remove">Entfernen</string>
 	<string name="users_question_remove">Soll das Profil wirklich entfernt werden </string>
 	<string-array name="users_contextmenu_unchecked">
@@ -166,7 +166,7 @@
 	</string-array>
 	<string name="log_label_section_identify">2. GeoKret identifizieren</string>
 	<string name="log_hint_code">Trackingcode</string>
-<!-- NEED TRANSLATE --><string name="log_button_user">User&#8230;</string>
+	<string name="log_button_user">Benutzer&#8230;</string>
 	<string name="log_button_inventory">Inventar</string>
 	<string name="log_label_section_location">3. Neuer Ort</string>
 	<string name="log_hint_waypoint">Wegpunkt</string>
@@ -259,7 +259,7 @@
 	<string name="resolve_wpt_message_waiting">Ermittle Koordinaten von %1$s Wegpunkten&#8230; (Du kannst fortfahren)</string>
 	<string name="resolve_wpt_error_location_can_not_be_resolved">Bitte trage auch noch die Koordinaten des Caches im entsprechenden Eingabefeld (lat/lon) ein. Mehr zum Thema GeoKrets in GC-Caches ablegen:</string>
 	<string name="resolve_wpt_warning_no_connection">Dir Koordinaten von %1$s Wegpunkten konnten derzeit nicht ermittelt werden. Bitte gib Koordinaten im Eingabefeld unter dem Wegpunkt an.</string>
-<!-- NEED TRANSLATE --><string name="resolve_wpt_error_waypont_not_found">%1$s geocache is not found. Please check waypoint or provide only the coordinates (lat/lon) of new the GeoKret location in the input box below.</string>
+	<string name="resolve_wpt_error_waypont_not_found">%1$s Geocache nicht gefunden. Bitte prüfe den Wegpunkt oder gib Koordinaten an.</string>
 		
 	<!-- About Activity -->
 	<string name="about_title">Über</string>
