@@ -23,6 +23,7 @@ package pl.nkg.geokrety.data;
 
 import java.text.NumberFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.exceptions.MessagedException;
@@ -311,7 +312,7 @@ public class GeoKretLog {
 	}
 
 	public void setNr(final String nr) {
-		this.nr = nr;
+		this.nr = nr.toUpperCase(Locale.ENGLISH);
 	}
 
 	public void setProblem(final int problem) {
