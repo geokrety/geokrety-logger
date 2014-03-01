@@ -38,7 +38,7 @@ public class GKDialog extends AlertDialogWrapper {
 
 	public GKDialog(ManagedDialogsActivity a) {
 		super(a, Dialogs.GK_PROMPTDIALOG);
-		setTitle(R.string.profile_gk_title);
+		setTitle(R.string.user_gk_title);
 		setLayout(R.layout.dialog_gk);
 		setOkCancelButtons();
 	}
@@ -51,12 +51,12 @@ public class GKDialog extends AlertDialogWrapper {
 				.getText().toString();
 
 		if (mGKLogin.length() == 0) {
-			showToast(R.string.profile_gk_error_login_null);
+			showToast(R.string.user_gk_error_login_null);
 			return false;
 		}
 
 		if (mGKPassword.length() == 0) {
-			showToast(R.string.profile_gk_error_password_null);
+			showToast(R.string.user_gk_error_password_null);
 			return false;
 		}
 

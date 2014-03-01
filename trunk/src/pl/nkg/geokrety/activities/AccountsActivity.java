@@ -111,10 +111,13 @@ public class AccountsActivity extends ManagedDialogsActivity {
             int current = mainListView.getCheckedItemPosition();
             String[] menuItems = getResources()
                     .getStringArray(
-                            current == info.position ? R.array.profiles_contextmenu_checked_profile
-                                    : R.array.profiles_contextmenu_profile);
+                            current == info.position ? R.array.users_contextmenu_checked
+                                    : R.array.users_contextmenu_unchecked);
             for (int i = 0; i < menuItems.length; i++) {
-                menu.add(Menu.NONE, i, i, menuItems[i]);
+                MenuItem item = menu.add(Menu.NONE, i, i, menuItems[i]);
+                if (i == 0 && listAdapter.getCount() == 1) {
+                    item.setEnabled(false);
+                }
             }
         }
     }

@@ -100,8 +100,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
     private GPSAcquirer gpsAcquirer;
 
     private static final int[] CHECKBOX_LABELS = {
-            R.string.profile_checkbox_portal_oc0, R.string.profile_checkbox_portal_oc1, R.string.profile_checkbox_portal_oc2,
-            R.string.profile_checkbox_portal_oc3, R.string.profile_checkbox_portal_oc4
+            R.string.user_checkbox_portal_oc0, R.string.user_checkbox_portal_oc1, R.string.user_checkbox_portal_oc2,
+            R.string.user_checkbox_portal_oc3, R.string.user_checkbox_portal_oc4
     };
 
     @Override
@@ -144,7 +144,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                     .getGKPassword()));
         } else if (dialog.getDialogId() == Dialogs.OC_PROMPTDIALOG) {
             final int nr = (Integer) arg;
-            uuidProgressDialog.setProgress(getText(R.string.profile_message_getting_uuid) + " "
+            uuidProgressDialog.setProgress(getText(R.string.user_message_getting_uuid) + " "
                     + SupportedOKAPI.SUPPORTED[nr].host + getText(R.string.dots));
             gettingUuidThread.execute(new Pair<String, Integer>(ocDialog.getOCLogin(), nr));
         } else if (dialog.getDialogId() == Dialogs.GC_PROMPTDIALOG) {
@@ -194,7 +194,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
 
     public void saveClick(final View view) {
         if (Utils.isEmpty(secid)) {
-            Toast.makeText(this, R.string.profile_gk_error_login_null, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.user_gk_error_login_null, Toast.LENGTH_LONG).show();
             return;
         }
 
@@ -215,9 +215,9 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
     private void updateChecks() {
         gkCheckBox.setChecked(!Utils.isEmpty(secid));
         if (Utils.isEmpty(accountName)) {
-            gkCheckBox.setText(R.string.profile_checkbox_portal_gk);
+            gkCheckBox.setText(R.string.user_checkbox_portal_gk);
         } else {
-            gkCheckBox.setText(getText(R.string.profile_checkbox_portal_gk) + ": " + accountName);
+            gkCheckBox.setText(getText(R.string.user_checkbox_portal_gk) + ": " + accountName);
         }
 
         for (int i = 0; i < ocCheckBox.length; i++) {
@@ -231,14 +231,14 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         
         gcCheckBox.setChecked(!Utils.isEmpty(gcLogin));
         if (Utils.isEmpty(gcLogin)) {
-            gcCheckBox.setText(R.string.profile_checkbox_portal_gc);
+            gcCheckBox.setText(R.string.user_checkbox_portal_gc);
         } else {
-            gcCheckBox.setText(getText(R.string.profile_checkbox_portal_gc) + ": " + gcLogin);
+            gcCheckBox.setText(getText(R.string.user_checkbox_portal_gc) + ": " + gcLogin);
         }
         
-        setTitle(getText(R.string.profile_title)
+        setTitle(getText(R.string.user_title)
                 + ": "
-                + (Utils.isEmpty(accountName) ? getText(R.string.profile_hint_name)
+                + (Utils.isEmpty(accountName) ? getText(R.string.user_hint_name)
                         : accountName));
         saveButton.setEnabled(gkCheckBox.isChecked());
     }
@@ -250,8 +250,8 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         application = (GeoKretyApplication) getApplication();
 
         saveModifiedsDialog = new AlertDialogWrapper(this, Dialogs.SAVE_MODIFIEDSDIALOG);
-        saveModifiedsDialog.setTitle(R.string.profile_query_title_save);
-        saveModifiedsDialog.setMessage(R.string.profile_query_message_save);
+        saveModifiedsDialog.setTitle(R.string.user_query_title_save);
+        saveModifiedsDialog.setMessage(R.string.user_query_message_save);
         saveModifiedsDialog.setPositiveButton(getText(R.string.yes));
         saveModifiedsDialog.setNegativeButton(getText(R.string.no));
         saveModifiedsDialog.setNeutralButton(getText(android.R.string.cancel));
@@ -261,12 +261,12 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
         gcDialog = new GCDialog(this);
 
         secidProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.SECID_PROGRESSDIALOG);
-        secidProgressDialog.setProgress(getText(R.string.profile_message_getting_secid).toString());
+        secidProgressDialog.setProgress(getText(R.string.user_message_getting_secid).toString());
 
         uuidProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.UUID_PROMPTDIALOG);
         
         gcProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.GC_PROGRESSDIALOG);
-        gcProgressDialog.setProgress(getText(R.string.profile_message_gc_verification).toString());
+        gcProgressDialog.setProgress(getText(R.string.user_message_gc_verification).toString());
 
         gettingSecidThread = GettingSecidThread.getFromHandler(application
                 .getForegroundTaskHandler());
@@ -479,10 +479,10 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                             gcLogin = param.first;
                             gcPassword = param.second;
                             updateChecks();
-                            Toast.makeText(AccountActivity.this, R.string.profile_gc_message_login_verified, Toast.LENGTH_LONG)
+                            Toast.makeText(AccountActivity.this, R.string.user_gc_message_login_verified, Toast.LENGTH_LONG)
                                     .show();
                         } else {
-                            Toast.makeText(AccountActivity.this, R.string.profile_gc_error_password_invalid, Toast.LENGTH_LONG)
+                            Toast.makeText(AccountActivity.this, R.string.user_gc_error_password_invalid, Toast.LENGTH_LONG)
                             .show();
                             gcDialog.show(null);
                         }

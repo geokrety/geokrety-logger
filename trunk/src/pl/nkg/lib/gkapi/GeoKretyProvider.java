@@ -171,7 +171,7 @@ public class GeoKretyProvider {
 		if (value != null && !value.startsWith("error")) {
 			return value.trim();
 		} else {
-			throw new MessagedException(R.string.profile_gk_error_password_invalid, String.valueOf(value));
+			throw new MessagedException(R.string.user_gk_error_password_invalid, String.valueOf(value));
 		}
 	}
 

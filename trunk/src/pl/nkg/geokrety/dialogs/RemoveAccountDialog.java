@@ -41,14 +41,14 @@ public class RemoveAccountDialog extends AlertDialogWrapper {
 
 	public RemoveAccountDialog(ManagedDialogsActivity a) {
 		super(a, Dialogs.REMOVE_ACCOUNT_ALERTDIALOG);
-		setTitle(R.string.profiles_submenu_remove);
+		setTitle(R.string.users_submenu_remove);
 		setOkCancelButtons();
 	}
 
 	public void show(Serializable arg, String accountName, int position) {
 		setPosition(position);
 		setMessage(getManagedDialogsActivity().getText(
-				R.string.profiles_question_remove)
+				R.string.users_question_remove)
 				+ " " + accountName + "?");
 		show(arg);
 	}

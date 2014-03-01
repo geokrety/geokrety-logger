@@ -53,33 +53,33 @@
 	<string name="main_error_no_account_configured">Najpierw dodaj co najmniej jeden profil i ustaw w nim swoje konto!</string>
     
     <!-- Accounts Activity -->
-	<string name="profiles_title">Profile</string>
-	<string name="profiles_button_add_account">Dodaj nowy profil</string>
-	<string name="profiles_submenu_set_as_default">Zaznacz jako domyślny</string>
-	<string name="profiles_submenu_unset_as_default">Odznacz jako domyślny</string>
-		<string name="profiles_submenu_remove">Usuń</string>
-	<string name="profiles_question_remove">Czy jesteś pewien że chcesz usunąć profil</string>
-	<string-array name="profiles_contextmenu_profile">
-		<item>@string/profiles_submenu_set_as_default</item>
-		<item>@string/profiles_submenu_remove</item>
+	<string name="users_title">Profile</string>
+	<string name="users_button_add_account">Dodaj nowy profil</string>
+	<string name="users_submenu_set_as_default">Zaznacz jako domyślny</string>
+	<string name="users_submenu_unset_as_default">Odznacz jako domyślny</string>
+		<string name="users_submenu_remove">Usuń</string>
+	<string name="users_question_remove">Czy jesteś pewien że chcesz usunąć profil</string>
+	<string-array name="users_contextmenu_unchecked">
+		<item>@string/users_submenu_set_as_default</item>
+		<item>@string/users_submenu_remove</item>
 	</string-array>
-	<string-array name="profiles_contextmenu_checked_profile">
-		<item>@string/profiles_submenu_unset_as_default</item>
-		<item>@string/profiles_submenu_remove</item>
+	<string-array name="users_contextmenu_checked">
+		<item>@string/users_submenu_unset_as_default</item>
+		<item>@string/users_submenu_remove</item>
 	</string-array>
     
     <!-- Account Activity -->
-	<string name="profile_title">Profil użytkownika</string>
-	<string name="profile_label_portals">Których portali używasz?</string>
-	<string name="profile_hint_name">Nowy użytkownik</string>
-	<string name="profile_checkbox_portal_gk">geokrety.org (obowiązkowe)</string>
-	<string name="profile_checkbox_portal_oc0">opencaching.pl</string>
-	<string name="profile_checkbox_portal_oc1">opencaching.de (z .es i .it)</string>
-	<string name="profile_checkbox_portal_oc2">opencaching.us</string>
-	<string name="profile_checkbox_portal_oc3">opencaching.nl</string>
-	<string name="profile_checkbox_portal_oc4">opencaching.org.uk</string>
-	<string name="profile_checkbox_portal_gc">geocaching.com (na własne ryzyko!)</string>
-	<string name="profile_label_private_policy">Polityka prywatności:
+	<string name="user_title">Profil użytkownika</string>
+	<string name="user_label_portals">Których portali używasz?</string>
+	<string name="user_hint_name">Nowy użytkownik</string>
+	<string name="user_checkbox_portal_gk">geokrety.org (obowiązkowe)</string>
+	<string name="user_checkbox_portal_oc0">opencaching.pl</string>
+	<string name="user_checkbox_portal_oc1">opencaching.de (z .es i .it)</string>
+	<string name="user_checkbox_portal_oc2">opencaching.us</string>
+	<string name="user_checkbox_portal_oc3">opencaching.nl</string>
+	<string name="user_checkbox_portal_oc4">opencaching.org.uk</string>
+	<string name="user_checkbox_portal_gc">geocaching.com (na własne ryzyko!)</string>
+	<string name="user_label_private_policy">Polityka prywatności:
 	    \ngeokrety.org - login i hasło są użyte do pobrania &quot;secid&quot;. Login i &quot;secid&quot; są zapisywane w pamięci telefonu, ale hasło nie.
 	    Login jest użyty jako nazwa profilu natomiast &quot;secid&quot; jest używany do pobrania listy kretów, które masz u siebie i logowania kretów, które przenosisz.
 	    Wszystko to odbywa się za pomocą oficjalnego API geokrety.org.\n
@@ -92,46 +92,46 @@
 	    wyciągnięcia tych danych z kodu HTML. Uwaga! Ta metoda prawdopodobnie łamie regulamin serwisu geocaching.com paragraf 2.D.i i 2.D.ii.
 	    Zatem używaj tej funkcjonalności na własne ryzyko! Jednakże taka sama metoda jest używana w aplikacji c:geo i nie ma problemów :)
 	</string>
-	<string name="profile_label_home_location">Koordynaty domowe (opcjonalne):</string>
-	<string name="profile_hint_latitude">szerokość</string>
-	<string name="profile_hint_longnitude">długość</string>
-	<string name="profile_button_from_gps">GPS</string>
-	<string name="profile_button_save">Gotowe!</string>
+	<string name="user_label_home_location">Koordynaty domowe (opcjonalne):</string>
+	<string name="user_hint_latitude">szerokość</string>
+	<string name="user_hint_longnitude">długość</string>
+	<string name="user_button_from_gps">GPS</string>
+	<string name="user_button_save">Gotowe!</string>
     <!-- Messages -->
-	<string name="profile_query_title_save">Czy zachować ustawienia profilu?</string>
-	<string name="profile_query_message_save">Dokonano zmian w ustawieniach profilu. Czy zapisać zmiany?</string>
-	<string name="profile_message_getting_secid">Logowanie do GeoKrety.org&#8230;</string>
-	<string name="profile_message_getting_uuid">Pobieranie Twojego UUID z</string>
-	<string name="profile_message_gc_verification">Logowanie do Geocaching.com&#8230;</string>
+	<string name="user_query_title_save">Czy zachować ustawienia profilu?</string>
+	<string name="user_query_message_save">Dokonano zmian w ustawieniach profilu. Czy zapisać zmiany?</string>
+	<string name="user_message_getting_secid">Logowanie do GeoKrety.org&#8230;</string>
+	<string name="user_message_getting_uuid">Pobieranie Twojego UUID z</string>
+	<string name="user_message_gc_verification">Logowanie do Geocaching.com&#8230;</string>
 	<string name="dots">&#8230;</string>
     
     <!-- GeoKrety.org account dialog -->
-	<string name="profile_gk_title">Login i hasło do GeoKrety.org</string>
-	<string name="profile_gk_label_login">GK login:</string>
-	<string name="profile_gk_login_password">GK hasło:</string>
-	<string name="profile_gk_hint_login">GeoKrety login</string>
-	<string name="profile_gk_hint_password">GeoKrety hasło</string>
-	<string name="profile_gk_error_login_null">Nie podałeś loginu do GeoKrety.org</string>
-	<string name="profile_gk_error_password_null">Nie podałeś hasła do GeoKrety.org</string>
-	<string name="profile_gk_error_password_invalid">Zły login lub hasło do GeoKrety.org</string>
+	<string name="user_gk_title">Login i hasło do GeoKrety.org</string>
+	<string name="user_gk_label_login">GK login:</string>
+	<string name="user_gk_login_password">GK hasło:</string>
+	<string name="user_gk_hint_login">GeoKrety login</string>
+	<string name="user_gk_hint_password">GeoKrety hasło</string>
+	<string name="user_gk_error_login_null">Nie podałeś loginu do GeoKrety.org</string>
+	<string name="user_gk_error_password_null">Nie podałeś hasła do GeoKrety.org</string>
+	<string name="user_gk_error_password_invalid">Zły login lub hasło do GeoKrety.org</string>
     
     <!-- Opencaching account dialog -->
-	<string name="profile_oc_title">Login do:</string>
-	<string name="profile_oc_label_login">OC login:</string>
-	<string name="profile_oc_hint_login">OpenCaching login</string>
-	<string name="profile_oc_error_login_null">Nie podałeś loginu do OpenCaching</string>
-	<string name="profile_oc_error_login_invalid">Błąd pobierania danych z:</string>
+	<string name="user_oc_title">Login do:</string>
+	<string name="user_oc_label_login">OC login:</string>
+	<string name="user_oc_hint_login">OpenCaching login</string>
+	<string name="user_oc_error_login_null">Nie podałeś loginu do OpenCaching</string>
+	<string name="user_oc_error_login_invalid">Błąd pobierania danych z:</string>
 	
 	<!-- Geocaching.com account dialog -->
-	<string name="profile_gc_title">Login i hasło do Geocaching.com</string>
-	<string name="profile_gc_label_login">Geocaching.com login:</string>
-	<string name="profile_gc_label_password">Geocaching.com hasło:</string>
-	<string name="profile_gc_hint_login">Geocaching.com login</string>
-	<string name="profile_gc_hint_password">Geocaching.com hasło</string>
-	<string name="profile_gc_error_login_null">Zostawiłeś puste pole login do Geocaching.com</string>
-	<string name="profile_gc_error_password_null">Zostawiłeś puste pole hasło do Geocaching.com</string>
-	<string name="profile_gc_error_password_invalid">Nieprawidłowy login lub hasło do Geocaching.com</string>
-	<string name="profile_gc_message_login_verified">Login i hasło do Geocaching.com zostało zweryfikowane poprawnie</string>
+	<string name="user_gc_title">Login i hasło do Geocaching.com</string>
+	<string name="user_gc_label_login">Geocaching.com login:</string>
+	<string name="user_gc_label_password">Geocaching.com hasło:</string>
+	<string name="user_gc_hint_login">Geocaching.com login</string>
+	<string name="user_gc_hint_password">Geocaching.com hasło</string>
+	<string name="user_gc_error_login_null">Zostawiłeś puste pole login do Geocaching.com</string>
+	<string name="user_gc_error_password_null">Zostawiłeś puste pole hasło do Geocaching.com</string>
+	<string name="user_gc_error_password_invalid">Nieprawidłowy login lub hasło do Geocaching.com</string>
+	<string name="user_gc_message_login_verified">Login i hasło do Geocaching.com zostało zweryfikowane poprawnie</string>
     
     <!-- Inventory Activity -->
 	<string name="inventory_title">Krety, które masz u siebie</string>

@@ -51,7 +51,7 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name=".activities.AccountsActivity" android:label="@string/profiles_title" />
+		<activity android:name=".activities.AccountsActivity" android:label="@string/users_title" />
 		<activity android:name=".activities.InventoryActivity" android:label="@string/inventory_title" />
 		<activity android:name=".activities.LastOCsActivity" android:label="@string/lastlogs_title" />
 		<activity android:name=".activities.GeoKretLogsActivity" android:label="@string/logs_title" />
@@ -115,7 +115,7 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".activities.AboutActivity" android:label="@string/about_title" />
-		<activity android:name=".activities.AccountActivity" android:label="@string/profile_title" />
+		<activity android:name=".activities.AccountActivity" android:label="@string/user_title" />
 		<activity android:name=".activities.GeoKretActivity" android:label="@string/geokret_title" android:windowSoftInputMode="adjustResize" />
 
 		<service android:name=".services.LogSubmitterService" />

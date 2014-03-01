@@ -34,13 +34,13 @@
         android:id="@+id/ocTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/profile_oc_label_login"
+        android:text="@string/user_oc_label_login"
         android:textStyle="bold" />
 
     <EditText
         android:id="@+id/ocEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/profile_oc_hint_login" />
+        android:hint="@string/user_oc_hint_login" />
 
 </LinearLayout>

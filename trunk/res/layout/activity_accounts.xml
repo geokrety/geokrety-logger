@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="onAddAccountButtonClicks"
-            android:text="@string/profiles_button_add_account" />
+            android:text="@string/users_button_add_account" />
     </LinearLayout>
 
     <LinearLayout

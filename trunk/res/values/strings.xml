@@ -74,34 +74,34 @@
     <!-- Error messages -->
 	<string name="main_error_no_account_configured">You must configure your account!</string>
 	    
-    <!-- Profiles Activity -->
-	<string name="profiles_title">GeoKrety profile manager</string>
-	<string name="profiles_button_add_account">Add profile</string>
-	<string name="profiles_submenu_set_as_default">Set as default</string>
-	<string name="profiles_submenu_unset_as_default">Unset as default</string>
-		<string name="profiles_submenu_remove">Remove</string>
-	<string name="profiles_question_remove">Are you sure you want to remove profile? </string>
-	<string-array name="profiles_contextmenu_profile">
-		<item>@string/profiles_submenu_set_as_default</item>
-		<item>@string/profiles_submenu_remove</item>
+    <!-- Users Activity -->
+	<string name="users_title">GeoKrety profile manager</string>
+	<string name="users_button_add_account">Add profile</string>
+	<string name="users_submenu_set_as_default">Set as default</string>
+	<string name="users_submenu_unset_as_default">Unset as default</string>
+	<string name="users_submenu_remove">Remove</string>
+	<string name="users_question_remove">Are you sure you want to remove profile? </string>
+	<string-array name="users_contextmenu_nchecked">
+		<item>@string/users_submenu_set_as_default</item>
+		<item>@string/users_submenu_remove</item>
 	</string-array>
-	<string-array name="profiles_contextmenu_checked_profile">
-		<item>@string/profiles_submenu_unset_as_default</item>
-		<item>@string/profiles_submenu_remove</item>
+	<string-array name="users_contextmenu_checked">
+		<item>@string/users_submenu_unset_as_default</item>
+		<item>@string/users_submenu_remove</item>
 	</string-array>
 	
     <!-- Account Activity -->
-	<string name="profile_title">Profile</string>
-	<string name="profile_label_portals">Choose which portal to use</string>
-	<string name="profile_hint_name">New user</string>
-	<string name="profile_checkbox_portal_gk">geokrety.org (required)</string>
-	<string name="profile_checkbox_portal_oc0">opencaching.pl</string>
-	<string name="profile_checkbox_portal_oc1">opencaching.de (with .es and .it)</string>
-	<string name="profile_checkbox_portal_oc2">opencaching.us</string>
-	<string name="profile_checkbox_portal_oc3">opencaching.nl</string>
-	<string name="profile_checkbox_portal_oc4">opencaching.org.uk</string>
-	<string name="profile_checkbox_portal_gc">geocaching.com (own your risk!)</string>
-	<string name="profile_label_private_policy">Privacy policy:
+	<string name="user_title">Profile</string>
+	<string name="user_label_portals">Choose which portal to use</string>
+	<string name="user_hint_name">New user</string>
+	<string name="user_checkbox_portal_gk">geokrety.org (required)</string>
+	<string name="user_checkbox_portal_oc0">opencaching.pl</string>
+	<string name="user_checkbox_portal_oc1">opencaching.de (with .es and .it)</string>
+	<string name="user_checkbox_portal_oc2">opencaching.us</string>
+	<string name="user_checkbox_portal_oc3">opencaching.nl</string>
+	<string name="user_checkbox_portal_oc4">opencaching.org.uk</string>
+	<string name="user_checkbox_portal_gc">geocaching.com (own your risk!)</string>
+	<string name="user_label_private_policy">Privacy policy:
 	    \ngeokrety.org - login and password is used for download &quot;secid&quot;. Login and &quot;secid&quot; is stored, but password not.
 	    Login is used as profile name. &quot;Secid&quot; is used for loading your inventory and logging moves of GeoKrets via official GeoKrety API.\n
 	    
@@ -111,46 +111,46 @@
 	    Warning! Using of this method probably break geocaching\'s terms of use paragraph 2.D.i and 2.D.ii. Use at your own risk!
 	    However similar method is used in c:geo app and no problems :)
 	</string>
-	<string name="profile_label_home_location">Home coordinates (optional):</string>
-	<string name="profile_hint_latitude">latitude</string>
-	<string name="profile_hint_longnitude">longitude</string>
-	<string name="profile_button_from_gps">GPS</string>
-	<string name="profile_button_save">OK</string>
+	<string name="user_label_home_location">Home coordinates (optional):</string>
+	<string name="user_hint_latitude">latitude</string>
+	<string name="user_hint_longnitude">longitude</string>
+	<string name="user_button_from_gps">GPS</string>
+	<string name="user_button_save">OK</string>
     <!-- Messages -->
-	<string name="profile_query_title_save">Save profile settings?</string>
-	<string name="profile_query_message_save">Profile settings changed. Save changes?</string>
-	<string name="profile_message_getting_secid">Login to GeoKrety.org&#8230;</string>
-	<string name="profile_message_getting_uuid">Getting UUID from</string>
-	<string name="profile_message_gc_verification">Login to Geocaching.com&#8230;</string>
+	<string name="user_query_title_save">Save profile settings?</string>
+	<string name="user_query_message_save">Profile settings changed. Save changes?</string>
+	<string name="user_message_getting_secid">Login to GeoKrety.org&#8230;</string>
+	<string name="user_message_getting_uuid">Getting UUID from</string>
+	<string name="user_message_gc_verification">Login to Geocaching.com&#8230;</string>
 	<string name="dots">&#8230;</string>
     
     <!-- GeoKrety.org account dialog -->
-	<string name="profile_gk_title">Login and password for GeoKrety.org</string>
-	<string name="profile_gk_label_login">GK login:</string>
-	<string name="profile_gk_login_password">GK password:</string>
-	<string name="profile_gk_hint_login">GeoKrety login</string>
-	<string name="profile_gk_hint_password">GeoKrety password</string>
-	<string name="profile_gk_error_login_null">GeoKrety.org login can not be empty</string>
-	<string name="profile_gk_error_password_null">GeoKrety.org password can not be empty</string>
-	<string name="profile_gk_error_password_invalid">Invalid GeoKrety login or password.</string>
+	<string name="user_gk_title">Login and password for GeoKrety.org</string>
+	<string name="user_gk_label_login">GK login:</string>
+	<string name="user_gk_login_password">GK password:</string>
+	<string name="user_gk_hint_login">GeoKrety login</string>
+	<string name="user_gk_hint_password">GeoKrety password</string>
+	<string name="user_gk_error_login_null">GeoKrety.org login can not be empty</string>
+	<string name="user_gk_error_password_null">GeoKrety.org password can not be empty</string>
+	<string name="user_gk_error_password_invalid">Invalid GeoKrety login or password.</string>
     
     <!-- Opencaching account dialog -->
-	<string name="profile_oc_title">Login to:</string>
-	<string name="profile_oc_label_login">OC login:</string>
-	<string name="profile_oc_hint_login">OpenCaching login</string>
-	<string name="profile_oc_error_login_null">OpenCaching login can not be empty</string>
-	<string name="profile_oc_error_login_invalid">Invalid login to:</string>
+	<string name="user_oc_title">Login to:</string>
+	<string name="user_oc_label_login">OC login:</string>
+	<string name="user_oc_hint_login">OpenCaching login</string>
+	<string name="user_oc_error_login_null">OpenCaching login can not be empty</string>
+	<string name="user_oc_error_login_invalid">Invalid login to:</string>
     
 	<!-- Geocaching.com account dialog -->
-	<string name="profile_gc_title">Login and password for Geocaching.com</string>
-	<string name="profile_gc_label_login">Geocaching.com login:</string>
-	<string name="profile_gc_label_password">Geocaching.com password:</string>
-	<string name="profile_gc_hint_login">Geocaching.com login</string>
-	<string name="profile_gc_hint_password">Geocaching.com password</string>
-	<string name="profile_gc_error_login_null">Geocaching.com login can not be empty</string>
-	<string name="profile_gc_error_password_null">Geocaching.com password can not be empty</string>
-	<string name="profile_gc_error_password_invalid">Invalid Geocaching.com login or password.</string>
-	<string name="profile_gc_message_login_verified">Login and password to Geocaching.com is valid.</string>
+	<string name="user_gc_title">Login and password for Geocaching.com</string>
+	<string name="user_gc_label_login">Geocaching.com login:</string>
+	<string name="user_gc_label_password">Geocaching.com password:</string>
+	<string name="user_gc_hint_login">Geocaching.com login</string>
+	<string name="user_gc_hint_password">Geocaching.com password</string>
+	<string name="user_gc_error_login_null">Geocaching.com login can not be empty</string>
+	<string name="user_gc_error_password_null">Geocaching.com password can not be empty</string>
+	<string name="user_gc_error_password_invalid">Invalid Geocaching.com login or password.</string>
+	<string name="user_gc_message_login_verified">Login and password to Geocaching.com is valid.</string>
 			
     <!-- Inventory Activity -->
 	<string name="inventory_title">GeoKrety inventory</string>
