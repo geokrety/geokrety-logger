@@ -275,6 +275,10 @@
 		niezgodnie z przeznaczeniem.
 	</string>
 	<string name="about_label_changelog">Historia zmian:\n
+		0.7.1 beta - 2014-01-02\n
+		- przemianowanie \"profil\" na \"użytkownik\",\n
+		- drobne poprawki\n
+		\n
 		0.7.0 beta - 2014-02-25\n
 		- obsługa geocachin.com (na własne ryzyko!)\n
 		\n
