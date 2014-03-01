@@ -184,9 +184,11 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     public void onClickDraft(final View view) {
-        saveLog(GeoKretLog.STATE_DRAFT);
-        Toast.makeText(this, R.string.submit_message_draft_saved, Toast.LENGTH_LONG).show();
-        finish();
+        if (canShowUserData()) {
+            saveLog(GeoKretLog.STATE_DRAFT);
+            Toast.makeText(this, R.string.submit_message_draft_saved, Toast.LENGTH_LONG).show();
+            finish();
+        }
     }
 
     public void onClickSetCoordinatesFromGPS(final View view) {
@@ -203,6 +205,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     public void onClickSubmit(final View view) {
         if (currentLogType == -1) {
             Toast.makeText(this, R.string.validation_error_no_log_type, Toast.LENGTH_LONG).show();
+        } else if (!canShowUserData()) {
         } else if (Utils.isEmpty(trackingCodeEditText.getText().toString())) {
             Toast.makeText(this, R.string.validation_error_no_traking_code, Toast.LENGTH_LONG).show();
         } else if (coordinatesEditText.isEnabled() && Utils.isEmpty(coordinatesEditText.getText().toString())) {
@@ -327,11 +330,13 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     private void configAdapters() {
-        inventoryAdapter = new InventoryAdapter();
-        inventorySpinnerDialog.setAdapter(inventoryAdapter);
-
-        lastLogsAdapter = new LastLogsAdapter();
-        ocsSpinnerDialog.setAdapter(lastLogsAdapter);
+        if (canShowUserData()) {
+            inventoryAdapter = new InventoryAdapter();
+            inventorySpinnerDialog.setAdapter(inventoryAdapter);
+    
+            lastLogsAdapter = new LastLogsAdapter();
+            ocsSpinnerDialog.setAdapter(lastLogsAdapter);
+        }
     }
 
     private void loadFromGeoKretLog(final GeoKretLog log) {
@@ -525,7 +530,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         gpsAcquirer.pause(outState);
         super.onSaveInstanceState(outState);
         storeToGeoKretLog(currentLog);
-        if (!savedLog && !isEmpty()) {
+        if (currentAccount != null && !savedLog && !isEmpty()) {
             saveLog(GeoKretLog.STATE_DRAFT);
         }
         currentLog.storeToBundle(outState);
@@ -585,7 +590,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         @Override
         public void onReceive(final Context context, final Intent intent) {
             final long userId = intent.getLongExtra(InventoryDataSource.COLUMN_USER_ID, -1);
-            if (userId == currentAccount.getID()) {
+            if (currentAccount != null && userId == currentAccount.getID()) {
                 configAdapters();
             }
         }

@@ -24,6 +24,8 @@ package pl.nkg.geokrety.data;
 import java.util.Collections;
 import java.util.List;
 
+import pl.nkg.geokrety.Utils;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.ListView;
@@ -123,11 +125,12 @@ public class StateHolder {
 
 	public void setDefaultAccount(final int defaultAccount) {
 		this.defaultAccount = defaultAccount;
+		getPreferences(Utils.application.getApplicationContext()).edit().putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
 	}
 
-	public void storeDefaultAccount(final Context context) {
+	/*public void storeDefaultAccount(final Context context) {
 		getPreferences(context).edit().putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
-	}
+	}*/
 
 	public GeoKretLog lockForLog(long logID) {
 		synchronized(this) {
