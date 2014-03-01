@@ -38,6 +38,7 @@ import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
+import pl.nkg.geokrety.exceptions.WaypointNotFoundException;
 import pl.nkg.geokrety.exceptions.MessagedException;
 
 public class GeocachingProvider {
@@ -117,16 +118,18 @@ public class GeocachingProvider {
             HttpResponse response = Utils.httpGetResponse("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
             
             if (response.getStatusLine().getStatusCode() == 404) {
-                return Geocache.notFound(waypoint);
+                throw new WaypointNotFoundException(waypoint);
             }
             
             String htmlCache = Utils.responseToString(response);
             
             if (htmlCache.contains("<h2>Cache is Unpublished</h2>")) {
-                return Geocache.notFound(waypoint);
+                throw new WaypointNotFoundException(waypoint);
             }
             
             return Geocache.parseGeocachingCom(htmlCache);
+        } catch (WaypointNotFoundException e) {
+            throw e;
         } catch (Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage() + ": " + waypoint);
         }

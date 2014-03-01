@@ -55,11 +55,16 @@
     <!-- Accounts Activity -->
 	<string name="profiles_title">Profile</string>
 	<string name="profiles_button_add_account">Dodaj nowy profil</string>
-	<string name="profiles_submenu_edit">Edytuj</string>
-	<string name="profiles_submenu_remove">Usuń</string>
+	<string name="profiles_submenu_set_as_default">Zaznacz jako domyślny</string>
+	<string name="profiles_submenu_unset_as_default">Odznacz jako domyślny</string>
+		<string name="profiles_submenu_remove">Usuń</string>
 	<string name="profiles_question_remove">Czy jesteś pewien że chcesz usunąć profil</string>
 	<string-array name="profiles_contextmenu_profile">
-		<item>@string/profiles_submenu_edit</item>
+		<item>@string/profiles_submenu_set_as_default</item>
+		<item>@string/profiles_submenu_remove</item>
+	</string-array>
+	<string-array name="profiles_contextmenu_checked_profile">
+		<item>@string/profiles_submenu_unset_as_default</item>
 		<item>@string/profiles_submenu_remove</item>
 	</string-array>
     
@@ -254,8 +259,9 @@
 
 	<!-- Waypoint Resolver service -->
 	<string name="resolve_wpt_message_waiting">Próba ściągnięcia współrzędnych %1$s&#8230; (możesz kontynuować)</string>
-	<string name="resolve_wpt_error_waypont_not_found">Nie można teraz ściągnąć współrzędnych do %1$s. Proszę podaj współrzędne (lat/lon) kesza %1$s w okienku poniżej</string>
+	<string name="resolve_wpt_error_location_can_not_be_resolved">Nie można teraz ściągnąć współrzędnych do %1$s. Proszę podaj współrzędne (lat/lon) kesza %1$s w okienku poniżej:</string>
 	<string name="resolve_wpt_warning_no_connection">Nie można teraz ściągnąć współrzędnych do %1$s bo jest problem z połączeniem. Lepiej będzie jak podasz współrzędne (lat/lon) kesza %1$s w okienku poniżej na wypadek jak by waypoint okazał się błędny.</string>
+	<string name="resolve_wpt_error_waypont_not_found">Geocache o identyfikatorze %1$s nie istnieje. Sprawdź czy dobrze wypisałeś waypoint lub po prostu podaj tylko współrzędne (lat/lon) miejsca w którym logujesz tego GeoKreta.</string>
 	
 	<!-- About Activity -->
 	<string name="about_title">Informacje o GeoKrety Logger</string>

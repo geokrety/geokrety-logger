@@ -22,8 +22,6 @@
 package pl.nkg.lib.gkapi;
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
@@ -40,6 +38,7 @@ import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.Geocache;
+import pl.nkg.geokrety.exceptions.LocationNotResolvedException;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
 import android.text.TextUtils;
@@ -145,10 +144,12 @@ public class GeoKretyProvider {
             final String str = Utils.httpGet(URL_AJAX, getData);
             JSONObject json = new JSONObject(str); 
             
-            return new Geocache(json.getString("tresc"), json.getString("lat"), json.getString("lon"));
+            return Geocache.fromWaypointResolver(waypoint, json);
             
         } catch (IOException e) {
             throw new NoConnectionException();
+        } catch (LocationNotResolvedException e) {
+            throw e;
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
             throw new MessagedException(R.string.global_error_system, Utils.formatException(e));

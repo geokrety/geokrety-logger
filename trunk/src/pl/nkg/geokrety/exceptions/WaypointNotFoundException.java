@@ -19,39 +19,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
-package pl.nkg.geokrety.services;
+package pl.nkg.geokrety.exceptions;
 
-import pl.nkg.geokrety.exceptions.NoConnectionException;
+import pl.nkg.geokrety.R;
 
-public abstract class TryDownload<O> {
+public class WaypointNotFoundException extends MessagedException {
 
-    private int mCount = 0;
-    private int mRetry = 0;
-    
-    public O tryRun(int count) throws Exception {
-        if (mCount != 0) {
-            throw new RuntimeException("tryRun method not finished");
-        }
-        mCount = count;
-        
-        for (mRetry = 0; mRetry < count; mRetry++) {
-            try {
-                O o = run();
-                mCount = 0;
-                return o;
-            } catch (NoConnectionException e) {
-                if (!doRetry(mRetry)) {
-                    mCount = 0;
-                    throw e;
-                }
-            }
-        }
-        throw new NoConnectionException();
+    private static final long serialVersionUID = -5478200523694626187L;
+
+    public WaypointNotFoundException(String waypoint) {
+        super(R.string.resolve_wpt_error_location_can_not_be_resolved, waypoint);
     }
-
-    protected boolean doRetry(int retry) {
-        return true;
-    }
-    
-    protected abstract O run() throws NoConnectionException, Exception;
 }

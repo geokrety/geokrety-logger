@@ -77,14 +77,19 @@
     <!-- Profiles Activity -->
 	<string name="profiles_title">GeoKrety profile manager</string>
 	<string name="profiles_button_add_account">Add profile</string>
-	<string name="profiles_submenu_edit">Edit</string>
-	<string name="profiles_submenu_remove">Remove</string>
+	<string name="profiles_submenu_set_as_default">Set as default</string>
+	<string name="profiles_submenu_unset_as_default">Unset as default</string>
+		<string name="profiles_submenu_remove">Remove</string>
 	<string name="profiles_question_remove">Are you sure you want to remove profile? </string>
 	<string-array name="profiles_contextmenu_profile">
-		<item>@string/profiles_submenu_edit</item>
+		<item>@string/profiles_submenu_set_as_default</item>
 		<item>@string/profiles_submenu_remove</item>
 	</string-array>
-    
+	<string-array name="profiles_contextmenu_checked_profile">
+		<item>@string/profiles_submenu_unset_as_default</item>
+		<item>@string/profiles_submenu_remove</item>
+	</string-array>
+	
     <!-- Account Activity -->
 	<string name="profile_title">Profile</string>
 	<string name="profile_label_portals">Choose which portal to use</string>
@@ -273,9 +278,10 @@
 	
 	<!-- Waypoint Resolver service -->
 	<string name="resolve_wpt_message_waiting">Resloving coordinates of %1$s waypoint&#8230; (you can continue)</string>
-	<string name="resolve_wpt_error_waypont_not_found">Coordinates of %1$s waypoint can not be resolved. Please provide the coordinates (lat/lon) of the %1$s cache in the input box below</string>
+	<string name="resolve_wpt_error_location_can_not_be_resolved">Coordinates of %1$s waypoint can not be resolved. Please provide the coordinates (lat/lon) of the %1$s cache in the input box below:</string>
 	<string name="resolve_wpt_warning_no_connection">Coordinates of %1$s waypoint can not be resolved in this time. Provide the coordinates in the input box below is good idea because your waypoint may be incorrect.</string>
-	
+	<string name="resolve_wpt_error_waypont_not_found">%1$s geocache is not found. Please check waypoint or provide only the coordinates (lat/lon) of new the GeoKret location in the input box below.</string>
+			
     <!-- About Activity -->
 	<string name="about_title">About</string>
 	<string name="about_label_foot">License: GPL 3.0,

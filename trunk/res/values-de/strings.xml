@@ -57,11 +57,16 @@
     <!-- Accounts Activity -->
 	<string name="profiles_title">Profilmanager</string>
 	<string name="profiles_button_add_account">Profile hinzufügen</string>
-	<string name="profiles_submenu_edit">Bearbeiten</string>
+<!-- NEED TRANSLATE --><string name="profiles_submenu_set_as_default">Set as default</string>
+<!-- NEED TRANSLATE --><string name="profiles_submenu_unset_as_default">Unset as default</string>
 	<string name="profiles_submenu_remove">Entfernen</string>
 	<string name="profiles_question_remove">Soll das Profil wirklich entfernt werden </string>
 	<string-array name="profiles_contextmenu_profile">
-		<item>@string/profiles_submenu_edit</item>
+		<item>@string/profiles_submenu_set_as_default</item>
+		<item>@string/profiles_submenu_remove</item>
+	</string-array>
+	<string-array name="profiles_contextmenu_checked_profile">
+		<item>@string/profiles_submenu_unset_as_default</item>
 		<item>@string/profiles_submenu_remove</item>
 	</string-array>
     
@@ -252,9 +257,9 @@
 	
 	<!-- Waypoint Resolver service -->
 	<string name="resolve_wpt_message_waiting">Ermittle Koordinaten von %1$s Wegpunkten&#8230; (Du kannst fortfahren)</string>
-	<string name="resolve_wpt_error_waypont_not_found">Bitte trage auch noch die Koordinaten des Caches im entsprechenden Eingabefeld (lat/lon) ein. Mehr zum Thema GeoKrets in GC-Caches ablegen.</string>
+	<string name="resolve_wpt_error_location_can_not_be_resolved">Bitte trage auch noch die Koordinaten des Caches im entsprechenden Eingabefeld (lat/lon) ein. Mehr zum Thema GeoKrets in GC-Caches ablegen:</string>
 	<string name="resolve_wpt_warning_no_connection">Dir Koordinaten von %1$s Wegpunkten konnten derzeit nicht ermittelt werden. Bitte gib Koordinaten im Eingabefeld unter dem Wegpunkt an.</string>
-
+<!-- NEED TRANSLATE --><string name="resolve_wpt_error_waypont_not_found">%1$s geocache is not found. Please check waypoint or provide only the coordinates (lat/lon) of new the GeoKret location in the input box below.</string>
 		
 	<!-- About Activity -->
 	<string name="about_title">Über</string>

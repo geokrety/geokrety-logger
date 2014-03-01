@@ -23,6 +23,7 @@
 package pl.nkg.geokrety.services;
 
 import java.util.Date;
+import java.util.Locale;
 
 import org.apache.http.protocol.HttpContext;
 
@@ -31,6 +32,8 @@ import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.User;
+import pl.nkg.geokrety.exceptions.WaypointNotFoundException;
+import pl.nkg.geokrety.exceptions.LocationNotResolvedException;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
 import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
@@ -40,10 +43,10 @@ public class WaypointResolverService extends AbstractVerifyService {
     public static final String BROADCAST = "pl.nkg.geokrety.services.WaypointResolverService";
 
     private static final String TAG = WaypointResolverService.class.getSimpleName();
-    
+
     private long lastLogin = 0;
     private HttpContext session;
-    private static final long SESSION_EXPIRED = 60*60*1000;
+    private static final long SESSION_EXPIRED = 60 * 60 * 1000;
 
     public WaypointResolverService() {
         super(TAG, BROADCAST);
@@ -61,48 +64,54 @@ public class WaypointResolverService extends AbstractVerifyService {
 
             @Override
             protected Geocache run() throws NoConnectionException, Exception {
-                Geocache gc =  GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
-                if (Utils.isEmpty(gc.getLocation())) {
+                try {
+                    return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
+                } catch (LocationNotResolvedException e) {
+                    if (!wpt.toUpperCase(Locale.ENGLISH).startsWith("GC")) {
+                        throw e;
+                    }
+                    
                     if (session == null || new Date().getTime() > lastLogin + SESSION_EXPIRED) {
                         session = null;
                         for (User user : stateHolder.getAccountList()) {
                             if (!Utils.isEmpty(user.getGeocachingLogin())) {
-                                session = GeocachingProvider.login(user.getGeocachingLogin(), user.getGeocachingPassword());
+                                session = GeocachingProvider.login(user.getGeocachingLogin(),
+                                        user.getGeocachingPassword());
                                 if (session != null) {
                                     break;
                                 }
                             }
                         }
                     }
+
                     if (session != null) {
-                        // FIXME: test
-                        gc = GeocachingProvider.loadGeocacheByWaypoint(session, wpt);
-                        if (gc != null && gc.getLocation() != null) {
-                            stateHolder.getGeocacheDataSource().updateGeocachingCom(gc);
-                        }
+                        Geocache gc = GeocachingProvider.loadGeocacheByWaypoint(session, wpt);
+                        stateHolder.getGeocacheDataSource().updateGeocachingCom(gc);
+                        return gc;
+                    } else {
+                        throw e;
                     }
                 }
-                return gc;
             }
         };
 
-        if (gc == null) {
-            gc = td.tryRun(application.getRetryCount());
-        }
-
-        if (gc == null) {
-            sendBroadcast(value, "", NotifyTextView.WARNING,
-                    String.format(getText(R.string.resolve_wpt_warning_no_connection)
+        try {
+            if (gc == null) {
+                gc = td.tryRun(application.getRetryCount());
+            }
+            sendBroadcast(value, gc.getLocation(), NotifyTextView.GOOD, wpt + ": " + gc.getName());
+        } catch (LocationNotResolvedException e) {
+            sendBroadcast(value, "", NotifyTextView.ERROR,
+                    String.format(getText(R.string.resolve_wpt_error_location_can_not_be_resolved)
                             .toString(), wpt));
-        } else if (gc.getName() != null) {
-            sendBroadcast(value, gc.getLocation(),
-                    NotifyTextView.GOOD,
-
-                    wpt + ": " + gc.getName());
-        } else {
+        } catch (WaypointNotFoundException e) {
             sendBroadcast(value, "", NotifyTextView.ERROR,
                     String.format(getText(R.string.resolve_wpt_error_waypont_not_found)
                             .toString(), wpt));
+        } catch (NoConnectionException e) {
+            sendBroadcast(value, "", NotifyTextView.WARNING,
+                    String.format(getText(R.string.resolve_wpt_warning_no_connection)
+                            .toString(), wpt));            
         }
     }
 }
