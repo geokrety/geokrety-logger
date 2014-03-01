@@ -166,7 +166,7 @@
 	</string-array>
 	<string name="log_label_section_identify">2. GeoKret identifizieren</string>
 	<string name="log_hint_code">Trackingcode</string>
-	<string name="log_button_user">Wer? &#8230;</string>
+<!-- NEED TRANSLATE --><string name="log_button_user">User&#8230;</string>
 	<string name="log_button_inventory">Inventar</string>
 	<string name="log_label_section_location">3. Neuer Ort</string>
 	<string name="log_hint_waypoint">Wegpunkt</string>
@@ -200,8 +200,8 @@
 	<string name="logs_label_status_queue">Queue</string>
 	<string name="logs_label_status_unidentified">Unbekannt</string>
    	<string name="logs_button_submit_all_drafts">Alle senden</string>
-    	<string name="logs_button_remove_all_saved_logs">Alle löschen</string>
-    	<string name="logs_query_confirm_delete_all_msg">Wirklich alle Logeinträge löschen?</string>
+    <string name="logs_button_remove_all_saved_logs">Alle löschen</string>
+    <string name="logs_query_confirm_delete_all_msg">Wirklich alle Logeinträge löschen?</string>
     
     <!-- Refresing progress bar -->
 	<string name="refresh_download_finish">Aktualisierung abgeschlossen</string>

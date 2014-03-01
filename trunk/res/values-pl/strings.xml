@@ -169,7 +169,7 @@
 	</string-array>
 	<string name="log_label_section_identify">2. Identyfikacja GeoKreta</string>
 	<string name="log_hint_code">Tracking Code</string>
-	<string name="log_button_user">Kto? &#8230;</string>
+	<string name="log_button_user">Użytkownik&#8230;</string>
 	<string name="log_button_inventory">Inwentarz &#8230;</string>
 	<string name="log_label_section_location">3. Nowa lokalizacja</string>
 	<string name="log_hint_waypoint">Waypoint</string>
@@ -209,7 +209,7 @@
 	<string name="refresh_download_finish">Odświeżanie zakończone</string>
     
     <!-- Global messages -->
-	<string name="error_no_user_selected">Proszę wybrać konto</string>
+	<string name="error_no_user_selected">Proszę wybrać użytkownika!</string>
 	<string name="connection_error">Problem z połączeniem:</string>
 	<string name="warning">Napotkano kilka problemów:</string>
 	<string name="yes">Tak</string>

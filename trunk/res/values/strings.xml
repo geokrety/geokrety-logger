@@ -188,7 +188,7 @@
 	</string-array>
 	<string name="log_label_section_identify">2. Identify GeoKret</string>
 	<string name="log_hint_code">Tracking code</string>
-	<string name="log_button_user">Who? &#8230;</string>
+	<string name="log_button_user">User&#8230;</string>
 	<string name="log_button_inventory">Inventory&#8230;</string>
 	<string name="log_label_section_location">3. New location</string>
 	<string name="log_hint_waypoint">Waypoint</string>
