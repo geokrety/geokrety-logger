@@ -45,7 +45,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class AccountsActivity extends ManagedDialogsActivity {
+public class UsersActivity extends ManagedDialogsActivity {
 
     private ListView mainListView;
     private ArrayAdapter<User> listAdapter;
@@ -161,7 +161,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
     }
 
     private void showNewAccountDialog() {
-        Intent intent = new Intent(this, AccountActivity.class);
+        Intent intent = new Intent(this, UserActivity.class);
         startActivityForResult(intent, NEW_ACCOUNT);
     }
 
@@ -193,7 +193,7 @@ public class AccountsActivity extends ManagedDialogsActivity {
         User account = ((GeoKretyApplication) getApplication())
                 .getStateHolder().getAccountList().get(position);
 
-        Intent intent = new Intent(this, AccountActivity.class);
+        Intent intent = new Intent(this, UserActivity.class);
         intent.putExtras(account.pack(new Bundle()));
         startActivityForResult(intent, EDIT_ACCOUNT);
     }

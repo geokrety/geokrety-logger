@@ -54,7 +54,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void showAccountsActivity(View view) {
-		startActivity(new Intent(this, AccountsActivity.class));
+		startActivity(new Intent(this, UsersActivity.class));
 	}
 
 	public void showInventoryActivity(View view) {

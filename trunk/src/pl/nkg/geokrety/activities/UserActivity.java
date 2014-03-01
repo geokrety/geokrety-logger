@@ -59,7 +59,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class AccountActivity extends ManagedDialogsActivity implements LocationListener,
+public class UserActivity extends ManagedDialogsActivity implements LocationListener,
         TextWatcher {
 
     // TODO: to moze byc razem z klasa Account
@@ -421,7 +421,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                         secid = result;
                         accountName = param.first;
                         updateChecks();
-                        Toast.makeText(AccountActivity.this, "secid: " + secid, Toast.LENGTH_LONG)
+                        Toast.makeText(UserActivity.this, "secid: " + secid, Toast.LENGTH_LONG)
                                 .show();
                     }
                 });
@@ -450,7 +450,7 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                             accountName = param.first;
                         }
                         updateChecks();
-                        Toast.makeText(AccountActivity.this,
+                        Toast.makeText(UserActivity.this,
                                 SupportedOKAPI.SUPPORTED[param.second].host + " uuid: " + result,
                                 Toast.LENGTH_LONG).show();
                     }
@@ -479,10 +479,10 @@ public class AccountActivity extends ManagedDialogsActivity implements LocationL
                             gcLogin = param.first;
                             gcPassword = param.second;
                             updateChecks();
-                            Toast.makeText(AccountActivity.this, R.string.user_gc_message_login_verified, Toast.LENGTH_LONG)
+                            Toast.makeText(UserActivity.this, R.string.user_gc_message_login_verified, Toast.LENGTH_LONG)
                                     .show();
                         } else {
-                            Toast.makeText(AccountActivity.this, R.string.user_gc_error_password_invalid, Toast.LENGTH_LONG)
+                            Toast.makeText(UserActivity.this, R.string.user_gc_error_password_invalid, Toast.LENGTH_LONG)
                             .show();
                             gcDialog.show(null);
                         }
