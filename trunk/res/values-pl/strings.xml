@@ -30,7 +30,7 @@
 		pozostawionych w
 		<a href="http://pl.m.wikipedia.org/wiki/Geocaching">pojemnikach geocache</a>.
 	</string>
-	<string name="main_button_accounts">Profile (konta)</string>
+	<string name="main_button_accounts">Użytkownicy (konta)</string>
 	<string name="main_button_inventory">Krety, które masz u siebie</string>
 	<string name="main_button_ocs">Geokesze do których się ostatnio logowałeś</string>
 	<string name="main_button_log">Zaloguj GeoKreta</string>
@@ -50,15 +50,15 @@
 		<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a>
 	</string>
     <!-- Error messages -->
-	<string name="main_error_no_account_configured">Najpierw dodaj co najmniej jeden profil i ustaw w nim swoje konto!</string>
+	<string name="main_error_no_account_configured">Najpierw dodaj co najmniej jednego użytkownika i ustaw w nim swoje konto!</string>
     
     <!-- Accounts Activity -->
-	<string name="users_title">Profile</string>
-	<string name="users_button_add_account">Dodaj nowy profil</string>
+	<string name="users_title">Użytkownicy</string>
+	<string name="users_button_add_account">Dodaj nowego użytkownika</string>
 	<string name="users_submenu_set_as_default">Zaznacz jako domyślny</string>
 	<string name="users_submenu_unset_as_default">Odznacz jako domyślny</string>
 		<string name="users_submenu_remove">Usuń</string>
-	<string name="users_question_remove">Czy jesteś pewien że chcesz usunąć profil</string>
+	<string name="users_question_remove">Czy jesteś pewien że chcesz usunąć użytkownika</string>
 	<string-array name="users_contextmenu_unchecked">
 		<item>@string/users_submenu_set_as_default</item>
 		<item>@string/users_submenu_remove</item>
@@ -69,7 +69,7 @@
 	</string-array>
     
     <!-- Account Activity -->
-	<string name="user_title">Profil użytkownika</string>
+	<string name="user_title">Ustawienia użytkownika</string>
 	<string name="user_label_portals">Których portali używasz?</string>
 	<string name="user_hint_name">Nowy użytkownik</string>
 	<string name="user_checkbox_portal_gk">geokrety.org (obowiązkowe)</string>
@@ -81,7 +81,7 @@
 	<string name="user_checkbox_portal_gc">geocaching.com (na własne ryzyko!)</string>
 	<string name="user_label_private_policy">Polityka prywatności:
 	    \ngeokrety.org - login i hasło są użyte do pobrania &quot;secid&quot;. Login i &quot;secid&quot; są zapisywane w pamięci telefonu, ale hasło nie.
-	    Login jest użyty jako nazwa profilu natomiast &quot;secid&quot; jest używany do pobrania listy kretów, które masz u siebie i logowania kretów, które przenosisz.
+	    Login jest użyty jako nazwa użytkownika natomiast &quot;secid&quot; jest używany do pobrania listy kretów, które masz u siebie i logowania kretów, które przenosisz.
 	    Wszystko to odbywa się za pomocą oficjalnego API geokrety.org.\n
 	    
 	    \nopencaching.* - login jest zapisywany w pamięci telefonu i jest używany do pobrania listy geokeszy, do których ostatnio się logowałeś.
@@ -98,8 +98,8 @@
 	<string name="user_button_from_gps">GPS</string>
 	<string name="user_button_save">Gotowe!</string>
     <!-- Messages -->
-	<string name="user_query_title_save">Czy zachować ustawienia profilu?</string>
-	<string name="user_query_message_save">Dokonano zmian w ustawieniach profilu. Czy zapisać zmiany?</string>
+	<string name="user_query_title_save">Czy zachować ustawienia użytkownika?</string>
+	<string name="user_query_message_save">Dokonano zmian w ustawieniach użytkownika. Czy zapisać zmiany?</string>
 	<string name="user_message_getting_secid">Logowanie do GeoKrety.org&#8230;</string>
 	<string name="user_message_getting_uuid">Pobieranie Twojego UUID z</string>
 	<string name="user_message_gc_verification">Logowanie do Geocaching.com&#8230;</string>
@@ -169,7 +169,7 @@
 	</string-array>
 	<string name="log_label_section_identify">2. Identyfikacja GeoKreta</string>
 	<string name="log_hint_code">Tracking Code</string>
-	<string name="log_button_profile">Kto? &#8230;</string>
+	<string name="log_button_user">Kto? &#8230;</string>
 	<string name="log_button_inventory">Inwentarz &#8230;</string>
 	<string name="log_label_section_location">3. Nowa lokalizacja</string>
 	<string name="log_hint_waypoint">Waypoint</string>
@@ -209,7 +209,7 @@
 	<string name="refresh_download_finish">Odświeżanie zakończone</string>
     
     <!-- Global messages -->
-	<string name="error_no_profile_selected">Proszę wybrać konto</string>
+	<string name="error_no_user_selected">Proszę wybrać konto</string>
 	<string name="connection_error">Problem z połączeniem:</string>
 	<string name="warning">Napotkano kilka problemów:</string>
 	<string name="yes">Tak</string>

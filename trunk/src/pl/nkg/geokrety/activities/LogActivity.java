@@ -266,7 +266,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     
     private boolean canShowUserData() {
         if (currentAccount == null) {
-            Toast.makeText(this, R.string.error_no_profile_selected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.error_no_user_selected, Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -342,7 +342,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private void loadFromGeoKretLog(final GeoKretLog log) {
         currentAccount = stateHolder.getAccountByID(log.getAccoundID());
         currentLogType = log.getLogTypeMapped();
-        accountsButton.setText(currentAccount == null ? getText(R.string.log_button_profile)
+        accountsButton.setText(currentAccount == null ? getText(R.string.log_button_user)
                 : currentAccount.getName());
         trackingCodeEditText.setText(log.getNr());
         datePicker.setText(log.getData());

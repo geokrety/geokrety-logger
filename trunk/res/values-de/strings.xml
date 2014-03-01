@@ -89,7 +89,7 @@
 	    
 	    \ngeocaching.com - Benutzername und Passwort werden gespeichert und zum Laden der letzten Logs sowie dasie Koordinatenermittlung (durch parsen der Webseite) verwendet.
 	    Warnung! Diese Methode verletzt möglicherweisedie Punkte 2.D.i und 2.D.ii der Nutzungsbedingungen von geocaching.com. Die Benutzung erfolgt auf eigene Gefahr!
-	    Übrigens: In c:geo wird diese Methode seit langem verwendet - bisher ohne Folgen... :)
+	    Übrigens: In c:geo wird diese Methode seit langem verwendet - bisher ohne Folgen&#8230; :)
 	</string>
 	<string name="user_label_home_location">Heimatkoordinaten (optional):</string>
 	<string name="user_hint_latitude">Latitude</string>
@@ -166,7 +166,7 @@
 	</string-array>
 	<string name="log_label_section_identify">2. GeoKret identifizieren</string>
 	<string name="log_hint_code">Trackingcode</string>
-	<string name="log_button_profile">Wer? &#8230;</string>
+	<string name="log_button_user">Wer? &#8230;</string>
 	<string name="log_button_inventory">Inventar</string>
 	<string name="log_label_section_location">3. Neuer Ort</string>
 	<string name="log_hint_waypoint">Wegpunkt</string>
@@ -207,7 +207,7 @@
 	<string name="refresh_download_finish">Aktualisierung abgeschlossen</string>
     
     <!-- Global messages -->
-	<string name="error_no_profile_selected">Bitte Profile auswählen.</string>
+	<string name="error_no_user_selected">Bitte Profile auswählen.</string>
 	<string name="connection_error">Verbindungsfehler: </string>
 	<string name="warning">Probleme:</string>
 	<string name="yes">Ja</string>
