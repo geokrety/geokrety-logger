@@ -32,7 +32,7 @@
 		sind ähnliche wie TravelBug(TM) oder GeoLutins, verfolgbare Objekte die in Geocaches abgelegt
 		werden (<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).
 	</string>
-	<string name="main_button_accounts">Profile (Konten)</string>
+	<string name="main_button_accounts">Benutzerprofile (Konten)</string>
 	<string name="main_button_inventory">Inventar</string>
 	<string name="main_button_ocs">Letzte Geocaching Logs</string>
 	<string name="main_button_log">Log GeoKret</string>
@@ -56,11 +56,11 @@
     
     <!-- Accounts Activity -->
 	<string name="users_title">Profilmanager</string>
-	<string name="users_button_add_account">Profile hinzufügen</string>
+	<string name="users_button_add_account">Beutzer hinzufügen</string>
 	<string name="users_submenu_set_as_default">Als Standard verwenden</string>
 	<string name="users_submenu_unset_as_default">Standard aufheben</string>
 	<string name="users_submenu_remove">Entfernen</string>
-	<string name="users_question_remove">Soll das Profil wirklich entfernt werden </string>
+	<string name="users_question_remove">Soll der Benutzer wirklich entfernt werden </string>
 	<string-array name="users_contextmenu_unchecked">
 		<item>@string/users_submenu_set_as_default</item>
 		<item>@string/users_submenu_remove</item>
