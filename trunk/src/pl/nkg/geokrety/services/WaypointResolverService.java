@@ -99,7 +99,7 @@ public class WaypointResolverService extends AbstractVerifyService {
             if (gc == null) {
                 gc = td.tryRun(application.getRetryCount());
             }
-            sendBroadcast(value, gc.getLocation(), NotifyTextView.GOOD, wpt + ": " + gc.getName());
+            sendBroadcast(value, gc.getFormattedLocation(), NotifyTextView.GOOD, wpt + ": " + gc.getName());
         } catch (LocationNotResolvedException e) {
             sendBroadcast(value, "", NotifyTextView.ERROR,
                     String.format(getText(R.string.resolve_wpt_error_location_can_not_be_resolved)

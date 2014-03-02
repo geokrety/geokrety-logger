@@ -111,6 +111,10 @@ public class Geocache {
     public String getLocation() {
         return location;
     }
+    
+    public String getFormattedLocation() {
+        return getLocation().replace("|", " ");
+    }
 
     public String getType() {
         return type;
@@ -138,5 +142,9 @@ public class Geocache {
                         .replace('￼', ' ').replace('\n', ':').trim().replace("- :  ", "");
 
         return new Geocache(waypoint, name, location, null, null, null);
+    }
+
+    public boolean hasLocation() {
+        return !Utils.isEmpty(getLocation());
     }
 }
