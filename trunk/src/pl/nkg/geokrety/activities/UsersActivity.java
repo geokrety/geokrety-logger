@@ -186,6 +186,7 @@ public class UsersActivity extends ManagedDialogsActivity {
             }
             listAdapter.notifyDataSetChanged();
         }
+        mainListView.setItemChecked(holder.getDefaultAccountNr(), true);
     }
 
     private void showEditAccountDialog(int position) {

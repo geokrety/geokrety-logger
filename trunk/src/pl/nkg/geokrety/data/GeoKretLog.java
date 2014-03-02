@@ -310,7 +310,7 @@ public class GeoKretLog {
 	}
 
 	public void setNr(final String nr) {
-		this.nr = nr.toUpperCase(Locale.ENGLISH);
+		this.nr = Utils.defaultIfNull(nr, "").toUpperCase(Locale.ENGLISH);
 	}
 
 	public void setProblem(final int problem) {

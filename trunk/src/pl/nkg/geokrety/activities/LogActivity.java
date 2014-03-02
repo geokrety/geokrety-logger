@@ -26,6 +26,8 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
 
+import org.acra.ACRA;
+
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
@@ -58,6 +60,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -502,6 +505,9 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                     currentLog.setWpt(data.getQueryParameter("wp"));
                 }
             } catch (final Throwable e) {
+                e.printStackTrace();
+                ACRA.getErrorReporter().handleSilentException(e);
+                Log.println(Log.ERROR, this.getClass().getSimpleName(), Utils.formatException(e));
                 Toast.makeText(this, Utils.formatException(e), Toast.LENGTH_LONG).show();
                 finish();
             }
