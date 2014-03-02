@@ -46,6 +46,7 @@ public class GettingUuidThread extends
 	@Override
 	protected String runInBackground(Thread thread, Pair<String, Integer> param)
 			throws Throwable {
+        // FIXME: use reTry
 		return OKAPIProvider.loadOpenCachingUUID(
 				SupportedOKAPI.SUPPORTED[param.second], param.first);
 	}

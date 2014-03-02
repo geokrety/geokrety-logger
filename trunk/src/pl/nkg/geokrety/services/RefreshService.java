@@ -232,7 +232,9 @@ public class RefreshService extends IntentService {
                         publishProgress(R.string.refresh_notify_last_logs,
                                 GeocachingProvider.HOST + " " + user.getGeocachingLogin()
                                         + getText(R.string.dots));
+                        // FIXME: use reTry
                         HttpContext httpContext = GeocachingProvider.login(user.getGeocachingLogin(), user.getGeocachingPassword());
+                        // FIXME: use reTry
                         stateHolder.getGeocacheLogDataSource().store(
                                 GeocachingProvider.loadGeocachingComLogs(httpContext),
                                 user.getID(), GeocachingProvider.PORTAL);
@@ -276,6 +278,7 @@ public class RefreshService extends IntentService {
     private void refreshGeocachingCom(StringBuilder sb, String guid, HttpContext httpContext) {
 
         try {
+            // FIXME: use reTry
             Geocache gc = GeocachingProvider.loadGeocacheByGUID(httpContext, guid);
             if (gc != null) {
                 stateHolder.getGeocacheDataSource().updateGeocachingCom(gc);
@@ -293,7 +296,7 @@ public class RefreshService extends IntentService {
     private void refreshGeoKrets(CancelHolder cancelHolder, StringBuilder sb) {
         List<String> list = stateHolder.getInventoryDataSource().loadNeedUpdateList();
 
-        // FIXME: may gets only sticky and not synchronized - do test
+        // FIXME: current - sticky resynchronized, todo: only sticky and not in inventory resynchronize
         List<GeoKret> gks = new LinkedList<GeoKret>();
         for (String tc : list) {
             if (!canContinue(cancelHolder, sb)) {
@@ -302,6 +305,7 @@ public class RefreshService extends IntentService {
 
             try {
                 publishProgress(R.string.refresh_notify_own_gk, "TrackingCode: " + tc);
+                // FIXME: use reTry
                 int id = GeoKretyProvider.loadIDByTranckingCode(tc);
 
                 if (!canContinue(cancelHolder, sb)) {
@@ -310,6 +314,7 @@ public class RefreshService extends IntentService {
 
                 GeoKret gk;
                 if (id != -1) {
+                    // FIXME: use reTry
                     gk = GeoKretyProvider.loadSingleGeoKretByID(id);
                     gk.setTrackingCode(tc);
 
@@ -360,6 +365,7 @@ public class RefreshService extends IntentService {
 
     private void refreshInventory(CancelHolder cancelHolder, long userId, String secId)
             throws MessagedException {
+        // FIXME: use reTry
         final Map<String, GeoKret> gkMap = GeoKretyProvider.loadInventory(secId);
 
         if (cancelHolder.isCancelled()) {
@@ -384,6 +390,7 @@ public class RefreshService extends IntentService {
     private void refreshLastLogs(CancelHolder cancelHolder, long userId, String uuid, int portal)
             throws MessagedException {
         SupportedOKAPI okapi = SupportedOKAPI.SUPPORTED[portal];
+        // FIXME: use reTry
         List<GeocacheLog> logs = OKAPIProvider.loadOpenCachingLogs(okapi, uuid);
 
         if (cancelHolder.isCancelled()) {
@@ -402,6 +409,7 @@ public class RefreshService extends IntentService {
             return;
         }
 
+        // FIXME: use reTry
         List<Geocache> gcs = OKAPIProvider.loadOCnames(codes, okapi);
 
         if (cancelHolder.isCancelled()) {

@@ -43,11 +43,13 @@ public class VerifyGeoKretService extends AbstractVerifyService {
     }
 
     private GeoKret retriveGeoKret(final CharSequence tc) throws MessagedException {
+        // FIXME: use reTry
         final int id = GeoKretyProvider.loadIDByTranckingCode(tc);
         if (id == -1) {
             return new GeoKret(tc.toString(), GeoKretDataSource.SYNCHRO_STATE_ERROR, getText(
                     R.string.validation_error_no_such_geokret).toString());
         } else {
+            // FIXME: use reTry
             final GeoKret gk = GeoKretyProvider.loadSingleGeoKretByID(id);
             gk.setTrackingCode(tc.toString());
             final List<GeoKret> gks = new LinkedList<GeoKret>();

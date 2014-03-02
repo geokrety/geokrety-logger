@@ -26,8 +26,6 @@ import java.util.Date;
 import java.util.Locale;
 
 import pl.nkg.geokrety.Utils;
-import pl.nkg.geokrety.exceptions.MessagedException;
-import pl.nkg.lib.gkapi.GeoKretyProvider;
 import android.content.Context;
 import android.content.res.Resources.NotFoundException;
 import android.database.Cursor;
@@ -351,11 +349,6 @@ public class GeoKretLog {
 		outState.putLong(ACCOUNT_ID, accoundID);
 	}
 
-	@Deprecated
-	public boolean submitLog(final User account) throws MessagedException {
-		return GeoKretyProvider.submitLog(account.getGeoKreySecredID(), this);
-	}
-	
 	@Override
 	public String toString() {
 		return getNr() + " (" +getState() + ")";

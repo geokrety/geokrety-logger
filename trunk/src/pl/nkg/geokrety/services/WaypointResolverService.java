@@ -65,6 +65,7 @@ public class WaypointResolverService extends AbstractVerifyService {
             @Override
             protected Geocache run() throws NoConnectionException, Exception {
                 try {
+                    // FIXME: use separated reTry
                     return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
                 } catch (LocationNotResolvedException e) {
                     if (!wpt.toUpperCase(Locale.ENGLISH).startsWith("GC")) {
@@ -75,6 +76,7 @@ public class WaypointResolverService extends AbstractVerifyService {
                         session = null;
                         for (User user : stateHolder.getAccountList()) {
                             if (!Utils.isEmpty(user.getGeocachingLogin())) {
+                                // FIXME: use separated reTry for login and download
                                 session = GeocachingProvider.login(user.getGeocachingLogin(),
                                         user.getGeocachingPassword());
                                 if (session != null) {

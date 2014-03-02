@@ -24,6 +24,7 @@ package pl.nkg.geokrety.services;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
 
 public abstract class TryDownload<O> {
+    // FIXME: implement cancellation
 
     private int mCount = 0;
     private int mRetry = 0;
@@ -34,19 +35,22 @@ public abstract class TryDownload<O> {
         }
         mCount = count;
         
+        Throwable t = null;
+        
         for (mRetry = 0; mRetry < count; mRetry++) {
             try {
                 O o = run();
                 mCount = 0;
                 return o;
             } catch (NoConnectionException e) {
+                t = e;
                 if (!doRetry(mRetry)) {
                     mCount = 0;
                     throw e;
                 }
             }
         }
-        throw new NoConnectionException();
+        throw new NoConnectionException(t);
     }
 
     protected boolean doRetry(int retry) {

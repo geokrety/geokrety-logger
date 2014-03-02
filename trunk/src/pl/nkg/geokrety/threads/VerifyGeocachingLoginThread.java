@@ -46,6 +46,7 @@ public class VerifyGeocachingLoginThread extends
 	@Override
 	protected Boolean runInBackground(Thread thread,
 			Pair<String, String> param) throws Throwable {
+        // FIXME: use reTry
 		return GeocachingProvider.login(param.first, param.second) != null;
 	}
 }

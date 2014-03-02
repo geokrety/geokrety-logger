@@ -46,6 +46,7 @@ public class GettingSecidThread extends
 	@Override
 	protected String runInBackground(Thread thread,
 			Pair<String, String> param) throws Throwable {
+        // FIXME: use reTry
 		return GeoKretyProvider.loadSecureID(param.first, param.second);
 	}
 }

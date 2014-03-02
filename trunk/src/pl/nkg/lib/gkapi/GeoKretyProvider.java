@@ -82,6 +82,8 @@ public class GeoKretyProvider {
 				inventory.put(geokret.getTrackingCode(), geokret);
 			}
 			return inventory;
+		} catch (IOException e) {
+            throw new NoConnectionException(e);
 		} catch (final Exception e) {
 			throw new MessagedException(R.string.inventory_error_refresh);
 		}
@@ -101,7 +103,7 @@ public class GeoKretyProvider {
                 return null;
             }
         } catch (IOException e) {
-            throw new NoConnectionException();
+            throw new NoConnectionException(e);
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
             throw new MessagedException(R.string.global_error_system, Utils.formatException(e));
@@ -129,7 +131,7 @@ public class GeoKretyProvider {
             String id = xml.substring(pos + KONKRET.length(), pos2);
             return Integer.parseInt(id);
         } catch (IOException e) {
-            throw new NoConnectionException();
+            throw new NoConnectionException(e);
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
             throw new MessagedException(R.string.global_error_system, Utils.formatException(e));
@@ -147,7 +149,7 @@ public class GeoKretyProvider {
             return Geocache.fromWaypointResolver(waypoint, json);
             
         } catch (IOException e) {
-            throw new NoConnectionException();
+            throw new NoConnectionException(e);
         } catch (LocationNotResolvedException e) {
             throw e;
         } catch (final Throwable e) {
@@ -164,6 +166,8 @@ public class GeoKretyProvider {
 		String value;
 		try {
 			value = Utils.httpPost(URL_LOGIN, postData);
+		} catch (IOException e) {
+            throw new NoConnectionException(e);
 		} catch (final Exception e) {
 			throw new MessagedException(R.string.connection_error, Utils.formatException(e));
 		}
@@ -228,52 +232,6 @@ public class GeoKretyProvider {
 		} catch (final Exception e) {
 			log.setProblemArg(Utils.formatException(e));
 			return LOG_NO_CONNECTION;
-		}
-	}
-
-	@Deprecated
-	public static boolean submitLog(final String secid, final GeoKretLog log) throws MessagedException {
-		final boolean ignoreLocation = checkIgnoreLocation(log.getLogTypeMapped());
-
-		final String[][] postData = new String[][] { //
-				new String[] { "secid", secid }, //
-				new String[] { "nr", log.getNr() }, //
-				new String[] { "formname", log.getFormname() }, //
-				new String[] { "logtype", log.getLogType() }, //
-				new String[] { "data", log.getData() }, //
-				new String[] { "godzina", Integer.toString(log.getGodzina()) }, //
-				new String[] { "minuta", Integer.toString(log.getMinuta()) }, //
-				new String[] { "comment", log.getComment() }, //
-				new String[] { "app", Utils.getAppName() }, //
-				new String[] { "app_ver", Utils.getAppVer() }, //
-				new String[] { "mobile_lang", Utils.getDefaultLanguage() }, //
-				new String[] { "latlon", ignoreLocation ? "" : log.getLatlon() }, //
-				new String[] { "wpt", ignoreLocation ? "" : log.getWpt() }, };
-
-		try {
-			final String value = Utils.httpPost(URL_RUCHY, postData);
-			final String[] adsFix = value.split("<script");
-			final Document doc = Utils.getDomElement(adsFix[0]);
-			final NodeList nl = doc.getElementsByTagName("error").item(0).getChildNodes();
-
-			final LinkedList<String> errors = new LinkedList<String>();
-			for (int i = 0; i < nl.getLength(); i++) {
-				errors.add(nl.item(0).getNodeValue());
-			}
-
-			if (errors.size() > 0) {
-
-				if (errors.get(0).equals("There is an entry with this date. Correct the date or the hour.")) {
-					throw new MessagedException(R.string.log_warning_already_logged);
-				} else {
-					throw new MessagedException(R.string.submit_error, "\n" + TextUtils.join("\n", errors));
-				}
-			}
-			return true;
-		} catch (final MessagedException e) {
-			throw e;
-		} catch (final Exception e) {
-			throw new MessagedException(R.string.submit_error, Utils.formatException(e));
 		}
 	}
 }

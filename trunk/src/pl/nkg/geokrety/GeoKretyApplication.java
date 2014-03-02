@@ -245,4 +245,6 @@ public class GeoKretyApplication extends Application {
      // TODO: use as app settings
         return true;
     }
+    
+    // TODO: clear geocache/geokrety cache
 }

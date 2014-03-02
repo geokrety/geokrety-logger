@@ -38,6 +38,7 @@ import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
+import pl.nkg.geokrety.exceptions.NoConnectionException;
 import pl.nkg.geokrety.exceptions.WaypointNotFoundException;
 import pl.nkg.geokrety.exceptions.MessagedException;
 
@@ -66,6 +67,8 @@ public class GeocachingProvider {
                 return null;
             }
             return httpContext;
+        } catch (IOException e) {
+            throw new NoConnectionException(e);
         } catch (Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
@@ -95,6 +98,8 @@ public class GeocachingProvider {
             }
             
             return openCachingLogs;
+        } catch (IOException e) {
+            throw new NoConnectionException(e);
         } catch (Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
@@ -106,6 +111,8 @@ public class GeocachingProvider {
         try {
             String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
             return Geocache.parseGeocachingCom(htmlCache);
+        } catch (IOException e) {
+            throw new NoConnectionException(e);
         } catch (Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
@@ -130,6 +137,8 @@ public class GeocachingProvider {
             return Geocache.parseGeocachingCom(htmlCache);
         } catch (WaypointNotFoundException e) {
             throw e;
+        } catch (IOException e) {
+            throw new NoConnectionException(e);
         } catch (Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage() + ": " + waypoint);
         }
@@ -137,7 +146,7 @@ public class GeocachingProvider {
     
     private static GeocacheLog extractGeocacheLog(String row) throws ClientProtocolException, IOException {
         try {
-            return GeocacheLog.fromGeocachingCom(row);//;/guid, logType, date);
+            return GeocacheLog.fromGeocachingCom(row);
         } catch (NullPointerException e) {
             return null;
         } catch (ArrayIndexOutOfBoundsException e) {

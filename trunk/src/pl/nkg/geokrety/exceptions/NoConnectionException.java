@@ -22,20 +22,22 @@
 package pl.nkg.geokrety.exceptions;
 
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.Utils;
 
 public class NoConnectionException extends MessagedException {
 	
     private static final long serialVersionUID = -4638504563481794092L;
 
-    public NoConnectionException() {
-        super(R.string.global_error_connection);
+    public NoConnectionException(Throwable e) {
+        super(R.string.global_error_connection, Utils.formatException(e));
+        
     }
     
-    public NoConnectionException(int messageID) {
+    /*public NoConnectionException(int messageID) {
 		super(messageID);
 	}
 
 	public NoConnectionException(int message, String arg) {
 		super(message, arg);
-	}
+	}*/
 }

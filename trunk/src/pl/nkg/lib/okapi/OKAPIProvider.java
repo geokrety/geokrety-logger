@@ -38,6 +38,7 @@ import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.exceptions.MessagedException;
+import pl.nkg.geokrety.exceptions.NoConnectionException;
 
 public class OKAPIProvider {
 	private static final String URL_BY_USERNAME = "/okapi/services/users/by_username";
@@ -57,6 +58,8 @@ public class OKAPIProvider {
 			return json.getString("uuid");
 		} catch (JSONException e) {
 			throw new MessagedException(R.string.user_oc_error_login_invalid);
+        } catch (IOException e) {   // TODO: improve conection error notification
+            throw new NoConnectionException(e);
 		} catch (Exception e) {
 			throw new MessagedException(R.string.lastlogs_error_refresh);
 		}
@@ -88,8 +91,10 @@ public class OKAPIProvider {
 		} catch (JSONException e) {
 			throw new MessagedException(R.string.user_oc_error_login_invalid,
 					okapi.host);
-		} catch (IOException e) {
-			throw new MessagedException(R.string.lastlogs_error_refresh);
+        } catch (IOException e) {
+            throw new NoConnectionException(e);
+		//} catch (IOException e) { // TODO: improve connection error notification
+		//	throw new MessagedException(R.string.lastlogs_error_refresh);
 		}
 	}
 
@@ -115,8 +120,10 @@ public class OKAPIProvider {
 		} catch (JSONException e) {
 			throw new MessagedException(R.string.user_oc_error_login_invalid,
 					okapi.host);
-		} catch (IOException e) {
-			throw new MessagedException(R.string.lastlogs_error_refresh);
+        } catch (IOException e) {
+            throw new NoConnectionException(e);
+		//} catch (IOException e) { // TODO: better label
+		//	throw new MessagedException(R.string.lastlogs_error_refresh);
 		} catch (ParseException e) {
 			throw new MessagedException(R.string.lastlogs_error_refresh);
 		}
