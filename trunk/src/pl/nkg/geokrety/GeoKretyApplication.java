@@ -97,7 +97,7 @@ public class GeoKretyApplication extends Application {
 		
 		startService(new Intent(this, LogSubmitterService.class));
 	}
-
+/*
     @Override
 	public void onLowMemory() {
 		super.onLowMemory();
@@ -105,7 +105,7 @@ public class GeoKretyApplication extends Application {
 		shutdownHttpClient();
 		shutdownHandler();
 	}
-
+*/
 	@Override
 	public void onTerminate() {
 		super.onTerminate();
