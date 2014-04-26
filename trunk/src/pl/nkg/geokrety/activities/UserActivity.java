@@ -79,8 +79,8 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
     private EditText latEditText;
     private EditText lonEditText;
     private CheckBox gcCheckBox;
-    //private EditText gcLoginEditText;
-    //private EditText gcPasswordEditText;
+    // private EditText gcLoginEditText;
+    // private EditText gcPasswordEditText;
 
     private AlertDialogWrapper saveModifiedsDialog;
 
@@ -100,7 +100,8 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
     private GPSAcquirer gpsAcquirer;
 
     private static final int[] CHECKBOX_LABELS = {
-            R.string.user_checkbox_portal_oc0, R.string.user_checkbox_portal_oc1, R.string.user_checkbox_portal_oc2,
+            R.string.user_checkbox_portal_oc0, R.string.user_checkbox_portal_oc1,
+            R.string.user_checkbox_portal_oc2,
             R.string.user_checkbox_portal_oc3, R.string.user_checkbox_portal_oc4
     };
 
@@ -148,8 +149,9 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
                     + SupportedOKAPI.SUPPORTED[nr].host + getText(R.string.dots));
             gettingUuidThread.execute(new Pair<String, Integer>(ocDialog.getOCLogin(), nr));
         } else if (dialog.getDialogId() == Dialogs.GC_PROMPTDIALOG) {
-            verifyGeocachingLoginThread.execute(new Pair<String, String>(gcDialog.getLogin(), gcDialog
-                    .getPassword()));
+            verifyGeocachingLoginThread.execute(new Pair<String, String>(gcDialog.getLogin(),
+                    gcDialog
+                            .getPassword()));
         }
     }
 
@@ -228,14 +230,14 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
                 ocCheckBox[i].setText(getText(CHECKBOX_LABELS[i]) + ": " + ocLogins[i]);
             }
         }
-        
+
         gcCheckBox.setChecked(!Utils.isEmpty(gcLogin));
         if (Utils.isEmpty(gcLogin)) {
             gcCheckBox.setText(R.string.user_checkbox_portal_gc);
         } else {
             gcCheckBox.setText(getText(R.string.user_checkbox_portal_gc) + ": " + gcLogin);
         }
-        
+
         setTitle(getText(R.string.user_title)
                 + ": "
                 + (Utils.isEmpty(accountName) ? getText(R.string.user_hint_name)
@@ -264,7 +266,7 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
         secidProgressDialog.setProgress(getText(R.string.user_message_getting_secid).toString());
 
         uuidProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.UUID_PROMPTDIALOG);
-        
+
         gcProgressDialog = new GenericProgressDialogWrapper(this, Dialogs.GC_PROGRESSDIALOG);
         gcProgressDialog.setProgress(getText(R.string.user_message_gc_verification).toString());
 
@@ -278,7 +280,7 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
         setContentView(R.layout.activity_account);
         latEditText = (EditText) findViewById(R.id.latEditText);
         lonEditText = (EditText) findViewById(R.id.lonEditText);
-        
+
         gcCheckBox = (CheckBox) findViewById(R.id.gcCheckBox);
 
         accountID = getIntent().getLongExtra(User.ACCOUNT_ID, AdapterView.INVALID_POSITION);
@@ -347,7 +349,7 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
                 }
             });
         }
-        
+
         gcCheckBox.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -364,7 +366,7 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
 
         lonEditText.addTextChangedListener(this);
         latEditText.addTextChangedListener(this);
-        
+
         if (application.isExperimentalEnabled()) {
             gcCheckBox.setVisibility(View.VISIBLE);
         }
@@ -456,7 +458,7 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
                     }
 
                 });
-        
+
         verifyGeocachingLoginThread.attach(gcProgressDialog,
                 new GenericTaskListener<Pair<String, String>, String, Boolean>(this) {
 
@@ -479,11 +481,13 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
                             gcLogin = param.first;
                             gcPassword = param.second;
                             updateChecks();
-                            Toast.makeText(UserActivity.this, R.string.user_gc_message_login_verified, Toast.LENGTH_LONG)
+                            Toast.makeText(UserActivity.this,
+                                    R.string.user_gc_message_login_verified, Toast.LENGTH_LONG)
                                     .show();
                         } else {
-                            Toast.makeText(UserActivity.this, R.string.user_gc_error_password_invalid, Toast.LENGTH_LONG)
-                            .show();
+                            Toast.makeText(UserActivity.this,
+                                    R.string.user_gc_error_password_invalid, Toast.LENGTH_LONG)
+                                    .show();
                             gcDialog.show(null);
                         }
                     }

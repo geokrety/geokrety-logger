@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.activities.filters;
 
 import java.util.regex.Pattern;
@@ -30,9 +31,9 @@ public class WaypointInputFilter extends RegExInputFilter {
     public WaypointInputFilter() {
         super(LETTERS_AND_DIGITS_PATTERN);
     }
-    
+
     @Override
-    public boolean validate(CharSequence text) {
+    public boolean validate(final CharSequence text) {
         // TODO: check min and max length of waypoints
         return text.length() >= 6 && super.validate(text);
     }

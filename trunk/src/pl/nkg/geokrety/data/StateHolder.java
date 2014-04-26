@@ -19,165 +19,158 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.data;
 
 import java.util.Collections;
 import java.util.List;
 
 import pl.nkg.geokrety.Utils;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.widget.ListView;
 
 public class StateHolder {
-	private static final String				DEFAULT_ACCOUNT			= "current_accounts";
-	private static final int				DEFAULT_ACCOUNT_VALUE	= ListView.INVALID_POSITION;
+    private static final String DEFAULT_ACCOUNT = "current_accounts";
+    private static final int DEFAULT_ACCOUNT_VALUE = ListView.INVALID_POSITION;
 
-	private static SharedPreferences getPreferences(final Context context) {
-		return context.getSharedPreferences("pl.nkg.geokrety", Context.MODE_PRIVATE);
-	}
+    private static SharedPreferences getPreferences(final Context context) {
+        return context.getSharedPreferences("pl.nkg.geokrety", Context.MODE_PRIVATE);
+    }
 
-	private List<User>				accountList;
-	private int							defaultAccount;
-	private final UserDataSource		userDataSource;
-	private final GeocacheLogDataSource	geocacheLogDataSource;
-	private final InventoryDataSource		inventoryDataSource;
-	private final GeoKretDataSource      geoKretDataSource;
+    private final List<User> accountList;
+    private int defaultAccount;
+    private final UserDataSource userDataSource;
+    private final GeocacheLogDataSource geocacheLogDataSource;
+    private final InventoryDataSource inventoryDataSource;
+    private final GeoKretDataSource geoKretDataSource;
 
-	private final GeocacheDataSource	geocacheDataSource;
+    private final GeocacheDataSource geocacheDataSource;
 
-	private final GeoKretLogDataSource	geoKretLogDataSource;
-	
-	private Long reservedLog;
-	private Long editLog;
-	
-	private final GeoKretySQLiteHelper dbHelper;
+    private final GeoKretLogDataSource geoKretLogDataSource;
 
-	public StateHolder(final Context context) {
-		dbHelper = new GeoKretySQLiteHelper(context);
-		userDataSource = new UserDataSource(dbHelper);
-		geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
-		inventoryDataSource = new InventoryDataSource(dbHelper);
-		geoKretDataSource = new GeoKretDataSource(dbHelper);
-		geocacheDataSource = new GeocacheDataSource(dbHelper);
-		geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
+    private Long reservedLog;
+    private Long editLog;
 
-		accountList = Collections.synchronizedList(userDataSource.getAll());
-	}
+    private final GeoKretySQLiteHelper dbHelper;
 
-	public GeoKretySQLiteHelper getDbHelper() {
-		return dbHelper;
-	}
+    public StateHolder(final Context context) {
+        dbHelper = new GeoKretySQLiteHelper(context);
+        userDataSource = new UserDataSource(dbHelper);
+        geocacheLogDataSource = new GeocacheLogDataSource(dbHelper);
+        inventoryDataSource = new InventoryDataSource(dbHelper);
+        geoKretDataSource = new GeoKretDataSource(dbHelper);
+        geocacheDataSource = new GeocacheDataSource(dbHelper);
+        geoKretLogDataSource = new GeoKretLogDataSource(dbHelper);
 
-	public User getAccountByID(final long id) {
-		for (final User account : getAccountList()) {
-			if (account.getID() == id) {
-				return account;
-			}
-		}
-		return null;
-	}
+        accountList = Collections.synchronizedList(userDataSource.getAll());
+    }
 
-	public UserDataSource getUserDataSource() {
-		return userDataSource;
-	}
+    public User getAccountByID(final long id) {
+        for (final User account : getAccountList()) {
+            if (account.getID() == id) {
+                return account;
+            }
+        }
+        return null;
+    }
 
-	public List<User> getAccountList() {
-		return accountList;
-	}
+    public List<User> getAccountList() {
+        return accountList;
+    }
 
-	public int getDefaultAccountNr() {
-	    if (accountList.size() == 1) {
-	        return 0;
-	    } else if (accountList.size() > 1) {
-	        if (defaultAccount < accountList.size() && defaultAccount >= 0) {
-	            return defaultAccount;
-	        }
-	    }
-		return  DEFAULT_ACCOUNT_VALUE;
-	}
-	
-	public User getDefaultAccount() {
-	    int nr = getDefaultAccountNr();
-	    return nr == DEFAULT_ACCOUNT_VALUE ? null : accountList.get(nr);
-	}
+    public GeoKretySQLiteHelper getDbHelper() {
+        return dbHelper;
+    }
 
-	public GeocacheDataSource getGeocacheDataSource() {
-		return geocacheDataSource;
-	}
+    public User getDefaultAccount() {
+        final int nr = getDefaultAccountNr();
+        return nr == DEFAULT_ACCOUNT_VALUE ? null : accountList.get(nr);
+    }
 
-	public GeocacheLogDataSource getGeocacheLogDataSource() {
-		return geocacheLogDataSource;
-	}
+    public int getDefaultAccountNr() {
+        if (accountList.size() == 1) {
+            return 0;
+        } else if (accountList.size() > 1) {
+            if (defaultAccount < accountList.size() && defaultAccount >= 0) {
+                return defaultAccount;
+            }
+        }
+        return DEFAULT_ACCOUNT_VALUE;
+    }
 
-	public InventoryDataSource getInventoryDataSource() {
-		return inventoryDataSource;
-	}
+    public GeocacheDataSource getGeocacheDataSource() {
+        return geocacheDataSource;
+    }
+
+    public GeocacheLogDataSource getGeocacheLogDataSource() {
+        return geocacheLogDataSource;
+    }
 
     public GeoKretDataSource getGeoKretDataSource() {
         return geoKretDataSource;
     }
-	
-	public GeoKretLogDataSource getGeoKretLogDataSource() {
-		return geoKretLogDataSource;
-	}
 
-	public void setDefaultAccount(final int defaultAccount) {
-		this.defaultAccount = defaultAccount;
-		getPreferences(Utils.application.getApplicationContext()).edit().putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
-	}
+    public GeoKretLogDataSource getGeoKretLogDataSource() {
+        return geoKretLogDataSource;
+    }
 
-	/*public void storeDefaultAccount(final Context context) {
-		getPreferences(context).edit().putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
-	}*/
+    public InventoryDataSource getInventoryDataSource() {
+        return inventoryDataSource;
+    }
 
-	public GeoKretLog lockForLog(long logID) {
-		synchronized(this) {
-			if (editLog != null && editLog == logID) {
-			    return null;
-			} else {
-	            GeoKretLog log = getGeoKretLogDataSource().loadByID(logID);
-	            if (log != null && log.getState() == GeoKretLog.STATE_OUTBOX) {
-	                reservedLog = logID;
-	                return log;	                
-	            } else {
-	                return null;
-	            }
-			}
-		}
-	}
-	
-	public void releaseLockForLog(long logID) {
-		synchronized(this) {
-			reservedLog = null;
-		}
-	}
-	
-	public boolean lockForEdit(long logID) {
-		synchronized(this) {
-			if (reservedLog != null && reservedLog == logID) {
-				return false;
-			} else {
-				editLog = logID;
-				return true;
-			}
-		}
-	}
-	
-	public void releaseLockForEdit(long logID) {
-		synchronized(this) {
-			editLog = null;
-		}
-	}
+    public long getLocked() {
+        return reservedLog == null ? 0 : reservedLog;
+    }
 
-    public User matchAccount(String username) {
+    public UserDataSource getUserDataSource() {
+        return userDataSource;
+    }
+
+    /*
+     * public void storeDefaultAccount(final Context context) {
+     * getPreferences(context).edit().putInt(DEFAULT_ACCOUNT,
+     * defaultAccount).commit(); }
+     */
+
+    public boolean isLocked(final long id) {
+        return reservedLog != null && reservedLog == id;
+    }
+
+    public boolean lockForEdit(final long logID) {
+        synchronized (this) {
+            if (reservedLog != null && reservedLog == logID) {
+                return false;
+            } else {
+                editLog = logID;
+                return true;
+            }
+        }
+    }
+
+    public GeoKretLog lockForLog(final long logID) {
+        synchronized (this) {
+            if (editLog != null && editLog == logID) {
+                return null;
+            } else {
+                final GeoKretLog log = getGeoKretLogDataSource().loadByID(logID);
+                if (log != null && log.getState() == GeoKretLog.STATE_OUTBOX) {
+                    reservedLog = logID;
+                    return log;
+                } else {
+                    return null;
+                }
+            }
+        }
+    }
+
+    public User matchAccount(final String username) {
         for (final User account : getAccountList()) {
             if (account.getName().equals(username)) {
                 return account;
             }
-            
-            for (String login : account.getOpenCachingLogins()) {
+
+            for (final String login : account.getOpenCachingLogins()) {
                 if (login.equals(username)) {
                     return account;
                 }
@@ -186,11 +179,21 @@ public class StateHolder {
         return null;
     }
 
-    public boolean isLocked(long id) {
-        return reservedLog != null && reservedLog == id;
+    public void releaseLockForEdit(final long logID) {
+        synchronized (this) {
+            editLog = null;
+        }
     }
 
-    public long getLocked() {
-        return reservedLog == null ? 0 : reservedLog;
+    public void releaseLockForLog(final long logID) {
+        synchronized (this) {
+            reservedLog = null;
+        }
+    }
+
+    public void setDefaultAccount(final int defaultAccount) {
+        this.defaultAccount = defaultAccount;
+        getPreferences(Utils.application.getApplicationContext()).edit()
+                .putInt(DEFAULT_ACCOUNT, defaultAccount).commit();
     }
 }

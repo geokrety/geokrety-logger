@@ -118,8 +118,8 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
             if (log.getLogTypeMapped() > 0) {
                 final int drawable = checkHumanGeokret(log) ? LOG_TYPE_ICON_MAP_HUMAN[log
                         .getLogTypeMapped()] : LOG_TYPE_ICON_MAP_GK[log.getLogTypeMapped()];
-                ImageView im = ((ImageView) view.findViewById(android.R.id.icon));
-                Drawable image = getResources().getDrawable(drawable);
+                final ImageView im = (ImageView) view.findViewById(android.R.id.icon);
+                final Drawable image = getResources().getDrawable(drawable);
                 im.setImageDrawable(image);
             }
         }
@@ -156,7 +156,8 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         }
 
         private CharSequence formatGeoKretName(final GeoKretLog log) {
-            if (log.getGeoKret() == null || log.getGeoKret().getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED) {
+            if (log.getGeoKret() == null
+                    || log.getGeoKret().getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED) {
                 return "...";
             }
             if (log.getGeoKret().getSynchroState() == GeoKretDataSource.SYNCHRO_STATE_ERROR) {
@@ -301,33 +302,17 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
         listView = (ListView) findViewById(R.id.gklListView);
         listView.setOnItemClickListener(this);
     }
-    
-    @Override
-    protected Cursor openCursor() {
-        super.openCursor();
-        if (account != null && database != null) {
-            cursor = GeoKretLogDataSource.createLoadByUserIDCurosr(database, account.getID());
-            if (adapter == null) {
-                adapter = new Adapter(this, cursor, true);
-                final ListView listView = (ListView) findViewById(R.id.gklListView);
-                listView.setAdapter(adapter);
-            } else {
-                adapter.changeCursor(cursor);
-            } 
-        }
-        return cursor;
-    }
-    
-    @Override
-    protected void onRefreshDatabase() {
-        super.onRefreshDatabase();
-        openCursor();
-    }
 
     @Override
     protected void onPause() {
         super.onPause();
         unregisterReceiver(submitDoneBroadcastReceiver);
+    }
+
+    @Override
+    protected void onRefreshDatabase() {
+        super.onRefreshDatabase();
+        openCursor();
     }
 
     @Override
@@ -343,5 +328,21 @@ public class GeoKretLogsActivity extends AbstractGeoKretyActivity implements
                 LogSubmitterService.BROADCAST_SUBMIT_START));
         registerReceiver(submitDoneBroadcastReceiver, new IntentFilter(
                 LogSubmitterService.BROADCAST_SUBMIT_DONE));
+    }
+
+    @Override
+    protected Cursor openCursor() {
+        super.openCursor();
+        if (account != null && database != null) {
+            cursor = GeoKretLogDataSource.createLoadByUserIDCurosr(database, account.getID());
+            if (adapter == null) {
+                adapter = new Adapter(this, cursor, true);
+                final ListView listView = (ListView) findViewById(R.id.gklListView);
+                listView.setAdapter(adapter);
+            } else {
+                adapter.changeCursor(cursor);
+            }
+        }
+        return cursor;
     }
 }

@@ -19,82 +19,83 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.activities;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
-import android.os.Bundle;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity {
 
-	private GeoKretyApplication application;
+    private GeoKretyApplication application;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		TextView appName = (TextView) findViewById(R.id.appNameTextView);
-		appName.setText(getResources().getString(R.string.main_label_version_prefix)
-				+ Utils.getAppVer());
-		application = (GeoKretyApplication) getApplication();
-	}
+    public void showAboutActivity(final View view) {
+        startActivity(new Intent(this, AboutActivity.class));
+    }
 
-	@Override
-	protected void onStart() {
-		super.onStart();
-		if (accountExist() && !application.isNoAccountHinted()) {
-			showAccountsActivity(null);
-		}
-	}
+    public void showAccountsActivity(final View view) {
+        startActivity(new Intent(this, UsersActivity.class));
+    }
 
-	public void showAccountsActivity(View view) {
-		startActivity(new Intent(this, UsersActivity.class));
-	}
+    public void showGeoKretLogsActivity(final View view) {
+        if (accountExistAndToast()) {
+            startActivity(new Intent(this, GeoKretLogsActivity.class));
+        }
+    }
 
-	public void showInventoryActivity(View view) {
-		if (accountExistAndToast()) {
-			startActivity(new Intent(this, InventoryActivity.class));
-		}
-	}
+    public void showInventoryActivity(final View view) {
+        if (accountExistAndToast()) {
+            startActivity(new Intent(this, InventoryActivity.class));
+        }
+    }
 
-	private boolean accountExist() {
-		return application.getStateHolder().getAccountList().size() == 0;
-	}
+    public void showLastOCsActivity(final View view) {
+        if (accountExistAndToast()) {
+            startActivity(new Intent(this, LastOCsActivity.class));
+        }
+    }
 
-	private boolean accountExistAndToast() {
-		if (accountExist()) {
-			Toast.makeText(this, R.string.main_error_no_account_configured,
-					Toast.LENGTH_LONG).show();
-			return false;
-		}
-		return true;
-	}
+    public void showLogGeoKretActivity(final View view) {
+        if (accountExistAndToast()) {
+            startActivity(new Intent(this, LogActivity.class));
+        }
+    }
 
-	public void showLastOCsActivity(View view) {
-		if (accountExistAndToast()) {
-			startActivity(new Intent(this, LastOCsActivity.class));
-		}
-	}
+    private boolean accountExist() {
+        return application.getStateHolder().getAccountList().size() == 0;
+    }
 
-	public void showLogGeoKretActivity(View view) {
-		if (accountExistAndToast()) {
-			startActivity(new Intent(this, LogActivity.class));
-		}
-	}
-	
-	public void showGeoKretLogsActivity(View view) {
-		if (accountExistAndToast()) {
-			startActivity(new Intent(this, GeoKretLogsActivity.class));
-		}
-	}
+    private boolean accountExistAndToast() {
+        if (accountExist()) {
+            Toast.makeText(this, R.string.main_error_no_account_configured,
+                    Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
+    }
 
-	public void showAboutActivity(View view) {
-		startActivity(new Intent(this, AboutActivity.class));
-	}
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        final TextView appName = (TextView) findViewById(R.id.appNameTextView);
+        appName.setText(getResources().getString(R.string.main_label_version_prefix)
+                + Utils.getAppVer());
+        application = (GeoKretyApplication) getApplication();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (accountExist() && !application.isNoAccountHinted()) {
+            showAccountsActivity(null);
+        }
+    }
 }

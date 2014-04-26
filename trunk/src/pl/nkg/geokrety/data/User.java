@@ -45,7 +45,7 @@ public class User {
 
     private String homeCordLon;
     private String homeCordLat;
-    
+
     private String gcLogin;
     private String gcPassword;
 
@@ -60,6 +60,14 @@ public class User {
         this.geoKretySecredID = geoKretySecredID;
         this.openCachingUUIDs = openCachingUUIDs;
         this.openCachingLogins = openCachingLogins;
+    }
+
+    public String getGeocachingLogin() {
+        return gcLogin;
+    }
+
+    public String getGeocachingPassword() {
+        return gcPassword;
     }
 
     public String getGeoKreySecredID() {
@@ -111,6 +119,14 @@ public class User {
         return bundle;
     }
 
+    public void setGeocachingLogin(final String gcLogin) {
+        this.gcLogin = gcLogin;
+    }
+
+    public void setGeocachingPassword(final String gcPassword) {
+        this.gcPassword = gcPassword;
+    }
+
     public void setHomeCordLat(final String homeCordLat) {
         this.homeCordLat = homeCordLat;
     }
@@ -143,21 +159,5 @@ public class User {
         gcLogin = bundle.getString(User.GC_LOGIN);
         gcPassword = bundle.getString(User.GC_PASSWORD);
         return bundle;
-    }
-
-    public String getGeocachingLogin() {
-        return gcLogin;
-    }
-
-    public String getGeocachingPassword() {
-        return gcPassword;
-    }
-
-    public void setGeocachingLogin(String gcLogin) {
-        this.gcLogin = gcLogin;
-    }
-
-    public void setGeocachingPassword(String gcPassword) {
-        this.gcPassword = gcPassword;
     }
 }

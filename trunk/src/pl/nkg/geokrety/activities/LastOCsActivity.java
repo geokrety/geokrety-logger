@@ -19,14 +19,15 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.activities;
 
 import java.io.Serializable;
 
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.GeocacheLogDataSource;
 import pl.nkg.geokrety.data.User;
-import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.lib.adapters.ExtendedCursorAdapter;
 import pl.nkg.lib.dialogs.AbstractDialogWrapper;
 import android.content.Context;
@@ -41,11 +42,9 @@ import android.widget.ListView;
 import android.widget.Spinner;
 
 public class LastOCsActivity extends AbstractGeoKretyActivity implements
-		AdapterView.OnItemSelectedListener {
+        AdapterView.OnItemSelectedListener {
 
-	private User account;
-
-	private class Adapter extends ExtendedCursorAdapter {
+    private class Adapter extends ExtendedCursorAdapter {
 
         public Adapter(final Context context, final Cursor c, final boolean autoRequery) {
             super(context, c, true, android.R.layout.simple_list_item_2);
@@ -58,32 +57,104 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
             if (gk.getGeoCache() == null || gk.getGeoCache().getName() == null) {
                 bindTextView(view, android.R.id.text1, gk.getCacheCode());
             } else {
-                bindTextView(view, android.R.id.text1, gk.getGeoCache().getName() + " (" + gk.getCacheCode() + ")");
+                bindTextView(view, android.R.id.text1,
+                        gk.getGeoCache().getName() + " (" + gk.getCacheCode() + ")");
             }
-            bindTextView(view, android.R.id.text2, GeocacheLog.toReadableDateString(gk.getDate()) + ", " + gk.getType());
+            bindTextView(view, android.R.id.text2, GeocacheLog.toReadableDateString(gk.getDate())
+                    + ", " + gk.getType());
         }
     }
-	
-	private Adapter adapter;
-	
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		turnOnDatabaseUse();
 
-		setContentView(R.layout.activity_last_ocs);
-		Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
-		spin.setOnItemSelectedListener(this);
-		ArrayAdapter<User> aa = new ArrayAdapter<User>(this,
-				android.R.layout.simple_spinner_item, stateHolder.getAccountList());
+    private User account;
 
-		aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		spin.setAdapter(aa);
-		spin.setSelection(stateHolder.getDefaultAccountNr());
+    private Adapter adapter;
 
-	}
-	
-	@Override
+    @Override
+    public void dialogFinished(final AbstractDialogWrapper<?> dialog, final int buttonId,
+            final Serializable arg) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(final Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.last_ocs, menu);
+        return true;
+    }
+
+    @Override
+    public void onItemSelected(final AdapterView<?> arg0, final View arg1, final int arg2,
+            final long arg3) {
+
+        if (!isPaused()) {
+            account = stateHolder.getAccountList().get(arg2);
+            updateListView();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(final AdapterView<?> arg0) {
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(final MenuItem item) {
+
+        switch (item.getItemId()) {
+            case R.id.menu_ocs_refresh:
+                refreshAccout();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void refreshAccout() {
+        // account.loadData(application, true);
+        application.runRefreshService(true);
+    }
+
+    private void updateListView() {
+        // if (!account.loadIfExpired(application, false)) {
+        // refreshListView();
+        // }
+        onRefreshDatabase();
+    }
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        turnOnDatabaseUse();
+
+        setContentView(R.layout.activity_last_ocs);
+        final Spinner spin = (Spinner) findViewById(R.id.accountsSpiner);
+        spin.setOnItemSelectedListener(this);
+        final ArrayAdapter<User> aa = new ArrayAdapter<User>(this,
+                android.R.layout.simple_spinner_item, stateHolder.getAccountList());
+
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(aa);
+        spin.setSelection(stateHolder.getDefaultAccountNr());
+
+    }
+
+    @Override
+    protected void onRefreshDatabase() {
+        super.onRefreshDatabase();
+        openCursor();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (stateHolder.getDefaultAccountNr() != AdapterView.INVALID_POSITION) {
+            account = stateHolder.getAccountList().get(stateHolder.getDefaultAccountNr());
+            updateListView();
+        }
+    }
+
+    @Override
     protected Cursor openCursor() {
         super.openCursor();
         if (account != null) {
@@ -98,73 +169,5 @@ public class LastOCsActivity extends AbstractGeoKretyActivity implements
         }
         return cursor;
     }
-
-	@Override
-	protected void onResume() {
-	    super.onResume();
-        if (stateHolder.getDefaultAccountNr() != ListView.INVALID_POSITION) {
-            account = stateHolder.getAccountList().get(stateHolder.getDefaultAccountNr());
-            updateListView();
-        }
-	}
-	
-	@Override
-	protected void onRefreshDatabase() {
-	    super.onRefreshDatabase();
-        openCursor();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.last_ocs, menu);
-		return true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		switch (item.getItemId()) {
-		case R.id.menu_ocs_refresh:
-			refreshAccout();
-			return true;
-
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	private void refreshAccout() {
-		//account.loadData(application, true);
-	    application.runRefreshService(true);
-	}
-
-	@Override
-	public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2,
-			long arg3) {
-	    
-		if (!isPaused()) {
-    		account = stateHolder.getAccountList().get(arg2);
-    		updateListView();
-		}
-	}
-
-	private void updateListView() {
-		//if (!account.loadIfExpired(application, false)) {
-			//refreshListView();
-		//}
-	    onRefreshDatabase();
-	}
-
-	@Override
-	public void onNothingSelected(AdapterView<?> arg0) {
-	}
-
-	@Override
-	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId,
-			Serializable arg) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

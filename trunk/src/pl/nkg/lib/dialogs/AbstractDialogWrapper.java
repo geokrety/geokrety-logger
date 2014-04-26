@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 import java.io.Serializable;
@@ -30,122 +31,123 @@ import android.content.DialogInterface.OnDismissListener;
 import android.os.Bundle;
 
 public abstract class AbstractDialogWrapper<D extends Dialog> implements
-		IDialogProtocol<D>, DialogInterface.OnClickListener {
+        IDialogProtocol<D>, DialogInterface.OnClickListener {
 
-	private static final String TITLE = "title";
-	private static final String ARG = "arg";
+    public interface OnClickListener<D extends Dialog> {
+        void onClicks(AbstractDialogWrapper<D> sender, int buttonID);
+    }
 
-	private ManagedDialogsActivity mActivity;
-	private int mDialogId;
-	private Bundle bundle;
-	private final String bundleName;
+    private static final String TITLE = "title";
 
-	private D instance;
+    private static final String ARG = "arg";
+    private final ManagedDialogsActivity mActivity;
+    private final int mDialogId;
+    private Bundle bundle;
 
-	public AbstractDialogWrapper(ManagedDialogsActivity a, int dialogId) {
-		mActivity = a;
-		mDialogId = dialogId;
-		bundleName = getClass().getName() + "_" + mDialogId + "_arg";
-		bundle = new Bundle();
-		a.registerDialog(this);
-	}
+    private final String bundleName;
 
-	@Override
-	public void onClick(DialogInterface dialog, int which) {
-		mActivity.dialogFinished(this, which, getArg());
-	}
+    private D instance;
 
-	@Override
-	public int getDialogId() {
-		return mDialogId;
-	}
+    public AbstractDialogWrapper(final ManagedDialogsActivity a, final int dialogId) {
+        mActivity = a;
+        mDialogId = dialogId;
+        bundleName = getClass().getName() + "_" + mDialogId + "_arg";
+        bundle = new Bundle();
+        a.registerDialog(this);
+    }
 
-	@SuppressWarnings("deprecation")
-	@Override
-	public void show(Serializable arg) {
-		setArg(arg);
-		mActivity.showDialog(mDialogId);
-	}
+    public Bundle getBundle() {
+        return bundle;
+    }
 
-	public ManagedDialogsActivity getManagedDialogsActivity() {
-		return mActivity;
-	}
+    @Override
+    public int getDialogId() {
+        return mDialogId;
+    }
 
-	public Bundle getBundle() {
-		return bundle;
-	}
+    public D getInstance() {
+        return instance;
+    }
 
-	@Override
-	public void saveInstanceState(Bundle outState) {
-		outState.putBundle(bundleName, bundle);
-	}
+    public ManagedDialogsActivity getManagedDialogsActivity() {
+        return mActivity;
+    }
 
-	@Override
-	public void restoreInstanceState(Bundle savedInstanceState) {
-		bundle = savedInstanceState.getBundle(bundleName);
-	}
+    public CharSequence getTitle() {
+        return getBundle().getCharSequence(TITLE);
+    }
 
-	@Override
-	public void prepare(D dialog) {
-		dialog.setOnDismissListener(new OnDismissListener() {
+    public boolean hasTitle() {
+        return getTitle() != null;
+    }
 
-			@Override
-			public void onDismiss(DialogInterface dialog) {
-				AbstractDialogWrapper.this.onDismiss(dialog);
-			}
-		});
-		dialog.setOnCancelListener(new OnCancelListener() {
+    @Override
+    public void onClick(final DialogInterface dialog, final int which) {
+        mActivity.dialogFinished(this, which, getArg());
+    }
 
-			@Override
-			public void onCancel(DialogInterface dialog) {
-				AbstractDialogWrapper.this.onCancel(dialog);
-			}
-		});
-		instance = dialog;
-		if (hasTitle()) {
-			dialog.setTitle(getTitle());
-		}
-	}
+    @Override
+    public void prepare(final D dialog) {
+        dialog.setOnDismissListener(new OnDismissListener() {
 
-	protected void onDismiss(DialogInterface dialog) {
-		instance = null;
-	}
+            @Override
+            public void onDismiss(final DialogInterface dialog) {
+                AbstractDialogWrapper.this.onDismiss(dialog);
+            }
+        });
+        dialog.setOnCancelListener(new OnCancelListener() {
 
-	protected void onCancel(DialogInterface dialog) {
-	}
+            @Override
+            public void onCancel(final DialogInterface dialog) {
+                AbstractDialogWrapper.this.onCancel(dialog);
+            }
+        });
+        instance = dialog;
+        if (hasTitle()) {
+            dialog.setTitle(getTitle());
+        }
+    }
 
-	public CharSequence getTitle() {
-		return getBundle().getCharSequence(TITLE);
-	}
-	
-	public boolean hasTitle() {
-		return getTitle() != null;
-	}
+    @Override
+    public void restoreInstanceState(final Bundle savedInstanceState) {
+        bundle = savedInstanceState.getBundle(bundleName);
+    }
 
-	public void setTitle(int titleID) {
-		setTitle(mActivity.getText(titleID));
-	}
+    @Override
+    public void saveInstanceState(final Bundle outState) {
+        outState.putBundle(bundleName, bundle);
+    }
 
-	public void setTitle(CharSequence title) {
-		getBundle().putCharSequence(TITLE, title);
-		if (instance != null) {
-			instance.setTitle(title);
-		}
-	}
+    public void setTitle(final CharSequence title) {
+        getBundle().putCharSequence(TITLE, title);
+        if (instance != null) {
+            instance.setTitle(title);
+        }
+    }
 
-	public interface OnClickListener<D extends Dialog> {
-		void onClicks(AbstractDialogWrapper<D> sender, int buttonID);
-	}
+    public void setTitle(final int titleID) {
+        setTitle(mActivity.getText(titleID));
+    }
 
-	protected Serializable getArg() {
-		return getBundle().getSerializable(ARG);
-	}
+    @SuppressWarnings("deprecation")
+    @Override
+    public void show(final Serializable arg) {
+        setArg(arg);
+        mActivity.showDialog(mDialogId);
+    }
 
-	protected void setArg(Serializable arg) {
-		getBundle().putSerializable(ARG, arg);
-	}
+    protected Serializable getArg() {
+        return getBundle().getSerializable(ARG);
+    }
 
-	public D getInstance() {
-		return instance;
-	}
+    protected void onCancel(final DialogInterface dialog) {
+    }
+
+    protected void onDismiss(final DialogInterface dialog) {
+        instance = null;
+    }
+
+    protected void setArg(final Serializable arg) {
+        getBundle().putSerializable(ARG, arg);
+    }
 }

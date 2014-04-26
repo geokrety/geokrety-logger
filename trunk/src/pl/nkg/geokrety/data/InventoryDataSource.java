@@ -64,9 +64,10 @@ public class InventoryDataSource {
             + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i." + COLUMN_TRACKING_CODE
             + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE;
 
-    private static final String FETCH_BY_USER = PREFIX_FETCH_BY +  " WHERE i." + COLUMN_USER_ID + " = ? ORDER BY g." + GeoKretDataSource.COLUMN_NAME;
-    private static final String FETCH_BY_ID = PREFIX_FETCH_BY +  " WHERE i." + COLUMN_ID + " = ? ";
-    
+    private static final String FETCH_BY_USER = PREFIX_FETCH_BY + " WHERE i." + COLUMN_USER_ID
+            + " = ? ORDER BY g." + GeoKretDataSource.COLUMN_NAME;
+    private static final String FETCH_BY_ID = PREFIX_FETCH_BY + " WHERE i." + COLUMN_ID + " = ? ";
+
     private static ContentValues getValues(final GeoKret geokret, final long userID) {
         final ContentValues values = new ContentValues();
         values.put(COLUMN_TRACKING_CODE, geokret.getTrackingCode());
@@ -79,87 +80,6 @@ public class InventoryDataSource {
         this.dbHelper = dbHelper;
     }
 
-    public List<String> loadStickyList(final long userId) {
-        final LinkedList<String> gks = new LinkedList<String>();
-        dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
-
-            @Override
-            public boolean inTransaction(final SQLiteDatabase db) {
-                final Cursor cursor = db.query(TABLE, new String[] {
-                        COLUMN_TRACKING_CODE
-                }, COLUMN_STICKY + " != 0 AND " + COLUMN_USER_ID + " = ?", new String[] {
-                        Long.toString(userId)
-                }, null, null, null);
-                while (cursor.moveToNext()) {
-                    gks.add(cursor.getString(0));
-                }
-                cursor.close();
-                return true;
-            }
-        });
-        return gks;
-    }
-
-    public void storeInventory(final Collection<GeoKret> geoKretList, final long userId,
-            final boolean removeNoSticky, final String... trackingCodesToRemove) {
-        dbHelper.runOnWritableDatabase(new DBOperation() {
-
-            @Override
-            public boolean inTransaction(final SQLiteDatabase db) {
-                if (removeNoSticky) {
-                    remove(db,
-                            TABLE,
-                            COLUMN_USER_ID + " = ? AND " + COLUMN_STICKY + " = 0",
-                            String.valueOf(userId));
-                }
-                
-                for (String trackingCodeToRemove : trackingCodesToRemove) {
-                    remove(db,
-                            TABLE,
-                            COLUMN_USER_ID + " = ? AND " + COLUMN_TRACKING_CODE + " = ?",
-                            String.valueOf(userId), trackingCodeToRemove);
-                }
-                
-                final LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
-                for (final GeoKret geoKret : geoKretList) {
-                    remove(db,
-                            TABLE,
-                            COLUMN_USER_ID + " = ? AND " + COLUMN_TRACKING_CODE + " = ?",
-                            String.valueOf(userId), geoKret.getTrackingCode());
-                    cv.add(getValues(geoKret, userId));
-                }
-                persistAll(db, TABLE, cv);
-                return true;
-            }
-        });
-    }
-
-    public List<String> loadNeedUpdateList() {
-        final LinkedList<String> gks = new LinkedList<String>();
-        dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
-
-            @Override
-            public boolean inTransaction(final SQLiteDatabase db) {
-                /*final Cursor cursor = db.rawQuery("SELECT i." + COLUMN_TRACKING_CODE
-                        + " FROM " + TABLE
-                        + " AS i"
-                        + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i."
-                        + COLUMN_TRACKING_CODE
-                        + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE
-                        + " WHERE g." + GeoKretDataSource.COLUMN_SYNCHRO_ERROR + " IS NULL OR g."
-                        + GeoKretDataSource.COLUMN_SYNCHRO_STATE + " < 1", null);*/
-                final Cursor cursor = db.query(TABLE, new String[] {COLUMN_TRACKING_CODE}, COLUMN_STICKY + " = 1 AND " + COLUMN_USER_ID, null, null, null, null);
-
-                while (cursor.moveToNext()) {
-                    gks.add(cursor.getString(0));
-                }
-                cursor.close();
-                return true;
-            }
-        });
-        return gks;
-    }
-    
     public GeoKret loadByID(final long logID) {
         final LinkedList<GeoKret> geoKretLogs = new LinkedList<GeoKret>();
         dbHelper.runOnReadableDatabase(new DBOperation() {
@@ -196,5 +116,89 @@ public class InventoryDataSource {
             }
         });
         return geoKrets.toArray(new GeoKret[geoKrets.size()]);
+    }
+
+    public List<String> loadNeedUpdateList() {
+        final LinkedList<String> gks = new LinkedList<String>();
+        dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                /*
+                 * final Cursor cursor = db.rawQuery("SELECT i." +
+                 * COLUMN_TRACKING_CODE + " FROM " + TABLE + " AS i" +
+                 * " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i." +
+                 * COLUMN_TRACKING_CODE + " = g." +
+                 * GeoKretDataSource.COLUMN_TRACKING_CODE + " WHERE g." +
+                 * GeoKretDataSource.COLUMN_SYNCHRO_ERROR + " IS NULL OR g." +
+                 * GeoKretDataSource.COLUMN_SYNCHRO_STATE + " < 1", null);
+                 */
+                final Cursor cursor = db.query(TABLE, new String[] {
+                    COLUMN_TRACKING_CODE
+                }, COLUMN_STICKY + " = 1 AND " + COLUMN_USER_ID, null, null, null, null);
+
+                while (cursor.moveToNext()) {
+                    gks.add(cursor.getString(0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return gks;
+    }
+
+    public List<String> loadStickyList(final long userId) {
+        final LinkedList<String> gks = new LinkedList<String>();
+        dbHelper.runOnReadableDatabase(new GeoKretySQLiteHelper.DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                final Cursor cursor = db.query(TABLE, new String[] {
+                        COLUMN_TRACKING_CODE
+                }, COLUMN_STICKY + " != 0 AND " + COLUMN_USER_ID + " = ?", new String[] {
+                        Long.toString(userId)
+                }, null, null, null);
+                while (cursor.moveToNext()) {
+                    gks.add(cursor.getString(0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return gks;
+    }
+
+    public void storeInventory(final Collection<GeoKret> geoKretList, final long userId,
+            final boolean removeNoSticky, final String... trackingCodesToRemove) {
+        dbHelper.runOnWritableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                if (removeNoSticky) {
+                    remove(db,
+                            TABLE,
+                            COLUMN_USER_ID + " = ? AND " + COLUMN_STICKY + " = 0",
+                            String.valueOf(userId));
+                }
+
+                for (final String trackingCodeToRemove : trackingCodesToRemove) {
+                    remove(db,
+                            TABLE,
+                            COLUMN_USER_ID + " = ? AND " + COLUMN_TRACKING_CODE + " = ?",
+                            String.valueOf(userId), trackingCodeToRemove);
+                }
+
+                final LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
+                for (final GeoKret geoKret : geoKretList) {
+                    remove(db,
+                            TABLE,
+                            COLUMN_USER_ID + " = ? AND " + COLUMN_TRACKING_CODE + " = ?",
+                            String.valueOf(userId), geoKret.getTrackingCode());
+                    cv.add(getValues(geoKret, userId));
+                }
+                persistAll(db, TABLE, cv);
+                return true;
+            }
+        });
     }
 }

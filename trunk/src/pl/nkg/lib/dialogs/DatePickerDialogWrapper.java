@@ -19,87 +19,89 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 import java.io.Serializable;
 
 import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.widget.DatePicker;
 
 public class DatePickerDialogWrapper extends
-		AbstractAlertDialogWrapper<DatePickerDialog> implements
-		DatePickerDialog.OnDateSetListener {
+        AbstractAlertDialogWrapper<DatePickerDialog> implements
+        DatePickerDialog.OnDateSetListener {
 
-	private int year = 2013;
-	private int monthOfYear = 11;
-	private int dayOfMonth = 12;
+    private int year = 2013;
+    private int monthOfYear = 11;
+    private int dayOfMonth = 12;
 
-	public DatePickerDialogWrapper(ManagedDialogsActivity a, int dialogId) {
-		super(a, dialogId);
-	}
+    public DatePickerDialogWrapper(final ManagedDialogsActivity a, final int dialogId) {
+        super(a, dialogId);
+    }
 
-	@Override
-	public DatePickerDialog create() {
-		DatePickerDialog dialog = new DatePickerDialog(
-				getManagedDialogsActivity(), this, year, monthOfYear,
-				dayOfMonth);
-		if (hasTitle()) {
-			dialog.setTitle(getTitle());
-		}
+    @Override
+    public DatePickerDialog create() {
+        final DatePickerDialog dialog = new DatePickerDialog(
+                getManagedDialogsActivity(), this, year, monthOfYear,
+                dayOfMonth);
+        if (hasTitle()) {
+            dialog.setTitle(getTitle());
+        }
 
-		if (hasMessage()) {
-			dialog.setMessage(getMessage());
-		}
+        if (hasMessage()) {
+            dialog.setMessage(getMessage());
+        }
 
-		return dialog;
-	}
+        return dialog;
+    }
 
-	@Override
-	public void prepare(DatePickerDialog dialog) {
-		super.prepare(dialog);
-		dialog.updateDate(year, monthOfYear, dayOfMonth);
-	}
+    public int getDayOfMonth() {
+        return dayOfMonth;
+    }
 
-	public void show(Serializable arg, int year, int monthOfYear, int dayOfMonth) {
-		this.year = year;
-		this.monthOfYear = monthOfYear;
-		this.dayOfMonth = dayOfMonth;
-		show(arg);
-	}
+    public int getMonthOfYear() {
+        return monthOfYear;
+    }
 
-	public int getYear() {
-		return year;
-	}
+    public int getYear() {
+        return year;
+    }
 
-	public void setYear(int year) {
-		this.year = year;
-	}
+    @Override
+    public void onDateSet(final DatePicker view, final int year, final int monthOfYear,
+            final int dayOfMonth) {
 
-	public int getMonthOfYear() {
-		return monthOfYear;
-	}
+        setDayOfMonth(dayOfMonth);
+        setMonthOfYear(monthOfYear);
+        setYear(year);
+        getManagedDialogsActivity().dialogFinished(this,
+                DialogInterface.BUTTON_POSITIVE, getArg());
+    }
 
-	public void setMonthOfYear(int monthOfYear) {
-		this.monthOfYear = monthOfYear;
-	}
+    @Override
+    public void prepare(final DatePickerDialog dialog) {
+        super.prepare(dialog);
+        dialog.updateDate(year, monthOfYear, dayOfMonth);
+    }
 
-	public int getDayOfMonth() {
-		return dayOfMonth;
-	}
+    public void setDayOfMonth(final int dayOfMonth) {
+        this.dayOfMonth = dayOfMonth;
+    }
 
-	public void setDayOfMonth(int dayOfMonth) {
-		this.dayOfMonth = dayOfMonth;
-	}
+    public void setMonthOfYear(final int monthOfYear) {
+        this.monthOfYear = monthOfYear;
+    }
 
-	@Override
-	public void onDateSet(DatePicker view, int year, int monthOfYear,
-			int dayOfMonth) {
+    public void setYear(final int year) {
+        this.year = year;
+    }
 
-		setDayOfMonth(dayOfMonth);
-		setMonthOfYear(monthOfYear);
-		setYear(year);
-		getManagedDialogsActivity().dialogFinished(this,
-				Dialog.BUTTON_POSITIVE, getArg());
-	}
+    public void show(final Serializable arg, final int year, final int monthOfYear,
+            final int dayOfMonth) {
+        this.year = year;
+        this.monthOfYear = monthOfYear;
+        this.dayOfMonth = dayOfMonth;
+        show(arg);
+    }
 }

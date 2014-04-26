@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.receivers;
 
 import pl.nkg.geokrety.services.LogSubmitterService;
@@ -28,13 +29,15 @@ import android.content.Intent;
 import android.net.NetworkInfo;
 
 public class NetworkStateReceiver extends BroadcastReceiver {
-	@Override
-	public void onReceive(final Context paramContext, final Intent paramIntent) {
-		if (paramIntent.getExtras() != null) {
-			final NetworkInfo localNetworkInfo = (NetworkInfo) paramIntent.getExtras().get("networkInfo");
-			if (localNetworkInfo != null && localNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
-				paramContext.startService(new Intent(paramContext, LogSubmitterService.class));
-			}
-		}
-	}
+    @Override
+    public void onReceive(final Context paramContext, final Intent paramIntent) {
+        if (paramIntent.getExtras() != null) {
+            final NetworkInfo localNetworkInfo = (NetworkInfo) paramIntent.getExtras().get(
+                    "networkInfo");
+            if (localNetworkInfo != null
+                    && localNetworkInfo.getState() == NetworkInfo.State.CONNECTED) {
+                paramContext.startService(new Intent(paramContext, LogSubmitterService.class));
+            }
+        }
+    }
 }

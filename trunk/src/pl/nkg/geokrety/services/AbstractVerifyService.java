@@ -68,7 +68,7 @@ abstract public class AbstractVerifyService extends IntentService {
         } catch (final Throwable e) {
             ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
-            String msg = Utils.formatException(e);
+            final String msg = Utils.formatException(e);
             Log.println(Log.ERROR, logTag, msg);
             sendBroadcast(value, "", NotifyTextView.ERROR, msg);
         }

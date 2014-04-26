@@ -70,7 +70,8 @@ abstract public class AbstractNotifiedEditText extends EditText {
                 setLabel(intent.getExtras().getString(AbstractVerifyService.INTENT_MESSAGE), type);
                 if (verifyResponseListener != null) {
                     verifyResponseListener.onVerifyResponse(bundle
-                            .getString(AbstractVerifyService.INTENT_RESPONSE), type == NotifyTextView.GOOD);
+                            .getString(AbstractVerifyService.INTENT_RESPONSE),
+                            type == NotifyTextView.GOOD);
                 }
             }
         }
@@ -128,6 +129,7 @@ abstract public class AbstractNotifiedEditText extends EditText {
     }
 
     abstract protected CharSequence getInvalidateMessage();
+
     abstract protected CharSequence getNotEnabledMessage();
 
     abstract protected String getServiceBroadcast();
@@ -135,6 +137,8 @@ abstract public class AbstractNotifiedEditText extends EditText {
     abstract protected Class<?> getServiceClass();
 
     abstract protected CharSequence getWaitMessage();
+
+    abstract protected boolean isVerifierEnabled();
 
     protected void runVerifyService() {
         final Intent intent = new Intent(getContext(), getServiceClass());
@@ -148,6 +152,4 @@ abstract public class AbstractNotifiedEditText extends EditText {
             mNotifyTextView.setLabel(content, color);
         }
     }
-    
-    abstract protected boolean isVerifierEnabled();
 }

@@ -61,7 +61,7 @@ public class GeoKretDataSource {
             + COLUMN_SYNCHRO_STATE + " INTEGER DEFAULT 0," //
             + COLUMN_SYNCHRO_ERROR + " TEXT" //
             + "); ";
-    
+
     public static final String FETCH_COLUMNS = "g." + COLUMN_GK_CODE + ", " //
             + "g." + COLUMN_DISTANCE + ", " //
             + "g." + COLUMN_OWNER_ID + ", " //
@@ -71,8 +71,8 @@ public class GeoKretDataSource {
             + "g." + COLUMN_SYNCHRO_STATE + ", " //
             + "g." + COLUMN_SYNCHRO_ERROR;
 
-    public static final String FETCH_BY_ID = "SELECT g." + COLUMN_TRACKING_CODE + ", 0 AS sticky, " + FETCH_COLUMNS + " FROM " + TABLE + " AS g WHERE g." + COLUMN_TRACKING_CODE + " = ?";
-    
+    public static final String FETCH_BY_ID = "SELECT g." + COLUMN_TRACKING_CODE + ", 0 AS sticky, "
+            + FETCH_COLUMNS + " FROM " + TABLE + " AS g WHERE g." + COLUMN_TRACKING_CODE + " = ?";
 
     private static ContentValues getValues(final GeoKret geokret) {
         final ContentValues values = new ContentValues();
@@ -94,6 +94,26 @@ public class GeoKretDataSource {
         this.dbHelper = dbHelper;
     }
 
+    public GeoKret loadByTrackingCode(final CharSequence tc) {
+        final LinkedList<GeoKret> geoKretLogs = new LinkedList<GeoKret>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[] {
+                    tc.toString()
+                });
+                while (cursor.moveToNext()) {
+                    geoKretLogs.add(new GeoKret(cursor, 0));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return geoKretLogs.isEmpty() ? null : geoKretLogs.getFirst();
+    }
+
     @Deprecated
     public List<String> loadNeedUpdateList() {
         final LinkedList<String> gks = new LinkedList<String>();
@@ -102,7 +122,7 @@ public class GeoKretDataSource {
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
                 final Cursor cursor = db.query(TABLE, new String[] {
-                    COLUMN_TRACKING_CODE
+                        COLUMN_TRACKING_CODE
                 }, COLUMN_SYNCHRO_STATE + " < 1", null, null, null, null);
                 while (cursor.moveToNext()) {
                     gks.add(cursor.getString(0));
@@ -132,23 +152,5 @@ public class GeoKretDataSource {
                 return true;
             }
         });
-    }
-    
-    public GeoKret loadByTrackingCode(final CharSequence tc) {
-        final LinkedList<GeoKret> geoKretLogs = new LinkedList<GeoKret>();
-        dbHelper.runOnReadableDatabase(new DBOperation() {
-
-            @Override
-            public boolean inTransaction(final SQLiteDatabase db) {
-
-                final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[]{tc.toString()});
-                while (cursor.moveToNext()) {
-                    geoKretLogs.add(new GeoKret(cursor, 0));
-                }
-                cursor.close();
-                return true;
-            }
-        });
-        return geoKretLogs.isEmpty() ? null : geoKretLogs.getFirst();
     }
 }

@@ -19,85 +19,86 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.dialogs;
 
 import java.io.Serializable;
 
+import pl.nkg.geokrety.R;
+import pl.nkg.lib.dialogs.AlertDialogWrapper;
+import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.widget.EditText;
 import android.widget.Toast;
-import pl.nkg.geokrety.R;
-import pl.nkg.lib.dialogs.AlertDialogWrapper;
-import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 
 public class GKDialog extends AlertDialogWrapper {
 
-	private String mGKLogin = "";
-	private String mGKPassword = "";
+    private String mGKLogin = "";
+    private String mGKPassword = "";
 
-	public GKDialog(ManagedDialogsActivity a) {
-		super(a, Dialogs.GK_PROMPTDIALOG);
-		setTitle(R.string.user_gk_title);
-		setLayout(R.layout.dialog_gk);
-		setOkCancelButtons();
-	}
+    public GKDialog(final ManagedDialogsActivity a) {
+        super(a, Dialogs.GK_PROMPTDIALOG);
+        setTitle(R.string.user_gk_title);
+        setLayout(R.layout.dialog_gk);
+        setOkCancelButtons();
+    }
 
-	@Override
-	protected boolean onValidate(Dialog dialog) {
-		mGKLogin = ((EditText) dialog.findViewById(R.id.loginEditText))
-				.getText().toString();
-		mGKPassword = ((EditText) dialog.findViewById(R.id.passwordEditText))
-				.getText().toString();
+    public void clearValues() {
+        mGKLogin = "";
+        mGKPassword = "";
+    }
 
-		if (mGKLogin.length() == 0) {
-			showToast(R.string.user_gk_error_login_null);
-			return false;
-		}
+    public String getGKLogin() {
+        return mGKLogin;
+    }
 
-		if (mGKPassword.length() == 0) {
-			showToast(R.string.user_gk_error_password_null);
-			return false;
-		}
+    public String getGKPassword() {
+        return mGKPassword;
+    }
 
-		return true;
-	}
+    @Override
+    public void prepare(final AlertDialog dialog) {
+        ((EditText) dialog.findViewById(R.id.loginEditText)).setText(mGKLogin);
+        ((EditText) dialog.findViewById(R.id.passwordEditText))
+                .setText(mGKPassword);
+        super.prepare(dialog);
+    }
 
-	@Override
-	public void prepare(AlertDialog dialog) {
-		((EditText) dialog.findViewById(R.id.loginEditText)).setText(mGKLogin);
-		((EditText) dialog.findViewById(R.id.passwordEditText))
-				.setText(mGKPassword);
-		super.prepare(dialog);
-	}
+    public void setGKLogin(final String gkLogin) {
+        mGKLogin = gkLogin;
+    }
 
-	private void showToast(int stringID) {
-		Toast.makeText(getManagedDialogsActivity(), stringID, Toast.LENGTH_SHORT).show();
-	}
+    public void setGKPassword(final String gkPassword) {
+        mGKPassword = gkPassword;
+    }
 
-	public String getGKLogin() {
-		return mGKLogin;
-	}
+    public void show(final Serializable arg, final String login) {
+        setGKLogin(login);
+        show(arg);
+    }
 
-	public void setGKLogin(String gkLogin) {
-		this.mGKLogin = gkLogin;
-	}
+    private void showToast(final int stringID) {
+        Toast.makeText(getManagedDialogsActivity(), stringID, Toast.LENGTH_SHORT).show();
+    }
 
-	public String getGKPassword() {
-		return mGKPassword;
-	}
+    @Override
+    protected boolean onValidate(final Dialog dialog) {
+        mGKLogin = ((EditText) dialog.findViewById(R.id.loginEditText))
+                .getText().toString();
+        mGKPassword = ((EditText) dialog.findViewById(R.id.passwordEditText))
+                .getText().toString();
 
-	public void setGKPassword(String gkPassword) {
-		this.mGKPassword = gkPassword;
-	}
+        if (mGKLogin.length() == 0) {
+            showToast(R.string.user_gk_error_login_null);
+            return false;
+        }
 
-	public void clearValues() {
-		mGKLogin = "";
-		mGKPassword = "";
-	}
-	
-	public void show(Serializable arg, String login) {
-		setGKLogin(login);
-		show(arg);
-	}
+        if (mGKPassword.length() == 0) {
+            showToast(R.string.user_gk_error_password_null);
+            return false;
+        }
+
+        return true;
+    }
 }

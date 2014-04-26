@@ -27,31 +27,59 @@ import org.json.JSONObject;
 
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.exceptions.LocationNotResolvedException;
-
 import android.database.Cursor;
 
 public class Geocache {
+
+    public static Geocache fromWaypointResolver(final String waypoint, final JSONObject json)
+            throws JSONException, LocationNotResolvedException {
+        final String content = json.getString("tresc");
+        final String lat = json.getString("lat");
+        final String lon = json.getString("lon");
+
+        if (Utils.isEmpty(lat) || Utils.isEmpty(lon)
+                || content.contains("Please provide the coordinates")) {
+            throw new LocationNotResolvedException(waypoint);
+        }
+
+        final String location = lat + " " + lon;
+        final String name = android.text.Html.fromHtml(content.replace("</a>", " -")).toString()
+                .replace('￼', ' ').replace('\n', ':').trim().replace("- :  ", "");
+
+        return new Geocache(waypoint, name, location, null, null, null);
+    }
+
+    public static Geocache parseGeocachingCom(final String html) throws JSONException {
+        final String title = Utils.extractBetween(html, "<title>", "</title>").trim();
+        final String waypoint = title.substring(0, 7);
+        final String type = Utils.extractBetween(title, "(", ")");
+        final String jsonStr = "{" + Utils.extractBetween(html, "mapLatLng = {", ";");
+        final JSONObject json = new JSONObject(jsonStr);
+        final String name = json.getString("name");
+        final String location = json.getString("lat") + " " + json.getString("lng");
+        final String guid = Utils.extractBetween(html, ", guid='", "'");
+        return new Geocache(waypoint, name, location, type, "", guid);
+    }
 
     private final String name;
     private final String code;
     private final String guid;
     private final String location;
+
     private final String type;
+
     private final String status;
 
-    public static Geocache parseGeocachingCom(final String html) throws JSONException {
-        String title = Utils.extractBetween(html, "<title>", "</title>").trim();
-        String waypoint = title.substring(0, 7);
-        String type = Utils.extractBetween(title, "(", ")");
-        String jsonStr = "{" + Utils.extractBetween(html, "mapLatLng = {", ";");
-        JSONObject json = new JSONObject(jsonStr);
-        String name = json.getString("name");
-        String location = json.getString("lat") + " " + json.getString("lng");
-        String guid = Utils.extractBetween(html, ", guid='", "'");
-        return new Geocache(waypoint, name, location, type, "", guid);
+    public Geocache(final Cursor cursor, final int i) {
+        code = cursor.getString(i + 0);
+        name = cursor.getString(i + 1);
+        location = cursor.getString(i + 2);
+        type = cursor.getString(i + 3);
+        status = cursor.getString(i + 4);
+        guid = cursor.getString(i + 5);
     }
 
-    public Geocache(JSONObject jsonObject) throws JSONException {
+    public Geocache(final JSONObject jsonObject) throws JSONException {
         name = jsonObject.getString("name");
         code = jsonObject.getString("code");
         location = jsonObject.getString("location");
@@ -60,28 +88,8 @@ public class Geocache {
         guid = null;
     }
 
-    private Geocache(String code, String name, String location, String type,
-            String status, String guid) {
-        super();
-        this.name = name;
-        this.code = code;
-        this.location = location;
-        this.type = type;
-        this.status = status;
-        this.guid = guid;
-    }
-
-    public Geocache(Cursor cursor, int i) {
-        this.code = cursor.getString(i + 0);
-        this.name = cursor.getString(i + 1);
-        this.location = cursor.getString(i + 2);
-        this.type = cursor.getString(i + 3);
-        this.status = cursor.getString(i + 4);
-        this.guid = cursor.getString(i + 5);
-    }
-
     @Deprecated
-    public Geocache(String content, String lat, String lon) {
+    public Geocache(final String content, final String lat, final String lon) {
         if (Utils.isEmpty(lat) || Utils.isEmpty(lon)) {
             location = "";
         } else {
@@ -100,48 +108,44 @@ public class Geocache {
         guid = null;
     }
 
-    public String getName() {
-        return name;
+    private Geocache(final String code, final String name, final String location,
+            final String type,
+            final String status, final String guid) {
+        super();
+        this.name = name;
+        this.code = code;
+        this.location = location;
+        this.type = type;
+        this.status = status;
+        this.guid = guid;
     }
 
     public String getCode() {
         return code;
     }
 
-    public String getLocation() {
-        return location;
-    }
-    
     public String getFormattedLocation() {
         return getLocation().replace("|", " ");
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getStatus() {
-        return status;
     }
 
     public String getGUID() {
         return guid;
     }
 
-    public static Geocache fromWaypointResolver(String waypoint, JSONObject json) throws JSONException, LocationNotResolvedException {
-        String content = json.getString("tresc");
-        String lat = json.getString("lat");
-        String lon = json.getString("lon");
+    public String getLocation() {
+        return location;
+    }
 
-        if (Utils.isEmpty(lat) || Utils.isEmpty(lon) || content.contains("Please provide the coordinates")) {
-            throw new LocationNotResolvedException(waypoint);
-        }
-        
-        String location = lat + " " + lon;
-        String name = android.text.Html.fromHtml(content.replace("</a>", " -")).toString()
-                        .replace('￼', ' ').replace('\n', ':').trim().replace("- :  ", "");
+    public String getName() {
+        return name;
+    }
 
-        return new Geocache(waypoint, name, location, null, null, null);
+    public String getStatus() {
+        return status;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public boolean hasLocation() {

@@ -19,29 +19,32 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.okapi;
 
 public class SupportedOKAPI {
 
-	public final String host;
-	public final int version;
-	public final String consumerKey;
-	public final int nr;
+    public final String host;
+    public final int version;
+    public final String consumerKey;
+    public final int nr;
 
-	public static final SupportedOKAPI[] SUPPORTED = new SupportedOKAPI[] { //
-			new SupportedOKAPI("opencaching.pl", 912, "DajjA4r3QZNRHAef7XZD", 0), //
-			new SupportedOKAPI("opencaching.de", 893, "LtBaPTnpjUpxpeqM6ThJ", 1), //
-			new SupportedOKAPI("opencaching.us", 901, "5vpZTs8UehxfmdF8uKhy", 2), //
-			new SupportedOKAPI("opencaching.nl", 912, "rVn3VMJ82FqAa5b2fmvG", 3), //
-			new SupportedOKAPI("opencaching.org.uk", 515,
-					"WM2DTuZFPrZbbLq59TBM", 4) //
-	};
+    public static final SupportedOKAPI[] SUPPORTED = new SupportedOKAPI[] { //
+            new SupportedOKAPI("opencaching.pl", 912, "DajjA4r3QZNRHAef7XZD", 0), //
+            new SupportedOKAPI("opencaching.de", 893, "LtBaPTnpjUpxpeqM6ThJ", 1), //
+            new SupportedOKAPI("opencaching.us", 901, "5vpZTs8UehxfmdF8uKhy", 2), //
+            new SupportedOKAPI("opencaching.nl", 912, "rVn3VMJ82FqAa5b2fmvG", 3), //
+            new SupportedOKAPI("opencaching.org.uk", 515,
+                    "WM2DTuZFPrZbbLq59TBM", 4)
+    //
+    };
 
-	private SupportedOKAPI(String host, int version, String consumerKey, int nr) {
-		super();
-		this.host = host;
-		this.version = version;
-		this.consumerKey = consumerKey;
-		this.nr = nr;
-	}
+    private SupportedOKAPI(final String host, final int version, final String consumerKey,
+            final int nr) {
+        super();
+        this.host = host;
+        this.version = version;
+        this.consumerKey = consumerKey;
+        this.nr = nr;
+    }
 }

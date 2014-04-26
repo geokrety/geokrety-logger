@@ -19,8 +19,14 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.activities;
 
+import pl.nkg.geokrety.GeoKretyApplication;
+import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.data.StateHolder;
+import pl.nkg.geokrety.services.RefreshService;
+import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,13 +36,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import pl.nkg.geokrety.GeoKretyApplication;
-import pl.nkg.geokrety.R;
-import pl.nkg.geokrety.data.StateHolder;
-import pl.nkg.geokrety.services.LogSubmitterService;
-import pl.nkg.geokrety.services.RefreshService;
-import pl.nkg.lib.dialogs.ManagedDialogsActivity;
-
 public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
 
     protected GeoKretyApplication application;
@@ -44,42 +43,51 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
     protected SQLiteDatabase database;
     protected Cursor cursor;
     private boolean useDataBase = false;
-    
+
     private final BroadcastReceiver refreshFinishBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            Toast.makeText(AbstractGeoKretyActivity.this, R.string.refresh_message_refresh_finish, Toast.LENGTH_LONG).show();
+            Toast.makeText(AbstractGeoKretyActivity.this, R.string.refresh_message_refresh_finish,
+                    Toast.LENGTH_LONG).show();
             onRefreshDatabase();
         }
     };
-    
+
     private final BroadcastReceiver refreshErrorBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
-            String error = intent.getExtras().getString(RefreshService.INTENT_ERROR_MESSAGE);
-            Toast.makeText(AbstractGeoKretyActivity.this, getText(R.string.refresh_message_refresh_error) + " " + error, Toast.LENGTH_LONG).show();
+            final String error = intent.getExtras().getString(RefreshService.INTENT_ERROR_MESSAGE);
+            Toast.makeText(AbstractGeoKretyActivity.this,
+                    getText(R.string.refresh_message_refresh_error) + " " + error,
+                    Toast.LENGTH_LONG).show();
             onRefreshError();
         }
     };
-    
-    protected void onRefreshDatabase() {
-    }
-    
-    protected void onRefreshError() {
-    }
-    
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        application = (GeoKretyApplication)getApplication();
-        stateHolder = application.getStateHolder();
-    }
-    
+
     private boolean mPaused = true;
+
     public boolean isPaused() {
         return mPaused;
     }
-    
+
+    protected void closeCursorIfOpened() {
+        if (useDataBase == false) {
+            throw new RuntimeException("You forgot to use turnOnDatabaseUse() in onCreate()");
+        }
+
+        if (cursor != null) {
+            cursor.close();
+            cursor = null;
+        }
+    }
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        application = (GeoKretyApplication) getApplication();
+        stateHolder = application.getStateHolder();
+    }
+
     @Override
     protected void onPause() {
         mPaused = true;
@@ -91,6 +99,12 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
             closeCursorIfOpened();
             stateHolder.getDbHelper().closeDatabase();
         }
+    }
+
+    protected void onRefreshDatabase() {
+    }
+
+    protected void onRefreshError() {
     }
 
     @Override
@@ -107,23 +121,12 @@ public abstract class AbstractGeoKretyActivity extends ManagedDialogsActivity {
                 RefreshService.BROADCAST_ERROR));
         mPaused = false;
     }
-    
+
     protected Cursor openCursor() {
         closeCursorIfOpened();
         return null;
     }
 
-    protected void closeCursorIfOpened() {
-        if (useDataBase == false) {
-            throw new RuntimeException("You forgot to use turnOnDatabaseUse() in onCreate()");
-        }
-        
-        if (cursor != null) {
-            cursor.close();
-            cursor = null;
-        }
-    }
-    
     protected void turnOnDatabaseUse() {
         if (useDataBase == false) {
             useDataBase = true;

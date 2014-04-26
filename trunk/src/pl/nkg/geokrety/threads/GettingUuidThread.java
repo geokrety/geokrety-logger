@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.threads;
 
 import pl.nkg.geokrety.GeoKretyApplication;
@@ -29,25 +30,25 @@ import pl.nkg.lib.threads.ForegroundTaskHandler;
 import android.util.Pair;
 
 public class GettingUuidThread extends
-		AbstractForegroundTaskWrapper<Pair<String, Integer>, String, String> {
+        AbstractForegroundTaskWrapper<Pair<String, Integer>, String, String> {
 
-	public static final int ID = 4;
+    public static final int ID = 4;
 
-	public GettingUuidThread(GeoKretyApplication application) {
-		super(application, ID);
-	}
+    public static GettingUuidThread getFromHandler(final ForegroundTaskHandler handler) {
+        final AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
+        final GettingUuidThread b = (GettingUuidThread) a;
+        return b;
+    }
 
-	public static GettingUuidThread getFromHandler(ForegroundTaskHandler handler) {
-		AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
-		GettingUuidThread b = (GettingUuidThread) a;
-		return b;
-	}
+    public GettingUuidThread(final GeoKretyApplication application) {
+        super(application, ID);
+    }
 
-	@Override
-	protected String runInBackground(Thread thread, Pair<String, Integer> param)
-			throws Throwable {
+    @Override
+    protected String runInBackground(final Thread thread, final Pair<String, Integer> param)
+            throws Throwable {
         // FIXME: use reTry
-		return OKAPIProvider.loadOpenCachingUUID(
-				SupportedOKAPI.SUPPORTED[param.second], param.first);
-	}
+        return OKAPIProvider.loadOpenCachingUUID(
+                SupportedOKAPI.SUPPORTED[param.second], param.first);
+    }
 }

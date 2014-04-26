@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 import android.app.Dialog;
@@ -30,44 +31,42 @@ import android.util.SparseArray;
  * English title: Pro Android 2<br/>
  * Authors: Sayed Hashimi, Satya Komatineni, Dave MacLean<br/>
  * ISBN: 978-83-246-2754-7
- * 
  */
 public class DialogRegistry {
-	SparseArray<IDialogProtocol<? extends Dialog>> idsToDialogs = new SparseArray<IDialogProtocol<?>>();
+    SparseArray<IDialogProtocol<? extends Dialog>> idsToDialogs = new SparseArray<IDialogProtocol<?>>();
 
-	public void registerDialog(IDialogProtocol<?> dialog) {
-		idsToDialogs.put(dialog.getDialogId(), dialog);
-	}
+    public Dialog create(final int id) {
+        final IDialogProtocol<?> dp = idsToDialogs.get(id);
+        if (dp == null) {
+            return null;
+        }
+        return dp.create();
+    }
 
-	public Dialog create(int id) {
-		IDialogProtocol<?> dp = idsToDialogs.get(id);
-		if (dp == null) {
-			return null;
-		}
-		return dp.create();
-	}
+    @SuppressWarnings("unchecked")
+    public void prepare(final Dialog dialog, final int id) {
+        @SuppressWarnings("rawtypes")
+        final IDialogProtocol dp = idsToDialogs.get(id);
+        if (dp == null) {
+            throw new RuntimeException("Dialog id is not registered: " + id);
+        }
+        dp.prepare(dialog);
+    }
 
-	
-	@SuppressWarnings("unchecked")
-	public void prepare(Dialog dialog, int id) {
-		@SuppressWarnings("rawtypes")
-		IDialogProtocol dp = idsToDialogs.get(id);
-		if (dp == null) {
-			throw new RuntimeException("Dialog id is not registered: " + id);
-		}
-		dp.prepare(dialog);
-	}
+    public void registerDialog(final IDialogProtocol<?> dialog) {
+        idsToDialogs.put(dialog.getDialogId(), dialog);
+    }
 
-	public void saveInstanceState(Bundle outState) {
-		for (int i = 0; i < idsToDialogs.size(); i++) {
-			idsToDialogs.get(idsToDialogs.keyAt(i)).saveInstanceState(outState);
-		}
-	}
+    public void restoreInstanceState(final Bundle savedInstanceState) {
+        for (int i = 0; i < idsToDialogs.size(); i++) {
+            idsToDialogs.get(idsToDialogs.keyAt(i)).restoreInstanceState(
+                    savedInstanceState);
+        }
+    }
 
-	public void restoreInstanceState(Bundle savedInstanceState) {
-		for (int i = 0; i < idsToDialogs.size(); i++) {
-			idsToDialogs.get(idsToDialogs.keyAt(i)).restoreInstanceState(
-					savedInstanceState);
-		}
-	}
+    public void saveInstanceState(final Bundle outState) {
+        for (int i = 0; i < idsToDialogs.size(); i++) {
+            idsToDialogs.get(idsToDialogs.keyAt(i)).saveInstanceState(outState);
+        }
+    }
 }

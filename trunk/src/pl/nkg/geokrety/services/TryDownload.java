@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.services;
 
 import pl.nkg.geokrety.exceptions.NoConnectionException;
@@ -28,21 +29,21 @@ public abstract class TryDownload<O> {
 
     private int mCount = 0;
     private int mRetry = 0;
-    
-    public O tryRun(int count) throws Exception {
+
+    public O tryRun(final int count) throws Exception {
         if (mCount != 0) {
             throw new RuntimeException("tryRun method not finished");
         }
         mCount = count;
-        
+
         Throwable t = null;
-        
+
         for (mRetry = 0; mRetry < count; mRetry++) {
             try {
-                O o = run();
+                final O o = run();
                 mCount = 0;
                 return o;
-            } catch (NoConnectionException e) {
+            } catch (final NoConnectionException e) {
                 t = e;
                 if (!doRetry(mRetry)) {
                     mCount = 0;
@@ -53,9 +54,9 @@ public abstract class TryDownload<O> {
         throw new NoConnectionException(t);
     }
 
-    protected boolean doRetry(int retry) {
+    protected boolean doRetry(final int retry) {
         return true;
     }
-    
+
     protected abstract O run() throws NoConnectionException, Exception;
 }

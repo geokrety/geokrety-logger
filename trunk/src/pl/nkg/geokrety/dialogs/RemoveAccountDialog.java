@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.dialogs;
 
 import java.io.Serializable;
@@ -29,27 +30,27 @@ import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 
 public class RemoveAccountDialog extends AlertDialogWrapper {
 
-	private static final String POSITION = "position";
+    private static final String POSITION = "position";
 
-	public int getPosition() {
-		return getBundle().getInt(POSITION);
-	}
+    public RemoveAccountDialog(final ManagedDialogsActivity a) {
+        super(a, Dialogs.REMOVE_ACCOUNT_ALERTDIALOG);
+        setTitle(R.string.users_submenu_remove);
+        setOkCancelButtons();
+    }
 
-	public void setPosition(int position) {
-		getBundle().putInt(POSITION, position);
-	}
+    public int getPosition() {
+        return getBundle().getInt(POSITION);
+    }
 
-	public RemoveAccountDialog(ManagedDialogsActivity a) {
-		super(a, Dialogs.REMOVE_ACCOUNT_ALERTDIALOG);
-		setTitle(R.string.users_submenu_remove);
-		setOkCancelButtons();
-	}
+    public void setPosition(final int position) {
+        getBundle().putInt(POSITION, position);
+    }
 
-	public void show(Serializable arg, String accountName, int position) {
-		setPosition(position);
-		setMessage(getManagedDialogsActivity().getText(
-				R.string.users_question_remove)
-				+ " " + accountName + "?");
-		show(arg);
-	}
+    public void show(final Serializable arg, final String accountName, final int position) {
+        setPosition(position);
+        setMessage(getManagedDialogsActivity().getText(
+                R.string.users_question_remove)
+                + " " + accountName + "?");
+        show(arg);
+    }
 }

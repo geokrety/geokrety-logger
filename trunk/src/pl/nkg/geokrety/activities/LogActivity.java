@@ -34,13 +34,13 @@ import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.activities.controls.TrackingCodeEditText;
 import pl.nkg.geokrety.activities.controls.WaypointEditText;
 import pl.nkg.geokrety.activities.listeners.VerifyResponseListener;
-import pl.nkg.geokrety.data.InventoryDataSource;
-import pl.nkg.geokrety.data.User;
+import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeoKretLogDataSource;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
-import pl.nkg.geokrety.data.GeoKret;
+import pl.nkg.geokrety.data.InventoryDataSource;
+import pl.nkg.geokrety.data.User;
 import pl.nkg.geokrety.dialogs.Dialogs;
 import pl.nkg.geokrety.dialogs.RemoveLogDialog;
 import pl.nkg.geokrety.services.LogSubmitterService;
@@ -70,21 +70,75 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class LogActivity extends AbstractGeoKretyActivity implements LocationListener, VerifyResponseListener {
+public class LogActivity extends AbstractGeoKretyActivity implements LocationListener,
+        VerifyResponseListener {
+
+    private class InventoryAdapter extends ArrayAdapter<GeoKret> {
+
+        public InventoryAdapter() {
+            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder
+                    .getInventoryDataSource().loadInventory(currentAccount.getID()));
+        }
+
+        public int indexOf(final String trackingCode) {
+            for (int i = 0; i < getCount(); i++) {
+                if (trackingCode.toUpperCase(Locale.ENGLISH).contains(
+                        getItem(i).getTrackingCode().toUpperCase(Locale.ENGLISH))) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
+
+    private class LastLogsAdapter extends ArrayAdapter<GeocacheLog> {
+
+        public LastLogsAdapter() {
+            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder
+                    .getGeocacheLogDataSource().loadLastLogs(currentAccount.getID()));
+        }
+
+        public int indexOf(final String waypoint) {
+            for (int i = 0; i < getCount(); i++) {
+                if (waypoint.toUpperCase(Locale.ENGLISH).contains(
+                        getItem(i).getCacheCode().toUpperCase(Locale.ENGLISH))) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
+
+    private class UsersAdapter extends ArrayAdapter<User> {
+
+        public UsersAdapter() {
+            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder
+                    .getUserDataSource().getAll());
+        }
+
+        public int indexOf(final long id) {
+            for (int i = 0; i < getCount(); i++) {
+                if (id == getItem(i).getID()) {
+                    return i;
+                }
+            }
+            return -1;
+        }
+    }
 
     private RemoveLogDialog removeLogDialog;
     private TimePickerDialogWrapper timePickerDialog;
     private DatePickerDialogWrapper datePickerDialog;
     private AlertDialogWrapper inventorySpinnerDialog;
+
     private AlertDialogWrapper ocsSpinnerDialog;
     private AlertDialogWrapper logTypeSpinnerDialog;
     private AlertDialogWrapper userSpinnerDialog;
-
     private GeoKretLog currentLog;
+
     private User currentAccount;
     private int currentLogType = -1;
     private boolean savedLog = false;
-
     private Button logTypeButton;
     private Button accountsButton;
     private TrackingCodeEditText trackingCodeEditText;
@@ -92,14 +146,33 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private ImageButton gpsButton;
     private Button datePicker;
     private Button timePicker;
+
     private WaypointEditText waypointEditText;
     private EditText coordinatesEditText;
+
     private EditText commentEditText;
-    
+
     private NotifyTextView tcNotifyTextView;
+
     private NotifyTextView wptNotifyTextView;
 
     private GPSAcquirer gpsAcquirer;
+
+    private InventoryAdapter inventoryAdapter;
+
+    private LastLogsAdapter lastLogsAdapter;
+
+    private UsersAdapter usersAdapter;
+
+    private final BroadcastReceiver refreshBroadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(final Context context, final Intent intent) {
+            final long userId = intent.getLongExtra(InventoryDataSource.COLUMN_USER_ID, -1);
+            if (currentAccount != null && userId == currentAccount.getID()) {
+                configAdapters();
+            }
+        }
+    };
 
     public void checkDate(final View view) {
         try {
@@ -158,7 +231,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 }
                 loadFromGeoKretLog(currentLog);
                 break;
-                
+
             case Dialogs.USER_SPINNERDIALOG:
                 currentAccount = (User) userSpinnerDialog.getAdapter().getItem(buttonId);
                 storeToGeoKretLog(currentLog);
@@ -180,6 +253,20 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!isEmpty()) {
+            saveLog(GeoKretLog.STATE_DRAFT);
+            Toast.makeText(this, R.string.submit_message_draft_saved, Toast.LENGTH_LONG).show();
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public void onChangeValue() {
+        coordinatesEditText.setEnabled(true);
     }
 
     public void onClickDelete(final View view) {
@@ -210,8 +297,10 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             Toast.makeText(this, R.string.validation_error_no_log_type, Toast.LENGTH_LONG).show();
         } else if (!canShowUserData()) {
         } else if (Utils.isEmpty(trackingCodeEditText.getText().toString())) {
-            Toast.makeText(this, R.string.validation_error_no_traking_code, Toast.LENGTH_LONG).show();
-        } else if (coordinatesEditText.isEnabled() && Utils.isEmpty(coordinatesEditText.getText().toString())) {
+            Toast.makeText(this, R.string.validation_error_no_traking_code, Toast.LENGTH_LONG)
+                    .show();
+        } else if (coordinatesEditText.isEnabled()
+                && Utils.isEmpty(coordinatesEditText.getText().toString())) {
             Toast.makeText(this, R.string.validation_error_no_location, Toast.LENGTH_LONG).show();
         } else {
             saveLog(GeoKretLog.STATE_OUTBOX);
@@ -241,18 +330,28 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     public void onStatusChanged(final String provider, final int status, final Bundle extras) {
     }
 
+    @Override
+    public void onVerifyResponse(final CharSequence response, final boolean valid) {
+        coordinatesEditText.setEnabled(!valid);
+        if (valid) {
+            coordinatesEditText.setText(response);
+        }
+    }
+
     public void refreshButtonClick(final View view) {
         application.runRefreshService(true);
     }
 
     public void showAccountsActivity(final View view) {
-        //startActivityForResult(new Intent(this, AccountsActivity.class), 0);
-        userSpinnerDialog.show(null, currentAccount == null ? -1 : usersAdapter.indexOf(currentAccount.getID()));
+        // startActivityForResult(new Intent(this, AccountsActivity.class), 0);
+        userSpinnerDialog.show(null,
+                currentAccount == null ? -1 : usersAdapter.indexOf(currentAccount.getID()));
     }
 
     public void showInventory(final View view) {
         if (updateSpinners()) {
-            inventorySpinnerDialog.show(null, inventoryAdapter.indexOf(trackingCodeEditText.getText().toString()));
+            inventorySpinnerDialog.show(null,
+                    inventoryAdapter.indexOf(trackingCodeEditText.getText().toString()));
         }
     }
 
@@ -266,7 +365,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                     lastLogsAdapter.indexOf(waypointEditText.getText().toString()));
         }
     }
-    
+
     private boolean canShowUserData() {
         if (currentAccount == null) {
             Toast.makeText(this, R.string.error_no_user_selected, Toast.LENGTH_SHORT).show();
@@ -274,72 +373,22 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         }
         return true;
     }
-    
-    private InventoryAdapter inventoryAdapter;
-    private class InventoryAdapter extends ArrayAdapter<GeoKret> {
-
-        public InventoryAdapter() {
-            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder.getInventoryDataSource().loadInventory(currentAccount.getID()));
-        }
-        
-        public int indexOf(String trackingCode) {
-            for (int i = 0; i < getCount(); i++) {
-                if (trackingCode.toUpperCase(Locale.ENGLISH).contains(getItem(i).getTrackingCode().toUpperCase(Locale.ENGLISH))) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
-    
-    private LastLogsAdapter lastLogsAdapter;
-    private class LastLogsAdapter extends ArrayAdapter<GeocacheLog> {
-
-        public LastLogsAdapter() {
-            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder.getGeocacheLogDataSource().loadLastLogs(currentAccount.getID()));
-        }
-        
-        public int indexOf(String waypoint) {
-            for (int i = 0; i < getCount(); i++) {
-                if (waypoint.toUpperCase(Locale.ENGLISH).contains(getItem(i).getCacheCode().toUpperCase(Locale.ENGLISH))) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
-    
-    private UsersAdapter usersAdapter;
-    private class UsersAdapter extends ArrayAdapter<User> {
-
-        public UsersAdapter() {
-            super(LogActivity.this, android.R.layout.simple_list_item_single_choice, stateHolder.getUserDataSource().getAll());
-        }
-        
-        public int indexOf(long id) {
-            for (int i = 0; i < getCount(); i++) {
-                if (id == getItem(i).getID()) {
-                    return i;
-                }
-            }
-            return -1;
-        }
-    }
-    
-    @Override
-    protected void onRefreshDatabase() {
-        super.onRefreshDatabase();
-        configAdapters();
-    }
 
     private void configAdapters() {
         if (canShowUserData()) {
             inventoryAdapter = new InventoryAdapter();
             inventorySpinnerDialog.setAdapter(inventoryAdapter);
-    
+
             lastLogsAdapter = new LastLogsAdapter();
             ocsSpinnerDialog.setAdapter(lastLogsAdapter);
         }
+    }
+
+    private boolean isEmpty() {
+        return Utils.isEmpty(trackingCodeEditText.getText().toString())
+                && Utils.isEmpty(coordinatesEditText.getText().toString())
+                && Utils.isEmpty(waypointEditText.getText().toString())
+                && Utils.isEmpty(commentEditText.getText().toString());
     }
 
     private void loadFromGeoKretLog(final GeoKretLog log) {
@@ -419,13 +468,13 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
 
         ocsSpinnerDialog = new AlertDialogWrapper(this, Dialogs.OCS_SPINNERDIALOG);
         ocsSpinnerDialog.setTitle(R.string.log_lastlogs_title);
-        
+
         userSpinnerDialog = new AlertDialogWrapper(this, Dialogs.USER_SPINNERDIALOG);
         usersAdapter = new UsersAdapter();
         userSpinnerDialog.setAdapter(usersAdapter);
 
         logTypeSpinnerDialog = new AlertDialogWrapper(this, Dialogs.TYPE_SPINNERDIALOG);
-        
+
         tcNotifyTextView = (NotifyTextView) findViewById(R.id.tcNotfiyTextView);
         wptNotifyTextView = (NotifyTextView) findViewById(R.id.wptNotifyTextView);
 
@@ -435,18 +484,16 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             currentLog = stateHolder.getGeoKretLogDataSource().loadByID(logID);
         }
 
-        
         if (currentLog == null) {
             currentLog = new GeoKretLog(savedInstanceState);
         } else {
             currentAccount = stateHolder.getAccountByID(currentLog.getAccoundID());
             if (currentLog.getState() == GeoKretLog.STATE_PROBLEM) {
-                TextView errorTextView = (TextView)findViewById(R.id.errorTextView);
+                final TextView errorTextView = (TextView) findViewById(R.id.errorTextView);
                 errorTextView.setText(currentLog.formatProblem(this));
                 errorTextView.setVisibility(View.VISIBLE);
             }
         }
-
 
         logTypeButton = (Button) findViewById(R.id.logTypeButton);
         accountsButton = (Button) findViewById(R.id.accountsButton);
@@ -460,9 +507,9 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         commentEditText = (EditText) findViewById(R.id.commentEditText);
 
         gpsAcquirer = new GPSAcquirer(this, "gpsAcquirer", this);
-        
+
         trackingCodeEditText.bindWithNotifyTextView(tcNotifyTextView);
-        
+
         waypointEditText.bindWithNotifyTextView(wptNotifyTextView);
         waypointEditText.setVerifyResponseListener(this);
 
@@ -479,7 +526,8 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                     final String godzina = data.getQueryParameter("godzina");
                     final String minuta = data.getQueryParameter("minuta");
                     final String username = data.getQueryParameter("username");
-                    String rrUsername = data.getQueryParameter("net.rygielski.roadrunner:profile_name");
+                    final String rrUsername = data
+                            .getQueryParameter("net.rygielski.roadrunner:profile_name");
 
                     if (!Utils.isEmpty(date)) {
                         currentLog.setData(date);
@@ -524,11 +572,26 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     }
 
     @Override
+    protected void onRefreshDatabase() {
+        super.onRefreshDatabase();
+        configAdapters();
+    }
+
+    @Override
     protected void onRestoreInstanceState(final Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentLog = new GeoKretLog(savedInstanceState);
         loadFromGeoKretLog(currentLog);
         gpsAcquirer.restore(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        trackingCodeEditText.registerReceiver();
+        waypointEditText.registerReceiver();
+        registerReceiver(refreshBroadcastReceiver, new IntentFilter(
+                RefreshService.BROADCAST_REFRESH_INVENTORY));
     }
 
     @Override
@@ -540,14 +603,15 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
             saveLog(GeoKretLog.STATE_DRAFT);
         }
         currentLog.storeToBundle(outState);
-    }
+    };
 
     @Override
     protected void onStart() {
         super.onStart();
 
         if (stateHolder.getAccountList().size() == 0) {
-            Toast.makeText(this, R.string.main_error_no_account_configured, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.main_error_no_account_configured, Toast.LENGTH_LONG)
+                    .show();
             startActivity(new Intent(this, MainActivity.class));
             return;
         }
@@ -555,7 +619,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         if (currentAccount == null) {
             currentAccount = stateHolder.getDefaultAccount();
         }
-        
+
         if (currentAccount != null) {
             currentLog.setAccoundID(currentAccount.getID());
         }
@@ -568,50 +632,5 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         loadFromGeoKretLog(currentLog);
         logTypeSpinnerDialog.setCheckedItem(currentLogType + 1);
         gpsAcquirer.start();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        trackingCodeEditText.registerReceiver();
-        waypointEditText.registerReceiver();
-        registerReceiver(refreshBroadcastReceiver, new IntentFilter(
-                RefreshService.BROADCAST_REFRESH_INVENTORY));
-    }
-    
-    @Override
-    public void onChangeValue() {
-        coordinatesEditText.setEnabled(true);
-    }
-
-    @Override
-    public void onVerifyResponse(CharSequence response, boolean valid) {
-        coordinatesEditText.setEnabled(!valid);
-        if (valid) {
-            coordinatesEditText.setText(response);
-        }
-    }
-    
-    private final BroadcastReceiver refreshBroadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(final Context context, final Intent intent) {
-            final long userId = intent.getLongExtra(InventoryDataSource.COLUMN_USER_ID, -1);
-            if (currentAccount != null && userId == currentAccount.getID()) {
-                configAdapters();
-            }
-        }
-    };
-    
-    @Override
-    public void onBackPressed() {
-        if (!isEmpty()) {
-            saveLog(GeoKretLog.STATE_DRAFT);
-            Toast.makeText(this, R.string.submit_message_draft_saved, Toast.LENGTH_LONG).show();
-        }
-        super.onBackPressed();
-    };
-    
-    private boolean isEmpty() {
-        return Utils.isEmpty(trackingCodeEditText.getText().toString()) && Utils.isEmpty(coordinatesEditText.getText().toString()) && Utils.isEmpty(waypointEditText.getText().toString()) && Utils.isEmpty(commentEditText.getText().toString());
     }
 }

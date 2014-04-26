@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 import java.io.Serializable;
@@ -32,40 +33,39 @@ import android.os.Bundle;
  * English title: Pro Android 2<br/>
  * Authors: Sayed Hashimi, Satya Komatineni, Dave MacLean<br/>
  * ISBN: 978-83-246-2754-7
- * 
  */
 public abstract class ManagedDialogsActivity extends Activity implements
-		IDialogFinishedCallBack {
+        IDialogFinishedCallBack {
 
-	private DialogRegistry dr = new DialogRegistry();
+    private final DialogRegistry dr = new DialogRegistry();
 
-	public void registerDialog(IDialogProtocol<?> dialog) {
-		dr.registerDialog(dialog);
-	}
+    @Override
+    abstract public void dialogFinished(AbstractDialogWrapper<?> dialog,
+            int buttonId, Serializable arg);
 
-	@Override
-	protected Dialog onCreateDialog(int id) {
-		return dr.create(id);
-	}
+    public void registerDialog(final IDialogProtocol<?> dialog) {
+        dr.registerDialog(dialog);
+    }
 
-	@Override
-	protected void onPrepareDialog(int id, Dialog dialog) {
-		dr.prepare(dialog, id);
-	}
+    @Override
+    protected Dialog onCreateDialog(final int id) {
+        return dr.create(id);
+    }
 
-	@Override
-	abstract public void dialogFinished(AbstractDialogWrapper<?> dialog,
-			int buttonId, Serializable arg);
+    @Override
+    protected void onPrepareDialog(final int id, final Dialog dialog) {
+        dr.prepare(dialog, id);
+    }
 
-	@Override
-	protected void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		dr.saveInstanceState(outState);
-	}
+    @Override
+    protected void onRestoreInstanceState(final Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        dr.restoreInstanceState(savedInstanceState);
+    }
 
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		dr.restoreInstanceState(savedInstanceState);
-	}
+    @Override
+    protected void onSaveInstanceState(final Bundle outState) {
+        super.onSaveInstanceState(outState);
+        dr.saveInstanceState(outState);
+    }
 }

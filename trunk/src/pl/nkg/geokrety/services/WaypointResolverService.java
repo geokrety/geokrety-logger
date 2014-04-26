@@ -32,9 +32,9 @@ import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.User;
-import pl.nkg.geokrety.exceptions.WaypointNotFoundException;
 import pl.nkg.geokrety.exceptions.LocationNotResolvedException;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
+import pl.nkg.geokrety.exceptions.WaypointNotFoundException;
 import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
 
@@ -44,7 +44,7 @@ public class WaypointResolverService extends AbstractVerifyService {
 
     private static final String TAG = WaypointResolverService.class.getSimpleName();
 
-    private long lastLogin = 0;
+    private final long lastLogin = 0;
     private HttpContext session;
     private static final long SESSION_EXPIRED = 60 * 60 * 1000;
 
@@ -67,16 +67,17 @@ public class WaypointResolverService extends AbstractVerifyService {
                 try {
                     // FIXME: use separated reTry
                     return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
-                } catch (LocationNotResolvedException e) {
+                } catch (final LocationNotResolvedException e) {
                     if (!wpt.toUpperCase(Locale.ENGLISH).startsWith("GC")) {
                         throw e;
                     }
-                    
+
                     if (session == null || new Date().getTime() > lastLogin + SESSION_EXPIRED) {
                         session = null;
-                        for (User user : stateHolder.getAccountList()) {
+                        for (final User user : stateHolder.getAccountList()) {
                             if (!Utils.isEmpty(user.getGeocachingLogin())) {
-                                // FIXME: use separated reTry for login and download
+                                // FIXME: use separated reTry for login and
+                                // download
                                 session = GeocachingProvider.login(user.getGeocachingLogin(),
                                         user.getGeocachingPassword());
                                 if (session != null) {
@@ -87,7 +88,7 @@ public class WaypointResolverService extends AbstractVerifyService {
                     }
 
                     if (session != null) {
-                        Geocache gc = GeocachingProvider.loadGeocacheByWaypoint(session, wpt);
+                        final Geocache gc = GeocachingProvider.loadGeocacheByWaypoint(session, wpt);
                         stateHolder.getGeocacheDataSource().updateGeocachingCom(gc);
                         return gc;
                     } else {
@@ -101,19 +102,20 @@ public class WaypointResolverService extends AbstractVerifyService {
             if (gc == null) {
                 gc = td.tryRun(application.getRetryCount());
             }
-            sendBroadcast(value, gc.getFormattedLocation(), NotifyTextView.GOOD, wpt + ": " + gc.getName());
-        } catch (LocationNotResolvedException e) {
+            sendBroadcast(value, gc.getFormattedLocation(), NotifyTextView.GOOD,
+                    wpt + ": " + gc.getName());
+        } catch (final LocationNotResolvedException e) {
             sendBroadcast(value, "", NotifyTextView.ERROR,
                     String.format(getText(R.string.resolve_wpt_error_location_can_not_be_resolved)
                             .toString(), wpt));
-        } catch (WaypointNotFoundException e) {
+        } catch (final WaypointNotFoundException e) {
             sendBroadcast(value, "", NotifyTextView.ERROR,
                     String.format(getText(R.string.resolve_wpt_error_waypont_not_found)
                             .toString(), wpt));
-        } catch (NoConnectionException e) {
+        } catch (final NoConnectionException e) {
             sendBroadcast(value, "", NotifyTextView.WARNING,
                     String.format(getText(R.string.resolve_wpt_warning_no_connection)
-                            .toString(), wpt));            
+                            .toString(), wpt));
         }
     }
 }

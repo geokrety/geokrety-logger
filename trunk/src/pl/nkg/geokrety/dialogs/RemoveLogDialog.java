@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.dialogs;
 
 import pl.nkg.geokrety.R;
@@ -27,10 +28,10 @@ import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 
 public class RemoveLogDialog extends AlertDialogWrapper {
 
-	public RemoveLogDialog(ManagedDialogsActivity a) {
-		super(a, Dialogs.REMOVE_LOG_ALERTDIALOG);
-		//setTitle(R.string.account_remove);
-		setMessage(R.string.log_query_confirm_delete);
-		setOkCancelButtons();
-	}
+    public RemoveLogDialog(final ManagedDialogsActivity a) {
+        super(a, Dialogs.REMOVE_LOG_ALERTDIALOG);
+        // setTitle(R.string.account_remove);
+        setMessage(R.string.log_query_confirm_delete);
+        setOkCancelButtons();
+    }
 }

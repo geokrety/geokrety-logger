@@ -95,33 +95,43 @@ public class GeoKretLogDataSource {
                 + "l." + COLUMN_HOUR + ", " //
                 + "l." + COLUMN_MINUTE + ", " //
                 + "l." + COLUMN_COMMENT;
-        
+
         FETCH_FULL_COLUMNS = FETCH_GK_LOG_COLUMNS + ", " //
-                + "c." +  GeocacheDataSource.COLUMN_WAYPOINT + ", " //
+                + "c." + GeocacheDataSource.COLUMN_WAYPOINT + ", " //
                 + GeocacheDataSource.FETCH_COLUMNS + ", " //
-                + "g." +  GeoKretDataSource.COLUMN_TRACKING_CODE + ", " //
+                + "g." + GeoKretDataSource.COLUMN_TRACKING_CODE + ", " //
                 + "0, " //
                 + GeoKretDataSource.FETCH_COLUMNS;
-        
+
         FETCH_OUTBOX = "SELECT " //
-                + FETCH_GK_LOG_COLUMNS + ", "//
+                + FETCH_GK_LOG_COLUMNS
+                + ", "//
                 + "u." + UserDataSource.COLUMN_SECID
                 + " FROM " //
-                + TABLE + " AS l" //
-                + " JOIN " + UserDataSource.TABLE + " AS u ON l." + COLUMN_USER_ID + " = u." + UserDataSource.COLUMN_ID //
+                + TABLE
+                + " AS l" //
+                + " JOIN " + UserDataSource.TABLE + " AS u ON l." + COLUMN_USER_ID
+                + " = u."
+                + UserDataSource.COLUMN_ID //
                 + " WHERE l." + COLUMN_STATE + " = " + GeoKretLog.STATE_OUTBOX //
                 + " ORDER BY l." + COLUMN_ID;
 
         FETCH_FULL_USER = "SELECT " //
                 + FETCH_FULL_COLUMNS
-                + " FROM " + TABLE + " AS l" //
-                + " LEFT JOIN " + GeocacheDataSource.TABLE + " AS c ON l." + COLUMN_WAYPOINT + " = c." + GeocacheDataSource.COLUMN_WAYPOINT
-                + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON l." + COLUMN_TRACKING_CODE + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE;
-        
+                + " FROM "
+                + TABLE
+                + " AS l" //
+                + " LEFT JOIN " + GeocacheDataSource.TABLE + " AS c ON l."
+                + COLUMN_WAYPOINT
+                + " = c." + GeocacheDataSource.COLUMN_WAYPOINT
+                + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON l."
+                + COLUMN_TRACKING_CODE
+                + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE;
+
         FETCH_BY_USER = FETCH_FULL_USER //
                 + " WHERE l." + COLUMN_USER_ID + " = ?" //
                 + " ORDER BY l." + COLUMN_ID;
-        
+
         FETCH_BY_ID = FETCH_FULL_USER + " WHERE l." + COLUMN_ID + " = ?";
     }
 

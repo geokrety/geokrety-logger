@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.threads;
 
 import java.io.Serializable;
@@ -26,59 +27,59 @@ import java.io.Serializable;
 import android.util.SparseArray;
 
 public class ForegroundTaskHandler {
-	private AbstractForegroundTaskWrapper<?, ?, ?> currentTask;
-	private SparseArray<AbstractForegroundTaskWrapper<?, ?, ?>> taskMap;
+    private AbstractForegroundTaskWrapper<?, ?, ?> currentTask;
+    private final SparseArray<AbstractForegroundTaskWrapper<?, ?, ?>> taskMap;
 
-	public ForegroundTaskHandler() {
-		taskMap = new SparseArray<AbstractForegroundTaskWrapper<?, ?, ?>>();
-	}
+    public ForegroundTaskHandler() {
+        taskMap = new SparseArray<AbstractForegroundTaskWrapper<?, ?, ?>>();
+    }
 
-	public void shutdown() {
-		synchronized (this) {
-			if (currentTask != null) {
-				currentTask.cancel(true);
-			}
-		}
-	}
+    @SuppressWarnings("unchecked")
+    public <Params, Progress extends Serializable, Result> AbstractForegroundTaskWrapper<Params, Progress, Result> getTask(
+            final int id) {
+        return (AbstractForegroundTaskWrapper<Params, Progress, Result>) taskMap
+                .get(id);
+    }
 
-	public boolean isBusy() {
-		return currentTask != null;
-	}
+    public boolean isBusy() {
+        return currentTask != null;
+    }
 
-	public void registerTask(AbstractForegroundTaskWrapper<?, ?, ?> task) {
-		taskMap.put(task.getID(), task);
-		task.setHandler(this);
-	}
+    public void registerTask(final AbstractForegroundTaskWrapper<?, ?, ?> task) {
+        taskMap.put(task.getID(), task);
+        task.setHandler(this);
+    }
 
-	public void terminateTask(AbstractForegroundTaskWrapper<?, ?, ?> task) {
-		synchronized (this) {
-			if (currentTask != null && currentTask.getID() == task.getID()) {
-				currentTask = null;
-			}
-		}
-	}
+    @SuppressWarnings("unchecked")
+    public <Params> boolean runTask(final int id, final Params params, final boolean force) {
+        synchronized (this) {
+            if (isBusy()) {
+                if (force) {
+                    currentTask.cancel(true);
+                } else {
+                    return false;
+                }
+            }
+            currentTask = taskMap.get(id);
+            final AbstractForegroundTaskWrapper<Params, ?, ?> task = (AbstractForegroundTaskWrapper<Params, ?, ?>) currentTask;
+            task.execute(params);
+            return true;
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public <Params> boolean runTask(int id, Params params, boolean force) {
-		synchronized (this) {
-			if (isBusy()) {
-				if (force) {
-					currentTask.cancel(true);
-				} else {
-					return false;
-				}
-			}
-			currentTask = taskMap.get(id);
-			AbstractForegroundTaskWrapper<Params, ?, ?> task = (AbstractForegroundTaskWrapper<Params, ?, ?>) currentTask;
-			task.execute(params);
-			return true;
-		}
-	}
+    public void shutdown() {
+        synchronized (this) {
+            if (currentTask != null) {
+                currentTask.cancel(true);
+            }
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public <Params, Progress extends Serializable, Result> AbstractForegroundTaskWrapper<Params, Progress, Result> getTask(
-			int id) {
-		return (AbstractForegroundTaskWrapper<Params, Progress, Result>) taskMap
-				.get(id);
-	}
+    public void terminateTask(final AbstractForegroundTaskWrapper<?, ?, ?> task) {
+        synchronized (this) {
+            if (currentTask != null && currentTask.getID() == task.getID()) {
+                currentTask = null;
+            }
+        }
+    }
 }

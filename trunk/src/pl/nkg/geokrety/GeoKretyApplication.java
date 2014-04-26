@@ -19,10 +19,13 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety;
 
 import java.util.Date;
 
+import org.acra.ACRA;
+import org.acra.ReportingInteractionMode;
 import org.acra.annotation.ReportsCrashes;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
@@ -46,7 +49,6 @@ import pl.nkg.geokrety.threads.GettingSecidThread;
 import pl.nkg.geokrety.threads.GettingUuidThread;
 import pl.nkg.geokrety.threads.VerifyGeocachingLoginThread;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -54,164 +56,88 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
-import org.acra.*;
-
 import com.github.anrwatchdog.ANRWatchDog;
 
 @ReportsCrashes(formKey = "",
-    formUri = "http://geokretylog.sourceforge.net/reportbug.php",
-    mode = ReportingInteractionMode.TOAST,
-    resToastText = R.string.crash_toast_text)
+        formUri = "http://geokretylog.sourceforge.net/reportbug.php",
+        mode = ReportingInteractionMode.TOAST,
+        resToastText = R.string.crash_toast_text)
 public class GeoKretyApplication extends Application {
-	private HttpClient httpClient;
-	private ForegroundTaskHandler foregroundTaskHandler;
-	private StateHolder stateHolder;
-	private boolean noAccountHinted = false;
-	public ANRWatchDog watchDog = new ANRWatchDog(30000);
-	
-	
-	
-	public GeoKretyApplication() {
+    private HttpClient httpClient;
+    private ForegroundTaskHandler foregroundTaskHandler;
+    private StateHolder stateHolder;
+    private boolean noAccountHinted = false;
+    public ANRWatchDog watchDog = new ANRWatchDog(30000);
+
+    private long lastRefresh = 0;
+
+    public GeoKretyApplication() {
         super();
         Utils.application = this;
     }
 
-    @SuppressWarnings("unused")
-    @Override
-	public void onCreate() {
-		super.onCreate();
-		
-		if (isAcraEnabled()) {
-    		ACRA.init(this);
-    		if (BuildConfig.DEBUG == false) {
-    		    watchDog.start();
-    		}
-		}
-		
-		stateHolder = new StateHolder(getApplicationContext());
-		httpClient = createHttpClient();
-		foregroundTaskHandler = new ForegroundTaskHandler();
-		foregroundTaskHandler.registerTask(new GettingSecidThread(this));
-		foregroundTaskHandler.registerTask(new GettingUuidThread(this));
-		foregroundTaskHandler.registerTask(new VerifyGeocachingLoginThread(this));
-		
-		startService(new Intent(this, LogSubmitterService.class));
-	}
-/*
-    @Override
-	public void onLowMemory() {
-		super.onLowMemory();
-		Utils.application = null;
-		shutdownHttpClient();
-		shutdownHandler();
-	}
-*/
-	@Override
-	public void onTerminate() {
-		super.onTerminate();
-		Utils.application = null;
-		shutdownHttpClient();
-		shutdownHandler();
-	}
+    public ForegroundTaskHandler getForegroundTaskHandler() {
+        return foregroundTaskHandler;
+    }
 
-	private void shutdownHandler() {
-		if (foregroundTaskHandler != null) {
-			foregroundTaskHandler.shutdown();
-			foregroundTaskHandler = null;
-		}
-	}
+    public HttpClient getHttpClient() {
+        return httpClient;
+    }
 
-	private HttpClient createHttpClient() {
-		HttpParams params = new BasicHttpParams();
-		HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
-		HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
-		HttpProtocolParams.setUseExpectContinue(params, true);
-		HttpConnectionParams.setConnectionTimeout(params, getTimeOut());
-		HttpConnectionParams.setSoTimeout(params, getTimeOut());
-
-		SchemeRegistry schReg = new SchemeRegistry();
-		schReg.register(new Scheme("http", PlainSocketFactory
-				.getSocketFactory(), 80));
-		schReg.register(new Scheme("https",
-				SSLSocketFactory.getSocketFactory(), 443));
-		ClientConnectionManager conMgr = new ThreadSafeClientConnManager(
-				params, schReg);
-		return new DefaultHttpClient(conMgr, params);
-	}
-
-	public HttpClient getHttpClient() {
-		return httpClient;
-	}
-
-	public StateHolder getStateHolder() {
-		return stateHolder;
-	}
-
-	public ForegroundTaskHandler getForegroundTaskHandler() {
-		return foregroundTaskHandler;
-	}
-
-	public boolean isNoAccountHinted() {
-		return noAccountHinted;
-	}
-
-	public void setNoAccountHinted(boolean noAccountHinted) {
-		this.noAccountHinted = noAccountHinted;
-	}
-
-	private void shutdownHttpClient() {
-		if (httpClient != null && httpClient.getConnectionManager() != null) {
-			httpClient.getConnectionManager().shutdown();
-		}
-	}
-	
-	private long lastRefresh = 0;
-	public void runRefreshService(boolean force) {
-	    if (!force && !isAutoRefreshEnabled()) {
-	        return;
-	    }
-	    
-	    if (force || lastRefresh + getRefreshExpire() < new Date().getTime()) {
-            Intent intent = new Intent(this, RefreshService.class);
-            stopService(intent);
-            if (isOnline()) {
-                lastRefresh = new Date().getTime();
-                startService(intent);
-                Toast.makeText(this, R.string.refresh_message_refresh_start, Toast.LENGTH_LONG).show();
-            } else {
-                if (force) {
-                    Toast.makeText(this, R.string.refresh_message_refresh_no_connection, Toast.LENGTH_LONG).show();
-                }
-            }
-	    }
-	}
-	
-	public boolean isOnline() {
-	    ConnectivityManager cm =
-	        (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo netInfo = cm.getActiveNetworkInfo();
-	    if (netInfo != null && netInfo.isConnected()) {
-	        return true;
-	    }
-	    return false;
-	}
+    public int getRefreshExpire() {
+        // TODO: use as app settings
+        return 5 * 60 * 1000;
+    }
 
     public int getRetryCount() {
         // TODO: use as app settings
         return 3;
     }
-    
+
+    public long getRetrySubmitDelay() {
+        // TODO: use as app settings
+        return 1000 * 60 * 5;
+    }
+
+    public StateHolder getStateHolder() {
+        return stateHolder;
+    }
+
     public int getTimeOut() {
         // TODO: use as app settings
         return 60 * 1000;
     }
-    
-    public int getRefreshExpire() {
+
+    public boolean isAcraEnabled() {
         // TODO: use as app settings
-        return 5 * 60 * 1000;
+        return true;
     }
-    
-    public boolean isWaypointResolverEnabled() {
+
+    public boolean isAutoRefreshEnabled() {
+        // TODO: use as app settings
+        return true;
+    }
+
+    public boolean isExperimentalEnabled() {
+        // TODO: use as app settings
+        return true;
+    }
+
+    public boolean isNoAccountHinted() {
+        return noAccountHinted;
+    }
+
+    public boolean isOnline() {
+        final ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isRetrySubmitEnabled() {
         // TODO: use as app settings
         return true;
     }
@@ -220,31 +146,102 @@ public class GeoKretyApplication extends Application {
         // TODO: use as app settings
         return true;
     }
-    
-    public boolean isAutoRefreshEnabled() {
+
+    public boolean isWaypointResolverEnabled() {
         // TODO: use as app settings
         return true;
     }
 
-    public boolean isRetrySubmitEnabled() {
-        // TODO: use as app settings
-        return true;
+    @SuppressWarnings("unused")
+    @Override
+    public void onCreate() {
+        super.onCreate();
+
+        if (isAcraEnabled()) {
+            ACRA.init(this);
+            if (BuildConfig.DEBUG == false) {
+                watchDog.start();
+            }
+        }
+
+        stateHolder = new StateHolder(getApplicationContext());
+        httpClient = createHttpClient();
+        foregroundTaskHandler = new ForegroundTaskHandler();
+        foregroundTaskHandler.registerTask(new GettingSecidThread(this));
+        foregroundTaskHandler.registerTask(new GettingUuidThread(this));
+        foregroundTaskHandler.registerTask(new VerifyGeocachingLoginThread(this));
+
+        startService(new Intent(this, LogSubmitterService.class));
     }
 
-    public long getRetrySubmitDelay() {
-        // TODO: use as app settings
-        return 1000 * 60 * 5;
+    /*
+     * @Override public void onLowMemory() { super.onLowMemory();
+     * Utils.application = null; shutdownHttpClient(); shutdownHandler(); }
+     */
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        Utils.application = null;
+        shutdownHttpClient();
+        shutdownHandler();
     }
-    
-    public boolean isAcraEnabled() {
-        // TODO: use as app settings
-        return true;
+
+    public void runRefreshService(final boolean force) {
+        if (!force && !isAutoRefreshEnabled()) {
+            return;
+        }
+
+        if (force || lastRefresh + getRefreshExpire() < new Date().getTime()) {
+            final Intent intent = new Intent(this, RefreshService.class);
+            stopService(intent);
+            if (isOnline()) {
+                lastRefresh = new Date().getTime();
+                startService(intent);
+                Toast.makeText(this, R.string.refresh_message_refresh_start, Toast.LENGTH_LONG)
+                        .show();
+            } else {
+                if (force) {
+                    Toast.makeText(this, R.string.refresh_message_refresh_no_connection,
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
-    
-    public boolean isExperimentalEnabled() {
-     // TODO: use as app settings
-        return true;
+
+    public void setNoAccountHinted(final boolean noAccountHinted) {
+        this.noAccountHinted = noAccountHinted;
     }
-    
+
+    private HttpClient createHttpClient() {
+        final HttpParams params = new BasicHttpParams();
+        HttpProtocolParams.setVersion(params, HttpVersion.HTTP_1_1);
+        HttpProtocolParams.setContentCharset(params, HTTP.UTF_8);
+        HttpProtocolParams.setUseExpectContinue(params, true);
+        HttpConnectionParams.setConnectionTimeout(params, getTimeOut());
+        HttpConnectionParams.setSoTimeout(params, getTimeOut());
+
+        final SchemeRegistry schReg = new SchemeRegistry();
+        schReg.register(new Scheme("http", PlainSocketFactory
+                .getSocketFactory(), 80));
+        schReg.register(new Scheme("https",
+                SSLSocketFactory.getSocketFactory(), 443));
+        final ClientConnectionManager conMgr = new ThreadSafeClientConnManager(
+                params, schReg);
+        return new DefaultHttpClient(conMgr, params);
+    }
+
+    private void shutdownHandler() {
+        if (foregroundTaskHandler != null) {
+            foregroundTaskHandler.shutdown();
+            foregroundTaskHandler = null;
+        }
+    }
+
+    private void shutdownHttpClient() {
+        if (httpClient != null && httpClient.getConnectionManager() != null) {
+            httpClient.getConnectionManager().shutdown();
+        }
+    }
+
     // TODO: clear geocache/geokrety cache
 }

@@ -19,85 +19,86 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 import java.io.Serializable;
 
-import android.app.Dialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.widget.TimePicker;
 
 public class TimePickerDialogWrapper extends
-		AbstractAlertDialogWrapper<TimePickerDialog> implements
-		TimePickerDialog.OnTimeSetListener {
+        AbstractAlertDialogWrapper<TimePickerDialog> implements
+        TimePickerDialog.OnTimeSetListener {
 
-	private int hourOfDay;
-	private int minute;
-	private boolean is24HourView;
+    private int hourOfDay;
+    private int minute;
+    private boolean is24HourView;
 
-	public TimePickerDialogWrapper(ManagedDialogsActivity a, int dialogId) {
-		super(a, dialogId);
-	}
+    public TimePickerDialogWrapper(final ManagedDialogsActivity a, final int dialogId) {
+        super(a, dialogId);
+    }
 
-	@Override
-	public TimePickerDialog create() {
-		TimePickerDialog dialog = new TimePickerDialog(
-				getManagedDialogsActivity(), this, hourOfDay, minute,
-				is24HourView);
-		if (hasTitle()) {
-			dialog.setTitle(getTitle());
-		}
+    @Override
+    public TimePickerDialog create() {
+        final TimePickerDialog dialog = new TimePickerDialog(
+                getManagedDialogsActivity(), this, hourOfDay, minute,
+                is24HourView);
+        if (hasTitle()) {
+            dialog.setTitle(getTitle());
+        }
 
-		if (hasMessage()) {
-			dialog.setMessage(getMessage());
-		}
-		
-		return dialog;
-	}
+        if (hasMessage()) {
+            dialog.setMessage(getMessage());
+        }
 
-	@Override
-	public void prepare(TimePickerDialog dialog) {
-		super.prepare(dialog);
-		dialog.updateTime(hourOfDay, minute);
-	}
+        return dialog;
+    }
 
-	@Override
-	public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-		setHourOfDay(hourOfDay);
-		setMinute(minute);
-		getManagedDialogsActivity().dialogFinished(this,
-				Dialog.BUTTON_POSITIVE, getArg());
-	}
+    public int getHourOfDay() {
+        return hourOfDay;
+    }
 
-	public int getHourOfDay() {
-		return hourOfDay;
-	}
+    public int getMinute() {
+        return minute;
+    }
 
-	public void setHourOfDay(int hourOfDay) {
-		this.hourOfDay = hourOfDay;
-	}
+    public boolean isIs24HourView() {
+        return is24HourView;
+    }
 
-	public int getMinute() {
-		return minute;
-	}
+    @Override
+    public void onTimeSet(final TimePicker view, final int hourOfDay, final int minute) {
+        setHourOfDay(hourOfDay);
+        setMinute(minute);
+        getManagedDialogsActivity().dialogFinished(this,
+                DialogInterface.BUTTON_POSITIVE, getArg());
+    }
 
-	public void setMinute(int minute) {
-		this.minute = minute;
-	}
+    @Override
+    public void prepare(final TimePickerDialog dialog) {
+        super.prepare(dialog);
+        dialog.updateTime(hourOfDay, minute);
+    }
 
-	public boolean isIs24HourView() {
-		return is24HourView;
-	}
+    public void setHourOfDay(final int hourOfDay) {
+        this.hourOfDay = hourOfDay;
+    }
 
-	public void setIs24HourView(boolean is24HourView) {
-		this.is24HourView = is24HourView;
-	}
+    public void setIs24HourView(final boolean is24HourView) {
+        this.is24HourView = is24HourView;
+    }
 
-	public void show(Serializable arg, int hourOfDay, int minute,
-			boolean is24HourView) {
-		setHourOfDay(hourOfDay);
-		setMinute(minute);
-		setIs24HourView(is24HourView);
-		show(arg);
-	}
+    public void setMinute(final int minute) {
+        this.minute = minute;
+    }
+
+    public void show(final Serializable arg, final int hourOfDay, final int minute,
+            final boolean is24HourView) {
+        setHourOfDay(hourOfDay);
+        setMinute(minute);
+        setIs24HourView(is24HourView);
+        show(arg);
+    }
 }

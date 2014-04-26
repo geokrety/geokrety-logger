@@ -36,7 +36,7 @@ public class RegExInputFilter implements InputFilter {
         mFilter = filter;
         mPattern = filter;
     }
-    
+
     public RegExInputFilter(final Pattern filter, final Pattern pattern) {
         mFilter = filter;
         mPattern = pattern;
@@ -51,7 +51,7 @@ public class RegExInputFilter implements InputFilter {
         }
         return "";
     }
-    
+
     public boolean validate(final CharSequence text) {
         return mPattern.matcher(text).matches();
     }

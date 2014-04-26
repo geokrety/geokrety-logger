@@ -31,5 +31,5 @@ public class TrackingCodeInputFilter extends RegExInputFilter {
 
     public TrackingCodeInputFilter() {
         super(CAPS_LETTERS_AND_DIGITS_PATTERN, TRACKING_CODE_PATTERN);
-    } 
+    }
 }

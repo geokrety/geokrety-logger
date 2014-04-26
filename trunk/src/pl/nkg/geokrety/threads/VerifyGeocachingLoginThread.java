@@ -19,34 +19,35 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.threads;
 
+import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.threads.AbstractForegroundTaskWrapper;
 import pl.nkg.lib.threads.ForegroundTaskHandler;
-import pl.nkg.geokrety.GeoKretyApplication;
 import android.util.Pair;
 
 public class VerifyGeocachingLoginThread extends
-		AbstractForegroundTaskWrapper<Pair<String, String>, String, Boolean> {
+        AbstractForegroundTaskWrapper<Pair<String, String>, String, Boolean> {
 
-	public static final int ID = 5;
+    public static final int ID = 5;
 
-	public VerifyGeocachingLoginThread(GeoKretyApplication application) {
-		super(application, ID);
-	}
+    public static VerifyGeocachingLoginThread getFromHandler(
+            final ForegroundTaskHandler handler) {
+        final AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
+        final VerifyGeocachingLoginThread b = (VerifyGeocachingLoginThread) a;
+        return b;
+    }
 
-	public static VerifyGeocachingLoginThread getFromHandler(
-			ForegroundTaskHandler handler) {
-		AbstractForegroundTaskWrapper<?, ?, ?> a = handler.getTask(ID);
-		VerifyGeocachingLoginThread b = (VerifyGeocachingLoginThread) a;
-		return b;
-	}
+    public VerifyGeocachingLoginThread(final GeoKretyApplication application) {
+        super(application, ID);
+    }
 
-	@Override
-	protected Boolean runInBackground(Thread thread,
-			Pair<String, String> param) throws Throwable {
+    @Override
+    protected Boolean runInBackground(final Thread thread,
+            final Pair<String, String> param) throws Throwable {
         // FIXME: use reTry
-		return GeocachingProvider.login(param.first, param.second) != null;
-	}
+        return GeocachingProvider.login(param.first, param.second) != null;
+    }
 }

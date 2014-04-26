@@ -24,5 +24,6 @@ package pl.nkg.geokrety.activities.listeners;
 
 public interface VerifyResponseListener {
     public void onChangeValue();
+
     public void onVerifyResponse(CharSequence response, boolean valid);
 }

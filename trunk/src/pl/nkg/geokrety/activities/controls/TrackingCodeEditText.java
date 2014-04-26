@@ -59,6 +59,12 @@ public class TrackingCodeEditText extends AbstractNotifiedEditText {
     }
 
     @Override
+    protected CharSequence getNotEnabledMessage() {
+        // TODO use strings.xml
+        return "this feature is off";
+    }
+
+    @Override
     protected String getServiceBroadcast() {
         return VerifyGeoKretService.BROADCAST;
     }
@@ -71,12 +77,6 @@ public class TrackingCodeEditText extends AbstractNotifiedEditText {
     @Override
     protected CharSequence getWaitMessage() {
         return getContext().getText(R.string.verify_tc_message_waiting);
-    }
-
-    @Override
-    protected CharSequence getNotEnabledMessage() {
-        // TODO use strings.xml
-        return "this feature is off";
     }
 
     @Override

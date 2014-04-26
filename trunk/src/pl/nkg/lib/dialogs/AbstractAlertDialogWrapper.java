@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 import java.io.Serializable;
@@ -29,121 +30,121 @@ import android.content.DialogInterface;
 import android.view.View;
 
 public abstract class AbstractAlertDialogWrapper<D extends AlertDialog> extends
-		AbstractDialogWrapper<D> {
+        AbstractDialogWrapper<D> {
 
-	private static final String MESSAGE = "message";
-	private CharSequence positiveButton = null;
-	private CharSequence negativeButton = null;
-	private CharSequence neutralButton = null;
-	private boolean cancelable = true;
+    private static final String MESSAGE = "message";
+    private CharSequence positiveButton = null;
+    private CharSequence negativeButton = null;
+    private CharSequence neutralButton = null;
+    private boolean cancelable = true;
 
-	private boolean clicked = false;
+    private boolean clicked = false;
 
-	public AbstractAlertDialogWrapper(ManagedDialogsActivity a, int dialogId) {
-		super(a, dialogId);
-	}
+    public AbstractAlertDialogWrapper(final ManagedDialogsActivity a, final int dialogId) {
+        super(a, dialogId);
+    }
 
-	public CharSequence getMessage() {
-		return getBundle().getCharSequence(MESSAGE);
-	}
+    public CharSequence getMessage() {
+        return getBundle().getCharSequence(MESSAGE);
+    }
 
-	public boolean isCancelable() {
-		return cancelable;
-	}
+    public CharSequence getNegativeButton() {
+        return negativeButton;
+    }
 
-	public void setCancelable(boolean cancelable) {
-		this.cancelable = cancelable;
-	}
+    public CharSequence getNeutralButton() {
+        return neutralButton;
+    }
 
-	public void setMessage(CharSequence message) {
-		getBundle().putCharSequence(MESSAGE, message);
-		if (getInstance() != null) {
-			getInstance().setMessage(message);
-		}
-	}
+    public CharSequence getPositiveButton() {
+        return positiveButton;
+    }
 
-	public void setMessage(int messageID) {
-		setMessage(getManagedDialogsActivity().getString(messageID));
-	}
-	
-	public boolean hasMessage() {
-		return getMessage() != null;
-	}
+    public boolean hasMessage() {
+        return getMessage() != null;
+    }
 
-	public CharSequence getPositiveButton() {
-		return positiveButton;
-	}
+    public boolean hasNegativeButtton() {
+        return negativeButton != null;
+    }
 
-	public void setPositiveButton(CharSequence positiveButton) {
-		this.positiveButton = positiveButton;
-	}
+    public boolean hasNeutralButtton() {
+        return neutralButton != null;
+    }
 
-	public CharSequence getNegativeButton() {
-		return negativeButton;
-	}
+    public boolean hasPositiveButtton() {
+        return positiveButton != null;
+    }
 
-	public void setNegativeButton(CharSequence negativeButton) {
-		this.negativeButton = negativeButton;
-	}
+    public boolean isCancelable() {
+        return cancelable;
+    }
 
-	public CharSequence getNeutralButton() {
-		return neutralButton;
-	}
+    @Override
+    public void prepare(final D dialog) {
+        super.prepare(dialog);
+        if (hasMessage()) {
+            dialog.setMessage(getMessage());
+        }
+        dialog.setCancelable(isCancelable());
+        if (hasPositiveButtton()) {
+            ((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE)
+                    .setOnClickListener(new View.OnClickListener() {
 
-	public void setNeutralButton(CharSequence neutralButton) {
-		this.neutralButton = neutralButton;
-	}
+                        @Override
+                        public void onClick(final View v) {
+                            if (!clicked && onValidate(dialog)) {
+                                clicked = true;
+                                AbstractAlertDialogWrapper.this.onClick(dialog,
+                                        DialogInterface.BUTTON_POSITIVE);
+                                dialog.dismiss();
+                            }
+                        }
+                    });
+        }
+    }
 
-	public boolean hasPositiveButtton() {
-		return positiveButton != null;
-	}
+    public void setCancelable(final boolean cancelable) {
+        this.cancelable = cancelable;
+    }
 
-	public boolean hasNegativeButtton() {
-		return negativeButton != null;
-	}
+    public void setMessage(final CharSequence message) {
+        getBundle().putCharSequence(MESSAGE, message);
+        if (getInstance() != null) {
+            getInstance().setMessage(message);
+        }
+    }
 
-	public boolean hasNeutralButtton() {
-		return neutralButton != null;
-	}
+    public void setMessage(final int messageID) {
+        setMessage(getManagedDialogsActivity().getString(messageID));
+    }
 
-	protected boolean onValidate(Dialog dialog) {
-		return true;
-	}
+    public void setNegativeButton(final CharSequence negativeButton) {
+        this.negativeButton = negativeButton;
+    }
 
-	@Override
-	public void prepare(final D dialog) {
-		super.prepare(dialog);
-		if (hasMessage()) {
-			dialog.setMessage(getMessage());
-		}
-		dialog.setCancelable(isCancelable());
-		if (hasPositiveButtton()) {
-			((AlertDialog) dialog).getButton(DialogInterface.BUTTON_POSITIVE)
-					.setOnClickListener(new View.OnClickListener() {
+    public void setNeutralButton(final CharSequence neutralButton) {
+        this.neutralButton = neutralButton;
+    }
 
-						@Override
-						public void onClick(View v) {
-							if (!clicked && onValidate(dialog)) {
-								clicked = true;
-								AbstractAlertDialogWrapper.this.onClick(dialog,
-										DialogInterface.BUTTON_POSITIVE);
-								dialog.dismiss();
-							}
-						}
-					});
-		}
-	}
+    public void setOkCancelButtons() {
+        setPositiveButton(getManagedDialogsActivity().getText(
+                android.R.string.ok));
+        setNegativeButton(getManagedDialogsActivity().getText(
+                android.R.string.cancel));
+    }
 
-	@Override
-	public void show(Serializable arg) {
-		clicked = false;
-		super.show(arg);
-	}
+    public void setPositiveButton(final CharSequence positiveButton) {
+        this.positiveButton = positiveButton;
+    }
 
-	public void setOkCancelButtons() {
-		setPositiveButton(getManagedDialogsActivity().getText(
-				android.R.string.ok));
-		setNegativeButton(getManagedDialogsActivity().getText(
-				android.R.string.cancel));
-	}
+    @Override
+    public void show(final Serializable arg) {
+        clicked = false;
+        super.show(arg);
+    }
+
+    protected boolean onValidate(final Dialog dialog) {
+        return true;
+    }
 }

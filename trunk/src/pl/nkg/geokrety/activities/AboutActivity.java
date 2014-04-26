@@ -19,21 +19,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.activities;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
-import android.os.Bundle;
 import android.app.Activity;
+import android.os.Bundle;
 import android.widget.TextView;
 
 public class AboutActivity extends Activity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_about);
-		TextView appName = (TextView)findViewById(R.id.appNameTextView);
-		appName.setText(getResources().getString(R.string.main_label_version_prefix) + Utils.getAppVer());
-	}
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_about);
+        final TextView appName = (TextView) findViewById(R.id.appNameTextView);
+        appName.setText(getResources().getString(R.string.main_label_version_prefix)
+                + Utils.getAppVer());
+    }
 }

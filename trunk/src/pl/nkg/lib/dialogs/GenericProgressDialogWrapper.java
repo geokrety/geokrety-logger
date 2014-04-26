@@ -19,17 +19,18 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 public class GenericProgressDialogWrapper extends
-		AbstractProgressDialogWrapper<String> {
+        AbstractProgressDialogWrapper<String> {
 
-	public GenericProgressDialogWrapper(ManagedDialogsActivity a, int dialogId) {
-		super(a, dialogId);
-	}
+    public GenericProgressDialogWrapper(final ManagedDialogsActivity a, final int dialogId) {
+        super(a, dialogId);
+    }
 
-	@Override
-	public void updateProgress() {
-		setMessage(getProgres());
-	}
+    @Override
+    public void updateProgress() {
+        setMessage(getProgres());
+    }
 }

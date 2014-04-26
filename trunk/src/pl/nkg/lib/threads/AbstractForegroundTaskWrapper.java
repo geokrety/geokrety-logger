@@ -19,229 +19,234 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.threads;
 
 import java.io.Serializable;
 
+import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.os.AsyncTask;
 import android.util.Pair;
 
-import pl.nkg.lib.dialogs.AbstractProgressDialogWrapper;
-
 public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Serializable, Result> {
-	private Param param;
-	private ForegroundTaskHandler handler;
-	private int id;
+    public class Thread extends AsyncTask<Object, Object, Result> implements ICancelable {
 
-	private AbstractProgressDialogWrapper<Progress> progressDialogWrapper;
-	private TaskListener<Param, Progress, Result> listener;
-	private Throwable exception;
+        public void publish(final Object... progress) {
+            super.publishProgress(progress);
+        }
 
-	private Thread thread;
+        @SuppressWarnings("unchecked")
+        @Override
+        protected Result doInBackground(final Object... params) {
+            try {
+                return runInBackground(this, (Param) params[0]);
+            } catch (final Throwable t) {
+                exception = t;
+                return null;
+            }
+        }
 
-	private Pair<Param, Result> nofiredFinish;
-	private Pair<Param, Throwable> nofiredError;
-	private int nofired;
+        @Override
+        protected void onCancelled() {
+            super.onCancelled();
 
-	private final Application application;
+            fireBreak(null);
 
-	protected AbstractForegroundTaskWrapper(Application application,
-			int id) {
-		this.id = id;
-		this.application = application;
-	}
+            dismissProgressDialog();
+            thread = null;
+            handler.terminateTask(AbstractForegroundTaskWrapper.this);
+        }
 
-	void setHandler(ForegroundTaskHandler handler) {
-		this.handler = handler;
-	}
+        @SuppressLint("NewApi")
+        @Override
+        protected void onCancelled(final Result result) {
+            super.onCancelled(result);
+            fireBreak(result);
+            thread = null;
+            handler.terminateTask(AbstractForegroundTaskWrapper.this);
+        }
 
-	public int getID() {
-		return id;
-	}
+        @Override
+        protected void onPostExecute(final Result result) {
+            super.onPostExecute(result);
 
-	public Application getApplication() {
-		return application;
-	}
+            if (result == null) {
+                fireError();
+            } else {
+                fireFinish(result);
+            }
 
-	public void setParam(Param param) {
-		this.param = param;
-	}
+            dismissProgressDialog();
+            thread = null;
+            handler.terminateTask(AbstractForegroundTaskWrapper.this);
+        }
 
-	public void execute(Param param) {
-		setParam(param);
-		cleanNofired();
-		thread = new Thread();
-		thread.execute(new Object[] { param });
-	}
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (progressDialogWrapper != null) {
+                progressDialogWrapper.show(null);
+            }
+        }
 
-	private void cleanNofired() {
-		nofired = 0;
-		nofiredFinish = null;
-		nofiredError = null;
-	}
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void onProgressUpdate(final Object... values) {
+            super.onProgressUpdate(values);
+            setProgress((Progress) values[0]);
+        }
 
-	public void attach(
-			AbstractProgressDialogWrapper<Progress> progressDialogWrapper,
-			TaskListener<Param, Progress, Result> listener) {
-		this.progressDialogWrapper = progressDialogWrapper;
-		this.listener = listener;
-		progressDialogWrapper.setTask(this);
-		if (thread == null) {
-			progressDialogWrapper.dismiss();
-		}
+    }
 
-		if (nofired > 0) {
-			switch (nofired) {
-			case 1:
-				listener.onFinish(this, nofiredFinish.first,
-						nofiredFinish.second);
-				break;
+    private Param param;
+    private ForegroundTaskHandler handler;
 
-			case 2:
-				listener.onBreak(this, nofiredFinish.first,
-						nofiredFinish.second);
-				break;
+    private final int id;
+    private AbstractProgressDialogWrapper<Progress> progressDialogWrapper;
+    private TaskListener<Param, Progress, Result> listener;
 
-			case 3:
-				listener.onError(this, nofiredError.first, nofiredError.second);
-				break;
-			}
+    private Throwable exception;
 
-			cleanNofired();
-		}
-	}
+    private Thread thread;
+    private Pair<Param, Result> nofiredFinish;
+    private Pair<Param, Throwable> nofiredError;
 
-	public void detach() {
-		progressDialogWrapper = null;
-		listener = null;
-	}
+    private int nofired;
 
-	private void fireFinish(Result result) {
-		if (listener != null) {
-			listener.onFinish(this, param, result);
-		} else {
-			nofired = 1;
-			nofiredFinish = new Pair<Param, Result>(param, result);
-		}
-	}
+    private final Application application;
 
-	private void fireBreak(Result result) {
-		if (listener != null) {
-			listener.onBreak(this, param, result);
-		} else {
-			nofired = 2;
-			nofiredFinish = new Pair<Param, Result>(param, result);
-		}
-	}
+    protected AbstractForegroundTaskWrapper(final Application application,
+            final int id) {
+        this.id = id;
+        this.application = application;
+    }
 
-	private void fireError() {
-		if (listener != null) {
-			listener.onError(this, param, exception);
-		} else {
-			nofired = 3;
-			nofiredError = new Pair<Param, Throwable>(param, exception);
-		}
-	}
+    public void attach(
+            final AbstractProgressDialogWrapper<Progress> progressDialogWrapper,
+            final TaskListener<Param, Progress, Result> listener) {
+        this.progressDialogWrapper = progressDialogWrapper;
+        this.listener = listener;
+        progressDialogWrapper.setTask(this);
+        if (thread == null) {
+            progressDialogWrapper.dismiss();
+        }
 
-	private void dismissProgressDialog() {
-		if (progressDialogWrapper != null) {
-			progressDialogWrapper.dismiss();
-		}
-	}
+        if (nofired > 0) {
+            switch (nofired) {
+                case 1:
+                    listener.onFinish(this, nofiredFinish.first,
+                            nofiredFinish.second);
+                    break;
 
-	private void setProgress(Progress progress) {
-		if (progressDialogWrapper != null) {
-			progressDialogWrapper.setProgress(progress);
-			progressDialogWrapper.updateProgress();
-		}
-	}
+                case 2:
+                    listener.onBreak(this, nofiredFinish.first,
+                            nofiredFinish.second);
+                    break;
 
-	protected void publishProgress(Progress progress) {
-		if (thread != null) {
-			thread.publish(new Object[] { progress });
-		}
-	}
+                case 3:
+                    listener.onError(this, nofiredError.first, nofiredError.second);
+                    break;
+            }
 
-	protected abstract Result runInBackground(Thread thread, Param param) throws Throwable;
+            cleanNofired();
+        }
+    }
 
-	public class Thread extends AsyncTask<Object, Object, Result> implements ICancelable {
+    public void cancel(final boolean force) {
+        if (thread != null) {
+            thread.cancel(force);
+        }
+    }
 
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-			if (progressDialogWrapper != null) {
-				progressDialogWrapper.show(null);
-			}
-		}
+    public void detach() {
+        progressDialogWrapper = null;
+        listener = null;
+    }
 
-		@SuppressWarnings("unchecked")
-		@Override
-		protected Result doInBackground(Object... params) {
-			try {
-				return runInBackground(this, (Param) params[0]);
-			} catch (Throwable t) {
-				exception = t;
-				return null;
-			}
-		}
+    public void execute(final Param param) {
+        setParam(param);
+        cleanNofired();
+        thread = new Thread();
+        thread.execute(new Object[] {
+            param
+        });
+    }
 
-		public void publish(Object... progress) {
-			super.publishProgress(progress);
-		}
+    public Application getApplication() {
+        return application;
+    }
 
-		@SuppressWarnings("unchecked")
-		@Override
-		protected void onProgressUpdate(Object... values) {
-			super.onProgressUpdate(values);
-			setProgress((Progress) values[0]);
-		}
+    public int getID() {
+        return id;
+    }
 
-		@Override
-		protected void onPostExecute(Result result) {
-			super.onPostExecute(result);
+    public boolean isFinished() {
+        return thread == null;
+    }
 
-			if (result == null) {
-				fireError();
-			} else {
-				fireFinish(result);
-			}
+    public void setParam(final Param param) {
+        this.param = param;
+    }
 
-			dismissProgressDialog();
-			thread = null;
-			handler.terminateTask(AbstractForegroundTaskWrapper.this);
-		}
+    private void cleanNofired() {
+        nofired = 0;
+        nofiredFinish = null;
+        nofiredError = null;
+    }
 
-		@Override
-		protected void onCancelled() {
-			super.onCancelled();
+    private void dismissProgressDialog() {
+        if (progressDialogWrapper != null) {
+            progressDialogWrapper.dismiss();
+        }
+    }
 
-			fireBreak(null);
+    private void fireBreak(final Result result) {
+        if (listener != null) {
+            listener.onBreak(this, param, result);
+        } else {
+            nofired = 2;
+            nofiredFinish = new Pair<Param, Result>(param, result);
+        }
+    }
 
-			dismissProgressDialog();
-			thread = null;
-			handler.terminateTask(AbstractForegroundTaskWrapper.this);
-		}
+    private void fireError() {
+        if (listener != null) {
+            listener.onError(this, param, exception);
+        } else {
+            nofired = 3;
+            nofiredError = new Pair<Param, Throwable>(param, exception);
+        }
+    }
 
-		@SuppressLint("NewApi")
-		@Override
-		protected void onCancelled(Result result) {
-			super.onCancelled(result);
-			fireBreak(result);
-			thread = null;
-			handler.terminateTask(AbstractForegroundTaskWrapper.this);
-		}
+    private void fireFinish(final Result result) {
+        if (listener != null) {
+            listener.onFinish(this, param, result);
+        } else {
+            nofired = 1;
+            nofiredFinish = new Pair<Param, Result>(param, result);
+        }
+    }
 
-	}
+    private void setProgress(final Progress progress) {
+        if (progressDialogWrapper != null) {
+            progressDialogWrapper.setProgress(progress);
+            progressDialogWrapper.updateProgress();
+        }
+    }
 
-	public void cancel(boolean force) {
-		if (thread != null) {
-			thread.cancel(force);
-		}
-	}
+    protected void publishProgress(final Progress progress) {
+        if (thread != null) {
+            thread.publish(new Object[] {
+                progress
+            });
+        }
+    }
 
-	public boolean isFinished() {
-		return thread == null;
-	}
+    protected abstract Result runInBackground(Thread thread, Param param) throws Throwable;
+
+    void setHandler(final ForegroundTaskHandler handler) {
+        this.handler = handler;
+    }
 }

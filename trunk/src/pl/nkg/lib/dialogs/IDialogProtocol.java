@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 import java.io.Serializable;
@@ -31,18 +32,17 @@ import android.os.Bundle;
  * English title: Pro Android 2<br/>
  * Authors: Sayed Hashimi, Satya Komatineni, Dave MacLean<br/>
  * ISBN: 978-83-246-2754-7
- * 
  */
 public interface IDialogProtocol<D extends Dialog> {
-	public D create();
+    public D create();
 
-	public void prepare(D dialog);
+    public int getDialogId();
 
-	public int getDialogId();
+    public void prepare(D dialog);
 
-	public void show(Serializable arg);
+    public void restoreInstanceState(Bundle savedInstanceState);
 
-	public void saveInstanceState(Bundle outState);
+    public void saveInstanceState(Bundle outState);
 
-	public void restoreInstanceState(Bundle savedInstanceState);
+    public void show(Serializable arg);
 }

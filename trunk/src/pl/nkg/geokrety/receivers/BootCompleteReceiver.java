@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.receivers;
 
 import pl.nkg.geokrety.services.LogSubmitterService;
@@ -27,8 +28,8 @@ import android.content.Context;
 import android.content.Intent;
 
 public class BootCompleteReceiver extends BroadcastReceiver {
-	@Override
-	public void onReceive(final Context paramContext, final Intent paramIntent) {
-		paramContext.startService(new Intent(paramContext, LogSubmitterService.class));
-	}
+    @Override
+    public void onReceive(final Context paramContext, final Intent paramIntent) {
+        paramContext.startService(new Intent(paramContext, LogSubmitterService.class));
+    }
 }

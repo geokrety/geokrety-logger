@@ -59,15 +59,25 @@ public class LogSubmitterService extends IntentService {
         super.onCreate();
         application = (GeoKretyApplication) getApplication();
         handler = new Handler();
-        notificationManager = ((NotificationManager) getSystemService(NOTIFICATION_SERVICE));
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
+    @SuppressWarnings("deprecation")
+    private void showNotify(final Intent intent, final int id, final int icon,
+            final CharSequence contentTitle, final CharSequence contentMessage) {
+        final Notification notification = new Notification(icon, contentTitle + ": "
+                + contentMessage,
+                System.currentTimeMillis());
 
-
+        notification.setLatestEventInfo(this, contentTitle, contentMessage,
+                PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT));
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;
+        notificationManager.notify(id, notification);
+    }
 
     @Override
     protected void onHandleIntent(final Intent intent) {
-        
+
         final List<GeoKretLog> outbox = application.getStateHolder().getGeoKretLogDataSource()
                 .loadOutbox();
 
@@ -84,21 +94,21 @@ public class LogSubmitterService extends IntentService {
             }
             log.setSecid(oldlog.getSecid());
 
-            Intent broadcastStart = new Intent(BROADCAST_SUBMIT_START);
-            Intent broadcastDone = new Intent(BROADCAST_SUBMIT_DONE);
+            final Intent broadcastStart = new Intent(BROADCAST_SUBMIT_START);
+            final Intent broadcastDone = new Intent(BROADCAST_SUBMIT_DONE);
             broadcastStart.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
             broadcastDone.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
             sendBroadcast(broadcastStart);
 
-            String title = log.getNr();
-            int notifyId = (int) log.getId();
+            final String title = log.getNr();
+            final int notifyId = (int) log.getId();
             showNotify(intent, notifyId, R.drawable.ic_stat_notify_log_submitting, title,
                     getText(R.string.submit_notify_submitting));
 
             int icon = 0;
             String message = "";
 
-            int ret = GeoKretyProvider.submitLog(log);
+            final int ret = GeoKretyProvider.submitLog(log);
             switch (ret) {
                 case GeoKretyProvider.LOG_NO_CONNECTION:
                     connectionProblems = true;
@@ -108,7 +118,8 @@ public class LogSubmitterService extends IntentService {
                     break;
 
                 case GeoKretyProvider.LOG_PROBLEM:
-                    message = getText(R.string.submit_notify_submit_problem) + ": " + log.formatProblem(this);
+                    message = getText(R.string.submit_notify_submit_problem) + ": "
+                            + log.formatProblem(this);
                     icon = R.drawable.ic_stat_notify_log_problem;
                     break;
 
@@ -127,7 +138,8 @@ public class LogSubmitterService extends IntentService {
             if (ret == GeoKretyProvider.LOG_SUCCESS) {
                 showNotify(intent, notifyId, icon, title, message);
             } else {
-                Intent notificationIntent = new Intent(getApplicationContext(), LogActivity.class);
+                final Intent notificationIntent = new Intent(getApplicationContext(),
+                        LogActivity.class);
                 notificationIntent.putExtra(GeoKretLogDataSource.COLUMN_ID, log.getId());
                 notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
                         | Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -153,18 +165,6 @@ public class LogSubmitterService extends IntentService {
         if (outbox.size() > 0) {
             sendBroadcast(new Intent(BROADCAST_SUBMITS_FINISH));
         }
-    }
-
-    @SuppressWarnings("deprecation")
-    private void showNotify(final Intent intent, int id, final int icon,
-            CharSequence contentTitle, CharSequence contentMessage) {
-        Notification notification = new Notification(icon, contentTitle + ": " + contentMessage,
-                System.currentTimeMillis());
-
-        notification.setLatestEventInfo(this, contentTitle, contentMessage,
-                PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT));
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notificationManager.notify(id, notification);
     }
 
 }

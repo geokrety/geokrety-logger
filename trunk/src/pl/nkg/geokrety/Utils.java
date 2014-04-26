@@ -62,24 +62,77 @@ public class Utils {
     public static GeoKretyApplication application;
     public static DecimalFormat latlonFormat = new DecimalFormat("#.######");
 
-    public static Document getDomElement(String xml) {
+    public static String defaultIfNull(final String value, final String def) {
+        return value == null ? def : value;
+    }
+
+    public static String extractBetween(final String src, final String startMarker,
+            final String stopMarker) {
+        int start = src.indexOf(startMarker);
+
+        if (start == -1) {
+            return null;
+        }
+
+        start += startMarker.length();
+        final int stop = src.indexOf(stopMarker, start);
+
+        if (stop == -1) {
+            return null;
+        }
+
+        return src.substring(start, stop);
+    }
+
+    public static String formatException(final Throwable e) {
+        String msg = e.getLocalizedMessage();
+
+        if (msg == null) {
+            msg = e.getMessage();
+        }
+
+        if (msg == null) {
+            msg = e.toString();
+        }
+
+        return msg;
+    }
+
+    public static String getAppName() {
+        return application.getText(R.string.app_name).toString();
+    }
+
+    public static String getAppVer() {
+        try {
+            return application.getPackageManager().getPackageInfo(
+                    application.getPackageName(), 0).versionName;
+        } catch (final NameNotFoundException e) {
+            return "";
+        }
+    }
+
+    public static String getDefaultLanguage() {
+        return Locale.getDefault().getDisplayLanguage();
+    }
+
+    public static Document getDomElement(final String xml) {
         Document doc = null;
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         try {
 
-            DocumentBuilder db = dbf.newDocumentBuilder();
+            final DocumentBuilder db = dbf.newDocumentBuilder();
 
-            InputSource is = new InputSource();
+            final InputSource is = new InputSource();
             is.setCharacterStream(new StringReader(xml));
             doc = db.parse(is);
 
-        } catch (ParserConfigurationException e) {
+        } catch (final ParserConfigurationException e) {
             Log.e("Error: ", e.getMessage());
             return null;
-        } catch (SAXException e) {
+        } catch (final SAXException e) {
             Log.e("Error: ", e.getMessage());
             return null;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             Log.e("Error: ", e.getMessage());
             return null;
         }
@@ -87,7 +140,7 @@ public class Utils {
         return doc;
     }
 
-    public static final String getElementValue(Node elem) {
+    public static final String getElementValue(final Node elem) {
         Node child;
         if (elem != null) {
             if (elem.hasChildNodes()) {
@@ -102,21 +155,52 @@ public class Utils {
         return "";
     }
 
-    public static String httpPost(String url, String[][] data) throws ClientProtocolException,
+    public static String httpGet(final String url, final String[][] data)
+            throws ClientProtocolException, IOException {
+        return httpGet(url, data, null);
+    }
+
+    public static String httpGet(final String url, final String[][] data,
+            final HttpContext httpContext)
+            throws ClientProtocolException, IOException {
+        return responseToString(httpGetResponse(url, data, httpContext));
+    }
+
+    public static HttpResponse httpGetResponse(final String url, final String[][] data,
+            final HttpContext httpContext)
+            throws ClientProtocolException, IOException {
+        final HttpClient httpclient = application.getHttpClient();
+
+        final List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
+                data.length);
+        for (final String[] varible : data) {
+            nameValuePairs.add(new BasicNameValuePair(varible[0], varible[1]));
+        }
+
+        final String url2 = url + "?"
+                + URLEncodedUtils.format(nameValuePairs, "UTF-8");
+        final HttpGet httppost = new HttpGet(url2);
+
+        return httpclient.execute(httppost, httpContext);
+    }
+
+    public static String httpPost(final String url, final String[][] data)
+            throws ClientProtocolException,
             IOException {
         return httpPost(url, data, null);
     }
 
-    public static String httpPost(String url, String[][] data, HttpContext httpContext)
+    public static String httpPost(final String url, final String[][] data,
+            final HttpContext httpContext)
             throws ClientProtocolException, IOException {
-        HttpClient httpclient = application.getHttpClient();
+        final HttpClient httpclient = application.getHttpClient();
 
-        HttpPost httppost = new HttpPost(url);
+        final HttpPost httppost = new HttpPost(url);
 
         // Add your data
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
+        final List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
                 data.length);
-        for (String[] varible : data) {
+        for (final String[] varible : data) {
             nameValuePairs.add(new BasicNameValuePair(varible[0], varible[1]));
         }
         httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs, "UTF-8"));
@@ -125,98 +209,20 @@ public class Utils {
         return responseToString(httpclient.execute(httppost, httpContext));
     }
 
-    public static String httpGet(String url, String[][] data)
-            throws ClientProtocolException, IOException {
-        return httpGet(url, data, null);
-    }
-
-    public static HttpResponse httpGetResponse(String url, String[][] data, HttpContext httpContext)
-            throws ClientProtocolException, IOException {
-        HttpClient httpclient = application.getHttpClient();
-
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
-                data.length);
-        for (String[] varible : data) {
-            nameValuePairs.add(new BasicNameValuePair(varible[0], varible[1]));
-        }
-
-        String url2 = url + "?"
-                + URLEncodedUtils.format(nameValuePairs, "UTF-8");
-        HttpGet httppost = new HttpGet(url2);
-
-        return httpclient.execute(httppost, httpContext);
-    }
-
-    public static String httpGet(String url, String[][] data, HttpContext httpContext)
-            throws ClientProtocolException, IOException {
-        return responseToString(httpGetResponse(url, data, httpContext));
-    }
-
-    public static String responseToString(HttpResponse response) throws ParseException, IOException {
-        return EntityUtils.toString(response.getEntity(),
-                HTTP.UTF_8);
-    }
-
-    public static String getAppVer() {
-        try {
-            return application.getPackageManager().getPackageInfo(
-                    application.getPackageName(), 0).versionName;
-        } catch (NameNotFoundException e) {
-            return "";
-        }
-    }
-
-    public static String getAppName() {
-        return application.getText(R.string.app_name).toString();
-    }
-
-    public static boolean isEmpty(String string) {
+    public static boolean isEmpty(final String string) {
         return string == null || string.length() == 0;
     }
 
-    public static String getDefaultLanguage() {
-        return Locale.getDefault().getDisplayLanguage();
-    }
-
-    public static String defaultIfNull(String value, String def) {
-        return value == null ? def : value;
-    }
-
     @SuppressLint("ShowToast")
-    public static Toast makeCenterToast(Context context, int resID) {
-        Toast toast = Toast.makeText(context, resID, Toast.LENGTH_LONG);
+    public static Toast makeCenterToast(final Context context, final int resID) {
+        final Toast toast = Toast.makeText(context, resID, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER, 0, 0);
         return toast;
     }
 
-    public static String formatException(Throwable e) {
-        String msg = e.getLocalizedMessage();
-
-        if (msg == null) {
-            msg = e.getMessage();
-        }
-
-        if (msg == null) {
-            msg = e.toString();
-        }
-
-        return msg;
-    }
-
-    public static String extractBetween(String src, String startMarker, String stopMarker) {
-        int start = src.indexOf(startMarker);
-
-        if (start == -1) {
-            return null;
-        }
-
-        start += startMarker.length();
-        int stop = src.indexOf(stopMarker, start);
-
-        if (stop == -1) {
-            return null;
-        }
-
-        return src.substring(start, stop);
+    public static String responseToString(final HttpResponse response) throws ParseException,
+            IOException {
+        return EntityUtils.toString(response.getEntity(),
+                HTTP.UTF_8);
     }
 }

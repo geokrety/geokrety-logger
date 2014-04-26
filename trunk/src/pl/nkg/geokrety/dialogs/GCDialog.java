@@ -19,85 +19,86 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.dialogs;
 
 import java.io.Serializable;
 
+import pl.nkg.geokrety.R;
+import pl.nkg.lib.dialogs.AlertDialogWrapper;
+import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.widget.EditText;
 import android.widget.Toast;
-import pl.nkg.geokrety.R;
-import pl.nkg.lib.dialogs.AlertDialogWrapper;
-import pl.nkg.lib.dialogs.ManagedDialogsActivity;
 
 public class GCDialog extends AlertDialogWrapper {
 
-	private String mLogin = "";
-	private String mPassword = "";
+    private String mLogin = "";
+    private String mPassword = "";
 
-	public GCDialog(ManagedDialogsActivity a) {
-		super(a, Dialogs.GC_PROMPTDIALOG);
-		setTitle(R.string.user_gc_title);
-		setLayout(R.layout.dialog_gc);
-		setOkCancelButtons();
-	}
+    public GCDialog(final ManagedDialogsActivity a) {
+        super(a, Dialogs.GC_PROMPTDIALOG);
+        setTitle(R.string.user_gc_title);
+        setLayout(R.layout.dialog_gc);
+        setOkCancelButtons();
+    }
 
-	@Override
-	protected boolean onValidate(Dialog dialog) {
-		mLogin = ((EditText) dialog.findViewById(R.id.loginEditText))
-				.getText().toString();
-		mPassword = ((EditText) dialog.findViewById(R.id.passwordEditText))
-				.getText().toString();
+    public void clearValues() {
+        mLogin = "";
+        mPassword = "";
+    }
 
-		if (mLogin.length() == 0) {
-			showToast(R.string.user_gc_error_login_null);
-			return false;
-		}
+    public String getLogin() {
+        return mLogin;
+    }
 
-		if (mPassword.length() == 0) {
-			showToast(R.string.user_gc_error_password_null);
-			return false;
-		}
+    public String getPassword() {
+        return mPassword;
+    }
 
-		return true;
-	}
+    @Override
+    public void prepare(final AlertDialog dialog) {
+        ((EditText) dialog.findViewById(R.id.loginEditText)).setText(mLogin);
+        ((EditText) dialog.findViewById(R.id.passwordEditText))
+                .setText(mPassword);
+        super.prepare(dialog);
+    }
 
-	@Override
-	public void prepare(AlertDialog dialog) {
-		((EditText) dialog.findViewById(R.id.loginEditText)).setText(mLogin);
-		((EditText) dialog.findViewById(R.id.passwordEditText))
-				.setText(mPassword);
-		super.prepare(dialog);
-	}
+    public void setGKPassword(final String password) {
+        mPassword = password;
+    }
 
-	private void showToast(int stringID) {
-		Toast.makeText(getManagedDialogsActivity(), stringID, Toast.LENGTH_SHORT).show();
-	}
+    public void setLogin(final String login) {
+        mLogin = login;
+    }
 
-	public String getLogin() {
-		return mLogin;
-	}
+    public void show(final Serializable arg, final String login) {
+        setLogin(login);
+        show(arg);
+    }
 
-	public void setLogin(String login) {
-		this.mLogin = login;
-	}
+    private void showToast(final int stringID) {
+        Toast.makeText(getManagedDialogsActivity(), stringID, Toast.LENGTH_SHORT).show();
+    }
 
-	public String getPassword() {
-		return mPassword;
-	}
+    @Override
+    protected boolean onValidate(final Dialog dialog) {
+        mLogin = ((EditText) dialog.findViewById(R.id.loginEditText))
+                .getText().toString();
+        mPassword = ((EditText) dialog.findViewById(R.id.passwordEditText))
+                .getText().toString();
 
-	public void setGKPassword(String password) {
-		this.mPassword = password;
-	}
+        if (mLogin.length() == 0) {
+            showToast(R.string.user_gc_error_login_null);
+            return false;
+        }
 
-	public void clearValues() {
-		mLogin = "";
-		mPassword = "";
-	}
-	
-	public void show(Serializable arg, String login) {
-		setLogin(login);
-		show(arg);
-	}
+        if (mPassword.length() == 0) {
+            showToast(R.string.user_gc_error_password_null);
+            return false;
+        }
+
+        return true;
+    }
 }

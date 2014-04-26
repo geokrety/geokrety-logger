@@ -19,25 +19,23 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.exceptions;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 
 public class NoConnectionException extends MessagedException {
-	
+
     private static final long serialVersionUID = -4638504563481794092L;
 
-    public NoConnectionException(Throwable e) {
+    public NoConnectionException(final Throwable e) {
         super(R.string.global_error_connection, Utils.formatException(e));
-        
-    }
-    
-    /*public NoConnectionException(int messageID) {
-		super(messageID);
-	}
 
-	public NoConnectionException(int message, String arg) {
-		super(message, arg);
-	}*/
+    }
+
+    /*
+     * public NoConnectionException(int messageID) { super(messageID); } public
+     * NoConnectionException(int message, String arg) { super(message, arg); }
+     */
 }

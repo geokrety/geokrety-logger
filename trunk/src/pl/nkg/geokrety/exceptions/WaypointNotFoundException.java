@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.geokrety.exceptions;
 
 import pl.nkg.geokrety.R;
@@ -27,7 +28,7 @@ public class WaypointNotFoundException extends MessagedException {
 
     private static final long serialVersionUID = -5478200523694626187L;
 
-    public WaypointNotFoundException(String waypoint) {
+    public WaypointNotFoundException(final String waypoint) {
         super(R.string.resolve_wpt_error_location_can_not_be_resolved, waypoint);
     }
 }

@@ -35,7 +35,7 @@ public class GeoKret {
     public static final int TYPE_HUMAN = 2;
     public static final int TYPE_COIN = 3;
     public static final int TYPE_POST = 4;
-    
+
     private Integer mGeoKretId;
     private Integer mDist;
     private Integer mOwnerId;
@@ -47,6 +47,20 @@ public class GeoKret {
     private int mSynchroState;
     private String mSynchroError;
 
+    public GeoKret(final Cursor cursor, final int i) {
+        mTrackingCode = cursor.getString(i + 0).toUpperCase(Locale.ENGLISH);
+        mSticky = cursor.getInt(i + 1) != 0;
+        mGeoKretId = cursor.isNull(i + 2) ? null : cursor.getInt(i + 2);
+        mDist = cursor.isNull(i + 3) ? null : cursor.getInt(i + 3);
+        mOwnerId = cursor.isNull(i + 4) ? null : cursor.getInt(i + 4);
+        mState = cursor.isNull(i + 5) ? null : cursor.getInt(i + 5);
+        mType = cursor.isNull(i + 6) ? null : cursor.getInt(i + 6);
+        mName = cursor.isNull(i + 7) ? null : cursor.getString(i + 7);
+        mSynchroState = cursor.isNull(i + 8) ? GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED
+                : cursor.getInt(i + 8);
+        mSynchroError = cursor.isNull(i + 9) ? null : cursor.getString(i + 9);
+    }
+
     public GeoKret(final Node node) {
         mGeoKretId = Integer.parseInt(node.getAttributes().getNamedItem("id")
                 .getNodeValue());
@@ -56,12 +70,12 @@ public class GeoKret {
                 .getNamedItem("owner_id").getNodeValue());
         mType = Integer.parseInt(node.getAttributes().getNamedItem("type")
                 .getNodeValue());
-        
-        Node trackingCodeNode = node.getAttributes().getNamedItem("nr");
+
+        final Node trackingCodeNode = node.getAttributes().getNamedItem("nr");
         if (trackingCodeNode != null) {
             mTrackingCode = trackingCodeNode.getNodeValue().toUpperCase(Locale.ENGLISH);
         }
-        
+
         mName = node.getChildNodes().item(0).getNodeValue();
 
         final Node stateNode = node.getAttributes().getNamedItem("state");
@@ -79,21 +93,24 @@ public class GeoKret {
         mSynchroError = synchroError;
     }
 
-    public GeoKret(Cursor cursor, int i) {
-        mTrackingCode = cursor.getString(i + 0).toUpperCase(Locale.ENGLISH);
-        mSticky = cursor.getInt(i + 1) != 0;
-        mGeoKretId = cursor.isNull(i + 2) ? null : cursor.getInt(i + 2);
-        mDist = cursor.isNull(i + 3) ? null : cursor.getInt(i + 3);
-        mOwnerId = cursor.isNull(i + 4) ? null : cursor.getInt(i + 4);
-        mState = cursor.isNull(i + 5) ? null : cursor.getInt(i + 5);
-        mType = cursor.isNull(i + 6) ? null : cursor.getInt(i + 6);
-        mName = cursor.isNull(i + 7) ? null : cursor.getString(i + 7);
-        mSynchroState = cursor.isNull(i + 8) ? GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED : cursor.getInt(i + 8);
-        mSynchroError = cursor.isNull(i + 9) ? null : cursor.getString(i + 9);
-    }
-
     public Integer getDist() {
         return mDist;
+    }
+
+    @SuppressLint("DefaultLocale")
+    public String getFormatedCode() {
+        if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED) {
+            return "...";
+        }
+        if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_ERROR) {
+            return "error";
+        } else {
+            return "GK" + Integer.toHexString(mGeoKretId).toUpperCase(Locale.ENGLISH);
+        }
+    }
+
+    public CharSequence getFormatedCodeAndName() {
+        return getFormatedCode() + " - " + mName;
     }
 
     public Integer getGeoKretId() {
@@ -176,25 +193,11 @@ public class GeoKret {
     public String toString() {
         if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED) {
             return mTrackingCode;
-        } if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_ERROR) {
+        }
+        if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_ERROR) {
             return mTrackingCode + " (" + mSynchroError + ")";
         } else {
             return getFormatedCode() + " (" + mTrackingCode + "): " + mName;
         }
-    }
-
-    @SuppressLint("DefaultLocale")
-    public String getFormatedCode() {
-        if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED) {
-            return "...";
-        } if (mSynchroState == GeoKretDataSource.SYNCHRO_STATE_ERROR) {
-            return "error";
-        } else {
-            return "GK" + Integer.toHexString(mGeoKretId).toUpperCase(Locale.ENGLISH);
-        }
-    }
-
-    public CharSequence getFormatedCodeAndName() {
-        return getFormatedCode() + " - " + mName; 
     }
 }

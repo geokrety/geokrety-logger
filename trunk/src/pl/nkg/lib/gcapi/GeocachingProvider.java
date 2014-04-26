@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.gcapi;
 
 import java.io.IOException;
@@ -38,9 +39,9 @@ import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.data.GeocacheLog;
+import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
 import pl.nkg.geokrety.exceptions.WaypointNotFoundException;
-import pl.nkg.geokrety.exceptions.MessagedException;
 
 public class GeocachingProvider {
 
@@ -48,45 +49,84 @@ public class GeocachingProvider {
     public static final int PORTAL = 100;
     public static final String HOST = "geocaching.com";
     private static final int LOGS_LIMIT = 20;
-    
+
     private static final DateFormat dateFormat;
 
     static {
         dateFormat = new SimpleDateFormat(FORMAT_DATE_GEOCACHING, Locale.getDefault());
         dateFormat.setTimeZone(TimeZone.getDefault());
     }
-    
-    public static HttpContext login(String login, String password) throws MessagedException {
-        String[][] postData = new String[][] {
-                new String[] { "ctl00$tbUsername", login },
-                new String[] { "ctl00$tbPassword", password } };
-        try {
-            HttpContext httpContext = new BasicHttpContext();
-            String ret = Utils.httpPost("https://www.geocaching.com/login/default.aspx", postData, httpContext);
-            if (ret.contains("Your username/password combination does not match. Make sure you entered your information correctly.")) {
-                return null;
+
+    public static Geocache loadGeocacheByGUID(final HttpContext httpContext, final String guid)
+            throws MessagedException {
+
+        final String[][] postData = new String[][] {
+            new String[] {
+                    "guid", guid
             }
-            return httpContext;
-        } catch (IOException e) {
+        };
+        try {
+            final String htmlCache = Utils.httpGet(
+                    "http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
+            return Geocache.parseGeocachingCom(htmlCache);
+        } catch (final IOException e) {
             throw new NoConnectionException(e);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
     }
-    
-    public static List<GeocacheLog> loadGeocachingComLogs(HttpContext httpContext) throws MessagedException {
-        String[][] postData = new String[][] {new String[] {"s","1"}};
-        try {
-            List<GeocacheLog> openCachingLogs = new LinkedList<GeocacheLog>();
 
-            String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", postData); 
-            String table = extractTable(html);
-            
+    public static Geocache loadGeocacheByWaypoint(final HttpContext httpContext,
+            final String waypoint) throws MessagedException {
+
+        final String[][] postData = new String[][] {
+            new String[] {
+                    "wp", waypoint
+            }
+        };
+        try {
+            final HttpResponse response = Utils.httpGetResponse(
+                    "http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
+
+            if (response.getStatusLine().getStatusCode() == 404) {
+                throw new WaypointNotFoundException(waypoint);
+            }
+
+            final String htmlCache = Utils.responseToString(response);
+
+            if (htmlCache.contains("<h2>Cache is Unpublished</h2>")) {
+                throw new WaypointNotFoundException(waypoint);
+            }
+
+            return Geocache.parseGeocachingCom(htmlCache);
+        } catch (final WaypointNotFoundException e) {
+            throw e;
+        } catch (final IOException e) {
+            throw new NoConnectionException(e);
+        } catch (final Throwable e) {
+            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage()
+                    + ": " + waypoint);
+        }
+    }
+
+    public static List<GeocacheLog> loadGeocachingComLogs(final HttpContext httpContext)
+            throws MessagedException {
+        final String[][] postData = new String[][] {
+            new String[] {
+                    "s", "1"
+            }
+        };
+        try {
+            final List<GeocacheLog> openCachingLogs = new LinkedList<GeocacheLog>();
+
+            final String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", postData);
+            final String table = extractTable(html);
+
             if (table != null) {
-                String[] rows = table.split("</tr>");
+                final String[] rows = table.split("</tr>");
                 int i = 0;
-                for (String row : rows) {
-                    GeocacheLog log = extractGeocacheLog(row);
+                for (final String row : rows) {
+                    final GeocacheLog log = extractGeocacheLog(row);
                     if (log != null) {
                         i++;
                         openCachingLogs.add(log);
@@ -96,82 +136,70 @@ public class GeocachingProvider {
                     }
                 }
             }
-            
+
             return openCachingLogs;
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new NoConnectionException(e);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
     }
-    
-    public static Geocache loadGeocacheByGUID(HttpContext httpContext, String guid) throws MessagedException {
 
-        String[][] postData = new String[][] {new String[] {"guid", guid}};
+    public static HttpContext login(final String login, final String password)
+            throws MessagedException {
+        final String[][] postData = new String[][] {
+                new String[] {
+                        "ctl00$tbUsername", login
+                },
+                new String[] {
+                        "ctl00$tbPassword", password
+                }
+        };
         try {
-            String htmlCache = Utils.httpGet("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
-            return Geocache.parseGeocachingCom(htmlCache);
-        } catch (IOException e) {
+            final HttpContext httpContext = new BasicHttpContext();
+            final String ret = Utils.httpPost("https://www.geocaching.com/login/default.aspx",
+                    postData, httpContext);
+            if (ret.contains("Your username/password combination does not match. Make sure you entered your information correctly.")) {
+                return null;
+            }
+            return httpContext;
+        } catch (final IOException e) {
             throw new NoConnectionException(e);
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
     }
-    
-    public static Geocache loadGeocacheByWaypoint(HttpContext httpContext, String waypoint) throws MessagedException {
 
-        String[][] postData = new String[][] {new String[] {"wp", waypoint}};
-        try {
-            HttpResponse response = Utils.httpGetResponse("http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
-            
-            if (response.getStatusLine().getStatusCode() == 404) {
-                throw new WaypointNotFoundException(waypoint);
-            }
-            
-            String htmlCache = Utils.responseToString(response);
-            
-            if (htmlCache.contains("<h2>Cache is Unpublished</h2>")) {
-                throw new WaypointNotFoundException(waypoint);
-            }
-            
-            return Geocache.parseGeocachingCom(htmlCache);
-        } catch (WaypointNotFoundException e) {
-            throw e;
-        } catch (IOException e) {
-            throw new NoConnectionException(e);
-        } catch (Throwable e) {
-            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage() + ": " + waypoint);
-        }
-    }
-    
-    private static GeocacheLog extractGeocacheLog(String row) throws ClientProtocolException, IOException {
-        try {
-            return GeocacheLog.fromGeocachingCom(row);
-        } catch (NullPointerException e) {
-            return null;
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return null;
-        }
-    }
-    
-    private static String extractTable(String src) {
-        return extractBetween(src, "<table class=\"Table\">", "</table>");
-    }
-    
-    private static String extractBetween(String src, String startMarker, String stopMarker) {
+    private static String extractBetween(final String src, final String startMarker,
+            final String stopMarker) {
         int start = src.indexOf(startMarker);
-        
+
         if (start == -1) {
             return null;
         }
-        
+
         start += startMarker.length();
-        int stop = src.indexOf(stopMarker, start);
-        
+        final int stop = src.indexOf(stopMarker, start);
+
         if (stop == -1) {
             return null;
         }
-        
+
         return src.substring(start, stop);
+    }
+
+    private static GeocacheLog extractGeocacheLog(final String row) throws ClientProtocolException,
+            IOException {
+        try {
+            return GeocacheLog.fromGeocachingCom(row);
+        } catch (final NullPointerException e) {
+            return null;
+        } catch (final ArrayIndexOutOfBoundsException e) {
+            return null;
+        }
+    }
+
+    private static String extractTable(final String src) {
+        return extractBetween(src, "<table class=\"Table\">", "</table>");
     }
 }

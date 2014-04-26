@@ -19,6 +19,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * or see <http://www.gnu.org/licenses/>
  */
+
 package pl.nkg.lib.dialogs;
 
 import java.io.Serializable;
@@ -28,8 +29,7 @@ import java.io.Serializable;
  * English title: Pro Android 2<br/>
  * Authors: Sayed Hashimi, Satya Komatineni, Dave MacLean<br/>
  * ISBN: 978-83-246-2754-7
- * 
  */
 public interface IDialogFinishedCallBack {
-	public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId, Serializable arg);
+    public void dialogFinished(AbstractDialogWrapper<?> dialog, int buttonId, Serializable arg);
 }

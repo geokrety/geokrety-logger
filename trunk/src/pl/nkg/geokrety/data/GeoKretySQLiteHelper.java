@@ -110,14 +110,8 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "geokrety.db";
 
     /**
-     * 1 - 0.1.0
-     * 2 - 0.3.0
-     * 3 - 0.4.0
-     * 4 - 0.4.1
-     * 6 - 0.5.0
-     * 7 - 0.6.0
-     * 8 - 0.6.1
-     * 9 - 0.6.2
+     * 1 - 0.1.0 2 - 0.3.0 3 - 0.4.0 4 - 0.4.1 6 - 0.5.0 7 - 0.6.0 8 - 0.6.1 9 -
+     * 0.6.2
      */
     private static final int DATABASE_VERSION = 9;
 
@@ -155,21 +149,26 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
             db.execSQL(GeocacheDataSource.TABLE_CREATE);
             db.execSQL(GeocacheLogDataSource.TABLE_CREATE);
             db.execSQL(InventoryDataSource.TABLE_CREATE);
-            importUsersFromOlderThan6(db, oldVersion);      // includes GC_LOGIN and GC_PASSWORD added in v8
+            importUsersFromOlderThan6(db, oldVersion); // includes GC_LOGIN and
+                                                       // GC_PASSWORD added in
+                                                       // v8
         }
 
         if (oldVersion <= 6) {
             importInventoryFromOlderThan7(db, oldVersion);
             db.execSQL(GeoKretDataSource.TABLE_CREATE);
         }
-        
+
         if (oldVersion <= 7 && oldVersion >= 6) {
-            db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " ADD COLUMN " + UserDataSource.COLUMN_GC_LOGIN + " TEXT");
-            db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " ADD COLUMN " + UserDataSource.COLUMN_GC_PASSWORD + " TEXT");
+            db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " ADD COLUMN "
+                    + UserDataSource.COLUMN_GC_LOGIN + " TEXT");
+            db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " ADD COLUMN "
+                    + UserDataSource.COLUMN_GC_PASSWORD + " TEXT");
         }
-        
+
         if (oldVersion <= 8 && oldVersion >= 6) {
-            db.execSQL("ALTER TABLE " + GeocacheDataSource.TABLE + " ADD COLUMN " + GeocacheDataSource.COLUMN_GUID + " TEXT");
+            db.execSQL("ALTER TABLE " + GeocacheDataSource.TABLE + " ADD COLUMN "
+                    + GeocacheDataSource.COLUMN_GUID + " TEXT");
         }
     }
 
@@ -230,6 +229,36 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
         dropTableIfExist(db, GeoKretLogDataSource.TABLE);
     }
 
+    private void importInventoryFromOlderThan7(final SQLiteDatabase db, final int oldVersion) {
+        db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " RENAME TO tmp_"
+                + InventoryDataSource.TABLE
+                + ";");
+        db.execSQL(InventoryDataSource.TABLE_CREATE);
+
+        final List<String> oldColumns = new LinkedList<String>(Arrays.asList(COLUMN_ID, //
+                InventoryDataSource.COLUMN_USER_ID, //
+                InventoryDataSource.COLUMN_STICKY, //
+                InventoryDataSource.COLUMN_TRACKING_CODE));
+
+        final List<String> newColumns = new LinkedList<String>(Arrays.asList(
+                InventoryDataSource.COLUMN_ID, //
+                InventoryDataSource.COLUMN_USER_ID, //
+                InventoryDataSource.COLUMN_STICKY, //
+                InventoryDataSource.COLUMN_TRACKING_CODE));
+
+        final StringBuilder sb = new StringBuilder();
+        sb.append("INSERT INTO " + InventoryDataSource.TABLE + "(");
+        sb.append(TextUtils.join(", ", newColumns));
+        sb.append(") SELECT ");
+        sb.append(TextUtils.join(", ", oldColumns));
+        sb.append(" FROM tmp_" + InventoryDataSource.TABLE).append(";");
+
+        final String query = sb.toString();
+
+        db.execSQL(query);
+        dropTableIfExist(db, "tmp_" + InventoryDataSource.TABLE);
+    }
+
     private void importUsersFromOlderThan6(final SQLiteDatabase db, final int oldVersion) {
         db.execSQL("ALTER TABLE " + UserDataSource.TABLE + " RENAME TO tmp_" + UserDataSource.TABLE
                 + ";");
@@ -265,34 +294,5 @@ public class GeoKretySQLiteHelper extends SQLiteOpenHelper {
 
         db.execSQL(query);
         dropTableIfExist(db, "tmp_" + UserDataSource.TABLE);
-    }
-    
-    private void importInventoryFromOlderThan7(final SQLiteDatabase db, final int oldVersion) {
-        db.execSQL("ALTER TABLE " + InventoryDataSource.TABLE + " RENAME TO tmp_" + InventoryDataSource.TABLE
-                + ";");
-        db.execSQL(InventoryDataSource.TABLE_CREATE);
-
-        final List<String> oldColumns = new LinkedList<String>(Arrays.asList(COLUMN_ID, //
-                InventoryDataSource.COLUMN_USER_ID, //
-                InventoryDataSource.COLUMN_STICKY, //
-                InventoryDataSource.COLUMN_TRACKING_CODE));
-
-        final List<String> newColumns = new LinkedList<String>(Arrays.asList(
-                InventoryDataSource.COLUMN_ID, //
-                InventoryDataSource.COLUMN_USER_ID, //
-                InventoryDataSource.COLUMN_STICKY, //
-                InventoryDataSource.COLUMN_TRACKING_CODE));
-
-        final StringBuilder sb = new StringBuilder();
-        sb.append("INSERT INTO " + InventoryDataSource.TABLE + "(");
-        sb.append(TextUtils.join(", ", newColumns));
-        sb.append(") SELECT ");
-        sb.append(TextUtils.join(", ", oldColumns));
-        sb.append(" FROM tmp_" + InventoryDataSource.TABLE).append(";");
-
-        final String query = sb.toString();
-
-        db.execSQL(query);
-        dropTableIfExist(db, "tmp_" + InventoryDataSource.TABLE);
     }
 }
