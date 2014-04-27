@@ -85,7 +85,7 @@ public class GeocacheDataSource {
             public boolean inTransaction(final SQLiteDatabase db) {
 
                 final Cursor cursor = db.rawQuery(FETCH_BY_WAYPOINT, new String[] {
-                    wpt
+                        wpt
                 });
                 while (cursor.moveToNext()) {
                     gcs.add(new Geocache(cursor, 0));

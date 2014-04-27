@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
-import java.util.TimeZone;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -50,20 +49,38 @@ public class GeocachingProvider {
     public static final String HOST = "geocaching.com";
     private static final int LOGS_LIMIT = 20;
 
-    private static final DateFormat dateFormat;
+    /*
+     * private static final DateFormat dateFormat; static { dateFormat = new
+     * SimpleDateFormat(FORMAT_DATE_GEOCACHING, Locale.getDefault());
+     * dateFormat.setTimeZone(TimeZone.getDefault()); }
+     */
 
-    static {
-        dateFormat = new SimpleDateFormat(FORMAT_DATE_GEOCACHING, Locale.getDefault());
-        dateFormat.setTimeZone(TimeZone.getDefault());
+    public static DateFormat detectDateFormat(final HttpContext httpContext)
+            throws MessagedException {
+        try {
+            final String html = Utils.httpGet(
+                    "http://www.geocaching.com/account/ManagePreferences.aspx", new String[][] {},
+                    httpContext);
+
+            final String dateFormatSelect = extractBetween(html,
+                    "ctl00$ContentBody$uxDateTimeFormat", "</select>");
+            final String pattern = extractBetween(dateFormatSelect,
+                    "<option selected=\"selected\" value=\"", "\"");
+            return new SimpleDateFormat(pattern, Locale.US);
+        } catch (final IOException e) {
+            throw new NoConnectionException(e);
+        } catch (final Throwable e) {
+            throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
+        }
     }
 
     public static Geocache loadGeocacheByGUID(final HttpContext httpContext, final String guid)
             throws MessagedException {
 
         final String[][] postData = new String[][] {
-            new String[] {
-                    "guid", guid
-            }
+                new String[] {
+                        "guid", guid
+                }
         };
         try {
             final String htmlCache = Utils.httpGet(
@@ -80,9 +97,9 @@ public class GeocachingProvider {
             final String waypoint) throws MessagedException {
 
         final String[][] postData = new String[][] {
-            new String[] {
-                    "wp", waypoint
-            }
+                new String[] {
+                        "wp", waypoint
+                }
         };
         try {
             final HttpResponse response = Utils.httpGetResponse(
@@ -112,21 +129,23 @@ public class GeocachingProvider {
     public static List<GeocacheLog> loadGeocachingComLogs(final HttpContext httpContext)
             throws MessagedException {
         final String[][] postData = new String[][] {
-            new String[] {
-                    "s", "1"
-            }
+                new String[] {
+                        "s", "1"
+                }
         };
         try {
             final List<GeocacheLog> openCachingLogs = new LinkedList<GeocacheLog>();
 
-            final String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", postData);
+            final DateFormat dateFormat = detectDateFormat(httpContext);
+            final String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", postData,
+                    httpContext);
             final String table = extractTable(html);
 
             if (table != null) {
                 final String[] rows = table.split("</tr>");
                 int i = 0;
                 for (final String row : rows) {
-                    final GeocacheLog log = extractGeocacheLog(row);
+                    final GeocacheLog log = extractGeocacheLog(row, dateFormat);
                     if (log != null) {
                         i++;
                         openCachingLogs.add(log);
@@ -188,10 +207,11 @@ public class GeocachingProvider {
         return src.substring(start, stop);
     }
 
-    private static GeocacheLog extractGeocacheLog(final String row) throws ClientProtocolException,
+    private static GeocacheLog extractGeocacheLog(final String row, final DateFormat dateFormat)
+            throws ClientProtocolException,
             IOException {
         try {
-            return GeocacheLog.fromGeocachingCom(row);
+            return GeocacheLog.fromGeocachingCom(row, dateFormat);
         } catch (final NullPointerException e) {
             return null;
         } catch (final ArrayIndexOutOfBoundsException e) {

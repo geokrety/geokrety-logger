@@ -102,7 +102,7 @@ public class GeoKretDataSource {
             public boolean inTransaction(final SQLiteDatabase db) {
 
                 final Cursor cursor = db.rawQuery(FETCH_BY_ID, new String[] {
-                    tc.toString()
+                        tc.toString()
                 });
                 while (cursor.moveToNext()) {
                     geoKretLogs.add(new GeoKret(cursor, 0));

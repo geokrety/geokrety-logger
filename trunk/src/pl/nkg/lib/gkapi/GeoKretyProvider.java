@@ -186,9 +186,9 @@ public class GeoKretyProvider {
 
     public static GeoKret loadSingleGeoKretByID(final int id) throws MessagedException {
         final String[][] getData = new String[][] {
-            new String[] {
-                    "gkid", Integer.toString(id)
-            }
+                new String[] {
+                        "gkid", Integer.toString(id)
+                }
         };
         try {
             final String xml = Utils.httpGet(URL_EXPORT2, getData);

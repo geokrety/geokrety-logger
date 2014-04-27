@@ -170,7 +170,7 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
         cleanNofired();
         thread = new Thread();
         thread.execute(new Object[] {
-            param
+                param
         });
     }
 
@@ -239,7 +239,7 @@ public abstract class AbstractForegroundTaskWrapper<Param, Progress extends Seri
     protected void publishProgress(final Progress progress) {
         if (thread != null) {
             thread.publish(new Object[] {
-                progress
+                    progress
             });
         }
     }

@@ -42,11 +42,11 @@ public class GeocacheLog {
     public static String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ssZ";
     public static String FORMAT_DATE_READABLE = "yyyy-MM-dd HH:mm";
 
-    public static GeocacheLog fromGeocachingCom(final String row) {
+    public static GeocacheLog fromGeocachingCom(final String row, final DateFormat dateFormat) {
         final String[] cells = row.split("</td>");
 
         final String logType = extractLogType(cells[0]);
-        Date date = extractDate(cells[2]);
+        Date date = extractDate(cells[2], dateFormat);
 
         date = new Date(date.getTime() + 12 * 60 * 60 * 1000);
 
@@ -88,9 +88,9 @@ public class GeocacheLog {
         return readableDateFormat.format(date);
     }
 
-    private static Date extractDate(final String src) {
+    private static Date extractDate(final String src, final DateFormat dateFormat) {
         try {
-            return geocachingComDateFormat.parse(Html.fromHtml(src).toString().trim());
+            return dateFormat.parse(Html.fromHtml(src).toString().trim());
         } catch (final ParseException e) {
             return null;
         }

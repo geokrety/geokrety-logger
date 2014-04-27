@@ -36,7 +36,7 @@ public class SupportedOKAPI {
             new SupportedOKAPI("opencaching.nl", 912, "rVn3VMJ82FqAa5b2fmvG", 3), //
             new SupportedOKAPI("opencaching.org.uk", 515,
                     "WM2DTuZFPrZbbLq59TBM", 4)
-    //
+            //
     };
 
     private SupportedOKAPI(final String host, final int version, final String consumerKey,

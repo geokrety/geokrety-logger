@@ -134,7 +134,7 @@ public class InventoryDataSource {
                  * GeoKretDataSource.COLUMN_SYNCHRO_STATE + " < 1", null);
                  */
                 final Cursor cursor = db.query(TABLE, new String[] {
-                    COLUMN_TRACKING_CODE
+                        COLUMN_TRACKING_CODE
                 }, COLUMN_STICKY + " = 1 AND " + COLUMN_USER_ID, null, null, null, null);
 
                 while (cursor.moveToNext()) {
