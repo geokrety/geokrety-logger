@@ -288,7 +288,10 @@
 		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.
 	</string>
 	<string name="about_label_changelog">Change log:\n\n
-		0.7.1 beta - 2014-01-02\n
+		0.7.2 beta - 2014-04-28\n
+		- fix date parsing in Geocaching.com\n
+		\n
+		0.7.1 beta - 2014-03-02\n
 		- rename \"profile\" to \"user\",\n
 		- some fixes\n
 		\n

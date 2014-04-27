@@ -275,7 +275,10 @@
 		niezgodnie z przeznaczeniem.
 	</string>
 	<string name="about_label_changelog">Historia zmian:\n
-		0.7.1 beta - 2014-01-02\n
+		0.7.2 beta - 2014-04-28\n
+		- naprawiony błąd z odczytem daty w Geocaching.com\n
+		\n
+		0.7.1 beta - 2014-03-02\n
 		- przemianowanie \"profil\" na \"użytkownik\",\n
 		- drobne poprawki\n
 		\n
