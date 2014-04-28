@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * 
+ * This file is a part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+-->
+<resources>
+
+    <style name="row_log_baseText" parent="@android:style/TextAppearance" />
+
+    <style name="row_log_gkCode" parent="@style/row_log_baseText">
+        <item name="android:textSize">22.0sp</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
+    </style>
+
+    <style name="row_log_gkName" parent="@style/row_log_baseText">
+        <item name="android:textSize">20.0sp</item>
+        <item name="android:textColor">#ff888888</item>
+    </style>
+
+    <style name="row_log_cacheCode" parent="@style/row_log_baseText">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
+    </style>
+
+    <style name="row_log_cacheName" parent="@style/row_log_baseText">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">#ff888888</item>
+    </style>
+
+    <style name="row_log_comment" parent="@style/row_log_baseText">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">@*android:color/primary_text_light</item>
+    </style>
+
+    <style name="row_log_statusLabel" parent="@style/row_log_baseText">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
+    </style>
+
+    <style name="row_log_statusContent" parent="@style/row_log_baseText">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ffcc8800</item>
+    </style>
+
+    <style name="row_log_profileLabel" parent="@style/row_log_baseText">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
+    </style>
+
+    <style name="row_log_profileContent" parent="@style/row_log_baseText">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textColor">#ff31b6e7</item>
+    </style>
+
+    <style name="row_log_errorMessage" parent="@style/row_log_baseText">
+        <item name="android:textSize">12.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ffcc0000</item>
+    </style>
+    
+    <style name="log_activity_spinner" parent="@android:style/Widget.Spinner" />
+
+</resources>
