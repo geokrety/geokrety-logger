@@ -178,7 +178,7 @@ public class GeoKretyProvider {
 
         if (value != null && !value.startsWith("error") && value.length() == 128) {
             return value;
-        } else if (value.length() != 128) {
+        } else if (value.length() != 128 && !value.startsWith("error")) {
             throw new MessagedException(R.string.user_gk_error_proxy,
                     String.valueOf(value));
         } else {

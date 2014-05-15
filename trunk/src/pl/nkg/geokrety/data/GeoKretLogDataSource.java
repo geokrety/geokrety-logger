@@ -59,6 +59,7 @@ public class GeoKretLogDataSource {
     private static final String FETCH_FULL_COLUMNS;
     private static final String FETCH_OUTBOX;
     private static final String FETCH_BY_USER;
+    private static final String FETCH_OUT_BY_USER;
     private static final String FETCH_BY_ID;
     private static final String FETCH_FULL_USER;
 
@@ -132,6 +133,12 @@ public class GeoKretLogDataSource {
                 + " WHERE l." + COLUMN_USER_ID + " = ?" //
                 + " ORDER BY l." + COLUMN_ID;
 
+        FETCH_OUT_BY_USER = "SELECT l." + COLUMN_TRACKING_CODE //
+                + " FROM " + TABLE + " AS l" //
+                + " WHERE l." + COLUMN_USER_ID + " = ?" //
+                + " AND l." + COLUMN_LOG_TYPE + " = 1" //
+                + " ORDER BY l." + COLUMN_ID;
+
         FETCH_BY_ID = FETCH_FULL_USER + " WHERE l." + COLUMN_ID + " = ?";
     }
 
@@ -139,6 +146,23 @@ public class GeoKretLogDataSource {
         return db.rawQuery(FETCH_BY_USER, new String[] {
                 String.valueOf(userID)
         });
+    }
+
+    public static Cursor createLoadOutByUserIDCurosr(final SQLiteDatabase db, final long userID) {
+        return db.rawQuery(FETCH_OUT_BY_USER, new String[] {
+                String.valueOf(userID)
+        });
+    }
+
+    public static List<String> importTrackingCodesFromLogs(final SQLiteDatabase db,
+            final long userID) {
+        final LinkedList<String> trackingCodes = new LinkedList<String>();
+        final Cursor cursor = createLoadOutByUserIDCurosr(db, userID);
+        while (cursor.moveToNext()) {
+            trackingCodes.add(cursor.getString(0));
+        }
+        cursor.close();
+        return trackingCodes;
     }
 
     private static ContentValues getValues(final GeoKretLog log) {
@@ -234,6 +258,7 @@ public class GeoKretLogDataSource {
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
                 mergeSimple(db, TABLE, getValues(log), log.getId());
+                InventoryDataSource.appendUnsendedGrabbed(db, log.getAccoundID());
                 return true;
             }
 
@@ -264,6 +289,7 @@ public class GeoKretLogDataSource {
             public boolean inTransaction(final SQLiteDatabase db) {
                 final int id = (int) persist(db, TABLE, getValues(log));
                 log.setId(id);
+                InventoryDataSource.appendUnsendedGrabbed(db, log.getAccoundID());
                 return true;
             }
 

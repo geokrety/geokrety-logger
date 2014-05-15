@@ -23,6 +23,7 @@
 package pl.nkg.geokrety.data;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -46,10 +47,47 @@ public class InventoryDataSource {
             + COLUMN_STICKY + " INTEGER NOT NULL DEFAULT 0" //
             + "); ";
 
+    private static final String FETCH_TRACKING_CODE_BY_USER_ID = "SELECT " + COLUMN_TRACKING_CODE
+            + " FROM " + TABLE + " WHERE " + COLUMN_ID + " = ?";
+
+    public static void appendUnsendedGrabbed(final SQLiteDatabase db, final long userId) {
+        final HashSet<String> saved = new HashSet<String>(
+                loadTrackingCodeByUserIDCurosr(db, userId));
+        final LinkedList<ContentValues> cv = new LinkedList<ContentValues>();
+        for (final String tc : GeoKretLogDataSource.importTrackingCodesFromLogs(db, userId)) {
+            if (!saved.contains(tc)) {
+                final GeoKret geoKret = new GeoKret(tc,
+                        GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED, null);
+                cv.add(getValues(geoKret, userId));
+            }
+        }
+        DBOperation.persistAll(db, TABLE, cv);
+    }
+
     public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
         return db.rawQuery(FETCH_BY_USER, new String[] {
                 String.valueOf(userID)
         });
+    }
+
+    public static Cursor createLoadTrackingCodeByUserIDCurosr(final SQLiteDatabase db,
+            final long userID) {
+        return db.rawQuery(FETCH_TRACKING_CODE_BY_USER_ID, new String[] {
+                String.valueOf(userID)
+        });
+    }
+
+    public static List<String> loadTrackingCodeByUserIDCurosr(final SQLiteDatabase db,
+            final long userID) {
+        final Cursor c = createLoadTrackingCodeByUserIDCurosr(db, userID);
+
+        final List<String> ret = new LinkedList<String>();
+        while (c.moveToNext()) {
+            ret.add(c.getString(0));
+        }
+        c.close();
+
+        return ret;
     }
 
     private final GeoKretySQLiteHelper dbHelper;
@@ -63,9 +101,9 @@ public class InventoryDataSource {
             + " AS i" //
             + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i." + COLUMN_TRACKING_CODE
             + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE;
-
     private static final String FETCH_BY_USER = PREFIX_FETCH_BY + " WHERE i." + COLUMN_USER_ID
             + " = ? ORDER BY g." + GeoKretDataSource.COLUMN_NAME;
+
     private static final String FETCH_BY_ID = PREFIX_FETCH_BY + " WHERE i." + COLUMN_ID + " = ? ";
 
     private static ContentValues getValues(final GeoKret geokret, final long userID) {
@@ -124,15 +162,6 @@ public class InventoryDataSource {
 
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
-                /*
-                 * final Cursor cursor = db.rawQuery("SELECT i." +
-                 * COLUMN_TRACKING_CODE + " FROM " + TABLE + " AS i" +
-                 * " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i." +
-                 * COLUMN_TRACKING_CODE + " = g." +
-                 * GeoKretDataSource.COLUMN_TRACKING_CODE + " WHERE g." +
-                 * GeoKretDataSource.COLUMN_SYNCHRO_ERROR + " IS NULL OR g." +
-                 * GeoKretDataSource.COLUMN_SYNCHRO_STATE + " < 1", null);
-                 */
                 final Cursor cursor = db.query(TABLE, new String[] {
                         COLUMN_TRACKING_CODE
                 }, COLUMN_STICKY + " = 1 AND " + COLUMN_USER_ID, null, null, null, null);
@@ -197,8 +226,12 @@ public class InventoryDataSource {
                     cv.add(getValues(geoKret, userId));
                 }
                 persistAll(db, TABLE, cv);
+
+                appendUnsendedGrabbed(db, userId);
+
                 return true;
             }
         });
     }
+
 }
