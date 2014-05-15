@@ -48,7 +48,7 @@ public class InventoryDataSource {
             + "); ";
 
     private static final String FETCH_TRACKING_CODE_BY_USER_ID = "SELECT " + COLUMN_TRACKING_CODE
-            + " FROM " + TABLE + " WHERE " + COLUMN_ID + " = ?";
+            + " FROM " + TABLE + " WHERE " + COLUMN_USER_ID + " = ?";
 
     public static void appendUnsendedGrabbed(final SQLiteDatabase db, final long userId) {
         final HashSet<String> saved = new HashSet<String>(
@@ -59,6 +59,7 @@ public class InventoryDataSource {
                 final GeoKret geoKret = new GeoKret(tc,
                         GeoKretDataSource.SYNCHRO_STATE_UNSYNCHRONIZED, null);
                 cv.add(getValues(geoKret, userId));
+                saved.add(tc);
             }
         }
         DBOperation.persistAll(db, TABLE, cv);
