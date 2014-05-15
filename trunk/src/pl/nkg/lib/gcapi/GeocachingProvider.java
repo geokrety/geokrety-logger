@@ -49,12 +49,6 @@ public class GeocachingProvider {
     public static final String HOST = "geocaching.com";
     private static final int LOGS_LIMIT = 20;
 
-    /*
-     * private static final DateFormat dateFormat; static { dateFormat = new
-     * SimpleDateFormat(FORMAT_DATE_GEOCACHING, Locale.getDefault());
-     * dateFormat.setTimeZone(TimeZone.getDefault()); }
-     */
-
     public static DateFormat detectDateFormat(final HttpContext httpContext)
             throws MessagedException {
         try {

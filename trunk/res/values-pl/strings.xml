@@ -114,6 +114,7 @@
 	<string name="user_gk_error_login_null">Nie podałeś loginu do GeoKrety.org</string>
 	<string name="user_gk_error_password_null">Nie podałeś hasła do GeoKrety.org</string>
 	<string name="user_gk_error_password_invalid">Zły login lub hasło do GeoKrety.org</string>
+	<string name="user_gk_error_proxy">Otwórz swoją przeglądarkę internetową i wpisz hasło do internetu?</string>
     
     <!-- Opencaching account dialog -->
 	<string name="user_oc_title">Login do:</string>

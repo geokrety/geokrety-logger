@@ -169,15 +169,18 @@ public class GeoKretyProvider {
 
         String value;
         try {
-            value = Utils.httpPost(URL_LOGIN, postData);
+            value = Utils.httpPost(URL_LOGIN, postData).trim();
         } catch (final IOException e) {
             throw new NoConnectionException(e);
         } catch (final Exception e) {
             throw new MessagedException(R.string.connection_error, Utils.formatException(e));
         }
 
-        if (value != null && !value.startsWith("error")) {
-            return value.trim();
+        if (value != null && !value.startsWith("error") && value.length() == 128) {
+            return value;
+        } else if (value.length() != 128) {
+            throw new MessagedException(R.string.user_gk_error_proxy,
+                    String.valueOf(value));
         } else {
             throw new MessagedException(R.string.user_gk_error_password_invalid,
                     String.valueOf(value));

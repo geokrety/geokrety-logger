@@ -133,6 +133,7 @@
 	<string name="user_gk_error_login_null">GeoKrety.org login can not be empty</string>
 	<string name="user_gk_error_password_null">GeoKrety.org password can not be empty</string>
 	<string name="user_gk_error_password_invalid">Invalid GeoKrety login or password.</string>
+	<string name="user_gk_error_proxy">Open your web browser and enter password for your internet connection.</string>
     
     <!-- Opencaching account dialog -->
 	<string name="user_oc_title">Login to:</string>
