@@ -68,6 +68,24 @@ public class GeocachingProvider {
         }
     }
 
+    public static String extractBetween(final String src, final String startMarker,
+            final String stopMarker) {
+        int start = src.indexOf(startMarker);
+
+        if (start == -1) {
+            return null;
+        }
+
+        start += startMarker.length();
+        final int stop = src.indexOf(stopMarker, start);
+
+        if (stop == -1) {
+            return null;
+        }
+
+        return src.substring(start, stop);
+    }
+
     public static Geocache loadGeocacheByGUID(final HttpContext httpContext, final String guid)
             throws MessagedException {
 
@@ -181,24 +199,6 @@ public class GeocachingProvider {
         } catch (final Throwable e) {
             throw new MessagedException(R.string.lastlogs_error_refresh, e.getLocalizedMessage());
         }
-    }
-
-    private static String extractBetween(final String src, final String startMarker,
-            final String stopMarker) {
-        int start = src.indexOf(startMarker);
-
-        if (start == -1) {
-            return null;
-        }
-
-        start += startMarker.length();
-        final int stop = src.indexOf(stopMarker, start);
-
-        if (stop == -1) {
-            return null;
-        }
-
-        return src.substring(start, stop);
     }
 
     private static GeocacheLog extractGeocacheLog(final String row, final DateFormat dateFormat)

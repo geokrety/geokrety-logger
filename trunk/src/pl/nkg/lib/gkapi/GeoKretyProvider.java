@@ -42,6 +42,7 @@ import pl.nkg.geokrety.data.Geocache;
 import pl.nkg.geokrety.exceptions.LocationNotResolvedException;
 import pl.nkg.geokrety.exceptions.MessagedException;
 import pl.nkg.geokrety.exceptions.NoConnectionException;
+import pl.nkg.lib.gcapi.GeocachingProvider;
 import android.text.TextUtils;
 
 public class GeoKretyProvider {
@@ -262,8 +263,9 @@ public class GeoKretyProvider {
 
         try {
             final String value = Utils.httpPost(URL_RUCHY, postData);
-            final String[] adsFix = value.split("<script");
-            final Document doc = Utils.getDomElement(adsFix[0]);
+            final String adsFix = "<gkxml"
+                    + GeocachingProvider.extractBetween(value, "<gkxml", "</gkxml>") + "</gkxml>";
+            final Document doc = Utils.getDomElement(adsFix);
             final NodeList nl = doc.getElementsByTagName("error").item(0).getChildNodes();
 
             final LinkedList<String> errors = new LinkedList<String>();

@@ -276,6 +276,9 @@
 		niezgodnie z przeznaczeniem.
 	</string>
 	<string name="about_label_changelog">Historia zmian:\n
+		0.7.3 beta - 2014-06-25\n
+		- dostosowanie do zmian w API geokrety.org\n
+		\n
 		0.7.2 beta - 2014-04-28\n
 		- naprawiony błąd z odczytem daty w Geocaching.com\n
 		\n
