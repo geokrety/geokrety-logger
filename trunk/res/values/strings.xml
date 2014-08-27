@@ -290,7 +290,7 @@
 	</string>
 	<string name="about_label_changelog">Change log:\n\n
 		0.7.4 beta - 2014-07-15\n
-		- French translation, thanks for Ldm Public\n
+		- Added french translation, thanks to Nam\n
 		\n
 		0.7.3 beta - 2014-06-25\n
 		- implement geokrety.org API changes\n
