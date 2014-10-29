@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * 
+ * This file is a part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+-->
+<manifest 
+    xmlns:android="http://schemas.android.com/apk/res/android" 
+    package="pl.nkg.geokrety" 
+    android:versionCode="41"
+	android:versionName="0.7.5 beta">
+
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+	<uses-feature android:name="android.hardware.location" android:required="false" />
+	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
+
+	<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19" />
+
+	<application 
+	    android:name=".GeoKretyApplication" 
+	    android:allowBackup="true" 
+	    android:icon="@drawable/ic_launcher"
+		android:label="@string/app_name" 
+		android:theme="@android:style/Theme.Light">
+		
+		<activity android:name=".activities.MainActivity" android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
+
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".activities.UsersActivity" android:label="@string/users_title" />
+		<activity android:name=".activities.InventoryActivity" android:label="@string/inventory_title" />
+		<activity android:name=".activities.LastOCsActivity" android:label="@string/lastlogs_title" />
+		<activity android:name=".activities.GeoKretLogsActivity" android:label="@string/logs_title" />
+				<activity android:name=".activities.LogActivity" android:label="@string/log_title">
+			<intent-filter>
+				<action android:name="android.intent.action.VIEW" />
+
+				<category android:name="android.intent.category.DEFAULT" />
+				<category android:name="android.intent.category.BROWSABLE" />
+
+				<data android:host="geokrety.org" android:path="/m/qr.php" android:scheme="http" />
+				<data android:host="geokrety.org" android:path="/ruchy.php" android:scheme="http" />
+				
+				<data android:host="opencaching.pl" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencaching.us" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencaching.org.uk" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencaching.se" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencaching.nl" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencaching.no" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencaching.it" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencachingspain.es" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencaching.de" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="opencaching.cz" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="geocaching.com" android:pathPrefix="/seek/cache_details.aspx" android:scheme="http" />
+				
+				<data android:host="www.opencaching.pl" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencaching.us" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencaching.org.uk" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencaching.se" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencaching.nl" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencaching.no" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencaching.it" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencachingspain.es" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencaching.de" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.opencaching.cz" android:pathPrefix="/viewcache.php" android:scheme="http" />
+				<data android:host="www.geocaching.com" android:pathPrefix="/seek/cache_details.aspx" android:scheme="http" />
+				
+				<data android:host="opencaching.pl" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencaching.us" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencaching.org.uk" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencaching.se" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencaching.nl" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencaching.no" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencaching.it" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencachingspain.es" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencaching.de" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="opencaching.cz" android:pathPrefix="/log.php" android:scheme="http" />
+				
+				<data android:host="www.opencaching.pl" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencaching.us" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencaching.org.uk" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencaching.se" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencaching.nl" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencaching.no" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencaching.it" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencachingspain.es" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencaching.de" android:pathPrefix="/log.php" android:scheme="http" />
+				<data android:host="www.opencaching.cz" android:pathPrefix="/log.php" android:scheme="http" />
+				
+				<data android:host="coord.info" android:pathPrefix="/GC" android:scheme="http" />
+			</intent-filter>
+		</activity>
+		<activity android:name=".activities.AboutActivity" android:label="@string/about_title" />
+		<activity android:name=".activities.UserActivity" android:label="@string/user_title" />
+		<activity android:name=".activities.GeoKretActivity" android:label="@string/geokret_title" android:windowSoftInputMode="adjustResize" />
+
+		<service android:name=".services.LogSubmitterService" />
+		<service android:name=".services.RefreshService" />
+		<service android:name=".services.VerifyGeoKretService" />
+		<service android:name=".services.WaypointResolverService" />
+		
+		
+		<receiver android:name=".receivers.BootCompleteReceiver" android:enabled="false">
+			<intent-filter>
+				<action android:name="android.intent.action.BOOT_COMPLETED" />
+			</intent-filter>
+		</receiver>
+		<receiver android:name=".receivers.NetworkStateReceiver" android:enabled="false">
+			<intent-filter>
+				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+			</intent-filter>
+		</receiver>
+
+		<service android:name=".services.LogSubmitterService" android:exported="false" />
+	</application>
+
+</manifest>
