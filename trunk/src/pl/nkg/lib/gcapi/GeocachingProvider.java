@@ -57,7 +57,7 @@ public class GeocachingProvider {
                     httpContext);
 
             final String dateFormatSelect = extractBetween(html,
-                    "ctl00$ContentBody$uxDateTimeFormat", "</select>");
+                    "SelectedDateFormat", "</select>");
             final String pattern = extractBetween(dateFormatSelect,
                     "<option selected=\"selected\" value=\"", "\"");
             return new SimpleDateFormat(pattern, Locale.US);

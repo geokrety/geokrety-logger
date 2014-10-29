@@ -28,6 +28,8 @@
 SRC=app_icon.svg
 DST=ic_launcher.png
 
+./render.sh $SRC ../ic_launcher-web_promote.png 150 150
+./render.sh $SRC ../ic_launcher-web_recommend.png 650 650
 ./render.sh $SRC ../ic_launcher-web.png 512 512
 ./render.sh $SRC ../res/drawable-xxxhdpi/$DST 192 192
 ./render.sh $SRC ../res/drawable-xxhdpi/$DST 144 144
