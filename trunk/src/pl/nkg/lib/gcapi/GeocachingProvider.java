@@ -53,7 +53,7 @@ public class GeocachingProvider {
             throws MessagedException {
         try {
             final String html = Utils.httpGet(
-                    "http://www.geocaching.com/account/ManagePreferences.aspx", new String[][] {},
+                    "https://www.geocaching.com/account/settings/preferences", new String[][] {},
                     httpContext);
 
             final String dateFormatSelect = extractBetween(html,
@@ -96,7 +96,7 @@ public class GeocachingProvider {
         };
         try {
             final String htmlCache = Utils.httpGet(
-                    "http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
+                    "https://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
             return Geocache.parseGeocachingCom(htmlCache);
         } catch (final IOException e) {
             throw new NoConnectionException(e);
@@ -149,7 +149,7 @@ public class GeocachingProvider {
             final List<GeocacheLog> openCachingLogs = new LinkedList<GeocacheLog>();
 
             final DateFormat dateFormat = detectDateFormat(httpContext);
-            final String html = Utils.httpGet("http://www.geocaching.com/my/logs.aspx", postData,
+            final String html = Utils.httpGet("https://www.geocaching.com/my/logs.aspx", postData,
                     httpContext);
             final String table = extractTable(html);
 
@@ -179,21 +179,33 @@ public class GeocachingProvider {
     public static HttpContext login(final String login, final String password)
             throws MessagedException {
         final String[][] postData = new String[][] {
-                new String[] {
-                        "ctl00$tbUsername", login
+	        	new String[] {
+	                    "__EVENTTARGET", ""
+	            },    
+	        	new String[] {
+	                    "__EVENTARGUMENT", ""
+	            },    
+	        	new String[] {
+                        "ctl00$ContentBody$tbUsername", login
                 },
                 new String[] {
-                        "ctl00$tbPassword", password
-                }
+                        "ctl00$ContentBody$tbPassword", password
+                },
+	        	new String[] {
+	                    "ctl00$ContentBody$cbRememberMe", "on"
+	            },    
+	        	new String[] {
+	                    "ctl00$ContentBody$btnSignIn", "Login"
+	            }
         };
         try {
             final HttpContext httpContext = new BasicHttpContext();
             final String ret = Utils.httpPost("https://www.geocaching.com/login/default.aspx",
                     postData, httpContext);
-            if (ret.contains("Your username/password combination does not match. Make sure you entered your information correctly.")) {
-                return null;
+            if (ret.contains("You are signed in as")) {
+                return httpContext;
             }
-            return httpContext;
+            return null;
         } catch (final IOException e) {
             throw new NoConnectionException(e);
         } catch (final Throwable e) {
