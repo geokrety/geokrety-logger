@@ -115,7 +115,7 @@ public class GeocachingProvider {
         };
         try {
             final HttpResponse response = Utils.httpGetResponse(
-                    "http://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
+                    "https://www.geocaching.com/seek/cache_details.aspx", postData, httpContext);
 
             if (response.getStatusLine().getStatusCode() == 404) {
                 throw new WaypointNotFoundException(waypoint);
@@ -123,7 +123,7 @@ public class GeocachingProvider {
 
             final String htmlCache = Utils.responseToString(response);
 
-            if (htmlCache.contains("<h2>Cache is Unpublished</h2>")) {
+            if (htmlCache.contains("File Not Found")) {
                 throw new WaypointNotFoundException(waypoint);
             }
 
