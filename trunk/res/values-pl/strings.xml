@@ -381,4 +381,8 @@
 	
 	<!-- Crash report -->
 	<string name="crash_toast_text">Nastąpił błąd działania aplikacji GeoKrety Logger. Raport o błędzie został wysłany do autora programu.</string>
+
+		<!-- Others -->
+	<string name="global_error_connection">Błąd połączeniar</string>
+	<string name="global_error_system">Błąd systemu</string>
 </resources>
