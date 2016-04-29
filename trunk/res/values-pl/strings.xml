@@ -78,6 +78,7 @@
 	<string name="user_checkbox_portal_oc2">opencaching.us</string>
 	<string name="user_checkbox_portal_oc3">opencaching.nl</string>
 	<string name="user_checkbox_portal_oc4">opencaching.org.uk</string>
+	<string name="user_checkbox_portal_oc5">opencaching.ro</string>
 	<string name="user_checkbox_portal_gc">geocaching.com (na własne ryzyko!)</string>
 	<string name="user_label_private_policy">Polityka prywatności:
 	    \ngeokrety.org - login i hasło są użyte do pobrania &quot;secid&quot;. Login i &quot;secid&quot; są zapisywane w pamięci telefonu, ale hasło nie.
@@ -276,6 +277,9 @@
 		niezgodnie z przeznaczeniem.
 	</string>
 	<string name="about_label_changelog">Historia zmian:\n
+		0.8.0 beta - 2016-04-29\n
+		- obsługa opencaching.ro\n
+		\n
 		0.7.6 beta - 2016-04-28\n
 		- poprawka: dostosowanie do zmian wprowadzonych na geocaching.com\n
 		\n

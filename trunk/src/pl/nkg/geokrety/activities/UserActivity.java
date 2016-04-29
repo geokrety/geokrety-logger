@@ -100,9 +100,12 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
     private GPSAcquirer gpsAcquirer;
 
     private static final int[] CHECKBOX_LABELS = {
-            R.string.user_checkbox_portal_oc0, R.string.user_checkbox_portal_oc1,
+            R.string.user_checkbox_portal_oc0, 
+            R.string.user_checkbox_portal_oc1,
             R.string.user_checkbox_portal_oc2,
-            R.string.user_checkbox_portal_oc3, R.string.user_checkbox_portal_oc4
+            R.string.user_checkbox_portal_oc3, 
+            R.string.user_checkbox_portal_oc4,
+            R.string.user_checkbox_portal_oc5
     };
 
     @Override
@@ -309,6 +312,7 @@ public class UserActivity extends ManagedDialogsActivity implements LocationList
         ocCheckBox[2] = (CheckBox) findViewById(R.id.ocCheckBox2);
         ocCheckBox[3] = (CheckBox) findViewById(R.id.ocCheckBox3);
         ocCheckBox[4] = (CheckBox) findViewById(R.id.ocCheckBox4);
+        ocCheckBox[5] = (CheckBox) findViewById(R.id.ocCheckBox5);
         saveButton = (Button) findViewById(R.id.saveButton);
 
         // accountNameEditText.setText(getIntent().getStringExtra(Account.ACCOUNT_NAME));

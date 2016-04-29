@@ -110,7 +110,7 @@ public class GeoKretyApplication extends Application {
 
     public boolean isAcraEnabled() {
         // TODO: use as app settings
-        return true;
+        return false;
     }
 
     public boolean isAutoRefreshEnabled() {

@@ -97,6 +97,7 @@
 	<string name="user_checkbox_portal_oc2">opencaching.us</string>
 	<string name="user_checkbox_portal_oc3">opencaching.nl</string>
 	<string name="user_checkbox_portal_oc4">opencaching.org.uk</string>
+	<string name="user_checkbox_portal_oc5">opencaching.ro</string>
 	<string name="user_checkbox_portal_gc">geocaching.com (bêta)</string>
 	<string name="user_label_private_policy">Privacy policy:
 	    \ngeokrety.org - login and password is used for download &quot;secid&quot;. Login and &quot;secid&quot; is stored, but password not.
@@ -286,6 +287,9 @@
 		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.
 	</string>
 		<string name="about_label_changelog">Change log:\n\n
+		0.8.0 beta - 2016-04-29\n
+		- support opencaching.ro\n
+		\n
 		0.7.6 beta - 2016-04-28\n
 		- fix: last logs and waypoints from geocaching.com\n
 		\n

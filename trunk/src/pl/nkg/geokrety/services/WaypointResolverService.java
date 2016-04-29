@@ -22,7 +22,9 @@
 
 package pl.nkg.geokrety.services;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.apache.http.protocol.HttpContext;
@@ -37,6 +39,8 @@ import pl.nkg.geokrety.exceptions.NoConnectionException;
 import pl.nkg.geokrety.exceptions.WaypointNotFoundException;
 import pl.nkg.lib.gcapi.GeocachingProvider;
 import pl.nkg.lib.gkapi.GeoKretyProvider;
+import pl.nkg.lib.okapi.OKAPIProvider;
+import pl.nkg.lib.okapi.SupportedOKAPI;
 
 public class WaypointResolverService extends AbstractVerifyService {
 
@@ -66,7 +70,15 @@ public class WaypointResolverService extends AbstractVerifyService {
             protected Geocache run() throws NoConnectionException, Exception {
                 try {
                     // FIXME: use separated reTry
-                    return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
+                	if (wpt.toUpperCase().startsWith("OR")) {
+                		ArrayList<String> waypoints = new ArrayList<String>();
+                		waypoints.add(wpt);
+                		List<Geocache> ors = OKAPIProvider.loadOCnames(waypoints, SupportedOKAPI.SUPPORTED[5]);
+                		if (ors.size() == 1) {
+                			return ors.get(0);
+                		}
+                	}
+                 	return GeoKretyProvider.loadCoordinatesByWaypoint(wpt);
                 } catch (final LocationNotResolvedException e) {
                     if (!wpt.toUpperCase(Locale.ENGLISH).startsWith("GC")) {
                         throw e;

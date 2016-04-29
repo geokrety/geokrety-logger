@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2013 Michał Niedźwiecki
+ * Copyright (C) 2013, 2016 Michał Niedźwiecki
  * 
  * This file is a part of GeoKrety Logger
  * http://geokretylog.sourceforge.net/
@@ -34,9 +34,8 @@ public class SupportedOKAPI {
             new SupportedOKAPI("opencaching.de", 893, "LtBaPTnpjUpxpeqM6ThJ", 1), //
             new SupportedOKAPI("opencaching.us", 901, "5vpZTs8UehxfmdF8uKhy", 2), //
             new SupportedOKAPI("opencaching.nl", 912, "rVn3VMJ82FqAa5b2fmvG", 3), //
-            new SupportedOKAPI("opencaching.org.uk", 515,
-                    "WM2DTuZFPrZbbLq59TBM", 4)
-            //
+            new SupportedOKAPI("opencaching.org.uk", 515, "WM2DTuZFPrZbbLq59TBM", 4), //
+            new SupportedOKAPI("opencaching.ro", 1288, "CNMaTpDXC77T76QQTD4k", 5), //
     };
 
     private SupportedOKAPI(final String host, final int version, final String consumerKey,
