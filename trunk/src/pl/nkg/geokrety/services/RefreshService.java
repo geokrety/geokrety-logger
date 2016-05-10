@@ -27,7 +27,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.acra.ACRA;
 import org.apache.http.protocol.HttpContext;
 
 import pl.nkg.geokrety.GeoKretyApplication;
@@ -431,7 +430,6 @@ public class RefreshService extends IntentService {
             error = Utils.formatException(e);
             e.printStackTrace();
             Log.println(Log.ERROR, TAG, error);
-            ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
         }
 

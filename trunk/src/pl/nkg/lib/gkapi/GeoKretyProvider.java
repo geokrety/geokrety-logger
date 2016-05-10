@@ -28,7 +28,6 @@ import java.util.LinkedList;
 import java.util.Locale;
 import java.util.Map;
 
-import org.acra.ACRA;
 import org.json.JSONObject;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
@@ -88,7 +87,6 @@ public class GeoKretyProvider {
         } catch (final LocationNotResolvedException e) {
             throw e;
         } catch (final Throwable e) {
-            ACRA.getErrorReporter().handleSilentException(e);
             throw new MessagedException(R.string.global_error_system, Utils.formatException(e));
         }
     }
@@ -121,7 +119,6 @@ public class GeoKretyProvider {
         } catch (final IOException e) {
             throw new NoConnectionException(e);
         } catch (final Throwable e) {
-            ACRA.getErrorReporter().handleSilentException(e);
             throw new MessagedException(R.string.global_error_system, Utils.formatException(e));
         }
     }
@@ -208,7 +205,6 @@ public class GeoKretyProvider {
         } catch (final IOException e) {
             throw new NoConnectionException(e);
         } catch (final Throwable e) {
-            ACRA.getErrorReporter().handleSilentException(e);
             throw new MessagedException(R.string.global_error_system, Utils.formatException(e));
         }
     }

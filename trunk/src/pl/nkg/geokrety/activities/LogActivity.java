@@ -26,8 +26,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
 
-import org.acra.ACRA;
-
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
@@ -142,6 +140,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
     private Button logTypeButton;
     private Button accountsButton;
     private TrackingCodeEditText trackingCodeEditText;
+    private Button inventoryButton;
     private Button ocsButton;
     private ImageButton gpsButton;
     private Button datePicker;
@@ -449,6 +448,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         coordinatesEditText.setEnabled(locationVisible);
         gpsButton.setEnabled(locationVisible);
         ocsButton.setEnabled(locationVisible);
+        inventoryButton.setEnabled(currentLogType != 1 && currentLogType != 2);
     }
 
     @Override
@@ -498,6 +498,7 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
         logTypeButton = (Button) findViewById(R.id.logTypeButton);
         accountsButton = (Button) findViewById(R.id.accountsButton);
         trackingCodeEditText = (TrackingCodeEditText) findViewById(R.id.trackingCodeEditText);
+        inventoryButton = (Button) findViewById(R.id.inventoryButton);
         ocsButton = (Button) findViewById(R.id.ocsButton);
         gpsButton = (ImageButton) findViewById(R.id.gpsButton);
         datePicker = (Button) findViewById(R.id.datePicker);
@@ -554,7 +555,6 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 }
             } catch (final Throwable e) {
                 e.printStackTrace();
-                ACRA.getErrorReporter().handleSilentException(e);
                 Log.println(Log.ERROR, this.getClass().getSimpleName(), Utils.formatException(e));
                 Toast.makeText(this, Utils.formatException(e), Toast.LENGTH_LONG).show();
                 finish();

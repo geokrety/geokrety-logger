@@ -22,8 +22,6 @@
 
 package pl.nkg.geokrety.services;
 
-import org.acra.ACRA;
-
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.Utils;
 import pl.nkg.geokrety.activities.controls.NotifyTextView;
@@ -66,7 +64,6 @@ abstract public class AbstractVerifyService extends IntentService {
             onHandleValue(value);
 
         } catch (final Throwable e) {
-            ACRA.getErrorReporter().handleSilentException(e);
             e.printStackTrace();
             final String msg = Utils.formatException(e);
             Log.println(Log.ERROR, logTag, msg);

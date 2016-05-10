@@ -191,7 +191,7 @@
 	<string name="log_button_inventory">Inventaire&#8230;</string>
 	<string name="log_label_section_location">3. Nouvel emplacement</string>
 	<string name="log_hint_waypoint">Cache</string>
-	<string name="log_button_oclogs">OC Log&#8230;</string>
+	<string name="log_button_oclogs">GC Log&#8230;</string>
 	<string name="log_hint_cords">Coordonnées</string>
 	<string name="log_button_gps">Initialiser avec le GPS</string>
 	<string name="log_button_home">Domicile</string>
@@ -285,109 +285,6 @@
 	<string name="about_title">A propos</string>
 	<string name="about_label_foot">License: GPL 3.0,
 		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.
-	</string>
-		<string name="about_label_changelog">Change log:\n\n
-		0.8.0 beta - 2016-04-29\n
-		- support opencaching.ro\n
-		\n
-		0.7.6 beta - 2016-04-28\n
-		- fix: last logs and waypoints from geocaching.com\n
-		\n
-		0.7.5 beta - 2014-10-30\n
-		- fix: last logs from geocaching.com\n
-		\n
-		0.7.4 beta - 2014-07-15\n
-		- Added french translation, thanks to Nam\n
-		\n
-		0.7.3 beta - 2014-06-25\n
-		- implement geokrety.org API changes\n
-		\n
-		0.7.2 beta - 2014-04-28\n
-		- fix date parsing in Geocaching.com\n
-		\n
-		0.7.1 beta - 2014-03-02\n
-		- rename \"profile\" to \"user\",\n
-		- some fixes\n
-		\n
-		0.7.0 beta - 2014-02-25\n
-		- support for geocaching.com (own your risk!)\n
-		\n
-		0.6.2 beta - 2014-02-20\n
-		- log GeoKret validation,\n
-		- some fixes\n
-		\n
-		0.6.1 beta - 2014-02-13\n
-		- fix crash on drafts screen\n
-		\n
-		0.6.0 beta - 2014-02-12\n
-		- refreshing in background,\n
-		- live tracking code verification,\n
-		- live waypoint resolving\n
-		\n
-		0.5.5 beta - 2014-02-06\n
-		- manually add to inventory fix,\n
-		- send all drafts button,\n
-		- remove all saved logs button\n
-		\n
-		0.5.3 beta - 2014-01-18\n
-		- English translation update, thanks to Mr.Yuck\n
-		\n
-		0.5.2 beta - 2014-01-17\n
-		- some fixes\n
-		\n
-		0.5.1 beta - 2014-01-16\n
-		- German translation update, thanks to Schrottie,\n
-		- some fixes\n
-		\n
-		0.5.0 beta - 2014-01-15\n
-		- log is being submitted in the background\n
-		\n
-		0.4.2 beta - 2014-01-06\n
-		- some fixes and layout improvements,\n
-		- German translation update, thanks to Schrottie\n
-		\n
-		0.4.1 beta - 2014-01-05\n
-		- fix crash after upgrade from 0.2.1 to 0.4.0 version\n
-		\n
-		0.4.0 beta - 2014-01-05\n
-		- works with third-party QR code scanners,\n
-		- add home location,\n
-		- QuickFind like Locus integration\n
-		\n
-		0.3.0 beta - 2014-01-04\n
-		- add GeoKret into inventory manually,\n
-		- log GeoKret on GPS location\n
-		\n
-		0.2.1 beta - 2013-12-29\n
-		- German translation, thanks to Schrottie\n
-		\n
-		0.2.0 beta - 2013-12-29\n
-		- add support for .de, .us, .nl and .org.uk\n
-		\n
-		0.1.2 beta - 2013-12-26\n
-		- inventory refresh fix,\n
-		- yes/no/cancel save account changes,\n
-		- back to main activity after log successful\n
-		\n
-		0.1.1 beta - 2013-12-25\n
-		- date and time clean fields - fix\n
-		\n
-		0.1.0 beta - 2013-12-25\n
-		- rotation safe,\n
-		- use secid instead of login and password\n
-		\n
-		0.0.2 alpha - 2013-12-17\n
-		- polish translation,\n
-		- about activity,\n
-		- interface improvements\n
-		\n
-		0.0.1 alpha - 2013-12-14\n
-		- first version with public .apk file,\n
-		- fix problem with Android 4.x\n
-		\n
-		0.0.0 alpha - 2013-12-13\n
-		- first public version, \n
-		- works only with Android 2.1-2.3.x.
 	</string>
 	<string name="about_label_release_plans">Pour consulter la liste des améliorations prévues :\n
 		<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a>

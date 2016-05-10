@@ -24,9 +24,6 @@ package pl.nkg.geokrety;
 
 import java.util.Date;
 
-import org.acra.ACRA;
-import org.acra.ReportingInteractionMode;
-import org.acra.annotation.ReportsCrashes;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.conn.ClientConnectionManager;
@@ -56,18 +53,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.widget.Toast;
 
-import com.github.anrwatchdog.ANRWatchDog;
-
-@ReportsCrashes(formKey = "",
-        formUri = "http://geokretylog.sourceforge.net/reportbug.php",
-        mode = ReportingInteractionMode.TOAST,
-        resToastText = R.string.crash_toast_text)
 public class GeoKretyApplication extends Application {
     private HttpClient httpClient;
     private ForegroundTaskHandler foregroundTaskHandler;
     private StateHolder stateHolder;
     private boolean noAccountHinted = false;
-    public ANRWatchDog watchDog = new ANRWatchDog(30000);
 
     private long lastRefresh = 0;
 
@@ -156,13 +146,6 @@ public class GeoKretyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        if (isAcraEnabled()) {
-            ACRA.init(this);
-            if (BuildConfig.DEBUG == false) {
-                watchDog.start();
-            }
-        }
 
         stateHolder = new StateHolder(getApplicationContext());
         httpClient = createHttpClient();
