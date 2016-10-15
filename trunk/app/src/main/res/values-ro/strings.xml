@@ -58,7 +58,7 @@
 	<string name="main_button_gkl">Însemnări salvate</string>
 	<string name="main_button_about">Despre</string>
 	<string name="main_label_version_prefix">GeoKrety Logger v</string>
-	<string name="main_label_copyright">Copyright &#169; de Michał Niedźwiecki 2013, 2014</string>
+	<string name="main_label_copyright">Copyright &#169; de Michał Niedźwiecki 2013&#8211;2016</string>
 	<string name="main_label_about">WWW:
 		<a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a>
 	</string>

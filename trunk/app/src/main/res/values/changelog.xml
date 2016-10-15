@@ -27,6 +27,8 @@
 	<string name="about_label_changelog">Change log:\n\n
 		0.8.0 beta - 2016-10-15\n
 		- support opencaching.ro\n
+		- Added romanian translation, thanks to Andrei\n
+		- Added croatian translation, thanks to Marta Marek\n
 		\n
 		0.7.6 beta - 2016-04-28\n
 		- fix: last logs and waypoints from geocaching.com\n
