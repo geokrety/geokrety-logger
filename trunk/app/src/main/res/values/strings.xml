@@ -81,7 +81,7 @@
 	<string name="users_submenu_unset_as_default">Unset as default</string>
 	<string name="users_submenu_remove">Remove</string>
 	<string name="users_question_remove">Are you sure you want to remove user? </string>
-	<string-array name="users_contextmenu_nchecked">
+	<string-array name="users_contextmenu_unchecked">
 		<item>@string/users_submenu_set_as_default</item>
 		<item>@string/users_submenu_remove</item>
 	</string-array>

@@ -80,7 +80,7 @@
 	<string name="users_submenu_unset_as_default">Să nu mai fie implicit</string>
 	<string name="users_submenu_remove">Şterge</string>
 	<string name="users_question_remove">Eşti sigur că vrei să ştergi acest utilizator? </string>
-	<string-array name="users_contextmenu_nchecked">
+	<string-array name="users_contextmenu_unchecked">
 		<item>@string/users_submenu_set_as_default</item>
 		<item>@string/users_submenu_remove</item>
 	</string-array>

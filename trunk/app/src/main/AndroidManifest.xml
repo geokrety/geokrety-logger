@@ -23,7 +23,7 @@
 <manifest 
     xmlns:android="http://schemas.android.com/apk/res/android" 
     package="pl.nkg.geokrety" 
-    android:versionCode="45"
+    android:versionCode="46"
 	android:versionName="0.8.0 beta">
 
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -35,9 +35,7 @@
 	<uses-feature android:name="android.hardware.location" android:required="false" />
 	<uses-feature android:name="android.hardware.location.gps" android:required="false" />
 
-	<uses-sdk android:minSdkVersion="5" android:targetSdkVersion="19" />
-
-	<application 
+	<application
 	    android:name=".GeoKretyApplication" 
 	    android:allowBackup="true" 
 	    android:icon="@drawable/ic_launcher"
@@ -122,7 +120,7 @@
 		<activity android:name=".activities.UserActivity" android:label="@string/user_title" />
 		<activity android:name=".activities.GeoKretActivity" android:label="@string/geokret_title" android:windowSoftInputMode="adjustResize" />
 
-		<service android:name=".services.LogSubmitterService" />
+		<service android:name=".services.LogSubmitterService" android:exported="false" />
 		<service android:name=".services.RefreshService" />
 		<service android:name=".services.VerifyGeoKretService" />
 		<service android:name=".services.WaypointResolverService" />
@@ -138,8 +136,6 @@
 				<action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
 			</intent-filter>
 		</receiver>
-
-		<service android:name=".services.LogSubmitterService" android:exported="false" />
 	</application>
 
 </manifest>
