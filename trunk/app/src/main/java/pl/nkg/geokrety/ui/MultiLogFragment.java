@@ -131,9 +131,11 @@ public class MultiLogFragment extends Fragment {
     }
 
     public void setUser(User user) {
-        mUser = user;
-        mInventoryListAdapter = new InventoryListAdapter(getContext(), mStateHolder.getInventoryDataSource().loadInventory(mUser.getID()));
-        gkListView.setAdapter(mInventoryListAdapter);
+        if (user.getID() != mUser.getID()) {
+            mUser = user;
+            mInventoryListAdapter = new InventoryListAdapter(getContext(), mStateHolder.getInventoryDataSource().loadInventory(mUser.getID()));
+            gkListView.setAdapter(mInventoryListAdapter);
+        }
     }
 
     public interface OnFragmentInteractionListener {

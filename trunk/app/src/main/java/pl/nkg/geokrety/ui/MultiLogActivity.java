@@ -41,6 +41,7 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
         } else {
             mCurrentUser = savedInstanceState.getInt(STATE_USER);
             mMultiLogFragment = (MultiLogFragment) getSupportFragmentManager().findFragmentById(android.R.id.content);
+            actionBar.setSelectedNavigationItem(mCurrentUser);
         }
     }
 
