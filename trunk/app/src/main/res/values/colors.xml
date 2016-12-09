@@ -27,9 +27,9 @@
     <color name="info_color">#ff0000ff</color>
     <color name="disabled_color">#ff888888</color>
 
-    <color name="colorPrimary">#c5c5c5</color>
+    <color name="colorPrimary">#5d5d5d</color>
     <!--3F51B5-->
-    <color name="colorPrimaryDark">#5d5d5d</color>
+    <color name="colorPrimaryDark">#000000</color>
     <!--303F9F-->
     <color name="colorAccent">#d4af8b</color>
     <!--d4af8b 5d5d5d 667b58 e9c642 c5c5c5 -->

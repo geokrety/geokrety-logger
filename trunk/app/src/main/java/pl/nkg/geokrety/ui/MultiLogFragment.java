@@ -19,28 +19,31 @@ import butterknife.Unbinder;
 
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
-import pl.nkg.geokrety.activities.GeoKretLogsActivity;
 import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.StateHolder;
+import pl.nkg.geokrety.data.User;
 
 public class MultiLogFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private Unbinder unbinder;
+    private StateHolder mStateHolder;
 
     @BindView(R.id.gkListView) ListView gkListView;
     @BindView(R.id.logListView) ListView logListView;
 
     private InventoryListAdapter mInventoryListAdapter;
     private GCLogListAdapter mGCLogListAdapter;
+    private User mUser;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         GeoKretyApplication application = (GeoKretyApplication) getContext().getApplicationContext();
-        StateHolder stateHolder = application.getStateHolder();
-        mInventoryListAdapter = new InventoryListAdapter(getContext(), stateHolder.getInventoryDataSource().loadInventory());
+        mUser = application.getStateHolder().getDefaultAccount();
+        mStateHolder = application.getStateHolder();
+        mInventoryListAdapter = new InventoryListAdapter(getContext(), mStateHolder.getInventoryDataSource().loadInventory(mUser.getID()));
         mGCLogListAdapter = new GCLogListAdapter(getContext(), application.getStateHolder().getGeocacheLogDataSource().loadLastLogs());
     }
 
@@ -125,6 +128,12 @@ public class MultiLogFragment extends Fragment {
 
     public static MultiLogFragment newInstance() {
         return new MultiLogFragment();
+    }
+
+    public void setUser(User user) {
+        mUser = user;
+        mInventoryListAdapter = new InventoryListAdapter(getContext(), mStateHolder.getInventoryDataSource().loadInventory(mUser.getID()));
+        gkListView.setAdapter(mInventoryListAdapter);
     }
 
     public interface OnFragmentInteractionListener {

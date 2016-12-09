@@ -4,6 +4,13 @@
     tools:context=".MainActivity">
 
     <item
+        android:id="@+id/action_user"
+        android:title=""
+        app:showAsAction="always"
+        android:orderInCategory="1"
+        app:actionViewClass="android.widget.Spinner" />
+
+    <item
         android:id="@+id/action_postpone"
         android:title="@string/action_postpone"
         android:orderInCategory="200"
