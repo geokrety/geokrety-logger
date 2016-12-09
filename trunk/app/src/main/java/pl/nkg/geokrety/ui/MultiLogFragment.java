@@ -93,8 +93,14 @@ public class MultiLogFragment extends Fragment {
             return;
         }
 
+        List<GeoKret> geoKretList = getSelectedGeoKretList();
+        List<GeocacheLog> geocacheLogList = getSelectedGeocacheLogList();
+
+        mListener.onSelectionListUpdated(geoKretList, geocacheLogList);
+    }
+
+    public List<GeoKret> getSelectedGeoKretList() {
         List<GeoKret> geoKretList = new ArrayList<>();
-        List<GeocacheLog> geocacheLogList = new ArrayList<>();
 
         for (int i = 0; i < mInventoryListAdapter.getCount(); i++) {
             if (logListView.isItemChecked(i)) {
@@ -102,13 +108,19 @@ public class MultiLogFragment extends Fragment {
             }
         }
 
+        return geoKretList;
+    }
+
+    public List<GeocacheLog> getSelectedGeocacheLogList() {
+        List<GeocacheLog> geocacheLogList = new ArrayList<>();
+
         for (int i = 0; i < mGCLogListAdapter.getCount(); i++) {
             if (gkListView.isItemChecked(i)) {
                 geocacheLogList.add(mGCLogListAdapter.getItem(i));
             }
         }
 
-        mListener.onSelectionListUpdated(geoKretList, geocacheLogList);
+        return geocacheLogList;
     }
 
     public static MultiLogFragment newInstance() {

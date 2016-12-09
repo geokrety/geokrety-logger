@@ -31,11 +31,11 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_multilog, menu);
         mMenu = menu;
+        onSelectionListUpdated(mMultiLogFragment.getSelectedGeoKretList(), mMultiLogFragment.getSelectedGeocacheLogList());
         return true;
     }
 
