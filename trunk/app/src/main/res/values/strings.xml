@@ -56,7 +56,7 @@
 	<string name="main_button_inventory">Inventory</string>
 	<string name="main_button_ocs">Geocaching last logs</string>
 	<string name="main_button_log">Log GeoKret</string>
-	<string name="main_button_multilog">Multi Log (experimental)</string>
+	<string name="main_button_multilog" translatable="false">Multi Log (experimental)</string>
 	<string name="main_button_gkl">Saved logs</string>
 	<string name="main_button_about">About</string>
 	<string name="main_label_version_prefix">GeoKrety Logger v</string>
@@ -228,9 +228,9 @@
 	<string name="logs_query_confirm_delete_all_msg">Delete all log entries?</string>
 
 	<!-- MultiLog Activity -->
-	<string name="multilog_title">Multi log</string>
-	<string name="action_postpone">@string/log_button_save_draft</string>
-	<string name="action_send">@string/log_button_submit</string>
+	<string name="multilog_title" translatable="false">Multi log</string>
+	<string name="action_postpone" translatable="false">@string/log_button_save_draft</string>
+	<string name="action_send" translatable="false">@string/log_button_submit</string>
 
     <!-- Refresing progress bar -->
 	<string name="refresh_download_finish">Refreshing finish</string>
