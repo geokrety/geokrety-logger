@@ -229,6 +229,8 @@
 
 	<!-- MultiLog Activity -->
 	<string name="multilog_title">Multi log</string>
+	<string name="action_postpone">@string/log_button_save_draft</string>
+	<string name="action_send">@string/log_button_submit</string>
 
     <!-- Refresing progress bar -->
 	<string name="refresh_download_finish">Refreshing finish</string>
