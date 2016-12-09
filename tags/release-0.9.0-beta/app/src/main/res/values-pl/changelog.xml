@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * 
+ * This file is a part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+-->
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="MissingTranslation">
+    
+    <string name="about_label_changelog">Historia zmian:\n
+		0.9.0 beta - 2016-12-09\n
+		- wklejanie komentarza geoskrzynki do komentarza GeoKreta (jak w c:geo),\n
+		- wykrycie godziny logowania z geocaching.com gdy ta godzina została umiesczona w komentarzu w formacie HH:MM,\n
+		- multi log - automatyczne robienie logów dla wszystkich zaznaczonych geokretów i logów do geoskrzynek\n
+		\n
+		0.8.0 beta - 2016-10-15\n
+		- obsługa opencaching.ro,\n
+		- rumuńskie tłumaczenie z podziękowaniem dla Andrei,\n
+		- chorwackie tłumaczenie z podziękowaniem dla Marty Marek\n
+		\n
+		0.7.6 beta - 2016-04-28\n
+		- poprawka: dostosowanie do zmian wprowadzonych na geocaching.com\n
+		\n
+		0.7.5 beta - 2014-10-30\n
+		- poprawka: dostosowanie do zmian wprowadzonych na geocaching.com\n
+		\n
+		0.7.4 beta - 2014-07-15\n
+		- tłumaczenie francuskie dzięki uprzejmości Ldm Public\n
+		\n
+		0.7.3 beta - 2014-06-25\n
+		- dostosowanie do zmian w API geokrety.org\n
+		\n
+		0.7.2 beta - 2014-04-28\n
+		- naprawiony błąd z odczytem daty w Geocaching.com\n
+		\n
+		0.7.1 beta - 2014-03-02\n
+		- przemianowanie \"profil\" na \"użytkownik\",\n
+		- drobne poprawki\n
+		\n
+		0.7.0 beta - 2014-02-25\n
+		- obsługa geocaching.com (na własne ryzyko!)\n
+		\n
+		0.6.2 beta - 2014-02-20\n
+		- walidacja formularza logowania GeoKreta przy wysyłaniu,\n
+		- naprawionych kilka błędów\n
+		\n
+		0.6.1 beta - 2014-02-13\n
+		- naprawiony błąd na liście logów do wysłania\n
+		\n
+		0.6.0 beta - 2014-02-12\n
+		- odświeżanie w tle,\n
+		- weryfikacja tracking code w tle,\n
+		- pobieranie współrzędnych waypoint w tle\n
+		\n
+		0.5.5 beta - 2014-02-06\n
+		- naprawiony błąd z ręcznym dodawaniem geokreta do inwentarza,\n
+		- przycisk Wyślij wszystkie szkice,\n
+		- przycisk Usuń wszystkie zapisane logi\n
+		\n
+		0.5.3 beta - 2014-01-18\n
+		- aktualizacja angielskiego tłumaczenia z podziękowaniem dla Mr.Yuck\n
+		\n
+		0.5.2 beta - 2014-01-17\n
+		- drobne poprawki\n
+		\n
+		0.5.1 beta - 2014-01-16\n
+		- aktualizacja niemieckiego tłumaczenia z podziękowaniem dla Schrottie,\n
+		- kilka drobnych poprawek\n
+		\n
+		0.5.0 beta - 2014-01-15\n
+		- logowanie GeoKreta w tle,\n
+		\n
+		0.4.2 beta - 2014-01-06\n
+		- drobne poprawki,\n
+		- aktualizacja niemieckiego tłumaczenia z podziękowaniem dla Schrottie\n
+		\n
+		0.4.1 beta - 2014-01-05\n
+		- naprawiony błąd uniemożliwiający działanie po upgrade z wersji 0.2.1 do 0.4.0\n
+		\n
+		0.4.0 beta - 2014-01-05\n
+		- współpraca ze skanerami QR code,\n
+		- logowanie GeoKreta w domu,\n
+		- integracja z Locus na podobnej zasadzie jak w Szybki Wpis\n
+		\n
+		0.3.0 beta - 2014-01-04\n
+		- możliwość ręcznego umieszczenia GeoKreta w inwentarzu,\n
+		- możliwość zalogowania GeoKreta w lokalizacji GPS zamiast w waypoint\n
+		\n
+		0.2.1 beta - 2013-12-29\n
+		- niemieckie tłumaczenie z podziękowaniem dla Schrottie\n
+		\n
+		0.2.0 beta - 2013-12-29\n
+		- obsługa .de, .us, .nl and .org.uk\n
+		\n
+		0.1.2 beta - 2013-12-26\n
+		- naprawiony problem z odświeżaniem listy kretów i logów w oknie logowania geokreta,\n
+		- pytanie tak/nie/anuluj czy zachować zmiany ustawienia konta,\n
+		- automatyczny powrót do głównego okna po udanym zalogowaniu kreta (widać, że wszystko ok)\n
+		\n
+		0.1.1 beta - 2013-12-25\n
+		- poprawiony błąd, który powodował kasowanie wprowadzonych danych po wprowadzeniu daty i godziny\n
+		\n
+		0.1.0 beta - 2013-12-25\n
+		- nie wiesza podczas obracania ekranem,\n
+		- użycie secid zamiast loginu i hasła\n
+		\n
+		0.0.2 alpha - 2013-12-17\n
+		- polskie tłumaczenie,\n
+		- informacje o programie,\n
+		- poprawki interfejsu\n
+		\n
+		0.0.1 alpha - 2013-12-14\n
+		- pierwsza wersja z publicznym, gotowym do instalacji pakietem apk,\n
+		- poprawienie błędu uniemożliwiającego działanie pod Androdid 4.x,\n
+		- progress dialog informujący o przebiegu odświeżania i logowania GeoKreta\n
+		\n
+		0.0.0 alpha - 2013-12-13\n
+		- pierwsza wersja działająca jedynie pod Android 2.1-2.3.x.
+	</string>
+</resources>

@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * 
+ * This file is a part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+-->
+<resources>
+    <!-- 
+    
+    Native language of this app is Polish.
+    This is Romanian translation.
+    Can you translate to your language or improve this translation?
+    Please translate this file and send to me:
+    nkg753 at gmail dot com
+    
+     -->
+    
+    <!-- 
+    pattern of naming:
+    {module}_{thing}_{subthing}_{title}
+    
+    module: activity (i.e. 'geokret') or service (i.e. 'refresh') or 'global'
+    thing: 'notify', 'toast', 'message', 'button', 'hint', 'label' etc.
+    subthing: 'title', 'description' (is optional)
+    title: short description of value content i.e. 'trackingcode'
+    
+     -->
+    
+	<!-- Main -->
+	<string name="app_name">GeoKrety Logger</string>
+    
+    <!-- Main Activity -->
+	<string name="main_label_welcome">GeoKrety Logger este o aplicaţie ajutătoare pentru a anunţa găsirea şi mutarea de GeoKrety. GeoKrety 
+		(<a href="http://en.m.wikipedia.org/wiki/Geokrety">en.m.wikipedia.org/wiki/Geokrety</a>)
+		sunt similare cu TravelBug(TM) sau GeoLutins, scopul lor este de a urmări obiecte călătorind prin geocutii
+		(<a href="http://en.m.wikipedia.org/wiki/Geocaching">en.m.wikipedia.org/wiki/Geocaching</a>).
+	</string>
+	<string name="main_button_accounts">Utilizatori (conturi)</string>
+	<string name="main_button_inventory">Inventar</string>
+	<string name="main_button_ocs">Ultimele însemnări la cutii</string>
+	<string name="main_button_log">Anunţă GeoKret</string>
+	<string name="main_button_gkl">Însemnări salvate</string>
+	<string name="main_button_about">Despre</string>
+	<string name="main_label_version_prefix">GeoKrety Logger v</string>
+	<string name="main_label_copyright">Copyright &#169; de Michał Niedźwiecki 2013&#8211;2016</string>
+	<string name="main_label_about">WWW:
+		<a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a>
+	</string>
+	<string name="main_label_emergency">Dacă această aplicaţie nu funcţionează. te rog vizitează: 
+		<a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>
+		Apoi te rog să contactezi autorul:
+		<a href="http://geokrety.org/majluj.php?to=12444">http://geokrety.org/majluj.php?to=12444</a>.
+	</string>
+	<string name="main_label_help_in_translation">Sugerează o traducere mai bună:\n
+		<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a>
+	</string>
+    <!-- Error messages -->
+	<string name="main_error_no_account_configured">Trebuie să-ţi configurezi contul!</string>
+	    
+    <!-- Users Activity -->
+	<string name="users_title">Gestiune utilizatori GeoKrety</string>
+	<string name="users_button_add_account">Adaugă utilizator</string>
+	<string name="users_submenu_set_as_default">Alege ca implicit</string>
+	<string name="users_submenu_unset_as_default">Să nu mai fie implicit</string>
+	<string name="users_submenu_remove">Şterge</string>
+	<string name="users_question_remove">Eşti sigur că vrei să ştergi acest utilizator? </string>
+	<string-array name="users_contextmenu_unchecked">
+		<item>@string/users_submenu_set_as_default</item>
+		<item>@string/users_submenu_remove</item>
+	</string-array>
+	<string-array name="users_contextmenu_checked">
+		<item>@string/users_submenu_unset_as_default</item>
+		<item>@string/users_submenu_remove</item>
+	</string-array>
+	
+    <!-- Account Activity -->
+	<string name="user_title">Utilizator</string>
+	<string name="user_label_portals">Alege site-urile de geocaching</string>
+	<string name="user_hint_name">Utilizator nou</string>
+	<string name="user_checkbox_portal_gk">geokrety.org (obligatoriu)</string>
+	<string name="user_checkbox_portal_oc0">opencaching.pl</string>
+	<string name="user_checkbox_portal_oc1">opencaching.de (împreună cu .es şi .it)</string>
+	<string name="user_checkbox_portal_oc2">opencaching.us</string>
+	<string name="user_checkbox_portal_oc3">opencaching.nl</string>
+	<string name="user_checkbox_portal_oc4">opencaching.org.uk</string>
+	<string name="user_checkbox_portal_oc5">opencaching.ro</string>
+	<string name="user_checkbox_portal_gc">geocaching.com (pe riscul tău!)</string>
+	<string name="user_label_private_policy">Confidenţialitate:
+	    \ngeokrety.org - nume utilizator şi parola sunt folosite pentru a descărca &quot;secid&quot;. Nume utilizator şi &quot;secid&quot; sunt salvate, dar parola nu.
+	    &quot;Secid&quot; este folosit pentru a încărca inventarul tău şi a anunţa mutările de GeoKrety folosind API-ul oficial GeoKrety.\n
+	    
+	    \nopencaching.* - nume utilizator este salvat şi folosit pentru a încărca cele mai recente însemnări alte tale folosind OKAPI.\n
+	    
+	    \ngeocaching.com - nume utilizator şi parolă sunt salvate şi folosite pentru a încărca cele mai recente însemnări ale tale extrăgând informaţiile din paginile site-ului geocaching.com.
+	    Atenţie! Utilizând această metoda s-ar putea să încalci condiţiile de utilizare ale geocaching.com, paragrafele 2.D.i şi 2.D.ii. Foloseşte pe riscul tău!
+	    Totuşi alte aplicaţii precum c:geo folosesc aceeaşi metodă, fără probleme :)
+	</string>
+	<string name="user_label_home_location">Coordonatele de acasă (opţional):</string>
+	<string name="user_hint_latitude">latitudine</string>
+	<string name="user_hint_longnitude">longitudine</string>
+	<string name="user_button_from_gps">GPS</string>
+	<string name="user_button_save">OK</string>
+    <!-- Messages -->
+	<string name="user_query_title_save">Salvează setări utilizator?</string>
+	<string name="user_query_message_save">Setări utilizator modificate. Salvează?</string>
+	<string name="user_message_getting_secid">Autentificare la GeoKrety.org&#8230;</string>
+	<string name="user_message_getting_uuid">Obţine UUID de la</string>
+	<string name="user_message_gc_verification">Autentificare la Geocaching.com&#8230;</string>
+	<string name="dots">&#8230;</string>
+    
+    <!-- GeoKrety.org account dialog -->
+	<string name="user_gk_title">Utilizator şi parolă pentru GeoKrety.org</string>
+	<string name="user_gk_label_login">GK utilizator:</string>
+	<string name="user_gk_login_password">GK parolă:</string>
+	<string name="user_gk_hint_login">GeoKrety utilizator</string>
+	<string name="user_gk_hint_password">GeoKrety parolă</string>
+	<string name="user_gk_error_login_null">Nume utilizator GeoKrety.org nu poate lipsi</string>
+	<string name="user_gk_error_password_null">Parola GeoKrety.org nu poate lipsi</string>
+	<string name="user_gk_error_password_invalid">Nume utilizator sau parolă GeoKrety incorect.</string>
+	<string name="user_gk_error_proxy">Deschide navigatorul şi introdu parola pentru conexiunea ta la internet.</string>
+    
+    <!-- Opencaching account dialog -->
+	<string name="user_oc_title">Conectare la:</string>
+	<string name="user_oc_label_login">Utilizator OC:</string>
+	<string name="user_oc_hint_login">Utilizator OpenCaching</string>
+	<string name="user_oc_error_login_null">Nume utilizator OpenCaching nu poate lipsi</string>
+	<string name="user_oc_error_login_invalid">Utilizator incorect pentru:</string>
+    
+	<!-- Geocaching.com account dialog -->
+	<string name="user_gc_title">Utilizator şi parolă pentru Geocaching.com</string>
+	<string name="user_gc_label_login">Utilizator Geocaching.com:</string>
+	<string name="user_gc_label_password">Parolă Geocaching.com:</string>
+	<string name="user_gc_hint_login">Utilizator Geocaching.com</string>
+	<string name="user_gc_hint_password">Parolă Geocaching.com</string>
+	<string name="user_gc_error_login_null">Nume utilizator Geocaching.com nu poate lipsi</string>
+	<string name="user_gc_error_password_null">Parola Geocaching.com nu poate lipsi</string>
+	<string name="user_gc_error_password_invalid">Nume utilizator sau parolă Invalid Geocaching.com incorectă.</string>
+	<string name="user_gc_message_login_verified">Nume utilizator şi parolă Geocaching.com corecte.</string>
+			
+    <!-- Inventory Activity -->
+	<string name="inventory_title">Inventar GeoKrety</string>
+	<string name="inventory_menu_refresh">Reîncarcă</string>
+	<string name="inventory_error_refresh">Eroare reîncărcare inventar. Te rog verifică conexiunea la internet.</string>
+	<string name="inventory_button_add_geokret">Adaugă manual</string>
+    
+    <!-- GeoKret Activity -->
+	<string name="geokret_title">GeoKret</string>
+
+	<string name="geokret_label_trackingcode">Cod de Urmărire:</string>
+	<string name="geokret_hint_trackingcode">ex. F65RF3</string>
+
+	<string name="geokret_checkbox_sticky">Nu şterge din inventar după reîncărcare</string>
+	<string name="geokret_button_save">Salvează</string>
+	<string name="geokret_query_title_save">Salvează informaţii despre GeoKret?</string>
+	<string name="geokret_query_message_save">Informaţiile despre GeoKret au fost modificate. Salvează?</string>
+	<string name="geokret_error_invalid_trackingcode">Te rog introdu un Cod de Urmărire valabil: 6 caractere de pe eticheta GeoKret-ului, ex. XF3ACS</string>
+    
+    <!-- Geocaching last logs Activity -->
+	<string name="lastlogs_title">Ultimele însemnări de pe site-uri de geocaching</string>
+	<string name="lastlogs_menu_refresh">Reîncarcă</string>
+	<string name="lastlogs_error_refresh">Însemnările nu au putut fi încărcate. Te rog verifică conexiunea la internet.</string>
+    	
+	<!-- Log GeoKret Activity -->
+	<string name="log_title">Anunţă GeoKret</string>
+	<string name="log_label_section_log_type">1. Alege tipul însemnării</string>
+	<string-array name="log_array">
+		<item>Alege tipul însemnării&#8230;</item>
+	    <item>Am lăsat un GeoKret</item>
+		<item>Am luat un GeoKret</item>
+		<item>Am întâlnit un GeoKret</item>
+		<item>Am vizitat cu un GeoKret</item>
+		<item>Comentariu</item>
+	</string-array>
+	<string name="log_label_section_identify">2. Identificare GeoKret</string>
+	<string name="log_hint_code">Cod de Urmărire</string>
+	<string name="log_button_user">Utilizator&#8230;</string>
+	<string name="log_button_inventory">Inventar&#8230;</string>
+	<string name="log_label_section_location">3. Amplasare nouă</string>
+	<string name="log_hint_waypoint">Cod geocutie</string>
+	<string name="log_button_oclogs">Însemnări&#8230;</string>
+	<string name="log_hint_cords">Coordonate</string>
+	<string name="log_button_gps">GPS</string>
+	<string name="log_button_home">Acasă</string>
+	<string name="log_label_section_additional">4. Informaţii suplimentare</string>
+	<string name="log_hint_comment">Comentariu</string>
+	<string name="log_button_submit">Trimite</string>
+	<string name="log_button_save_draft">Amână</string>
+	<string name="log_button_discard">Şterge</string>
+    <!-- Spinners -->
+	<string name="log_inventory_title">Inventarul tău</string>
+	<string name="log_lastlogs_title">Ultimele tale însemnări de pe site-uri de geocaching</string>
+    <!-- Messages -->
+	<string name="log_query_confirm_delete">Şterge această însemnare?</string>
+	<string name="log_warning_already_logged">Deja există o însemnare în această dată. Corectează data sau ora.</string>
+    <!-- Log submitting -->
+	<string name="submit_error">Trimitere eşuată: </string>
+    
+    <!-- GeoKretLogs Activity -->
+	<string name="logs_title">Însemnări GeoKret</string>
+	<string name="logs_row_label_log_icon_content_description">Tip însemnare</string>
+	<string name="logs_label_status_draft">Schiţă</string>
+	<string name="logs_label_status_new">Nou</string>
+	<string name="logs_label_status_double">Duplicat</string>
+	<string name="logs_label_status_problem">Eroare</string>
+	<string name="logs_label_status_success">Succes</string>
+	<string name="logs_label_status_queue">În coada de aşteptare</string>
+	<string name="logs_label_status_unidentified">Neidentificat</string>
+	<string name="logs_button_submit_all_drafts">Trimite schiţele</string>
+	<string name="logs_button_remove_all_saved_logs">Şterge tot</string>
+	<string name="logs_query_confirm_delete_all_msg">Şterge toate însemnările?</string>
+    
+    <!-- Refresing progress bar -->
+	<string name="refresh_download_finish">Terminat de reîncărcat</string>
+    
+    <!-- Global messages -->
+	<string name="error_no_user_selected">Alege utilizator.</string>
+	<string name="connection_error">Eroare conexiune: </string>
+	<string name="warning">Probleme:</string>
+	<string name="yes">Da</string>
+	<string name="no">Nu</string>
+	<string name="generic_error">Eroare:</string>
+	<string name="generic_broken">Defect</string>
+	<string name="generic_finish">Succes</string>
+	<string name="not_implemented_yet">Neimplementat</string>
+    
+    <!-- GPS -->
+	<string name="gps_label_supported_formats">Formate suportate:
+		http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
+	<string name="gps_error_not_exist">Acest dispozitiv nu are modul GPS</string>
+	<string name="gps_warning_not_enabled">GPS-ul este oprit, te rog porneşte-l</string>
+	<string name="gps_message_pleas_wait">Aşteaptă poziţie de la GPS</string>
+	<string name="gps_message_fixed">Poziţie GPS obţinută, coordonatele au fost preluate</string>
+    
+    <!-- Log submitting service -->
+	<string name="submit_message_do_submitting">Însemnarea este trimisă pe fundal&#8230;</string>
+	<string name="submit_message_draft_saved">Însemnare salvată în Schiţe&#8230;</string>
+	<string name="submit_notify_submitting">Trimitere însemnare&#8230;</string>
+	<string name="submit_notify_submit_success">Însemnare trimisă cu succes</string>
+	<string name="submit_notify_submit_problem">geokrety.org a respins informaţiile trimise</string>
+	<string name="submit_notify_submit_no_connection">Eroare conexiune, încerc din nou&#8230;</string>
+	<string name="validation_error_no_log_type">Alege tipul însemnării!</string>
+	<string name="validation_error_no_traking_code">Codul de Urmărire!</string>
+	<string name="validation_error_no_location">Introdu noua amplasare a GeoKret-ului!</string>
+    
+	<!-- Refresh service -->
+	<string name="refresh_message_refresh_start">Inventarul şi ultimele însemnări de la cutii se reîncarcă pe fundal&#8230;</string>
+	<string name="refresh_message_refresh_finish">Terminat de reîncărcat</string>
+	<string name="refresh_message_refresh_error">Eroare conexiune:</string>
+	<string name="refresh_message_refresh_no_connection">Lipsă conexiune la internet</string>
+	<string name="refresh_notify_inventory">Reîncărcare inventar</string>
+	<string name="refresh_notify_last_logs">Reîncărcare însemnări</string>
+	<string name="refresh_notify_oc_names">Reîncărcare informaţii geocutii</string>
+	<string name="refresh_notify_own_gk">Reîncărcare propriile Geokrety</string>
+	<string name="refresh_notify_error_broken">Eroare reîncărcare</string>
+	<string name="refresh_notify_error_lost_connection">Pierdut conexiunea la internet</string>
+	<string name="validation_error_no_such_geokret">Cod de urmărire invalid</string>
+	
+	<!-- GeoKret verification service -->
+	<string name="verify_tc_message_waiting">Verificare Cod de Urmărire&#8230; (poţi continua)</string>
+	<string name="verify_tc_error_geokret_not_found">GeoKret negăsit</string>
+	<string name="verify_tc_warning_no_connection">Codul de Urmărire nu poate fi verificat în acest moment</string>
+	<string name="verify_tc_message_good_verified">GeoKret găsit:</string>
+	
+	<!-- Waypoint Resolver service -->
+	<string name="resolve_wpt_message_waiting">Preluare coordonate pentru cod geocutie %1$s &#8230; (poţi continua)</string>
+	<string name="resolve_wpt_error_location_can_not_be_resolved">Coordonatele geocutiei %1$s nu pot fi preluate. Te rog introdu coordonatele (lat/lon) geocutiei %1$s în caseta de mai jos:</string>
+	<string name="resolve_wpt_warning_no_connection">Coordonatele geocutiei %1$s nu pot fi preluate în acest moment. Coordonatele pe care le introduci sunt utile pentru a identifica geocutia dacă nu ştii codul corect al geocutiei.</string>
+	<string name="resolve_wpt_error_waypont_not_found">%1$s nu a fost găsită. Te rog verifică codul geocutiei sau furnizează coordonatele (lat/lon) noului amplasament al GeoKret-ului în caseta de mai jos.</string>
+			
+    <!-- About Activity -->
+	<string name="about_title">Despre</string>
+	<string name="about_label_foot">Licenţă: GPL 3.0,
+		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>.
+	</string>
+	<string name="about_label_release_plans">Mai multe despre planurile de viitor:\n
+		<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a>
+	</string>
+
+	<!-- Crash report -->
+	<string name="crash_toast_text">Ooooof! Aplicaţia s-a închis datorită unor erori. Pentru a putea remedia problema, un raport cu acest incident a fost trimis dezvoltatorului.!</string>
+	
+	<!-- Others -->
+	<string name="global_error_connection">Eroare conexiune</string>
+	<string name="global_error_system">Eroare sistem</string>
+</resources>

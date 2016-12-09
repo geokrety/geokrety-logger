@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ * Copyright (C) 2013, 2014 Michał Niedźwiecki
+ * 
+ * This file is a part of GeoKrety Logger
+ * http://geokretylog.sourceforge.net/
+ * 
+ * GeoKrety Logger is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This source code is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this source code; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+ * or see <http://www.gnu.org/licenses/>
+ -->
+<resources>
+    <!-- Main -->
+	<string name="app_name">GeoKrety Logger</string>
+    
+    <!-- Main Activity -->
+	<string name="main_label_welcome">GeoKrety Logger je program, koji služi za rejestraciju premještenja predmeta 
+		(<a href="http://pl.m.wikipedia.org/wiki/Geokrety">GeoKretów</a>)
+		ostavljenih u
+		<a href="http://pl.m.wikipedia.org/wiki/Geocaching">kontejnerima geocache</a>.
+	</string>
+	<string name="main_button_accounts">Korisnici (računi)</string>
+	<string name="main_button_inventory">GeoKrety, koje imaš u sebi</string>
+	<string name="main_button_ocs">Geokeši u kojima si se posljednio prijavio</string>
+	<string name="main_button_log">Prijavi GeoKreta</string>
+	<string name="main_button_gkl">Zablježene prijave</string>
+	<string name="main_button_about">Informacije</string>
+	<string name="main_label_version_prefix">GeoKrety Logger v</string>
+	<string name="main_label_copyright">Copyright &#169; by Michał Niedźwiecki 2013&#8211;2016</string>
+	<string name="main_label_about">WWW:
+		<a href="http://geokretylog.sourceforge.net/">geokretylog.sourceforge.net</a>
+	</string>
+	<string name="main_label_emergency">Ako u slučaju pogriješki u programu nije moguće prijavljenje GeoKreta, izradi ovo preko WWW servis 
+		prelazići izravno na stranu
+		<a href="http://geokrety.org/ruchy.php">geokrety.org/ruchy.php</a>.
+		Ako prilavljenje GeoKreta na strani WWW je uspijelo, molim te informiraj me o problemu.
+	</string>
+	<string name="main_label_help_in_translation">Predloži bolji prijevod | Suggest a better translation:\n
+		<a href="http://geokretylog.sourceforge.net/translate.php">geokretylog.sourceforge.net/translate.php</a>
+	</string>
+    <!-- Error messages -->
+	<string name="main_error_no_account_configured">Prvo moraš dodati najmanje jednog korisnika i postavi u njemu svoj račun!</string>
+    
+    <!-- Accounts Activity -->
+	<string name="users_title">Korisnici</string>
+	<string name="users_button_add_account">Dodaj novog korisnika</string>
+	<string name="users_submenu_set_as_default">Odaberi kao dosjetljiv</string>
+	<string name="users_submenu_unset_as_default">Označi kao dosjetljiv</string>
+	<string name="users_submenu_remove">Ukloni</string>
+	<string name="users_question_remove">Jesi siguran da želiš ukloniti korisnika</string>
+	<string-array name="users_contextmenu_unchecked">
+		<item>@string/users_submenu_set_as_default</item>
+		<item>@string/users_submenu_remove</item>
+	</string-array>
+	<string-array name="users_contextmenu_checked">
+		<item>@string/users_submenu_unset_as_default</item>
+		<item>@string/users_submenu_remove</item>
+	</string-array>
+    
+    <!-- Account Activity -->
+	<string name="user_title">Postavke korisnika</string>
+	<string name="user_label_portals">Iz kojih portala koristiš</string>
+	<string name="user_hint_name">Novi korisnik</string>
+	<string name="user_checkbox_portal_gk">geokrety.org (obavezući)</string>
+	<string name="user_checkbox_portal_oc0">opencaching.pl</string>
+	<string name="user_checkbox_portal_oc1">opencaching.de (z .es i .it)</string>
+	<string name="user_checkbox_portal_oc2">opencaching.us</string>
+	<string name="user_checkbox_portal_oc3">opencaching.nl</string>
+	<string name="user_checkbox_portal_oc4">opencaching.org.uk</string>
+	<string name="user_checkbox_portal_oc5">opencaching.ro</string>
+	<string name="user_checkbox_portal_gc">geocaching.com (na vlastiti rizik!)</string>
+	<string name="user_label_private_policy">Izjava o privatnosti:
+	    \ngeokrety.org - prijava i lozinka su upotrebljene za preuzimanje &quot;secid&quot;. Prijava i &quot;secid&quot; su zablježene u pameti uređaja, lozinka nije zablježena.
+	    Prijava je upotrebljena kao naziv korisnika međutim &quot;secid&quot; je upotrebljeni za preuzimanje popisa GeoKreta, koje imaš u sebi i prijavi GeoKreta, koje prenosiš.
+	    Sve ovo održava se uz pomoć oficjalnog API geokrety.org.\n
+	    
+	    \nopencaching.* - prijava je zablježena u pameti uređaja i je upotrebljena za preuzimanje popisa geokeša, u koje si se posljednio prijavio.
+	    Sve ovo održava se uz pomoć oficjalnog OKAPI.\n
+	    
+	    \ngeocaching.com - prijava i lozinka su zablježena u pameti uređaja i je upotrebljena za preuzimanje popisa geokeša, u koje si se posljednio prijavio a također koordinata
+	    geokeša u koje ćete prijaviti GeoKreta. Ovo se održava kroz &quot;udawanie&quot; uz pomoć programa preglednika u cijelu prijavljenja geocaching.com i
+	    izvučenja ovih podatka iz ključa HTML. Pazi! Ova metoda vjerojatno kršti pravilnik servisa geocaching.com paragraf 2.D.i i 2.D.ii.
+	    Zatim koristi iz ove funkcije na vlastiti rizik! Ipak ista medota je upotrebljena u aplikaciji c:geo i nema nikakvih problema :)
+	</string>
+	<string name="user_label_home_location">Kućne koordinate (neobavezno):</string>
+	<string name="user_hint_latitude">širina</string>
+	<string name="user_hint_longnitude">dužina</string>
+	<string name="user_button_from_gps">GPS</string>
+	<string name="user_button_save">Spremno!</string>
+    <!-- Messages -->
+	<string name="user_query_title_save">Sačuvati postavke korisnika?</string>
+	<string name="user_query_message_save">Napravljeno promjene u postavkama korisnika. Zablježiti promjene?</string>
+	<string name="user_message_getting_secid">Prijavljanje za GeoKrety.org&#8230;</string>
+	<string name="user_message_getting_uuid">Preuzimanje Vašeg UUID iz</string>
+	<string name="user_message_gc_verification">Prijavljanje za Geocaching.com&#8230;</string>
+	<string name="dots">&#8230;</string>
+    
+    <!-- GeoKrety.org account dialog -->
+	<string name="user_gk_title">Prijava i lozinka za GeoKrety.org</string>
+	<string name="user_gk_label_login">GK prijava:</string>
+	<string name="user_gk_login_password">GK lozinka:</string>
+	<string name="user_gk_hint_login">GeoKrety prijava</string>
+	<string name="user_gk_hint_password">GeoKrety lozinka</string>
+	<string name="user_gk_error_login_null">Nisi pružio prijavu za GeoKrety.org</string>
+	<string name="user_gk_error_password_null">Nisi pružio lozinku za GeoKrety.org</string>
+	<string name="user_gk_error_password_invalid">Kriva prijava ili lozinka za GeoKrety.org</string>
+	<string name="user_gk_error_proxy">Otvori svoj internetski preglednik i upiši lozinku u internet?</string>
+    
+    <!-- Opencaching account dialog -->
+	<string name="user_oc_title">Prijava do:</string>
+	<string name="user_oc_label_login">OC prijava:</string>
+	<string name="user_oc_hint_login">OpenCaching prijava</string>
+	<string name="user_oc_error_login_null">Nisi pružio prijavu za OpenCaching</string>
+	<string name="user_oc_error_login_invalid">Pogrješka preuzimanja podataka iz:</string>
+	
+	<!-- Geocaching.com account dialog -->
+	<string name="user_gc_title">Prijava i lozinka za Geocaching.com</string>
+	<string name="user_gc_label_login">Geocaching.com prijava:</string>
+	<string name="user_gc_label_password">Geocaching.com lozinka:</string>
+	<string name="user_gc_hint_login">Geocaching.com prijava</string>
+	<string name="user_gc_hint_password">Geocaching.com lozinka</string>
+	<string name="user_gc_error_login_null">Ostavio si prazno polje prijava za Geocaching.com</string>
+	<string name="user_gc_error_password_null">Ostavio si prazno polje lozinka za Geocaching.com</string>
+	<string name="user_gc_error_password_invalid">Nepravilna prijava ili lozinka za Geocaching.com</string>
+	<string name="user_gc_message_login_verified">Prijava i lozinka za Geocaching.com verificirano pravilno</string>
+    
+    <!-- Inventory Activity -->
+	<string name="inventory_title">Krtice, koje imaš u sebi</string>
+	<string name="inventory_menu_refresh">Osvježi</string>
+	<string name="inventory_error_refresh">Problem sa preuzimanjem popisa krtica, koje imaš u sebi. Da li Internet radi?
+	</string>
+	<string name="inventory_button_add_geokret">Dodaj manualno</string>
+    
+    <!-- GeoKret Activity -->
+	<string name="geokret_title">GeoKret</string>
+	<string name="geokret_label_trackingcode">Tracking Code:</string>
+	<string name="geokret_hint_trackingcode">np. F65RF3</string>
+	<string name="geokret_checkbox_sticky">Ne odstrani iz zalihe nakon osježanja</string>
+	<string name="geokret_button_save">Ostavi</string>
+	<string name="geokret_query_title_save">Ostaviti postavke GeoKreta?</string>
+	<string name="geokret_query_message_save">Napravljeno promjene u postavkama GeoKreta. Zablježiti promjene?</string>
+	<string name="geokret_error_invalid_trackingcode">Upiši pravilno Tracking Code točnije 6 znakova iz oznake GeoKreta, np. XF3ACS</string>
+    
+    <!-- OpenCaching last logs Activity -->
+	<string name="lastlogs_title">Vaše posljednje prijave iz geocaching portala</string>
+	<string name="lastlogs_menu_refresh">Osvježi</string>
+	<string name="lastlogs_error_refresh">Problem sa preuzimanjem Vaših posljednih prijava iz geocaching portala. Da li Internet
+		radi?</string>
+    
+    <!-- Log GeoKret Activity -->
+	<string name="log_title">Prijavi krticu</string>
+	<string name="log_label_section_log_type">1. Uzorak prijave</string>
+	<string-array name="log_array">
+	    <item>Izaberi uzorak prijave&#8230;</item>
+		<item>Ubacio sam GeoKreta</item>
+		<item>Uzeo sam GeoKreta</item>
+		<item>Sreo sam GeoKreta</item>
+		<item>Krtica posjetila</item>
+		<item>Komentar</item>
+	</string-array>
+	<string name="log_label_section_identify">2. Identifikacija GeoKreta</string>
+	<string name="log_hint_code">Tracking Code</string>
+	<string name="log_button_user">Korisnik&#8230;</string>
+	<string name="log_button_inventory">Zaliha &#8230;</string>
+	<string name="log_label_section_location">3. Nova lokalizacija</string>
+	<string name="log_hint_waypoint">Waypoint</string>
+	<string name="log_button_oclogs">GC Log &#8230;</string>
+	<string name="log_hint_cords">Koordinata</string>
+	<string name="log_button_gps">GPS</string>
+	<string name="log_button_home">U kući</string>
+	<string name="log_label_section_additional">4. Dodatne informacije</string>
+	<string name="log_hint_comment">Komentar</string>
+	<string name="log_button_submit">Pošalji</string>
+	<string name="log_button_save_draft">Ostavi</string>
+	<string name="log_button_discard">Izbriši</string>
+    <!-- Spinners -->
+	<string name="log_inventory_title">Krtice, koje imaš u sebi</string>
+	<string name="log_lastlogs_title">Vaše posljednje prijave iz geocaching portala</string>
+    <!-- Messages -->
+	<string name="log_query_confirm_delete">Izbrisati ovaj upis?</string>
+	<string name="log_warning_already_logged">Ovaj GeoKret je već prijavljen u ovom mjestu i u ovom vrijemu!</string>
+    <!-- Log submitting -->
+	<string name="submit_error">Problem sa prijavljenjem GeoKreta:</string>
+    
+    <!-- GeoKretLogs Activity -->
+	<string name="logs_title">Upisane prijave GeoKretów</string>
+	<string name="logs_row_label_log_icon_content_description">Uzorak prijave</string>
+	<string name="logs_label_status_draft">Skica</string>
+	<string name="logs_label_status_new">Novi</string>
+	<string name="logs_label_status_double">Duplicirani</string>
+	<string name="logs_label_status_problem">Griješka</string>
+	<string name="logs_label_status_success">Pošaljen</string>
+	<string name="logs_label_status_queue">Na redu</string>
+	<string name="logs_label_status_unidentified">Neidentificirani</string>
+	<string name="logs_button_submit_all_drafts">Pošalji sve</string>
+	<string name="logs_button_remove_all_saved_logs">Izbriši sve</string>
+	<string name="logs_query_confirm_delete_all_msg">Izbrisati sve sačuvane upise?</string>
+    
+    <!-- Refresing progress bar -->
+	<string name="refresh_download_finish">Osvježanje završeno</string>
+    
+    <!-- Global messages -->
+	<string name="error_no_user_selected">Molimo odaberite korisnika!</string>
+	<string name="connection_error">Problem sa vezom:</string>
+	<string name="warning">Sukobljeno se nekoliko problema:</string>
+	<string name="yes">Da</string>
+	<string name="no">Ne</string>
+	<string name="generic_error">Sukobljeno problem sa:</string>
+	<string name="generic_broken">Prekinuo</string>
+	<string name="generic_finish">Završeno pravilno</string>
+	<string name="not_implemented_yet">Ova funkcija još ne radi, molimo pričekati noviju verziju.</string>
+    
+    <!-- GPS -->
+	<string name="gps_label_supported_formats">Rukovane formate:
+		http://geokrety.org/help_generate.php?help=pl#acceptableformats</string>
+	<string name="gps_error_not_exist">Tvoj uređaj nema GPS kocke</string>
+	<string name="gps_warning_not_enabled">GPS je isključen, prvo uključi GPS i pokušaj još jednom</string>
+	<string name="gps_message_pleas_wait">Pričekaj dok GPS uhvati fix\'a</string>
+	<string name="gps_message_fixed">GPS fix uhvaćen, koordinate zaljepjene</string>
+    
+    <!-- Log submitting service -->
+	<string name="submit_message_do_submitting">Prijavljanje GeoKreta u pozadini&#8230;</string>
+	<string name="submit_message_draft_saved">Upisano kao skicu&#8230;</string>
+	<string name="submit_notify_submitting">Prijavljanje GeoKreta&#8230;</string>
+	<string name="submit_notify_submit_success">Prijavljanje GeoKreta je uspijelo!</string>
+	<string name="submit_notify_submit_problem">Prijavljanje odbaćeno preko geokrety.org</string>
+	<string name="submit_notify_submit_no_connection">Nema veze, probajte ponovo za trenutak&#8230;</string>
+	<string name="validation_error_no_log_type">Odaberi uzorak prijave!</string>
+	<string name="validation_error_no_traking_code">Unosi tracking code!</string>
+	<string name="validation_error_no_location">Unosi novu lokalizaciju GeoKreta!</string>
+	
+	<!-- Refresh service -->
+	<string name="refresh_message_refresh_start">Počeo je osježanje zalihe i popisa geokeša u koje si se posljednio prijavio&#8230;</string>
+	<string name="refresh_message_refresh_finish">Osvježanje završeno</string>
+	<string name="refresh_message_refresh_error">Griješka na vezi:</string>
+	<string name="refresh_message_refresh_no_connection">No Internet connection</string>
+	<string name="refresh_notify_inventory">Osvježanje zalihe</string>
+	<string name="refresh_notify_last_logs">Osvježanje popisa posljednih prijava</string>
+	<string name="refresh_notify_oc_names">Osvježanje naziva geokeša</string>
+	<string name="refresh_notify_own_gk">Osvježanje mojih geokreta</string>
+	<string name="refresh_notify_error_broken">Osvježanje prekinuo</string>
+	<string name="refresh_notify_error_lost_connection">Izgubljeno vezu sa Internetem</string>
+	<string name="validation_error_no_such_geokret">Nepravilan tracking code</string>
+	
+	<!-- GeoKret verification service -->
+	<string name="verify_tc_message_waiting">Verifikacija Tracking Code&#8230; (nastavljenje moguće)</string>
+	<string name="verify_tc_error_geokret_not_found">GeoKret ne pronađen</string>
+	<string name="verify_tc_warning_no_connection">Verifikacija Tracking Code nije moguća jer ima problema s vezom</string>
+	<string name="verify_tc_message_good_verified">GeoKret pronađen:</string>
+
+	<!-- Waypoint Resolver service -->
+	<string name="resolve_wpt_message_waiting">Pokušaj izvlačenja koordinata %1$s&#8230; (nastavljenje moguće)</string>
+	<string name="resolve_wpt_error_location_can_not_be_resolved">Nije sada moguće izvlačenja koordinata za %1$s. Molimo dajte koordinate (lat/lon) keša %1$s u prozoru ispod:</string>
+	<string name="resolve_wpt_warning_no_connection">Sada nije moguće izvlačenje koordinata za %1$s jer ima problema sa vezom. Bit će bolje ako date koordinate (lat/lon) keša %1$s u prozoru ispod u slučaju da waypoint pokazao se griješan.</string>
+	<string name="resolve_wpt_error_waypont_not_found">Geocache o identifikatoru %1$s ne postoji. Provjeri da li si dobro upisao waypoint ili jednostavno podaj samo koordinate (lat/lon) mjesta u kojem prijavljaš ovog GeoKreta.</string>
+	
+	<!-- About Activity -->
+	<string name="about_title">Informacije o GeoKrety Logger</string>
+	<string name="about_label_foot">Dodavam što više napora da prijava GeoKreta je uz pomoć ovog programa brža i udobna.
+		Program je besplatan, a njegov izvorni kod je publično dostupni na licenciji GPL 3.0 (
+		<a href="http://www.gnu.org/licenses/gpl.html">www.gnu.org/licenses/gpl.html</a>).
+		Ako nešto ne radi pravilno, informiraj me za nju najbolje da napišeš u obrazcu ispod
+		adresa:
+		<a href="http://geokrety.org/majluj.php?to=12444">geokrety.org/majluj.php?to=12444</a>.
+		Ne skinam odgovornosti za štete proizlažene iz griješnog dijelanja programa ili korištenja ga
+		nesuglasno sa sudbinom.
+	</string>
+	<string name="about_label_release_plans">Ako želiš znati planirane novosti, posjeti stranu:\n
+		<a href="https://sourceforge.net/p/geokretylog/wiki/Release%20plans/">sourceforge.net/p/geokretylog/wiki/Release%20plans/</a>
+	</string>
+	
+	<!-- Crash report -->
+	<string name="crash_toast_text">Griješka radnje aplikacije GeoKrety Logger. Izvještaj o griješci je pošaljen autoru ovog programa.</string>
+
+		<!-- Others -->
+	<string name="global_error_connection">Griješka na vezi</string>
+	<string name="global_error_system">Griješka sustava</string>
+</resources>
