@@ -36,6 +36,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 
 public class LogSubmitterService extends IntentService {
 
@@ -65,14 +66,24 @@ public class LogSubmitterService extends IntentService {
     @SuppressWarnings("deprecation")
     private void showNotify(final Intent intent, final int id, final int icon,
             final CharSequence contentTitle, final CharSequence contentMessage) {
-        final Notification notification = new Notification(icon, contentTitle + ": "
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
+                .setContentTitle(contentTitle)
+                .setContentText(contentMessage)
+                .setSmallIcon(icon)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        /*final Notification notification = new Notification(icon, contentTitle + ": "
                 + contentMessage,
                 System.currentTimeMillis());
 
         notification.setLatestEventInfo(this, contentTitle, contentMessage,
                 PendingIntent.getActivity(this, 1, intent, PendingIntent.FLAG_UPDATE_CURRENT));
-        notification.flags |= Notification.FLAG_AUTO_CANCEL;
-        notificationManager.notify(id, notification);
+        notification.flags |= Notification.FLAG_AUTO_CANCEL;*/
+        notificationManager.notify(id, builder.build());
     }
 
     @Override
