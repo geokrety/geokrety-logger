@@ -120,6 +120,16 @@
 		<activity android:name=".activities.UserActivity" android:label="@string/user_title" />
 		<activity android:name=".activities.GeoKretActivity" android:label="@string/geokret_title" android:windowSoftInputMode="adjustResize" />
 
+		<activity
+			android:name=".ui.MultiLogActivity"
+			android:label="@string/multilog_title"
+			android:theme="@style/AppTheme"
+			android:parentActivityName=".activities.MainActivity">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".activities.MainActivity" />
+		</activity>
+
 		<service android:name=".services.LogSubmitterService" android:exported="false" />
 		<service android:name=".services.RefreshService" />
 		<service android:name=".services.VerifyGeoKretService" />

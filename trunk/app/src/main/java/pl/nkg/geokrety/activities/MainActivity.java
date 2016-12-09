@@ -25,6 +25,8 @@ package pl.nkg.geokrety.activities;
 import pl.nkg.geokrety.GeoKretyApplication;
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
+import pl.nkg.geokrety.ui.MultiLogActivity;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -65,6 +67,12 @@ public class MainActivity extends Activity {
     public void showLogGeoKretActivity(final View view) {
         if (accountExistAndToast()) {
             startActivity(new Intent(this, LogActivity.class));
+        }
+    }
+
+    public void showMultiLogActivity(final View view) {
+        if (accountExistAndToast()) {
+            startActivity(new Intent(this, MultiLogActivity.class));
         }
     }
 
