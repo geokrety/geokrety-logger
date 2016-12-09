@@ -6,11 +6,16 @@ import android.support.annotation.Nullable;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
 import pl.nkg.geokrety.R;
+import pl.nkg.geokrety.data.GeoKret;
+import pl.nkg.geokrety.data.GeocacheLog;
 
 public class MultiLogActivity extends AbstractActivity implements MultiLogFragment.OnFragmentInteractionListener {
 
     private MultiLogFragment mMultiLogFragment;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -30,6 +35,7 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_multilog, menu);
+        mMenu = menu;
         return true;
     }
 
@@ -46,5 +52,12 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onSelectionListUpdated(List<GeoKret> geoKretList, List<GeocacheLog> geocacheLogList) {
+        boolean enabled = geoKretList.size() > 0 && geocacheLogList.size() > 0;
+        mMenu.findItem(R.id.action_postpone).setVisible(enabled);
+        mMenu.findItem(R.id.action_send).setVisible(enabled);
     }
 }

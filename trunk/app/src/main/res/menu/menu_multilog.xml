@@ -8,6 +8,7 @@
         android:title="@string/action_postpone"
         android:orderInCategory="200"
         app:showAsAction="ifRoom"
+        android:visible="false"
         android:icon="@drawable/ic_move_to_inbox_white_24dp" />
 
     <item
@@ -15,6 +16,7 @@
         android:title="@string/action_send"
         android:orderInCategory="300"
         app:showAsAction="ifRoom"
+        android:visible="false"
         android:icon="@drawable/ic_send_white_24dp" />
 
 </menu>
