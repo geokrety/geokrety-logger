@@ -29,6 +29,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,7 +43,7 @@ public class GeocacheLog {
     public static String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ssZ";
     public static String FORMAT_DATE_READABLE = "yyyy-MM-dd HH:mm";
 
-    public static GeocacheLog fromGeocachingCom(final String row, final DateFormat dateFormat) {
+    public static GeocacheLog fromGeocachingCom(final String row, final DateFormat dateFormat, final String comment) {
         final String[] cells = row.split("</td>");
 
         final String logType = extractLogType(cells[0]);
@@ -51,7 +52,7 @@ public class GeocacheLog {
         date = new Date(date.getTime() + 12 * 60 * 60 * 1000);
 
         final String guid = extractGUID(cells[3]);
-        return new GeocacheLog(guid, "", logType, date, "", GeocachingProvider.PORTAL);
+        return new GeocacheLog(guid, "", logType, date, StringUtils.defaultString(comment, ""), GeocachingProvider.PORTAL);
     }
 
     private final String uuid;

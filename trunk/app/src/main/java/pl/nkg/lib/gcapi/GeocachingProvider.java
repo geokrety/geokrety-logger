@@ -23,12 +23,16 @@
 package pl.nkg.lib.gcapi;
 
 import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.CharEncoding;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.protocol.BasicHttpContext;
@@ -48,6 +52,7 @@ public class GeocachingProvider {
     public static final int PORTAL = 100;
     public static final String HOST = "geocaching.com";
     private static final int LOGS_LIMIT = 20;
+    private static final String SEEK_LOG = "https://www.geocaching.com/seek/log.aspx";
 
     public static DateFormat detectDateFormat(final HttpContext httpContext)
             throws MessagedException {
@@ -217,7 +222,11 @@ public class GeocachingProvider {
             throws ClientProtocolException,
             IOException {
         try {
-            return GeocacheLog.fromGeocachingCom(row, dateFormat);
+            String commentURL = SEEK_LOG + StringUtils.substringBetween(row, SEEK_LOG, "\"");
+            String commentWeb = IOUtils.toString(new URL(commentURL), CharEncoding.UTF_8);
+            String comment = StringUtils.substringBetween(commentWeb, "<span id=\"ctl00_ContentBody_LogBookPanel1_LogText\"><p>", "</p>");
+
+            return GeocacheLog.fromGeocachingCom(row, dateFormat, comment);
         } catch (final NullPointerException e) {
             return null;
         } catch (final ArrayIndexOutOfBoundsException e) {
