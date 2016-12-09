@@ -29,6 +29,8 @@ import java.text.SimpleDateFormat;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.CharEncoding;
@@ -37,6 +39,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+
+import android.util.Log;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.Utils;
@@ -53,6 +57,7 @@ public class GeocachingProvider {
     public static final String HOST = "geocaching.com";
     private static final int LOGS_LIMIT = 20;
     private static final String SEEK_LOG = "https://www.geocaching.com/seek/log.aspx";
+    private static final Pattern HOUR_PATTERN = Pattern.compile("\\d\\d\\:\\d\\d");
 
     public static DateFormat detectDateFormat(final HttpContext httpContext)
             throws MessagedException {
@@ -225,8 +230,20 @@ public class GeocachingProvider {
             String commentURL = SEEK_LOG + StringUtils.substringBetween(row, SEEK_LOG, "\"");
             String commentWeb = IOUtils.toString(new URL(commentURL), CharEncoding.UTF_8);
             String comment = StringUtils.substringBetween(commentWeb, "<span id=\"ctl00_ContentBody_LogBookPanel1_LogText\"><p>", "</p>");
+            String time = null;
 
-            return GeocacheLog.fromGeocachingCom(row, dateFormat, comment);
+            if (StringUtils.isNotBlank(comment)) {
+                Matcher matcher = HOUR_PATTERN.matcher(comment);
+                int found = -1;
+                while(matcher.find()) {
+                    found = matcher.start();
+                }
+                if (found >= 0) {
+                    time = comment.substring(found, found + 5);
+                }
+            }
+
+            return GeocacheLog.fromGeocachingCom(row, dateFormat, comment, time);
         } catch (final NullPointerException e) {
             return null;
         } catch (final ArrayIndexOutOfBoundsException e) {

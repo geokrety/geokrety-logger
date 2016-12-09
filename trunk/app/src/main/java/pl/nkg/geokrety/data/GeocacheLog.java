@@ -43,13 +43,18 @@ public class GeocacheLog {
     public static String FORMAT_DATE_ISO = "yyyy-MM-dd'T'HH:mm:ssZ";
     public static String FORMAT_DATE_READABLE = "yyyy-MM-dd HH:mm";
 
-    public static GeocacheLog fromGeocachingCom(final String row, final DateFormat dateFormat, final String comment) {
+    public static GeocacheLog fromGeocachingCom(final String row, final DateFormat dateFormat, final String comment, String time) {
         final String[] cells = row.split("</td>");
 
         final String logType = extractLogType(cells[0]);
         Date date = extractDate(cells[2], dateFormat);
 
-        date = new Date(date.getTime() + 12 * 60 * 60 * 1000);
+        if (StringUtils.isNotBlank(time)) {
+            String[] values = time.split(":");
+            date = new Date(date.getTime() + Integer.parseInt(values[0]) * 60 * 60 * 1000 + Integer.parseInt(values[1]) * 60 * 1000);
+        } else {
+            date = new Date(date.getTime() + 12 * 60 * 60 * 1000);
+        }
 
         final String guid = extractGUID(cells[3]);
         return new GeocacheLog(guid, "", logType, date, StringUtils.defaultString(comment, ""), GeocachingProvider.PORTAL);
