@@ -7,10 +7,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import pl.nkg.geokrety.R;
 import pl.nkg.geokrety.data.GeoKret;
+import pl.nkg.geokrety.data.GeoKretLog;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.User;
 
@@ -63,9 +65,11 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
 
         switch (id) {
             case R.id.action_postpone:
+                postponeLogs();
                 return true;
 
             case R.id.action_send:
+                submitLogs();
                 return true;
         }
 
@@ -81,7 +85,7 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
     @Override
     public void onSelectionListUpdated(List<GeoKret> geoKretList, List<GeocacheLog> geocacheLogList) {
         boolean enabled = geoKretList.size() > 0 && geocacheLogList.size() > 0;
-        mMenu.findItem(R.id.action_postpone).setVisible(enabled);
+        //TODO: mMenu.findItem(R.id.action_postpone).setVisible(enabled);
         mMenu.findItem(R.id.action_send).setVisible(enabled);
     }
 
@@ -91,5 +95,36 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
         mMultiLogFragment.setUser(mUserList.get(itemPosition));
         updateMenuIconsVisible();
         return true;
+    }
+
+    private void makeLogs(int state) {
+        List<GeoKret> geoKretList = mMultiLogFragment.getSelectedGeoKretList();
+        List<GeocacheLog> geocacheLogList = mMultiLogFragment.getSelectedGeocacheLogList();
+
+        for (GeocacheLog log : geocacheLogList) {
+            for (GeoKret gk : geoKretList) {
+                GeoKretLog gkl = new GeoKretLog();
+                gkl.setAccoundID(mUserList.get(mCurrentUser).getID());
+                gkl.setNr(gk.getTrackingCode());
+                gkl.setWpt(log.getCacheCode());
+                gkl.setLatlon(log.getGeoCache().getLocation());
+                gkl.setComment(log.getComment());
+                gkl.setLogTypeMapped(3);
+                gkl.setDateAndTime(log.getDate());
+                gkl.setState(state);
+                mApplication.getStateHolder().getGeoKretLogDataSource().persist(gkl);
+            }
+        }
+    }
+
+    private void postponeLogs() {
+        makeLogs(GeoKretLog.STATE_DRAFT);
+        setResult(1);
+        finish();
+    }
+
+    private void submitLogs() {
+        //TODO: makeLogs(GeoKretLog.STATE_OUTBOX);
+        postponeLogs();
     }
 }

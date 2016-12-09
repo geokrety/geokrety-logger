@@ -106,7 +106,7 @@ public class MultiLogFragment extends Fragment {
         List<GeoKret> geoKretList = new ArrayList<>();
 
         for (int i = 0; i < mInventoryListAdapter.getCount(); i++) {
-            if (logListView.isItemChecked(i)) {
+            if (gkListView.isItemChecked(i)) {
                 geoKretList.add(mInventoryListAdapter.getItem(i));
             }
         }
@@ -118,7 +118,7 @@ public class MultiLogFragment extends Fragment {
         List<GeocacheLog> geocacheLogList = new ArrayList<>();
 
         for (int i = 0; i < mGCLogListAdapter.getCount(); i++) {
-            if (gkListView.isItemChecked(i)) {
+            if (logListView.isItemChecked(i)) {
                 geocacheLogList.add(mGCLogListAdapter.getItem(i));
             }
         }

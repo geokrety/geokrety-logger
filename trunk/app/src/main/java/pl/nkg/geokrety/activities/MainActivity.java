@@ -72,7 +72,7 @@ public class MainActivity extends Activity {
 
     public void showMultiLogActivity(final View view) {
         if (accountExistAndToast()) {
-            startActivity(new Intent(this, MultiLogActivity.class));
+            startActivityForResult(new Intent(this, MultiLogActivity.class), 1000);
         }
     }
 
@@ -104,6 +104,13 @@ public class MainActivity extends Activity {
         super.onStart();
         if (accountExist() && !application.isNoAccountHinted()) {
             showAccountsActivity(null);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1000 && resultCode == 1) {
+            showGeoKretLogsActivity(null);
         }
     }
 }
