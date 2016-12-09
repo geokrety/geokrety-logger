@@ -22,6 +22,8 @@
 
 package pl.nkg.geokrety.activities;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Locale;
@@ -228,6 +230,12 @@ public class LogActivity extends AbstractGeoKretyActivity implements LocationLis
                 } else {
                     currentLog.setDateAndTime(log.getDate());
                 }
+
+                if (StringUtils.isBlank(currentLog.getComment())) {
+
+                    currentLog.setComment(log.getComment());
+                }
+
                 loadFromGeoKretLog(currentLog);
                 break;
 

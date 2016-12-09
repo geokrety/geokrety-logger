@@ -5,18 +5,13 @@ android {
     props.load(new FileInputStream(file('../local.properties')))
 
     signingConfigs {
-        config {
-            if (props["key.store"] != null) {
-                keyAlias props["key.alias"]
-                keyPassword props["key.alias.password"]
-                storeFile file(props["key.store"])
-                storePassword props["key.store.password"]
-            }
+
+        nkg {
         }
     }
 
     compileSdkVersion 19
-    buildToolsVersion "24.0.3"
+    buildToolsVersion '25.0.1'
 
     defaultConfig {
         applicationId "pl.nkg.geokrety"
@@ -33,4 +28,5 @@ android {
 }
 
 dependencies {
+    compile 'org.apache.commons:commons-lang3:3.4'
 }
