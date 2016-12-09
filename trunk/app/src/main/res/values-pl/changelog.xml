@@ -27,7 +27,8 @@
     <string name="about_label_changelog">Historia zmian:\n
 		0.9.0 beta - 2016-12-09\n
 		- wklejanie komentarza geoskrzynki do komentarza GeoKreta (jak w c:geo),\n
-		- wykrycie godziny logowania z geocaching.com gdy ta godzina została umiesczona w komentarzu w formacie HH:MM\n
+		- wykrycie godziny logowania z geocaching.com gdy ta godzina została umiesczona w komentarzu w formacie HH:MM,\n
+		- multi log - automatyczne robienie logów dla wszystkich zaznaczonych geokretów i logów do geoskrzynek\n
 		\n
 		0.8.0 beta - 2016-10-15\n
 		- obsługa opencaching.ro,\n

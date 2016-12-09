@@ -27,7 +27,8 @@
 	<string name="about_label_changelog">Change log:\n\n
 		0.9.0 beta - 2016-12-09\n
 		- inserting GC log comment to GeoKrety comment (like c:geo),\n
-		- detect hour of geocaching.com log when is placed in comment as HH:MM pattern\n
+		- detect hour of geocaching.com log when is placed in comment as HH:MM pattern,\n
+		- multi log - making log drafts for \"GeoKret\" x \"geocache log\" matrix\n
 		\n
 		0.8.0 beta - 2016-10-15\n
 		- support opencaching.ro,\n
