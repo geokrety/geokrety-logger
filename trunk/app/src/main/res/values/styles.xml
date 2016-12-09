@@ -46,7 +46,7 @@
 
     <style name="row_log_comment" parent="@style/row_log_baseText">
         <item name="android:textSize">12.0sp</item>
-        <item name="android:textColor">@*android:color/primary_text_light</item>
+        <item name="android:textColor">@android:color/primary_text_light</item>
     </style>
 
     <style name="row_log_statusLabel" parent="@style/row_log_baseText">

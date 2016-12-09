@@ -1,16 +1,11 @@
 package pl.nkg.geokrety.ui;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.ActionBar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 
 import java.util.List;
 
@@ -19,17 +14,23 @@ import pl.nkg.geokrety.data.GeoKret;
 import pl.nkg.geokrety.data.GeocacheLog;
 import pl.nkg.geokrety.data.User;
 
-public class MultiLogActivity extends AbstractActivity implements MultiLogFragment.OnFragmentInteractionListener {
+public class MultiLogActivity extends AbstractActivity implements MultiLogFragment.OnFragmentInteractionListener, ActionBar.OnNavigationListener {
 
     private static final String STATE_USER = "user";
     private MultiLogFragment mMultiLogFragment;
     private Menu mMenu;
     private int mCurrentUser;
+    List<User> mUserList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+        mUserList = mApplication.getStateHolder().getAccountList();
+        actionBar.setListNavigationCallbacks(new ArrayAdapter<>(this, R.layout.action_menu_user_item, mUserList), this);
+
 
         if (savedInstanceState == null) {
             mCurrentUser = mApplication.getStateHolder().getAccountList().indexOf(mApplication.getStateHolder().getDefaultAccount());
@@ -48,32 +49,6 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
         getMenuInflater().inflate(R.menu.menu_multilog, menu);
         mMenu = menu;
         updateMenuIconsVisible();
-
-        MenuItem users = menu.findItem( R.id.action_user);
-        View view = MenuItemCompat.getActionView(users);
-        if (view instanceof Spinner)
-        {
-            final Spinner spinner = (Spinner) view;
-            final List<User> userList = mApplication.getStateHolder().getAccountList();
-            spinner.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, userList.toArray(new User[userList.size()])));
-            spinner.setSelection(mCurrentUser);
-            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-
-                @Override
-                public void onItemSelected(AdapterView<?> arg0, View arg1,
-                                           int arg2, long arg3) {
-                    mCurrentUser = arg2;
-                    mMultiLogFragment.setUser(userList.get(arg2));
-                    updateMenuIconsVisible();
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> arg0) {
-                }
-            });
-
-        }
-
         return true;
     }
 
@@ -107,5 +82,13 @@ public class MultiLogActivity extends AbstractActivity implements MultiLogFragme
         boolean enabled = geoKretList.size() > 0 && geocacheLogList.size() > 0;
         mMenu.findItem(R.id.action_postpone).setVisible(enabled);
         mMenu.findItem(R.id.action_send).setVisible(enabled);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+        mCurrentUser = itemPosition;
+        mMultiLogFragment.setUser(mUserList.get(itemPosition));
+        updateMenuIconsVisible();
+        return true;
     }
 }
