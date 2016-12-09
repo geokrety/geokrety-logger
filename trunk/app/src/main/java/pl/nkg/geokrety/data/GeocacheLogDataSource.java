@@ -71,33 +71,44 @@ public class GeocacheLogDataSource {
             + " FROM " //
             + TABLE + " ORDER BY " + COLUMN_DATE + " DESC";
 
-    private static final String FETCH_BY_USER = "SELECT " //
-            + "l." + COLUMN_ID + " AS " + COLUMN_ID
-            + ", " //
-            + "l." + COLUMN_LOG_UUID
-            + ", " //
-            + "l." + COLUMN_TYPE
-            + ", " //
-            + "l." + COLUMN_DATE
-            + ", " //
-            + "l." + COLUMN_COMMENT
-            + ", " //
-            + "l." + COLUMN_PORTAL
-            + "," //
-            + "l." + COLUMN_WAYPOINT
-            + ", " //
-            + "c." + GeocacheDataSource.COLUMN_WAYPOINT
-            + ", " //
+    private static final String FETCH_FULL = "SELECT " //
+            + "l." + COLUMN_ID + " AS " + COLUMN_ID + ", " //
+            + "l." + COLUMN_LOG_UUID + ", " //
+            + "l." + COLUMN_TYPE + ", " //
+            + "l." + COLUMN_DATE + ", " //
+            + "l." + COLUMN_COMMENT + ", " //
+            + "l." + COLUMN_PORTAL + "," //
+            + "l." + COLUMN_WAYPOINT + ", " //
+            + "c." + GeocacheDataSource.COLUMN_WAYPOINT + ", " //
             + GeocacheDataSource.FETCH_COLUMNS
-            + " FROM " //
-            + TABLE + " AS l"
+            + " FROM " + TABLE + " AS l"
+            + " LEFT JOIN " + GeocacheDataSource.TABLE + " AS c ON l." + COLUMN_WAYPOINT + " = c."
+            + GeocacheDataSource.COLUMN_WAYPOINT
+            + " WHERE l." + COLUMN_WAYPOINT + " != ''"
+            + " ORDER BY " + "l." + COLUMN_DATE + " DESC";
+
+    private static final String FETCH_FULL_BY_USER = "SELECT " //
+            + "l." + COLUMN_ID + " AS " + COLUMN_ID + ", " //
+            + "l." + COLUMN_LOG_UUID + ", " //
+            + "l." + COLUMN_TYPE + ", " //
+            + "l." + COLUMN_DATE + ", " //
+            + "l." + COLUMN_COMMENT + ", " //
+            + "l." + COLUMN_PORTAL + "," //
+            + "l." + COLUMN_WAYPOINT + ", " //
+            + "c." + GeocacheDataSource.COLUMN_WAYPOINT + ", " //
+            + GeocacheDataSource.FETCH_COLUMNS
+            + " FROM " + TABLE + " AS l"
             + " LEFT JOIN " + GeocacheDataSource.TABLE + " AS c ON l." + COLUMN_WAYPOINT + " = c."
             + GeocacheDataSource.COLUMN_WAYPOINT
             + " WHERE l." + COLUMN_USER_ID + " = ? AND l." + COLUMN_WAYPOINT + " != '' ORDER BY "
             + "l." + COLUMN_DATE + " DESC";
 
+    public static Cursor createLoadCursor(final SQLiteDatabase db) {
+        return db.rawQuery(FETCH_FULL, new String[] {});
+    }
+
     public static Cursor createLoadByUserIDCurosr(final SQLiteDatabase db, final long userID) {
-        return db.rawQuery(FETCH_BY_USER, new String[] {
+        return db.rawQuery(FETCH_FULL_BY_USER, new String[] {
                 String.valueOf(userID)
         });
     }
@@ -166,7 +177,7 @@ public class GeocacheLogDataSource {
 
             @Override
             public boolean inTransaction(final SQLiteDatabase db) {
-                final Cursor cursor = db.rawQuery(FETCH_BY_USER,
+                final Cursor cursor = db.rawQuery(FETCH_FULL_BY_USER,
                         new String[] {
                             String.valueOf(userID)
                         });
@@ -179,6 +190,24 @@ public class GeocacheLogDataSource {
             }
         });
         return list;
+    }
+
+    public GeocacheLog[] loadLastLogs() {
+        final LinkedList<GeocacheLog> list = new LinkedList<GeocacheLog>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+                final Cursor cursor = createLoadCursor(db);
+                while (cursor.moveToNext()) {
+                    final GeocacheLog log = new GeocacheLog(cursor, 1);
+                    list.add(log);
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return list.toArray(new GeocacheLog[list.size()]);
     }
 
     public GeocacheLog[] loadLastLogs(final long userID) {

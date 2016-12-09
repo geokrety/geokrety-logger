@@ -71,6 +71,10 @@ public class InventoryDataSource {
         });
     }
 
+    public static Cursor createLoadCurosr(final SQLiteDatabase db) {
+        return db.rawQuery(FETCH_INVENTORY, new String[] {});
+    }
+
     public static Cursor createLoadTrackingCodeByUserIDCurosr(final SQLiteDatabase db,
             final long userID) {
         return db.rawQuery(FETCH_TRACKING_CODE_BY_USER_ID, new String[] {
@@ -102,8 +106,13 @@ public class InventoryDataSource {
             + " AS i" //
             + " LEFT JOIN " + GeoKretDataSource.TABLE + " AS g ON i." + COLUMN_TRACKING_CODE
             + " = g." + GeoKretDataSource.COLUMN_TRACKING_CODE;
+
     private static final String FETCH_BY_USER = PREFIX_FETCH_BY + " WHERE i." + COLUMN_USER_ID
             + " = ? ORDER BY g." + GeoKretDataSource.COLUMN_NAME;
+
+    private static final String FETCH_INVENTORY = PREFIX_FETCH_BY
+            + " ORDER BY g." + GeoKretDataSource.COLUMN_NAME;
+
 
     private static final String FETCH_BY_ID = PREFIX_FETCH_BY + " WHERE i." + COLUMN_ID + " = ? ";
 
@@ -147,6 +156,24 @@ public class InventoryDataSource {
             public boolean inTransaction(final SQLiteDatabase db) {
 
                 final Cursor cursor = createLoadByUserIDCurosr(db, id);
+                while (cursor.moveToNext()) {
+                    geoKrets.add(new GeoKret(cursor, 1));
+                }
+                cursor.close();
+                return true;
+            }
+        });
+        return geoKrets.toArray(new GeoKret[geoKrets.size()]);
+    }
+
+    public GeoKret[] loadInventory() {
+        final LinkedList<GeoKret> geoKrets = new LinkedList<GeoKret>();
+        dbHelper.runOnReadableDatabase(new DBOperation() {
+
+            @Override
+            public boolean inTransaction(final SQLiteDatabase db) {
+
+                final Cursor cursor = createLoadCurosr(db);
                 while (cursor.moveToNext()) {
                     geoKrets.add(new GeoKret(cursor, 1));
                 }
