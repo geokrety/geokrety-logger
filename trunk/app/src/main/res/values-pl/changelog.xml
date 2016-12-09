@@ -25,6 +25,9 @@
     tools:ignore="MissingTranslation">
     
     <string name="about_label_changelog">Historia zmian:\n
+		0.9.0 beta - 2016-12-09\n
+		- wklejanie komentarza OpenCaching do komentarza GeoKreta, jeśli ten jest pusty (z geocaching.com to na razie nie działa)\n
+		\n
 		0.8.0 beta - 2016-10-15\n
 		- obsługa opencaching.ro\n
 		- rumuńskie tłumaczenie z podziękowaniem dla Andrei\n
