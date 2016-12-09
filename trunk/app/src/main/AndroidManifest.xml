@@ -23,8 +23,8 @@
 <manifest 
     xmlns:android="http://schemas.android.com/apk/res/android" 
     package="pl.nkg.geokrety" 
-    android:versionCode="46"
-	android:versionName="0.8.0 beta">
+    android:versionCode="47"
+	android:versionName="0.9.0 beta">
 
 	<uses-permission android:name="android.permission.INTERNET" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
