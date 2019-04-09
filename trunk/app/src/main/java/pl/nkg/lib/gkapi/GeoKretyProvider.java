@@ -51,14 +51,14 @@ public class GeoKretyProvider {
     public static final int LOG_NO_CONNECTION = 3;
     public static final int LOG_DOUBLE = 4;
 
-    private static final String URL_LOGIN = "http://geokrety.org/api-login2secid.php";
-    private static final String URL_EXPORT2 = "http://geokrety.org/export2.php";
-    private static final String URL_RUCHY = "http://geokrety.org/ruchy.php";
-    private static final String URL_AJAX = "http://geokrety.org/szukaj-ajax.php";
+    private static final String URL_LOGIN = "https://geokrety.org/api-login2secid.php";
+    private static final String URL_EXPORT2 = "https://geokrety.org/export2.php";
+    private static final String URL_RUCHY = "https://geokrety.org/ruchy.php";
+    private static final String URL_AJAX = "https://geokrety.org/szukaj-ajax.php";
 
-    private static final String URL_EXPORT_GLID = "http://geokrety.org/export2.php?gkid=";
-    private static final String URL_SZUKAJ_GK = "http://geokrety.org/szukaj-ajax.php?skad=ajax&nr=";
-    private static final String URL_SZUKAJ_GC = "http://geokrety.org/szukaj-ajax.php?skad=ajax&wpt=";
+    private static final String URL_EXPORT_GLID = "https://geokrety.org/export2.php?gkid=";
+    private static final String URL_SZUKAJ_GK = "https://geokrety.org/szukaj-ajax.php?skad=ajax&nr=";
+    private static final String URL_SZUKAJ_GC = "https://geokrety.org/szukaj-ajax.php?skad=ajax&wpt=";
 
     private final static String KONKRET = "konkret.php?id=";
 
